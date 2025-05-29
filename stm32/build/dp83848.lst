@@ -1,0 +1,2391 @@
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"dp83848.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.DP83848_RegisterBusIO,"ax",%progbits
+  20              		.align	1
+  21              		.global	DP83848_RegisterBusIO
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	DP83848_RegisterBusIO:
+  27              	.LVL0:
+  28              	.LFB0:
+  29              		.file 1 "ThirdPackage/lwip_app/dp83848.c"
+   1:ThirdPackage/lwip_app/dp83848.c **** /**
+   2:ThirdPackage/lwip_app/dp83848.c ****   ******************************************************************************
+   3:ThirdPackage/lwip_app/dp83848.c ****   * @file    dp83848.c
+   4:ThirdPackage/lwip_app/dp83848.c ****   * @author  MCD Application Team
+   5:ThirdPackage/lwip_app/dp83848.c ****   * @brief   This file provides a set of functions needed to manage the DP83848
+   6:ThirdPackage/lwip_app/dp83848.c ****   *          PHY devices.
+   7:ThirdPackage/lwip_app/dp83848.c ****   ******************************************************************************
+   8:ThirdPackage/lwip_app/dp83848.c ****   * @attention
+   9:ThirdPackage/lwip_app/dp83848.c ****   *
+  10:ThirdPackage/lwip_app/dp83848.c ****   * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
+  11:ThirdPackage/lwip_app/dp83848.c ****   * All rights reserved.</center></h2>
+  12:ThirdPackage/lwip_app/dp83848.c ****   *
+  13:ThirdPackage/lwip_app/dp83848.c ****   * This software component is licensed by ST under BSD 3-Clause license,
+  14:ThirdPackage/lwip_app/dp83848.c ****   * the "License"; You may not use this file except in compliance with the
+  15:ThirdPackage/lwip_app/dp83848.c ****   * License. You may obtain a copy of the License at:
+  16:ThirdPackage/lwip_app/dp83848.c ****   *                        opensource.org/licenses/BSD-3-Clause
+  17:ThirdPackage/lwip_app/dp83848.c ****   *
+  18:ThirdPackage/lwip_app/dp83848.c ****   ******************************************************************************
+  19:ThirdPackage/lwip_app/dp83848.c ****   */
+  20:ThirdPackage/lwip_app/dp83848.c **** 
+  21:ThirdPackage/lwip_app/dp83848.c **** /* Includes ------------------------------------------------------------------*/
+  22:ThirdPackage/lwip_app/dp83848.c **** #include "dp83848.h"
+  23:ThirdPackage/lwip_app/dp83848.c **** 
+  24:ThirdPackage/lwip_app/dp83848.c **** /** @addtogroup BSP
+  25:ThirdPackage/lwip_app/dp83848.c ****   * @{
+  26:ThirdPackage/lwip_app/dp83848.c ****   */
+  27:ThirdPackage/lwip_app/dp83848.c **** 
+  28:ThirdPackage/lwip_app/dp83848.c **** /** @addtogroup Component
+  29:ThirdPackage/lwip_app/dp83848.c ****   * @{
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 2
+
+
+  30:ThirdPackage/lwip_app/dp83848.c ****   */
+  31:ThirdPackage/lwip_app/dp83848.c **** 
+  32:ThirdPackage/lwip_app/dp83848.c **** /** @defgroup DP83848 DP83848
+  33:ThirdPackage/lwip_app/dp83848.c ****   * @{
+  34:ThirdPackage/lwip_app/dp83848.c ****   */
+  35:ThirdPackage/lwip_app/dp83848.c **** 
+  36:ThirdPackage/lwip_app/dp83848.c **** /* Private typedef -----------------------------------------------------------*/
+  37:ThirdPackage/lwip_app/dp83848.c **** /* Private define ------------------------------------------------------------*/
+  38:ThirdPackage/lwip_app/dp83848.c **** /** @defgroup DP83848_Private_Defines DP83848 Private Defines
+  39:ThirdPackage/lwip_app/dp83848.c ****   * @{
+  40:ThirdPackage/lwip_app/dp83848.c ****   */
+  41:ThirdPackage/lwip_app/dp83848.c **** #define DP83848_SW_RESET_TO    ((uint32_t)500U)
+  42:ThirdPackage/lwip_app/dp83848.c **** #define DP83848_INIT_TO        ((uint32_t)2000U)
+  43:ThirdPackage/lwip_app/dp83848.c **** #define DP83848_MAX_DEV_ADDR   ((uint32_t)31U)
+  44:ThirdPackage/lwip_app/dp83848.c **** /**
+  45:ThirdPackage/lwip_app/dp83848.c ****   * @}
+  46:ThirdPackage/lwip_app/dp83848.c ****   */
+  47:ThirdPackage/lwip_app/dp83848.c **** 
+  48:ThirdPackage/lwip_app/dp83848.c **** /* Private macro -------------------------------------------------------------*/
+  49:ThirdPackage/lwip_app/dp83848.c **** /* Private variables ---------------------------------------------------------*/
+  50:ThirdPackage/lwip_app/dp83848.c **** /* Private function prototypes -----------------------------------------------*/
+  51:ThirdPackage/lwip_app/dp83848.c **** /* Private functions ---------------------------------------------------------*/
+  52:ThirdPackage/lwip_app/dp83848.c **** /** @defgroup DP83848_Private_Functions DP83848 Private Functions
+  53:ThirdPackage/lwip_app/dp83848.c ****   * @{
+  54:ThirdPackage/lwip_app/dp83848.c ****   */
+  55:ThirdPackage/lwip_app/dp83848.c **** 
+  56:ThirdPackage/lwip_app/dp83848.c **** /**
+  57:ThirdPackage/lwip_app/dp83848.c ****   * @brief  Register IO functions to component object
+  58:ThirdPackage/lwip_app/dp83848.c ****   * @param  pObj: device object  of DP83848_Object_t.
+  59:ThirdPackage/lwip_app/dp83848.c ****   * @param  ioctx: holds device IO functions.
+  60:ThirdPackage/lwip_app/dp83848.c ****   * @retval DP83848_STATUS_OK  if OK
+  61:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_ERROR if missing mandatory function
+  62:ThirdPackage/lwip_app/dp83848.c ****   */
+  63:ThirdPackage/lwip_app/dp83848.c **** int32_t  DP83848_RegisterBusIO(dp83848_Object_t *pObj, dp83848_IOCtx_t *ioctx)
+  64:ThirdPackage/lwip_app/dp83848.c **** {
+  30              		.loc 1 64 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  65:ThirdPackage/lwip_app/dp83848.c ****   if(!pObj || !ioctx->ReadReg || !ioctx->WriteReg || !ioctx->GetTick)
+  35              		.loc 1 65 3 view .LVU1
+  36              		.loc 1 65 5 is_stmt 0 view .LVU2
+  37 0000 88B1     		cbz	r0, .L3
+  38              		.loc 1 65 21 discriminator 1 view .LVU3
+  39 0002 CA68     		ldr	r2, [r1, #12]
+  40              		.loc 1 65 12 discriminator 1 view .LVU4
+  41 0004 92B1     		cbz	r2, .L4
+  42              		.loc 1 65 40 discriminator 2 view .LVU5
+  43 0006 8A68     		ldr	r2, [r1, #8]
+  44              		.loc 1 65 31 discriminator 2 view .LVU6
+  45 0008 9AB1     		cbz	r2, .L5
+  46              		.loc 1 65 60 discriminator 3 view .LVU7
+  47 000a 0A69     		ldr	r2, [r1, #16]
+  48              		.loc 1 65 51 discriminator 3 view .LVU8
+  49 000c A2B1     		cbz	r2, .L6
+  66:ThirdPackage/lwip_app/dp83848.c ****   {
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 3
+
+
+  67:ThirdPackage/lwip_app/dp83848.c ****     return DP83848_STATUS_ERROR;
+  68:ThirdPackage/lwip_app/dp83848.c ****   }
+  69:ThirdPackage/lwip_app/dp83848.c **** 
+  70:ThirdPackage/lwip_app/dp83848.c ****   pObj->IO.Init = ioctx->Init;
+  50              		.loc 1 70 3 is_stmt 1 view .LVU9
+  51              		.loc 1 70 24 is_stmt 0 view .LVU10
+  52 000e 0A68     		ldr	r2, [r1]
+  53              		.loc 1 70 17 view .LVU11
+  54 0010 8260     		str	r2, [r0, #8]
+  71:ThirdPackage/lwip_app/dp83848.c ****   pObj->IO.DeInit = ioctx->DeInit;
+  55              		.loc 1 71 3 is_stmt 1 view .LVU12
+  56              		.loc 1 71 26 is_stmt 0 view .LVU13
+  57 0012 4A68     		ldr	r2, [r1, #4]
+  58              		.loc 1 71 19 view .LVU14
+  59 0014 C260     		str	r2, [r0, #12]
+  72:ThirdPackage/lwip_app/dp83848.c ****   pObj->IO.ReadReg = ioctx->ReadReg;
+  60              		.loc 1 72 3 is_stmt 1 view .LVU15
+  61              		.loc 1 72 27 is_stmt 0 view .LVU16
+  62 0016 CA68     		ldr	r2, [r1, #12]
+  63              		.loc 1 72 20 view .LVU17
+  64 0018 4261     		str	r2, [r0, #20]
+  73:ThirdPackage/lwip_app/dp83848.c ****   pObj->IO.WriteReg = ioctx->WriteReg;
+  65              		.loc 1 73 3 is_stmt 1 view .LVU18
+  66              		.loc 1 73 28 is_stmt 0 view .LVU19
+  67 001a 8A68     		ldr	r2, [r1, #8]
+  68              		.loc 1 73 21 view .LVU20
+  69 001c 0261     		str	r2, [r0, #16]
+  74:ThirdPackage/lwip_app/dp83848.c ****   pObj->IO.GetTick = ioctx->GetTick;
+  70              		.loc 1 74 3 is_stmt 1 view .LVU21
+  71              		.loc 1 74 27 is_stmt 0 view .LVU22
+  72 001e 0A69     		ldr	r2, [r1, #16]
+  73              		.loc 1 74 20 view .LVU23
+  74 0020 8261     		str	r2, [r0, #24]
+  75:ThirdPackage/lwip_app/dp83848.c **** 
+  76:ThirdPackage/lwip_app/dp83848.c ****   return DP83848_STATUS_OK;
+  75              		.loc 1 76 3 is_stmt 1 view .LVU24
+  76              		.loc 1 76 10 is_stmt 0 view .LVU25
+  77 0022 0020     		movs	r0, #0
+  78              	.LVL1:
+  79              		.loc 1 76 10 view .LVU26
+  80 0024 7047     		bx	lr
+  81              	.LVL2:
+  82              	.L3:
+  67:ThirdPackage/lwip_app/dp83848.c ****   }
+  83              		.loc 1 67 12 view .LVU27
+  84 0026 4FF0FF30 		mov	r0, #-1
+  85              	.LVL3:
+  67:ThirdPackage/lwip_app/dp83848.c ****   }
+  86              		.loc 1 67 12 view .LVU28
+  87 002a 7047     		bx	lr
+  88              	.LVL4:
+  89              	.L4:
+  67:ThirdPackage/lwip_app/dp83848.c ****   }
+  90              		.loc 1 67 12 view .LVU29
+  91 002c 4FF0FF30 		mov	r0, #-1
+  92              	.LVL5:
+  67:ThirdPackage/lwip_app/dp83848.c ****   }
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 4
+
+
+  93              		.loc 1 67 12 view .LVU30
+  94 0030 7047     		bx	lr
+  95              	.LVL6:
+  96              	.L5:
+  67:ThirdPackage/lwip_app/dp83848.c ****   }
+  97              		.loc 1 67 12 view .LVU31
+  98 0032 4FF0FF30 		mov	r0, #-1
+  99              	.LVL7:
+  67:ThirdPackage/lwip_app/dp83848.c ****   }
+ 100              		.loc 1 67 12 view .LVU32
+ 101 0036 7047     		bx	lr
+ 102              	.LVL8:
+ 103              	.L6:
+  67:ThirdPackage/lwip_app/dp83848.c ****   }
+ 104              		.loc 1 67 12 view .LVU33
+ 105 0038 4FF0FF30 		mov	r0, #-1
+ 106              	.LVL9:
+  77:ThirdPackage/lwip_app/dp83848.c **** }
+ 107              		.loc 1 77 1 view .LVU34
+ 108 003c 7047     		bx	lr
+ 109              		.cfi_endproc
+ 110              	.LFE0:
+ 112              		.section	.text.DP83848_Init,"ax",%progbits
+ 113              		.align	1
+ 114              		.global	DP83848_Init
+ 115              		.syntax unified
+ 116              		.thumb
+ 117              		.thumb_func
+ 119              	DP83848_Init:
+ 120              	.LVL10:
+ 121              	.LFB1:
+  78:ThirdPackage/lwip_app/dp83848.c **** 
+  79:ThirdPackage/lwip_app/dp83848.c **** /**
+  80:ThirdPackage/lwip_app/dp83848.c ****   * @brief  Initialize the DP83848 and configure the needed hardware resources
+  81:ThirdPackage/lwip_app/dp83848.c ****   * @param  pObj: device object DP83848_Object_t.
+  82:ThirdPackage/lwip_app/dp83848.c ****   * @retval DP83848_STATUS_OK  if OK
+  83:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_ADDRESS_ERROR if cannot find device address
+  84:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_READ_ERROR if connot read register
+  85:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_WRITE_ERROR if connot write to register
+  86:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_RESET_TIMEOUT if cannot perform a software reset
+  87:ThirdPackage/lwip_app/dp83848.c ****   */
+  88:ThirdPackage/lwip_app/dp83848.c ****  int32_t DP83848_Init(dp83848_Object_t *pObj)
+  89:ThirdPackage/lwip_app/dp83848.c ****  {
+ 122              		.loc 1 89 2 is_stmt 1 view -0
+ 123              		.cfi_startproc
+ 124              		@ args = 0, pretend = 0, frame = 8
+ 125              		@ frame_needed = 0, uses_anonymous_args = 0
+ 126              		.loc 1 89 2 is_stmt 0 view .LVU36
+ 127 0000 70B5     		push	{r4, r5, r6, lr}
+ 128              	.LCFI0:
+ 129              		.cfi_def_cfa_offset 16
+ 130              		.cfi_offset 4, -16
+ 131              		.cfi_offset 5, -12
+ 132              		.cfi_offset 6, -8
+ 133              		.cfi_offset 14, -4
+ 134 0002 82B0     		sub	sp, sp, #8
+ 135              	.LCFI1:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 5
+
+
+ 136              		.cfi_def_cfa_offset 24
+ 137 0004 0546     		mov	r5, r0
+  90:ThirdPackage/lwip_app/dp83848.c ****    uint32_t tickstart = 0, regvalue = 0, addr = 0;
+ 138              		.loc 1 90 4 is_stmt 1 view .LVU37
+ 139              	.LVL11:
+ 140              		.loc 1 90 28 is_stmt 0 view .LVU38
+ 141 0006 0023     		movs	r3, #0
+ 142 0008 0193     		str	r3, [sp, #4]
+ 143              	.LVL12:
+  91:ThirdPackage/lwip_app/dp83848.c ****    int32_t status = DP83848_STATUS_OK;
+ 144              		.loc 1 91 4 is_stmt 1 view .LVU39
+  92:ThirdPackage/lwip_app/dp83848.c **** 
+  93:ThirdPackage/lwip_app/dp83848.c ****    if(pObj->Is_Initialized == 0)
+ 145              		.loc 1 93 4 view .LVU40
+ 146              		.loc 1 93 11 is_stmt 0 view .LVU41
+ 147 000a 4468     		ldr	r4, [r0, #4]
+ 148              		.loc 1 93 6 view .LVU42
+ 149 000c 002C     		cmp	r4, #0
+ 150 000e 49D1     		bne	.L19
+  94:ThirdPackage/lwip_app/dp83848.c ****    {
+  95:ThirdPackage/lwip_app/dp83848.c ****      if(pObj->IO.Init != 0)
+ 151              		.loc 1 95 6 is_stmt 1 view .LVU43
+ 152              		.loc 1 95 17 is_stmt 0 view .LVU44
+ 153 0010 8368     		ldr	r3, [r0, #8]
+ 154              		.loc 1 95 8 view .LVU45
+ 155 0012 03B1     		cbz	r3, .L9
+  96:ThirdPackage/lwip_app/dp83848.c ****      {
+  97:ThirdPackage/lwip_app/dp83848.c ****        /* GPIO and Clocks initialization */
+  98:ThirdPackage/lwip_app/dp83848.c ****        pObj->IO.Init();
+ 156              		.loc 1 98 8 is_stmt 1 view .LVU46
+ 157 0014 9847     		blx	r3
+ 158              	.LVL13:
+ 159              	.L9:
+  99:ThirdPackage/lwip_app/dp83848.c ****      }
+ 100:ThirdPackage/lwip_app/dp83848.c **** 
+ 101:ThirdPackage/lwip_app/dp83848.c ****      /* for later check */
+ 102:ThirdPackage/lwip_app/dp83848.c ****      pObj->DevAddr = DP83848_MAX_DEV_ADDR + 1;
+ 160              		.loc 1 102 6 view .LVU47
+ 161              		.loc 1 102 20 is_stmt 0 view .LVU48
+ 162 0016 2023     		movs	r3, #32
+ 163 0018 2B60     		str	r3, [r5]
+ 103:ThirdPackage/lwip_app/dp83848.c **** 
+ 104:ThirdPackage/lwip_app/dp83848.c ****      /* Get the device address from special mode register */
+ 105:ThirdPackage/lwip_app/dp83848.c ****      for(addr = 0; addr <= DP83848_MAX_DEV_ADDR; addr ++)
+ 164              		.loc 1 105 6 is_stmt 1 view .LVU49
+  91:ThirdPackage/lwip_app/dp83848.c **** 
+ 165              		.loc 1 91 12 is_stmt 0 view .LVU50
+ 166 001a 0026     		movs	r6, #0
+ 167              		.loc 1 105 6 view .LVU51
+ 168 001c 02E0     		b	.L10
+ 169              	.LVL14:
+ 170              	.L20:
+ 106:ThirdPackage/lwip_app/dp83848.c ****      {
+ 107:ThirdPackage/lwip_app/dp83848.c ****        if(pObj->IO.ReadReg(addr, DP83848_SMR, &regvalue) < 0)
+ 108:ThirdPackage/lwip_app/dp83848.c ****        {
+ 109:ThirdPackage/lwip_app/dp83848.c ****          status = DP83848_STATUS_READ_ERROR;
+ 171              		.loc 1 109 17 view .LVU52
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 6
+
+
+ 172 001e 6FF00406 		mvn	r6, #4
+ 173              	.LVL15:
+ 174              	.L11:
+ 105:ThirdPackage/lwip_app/dp83848.c ****      {
+ 175              		.loc 1 105 50 is_stmt 1 discriminator 2 view .LVU53
+ 105:ThirdPackage/lwip_app/dp83848.c ****      {
+ 176              		.loc 1 105 55 is_stmt 0 discriminator 2 view .LVU54
+ 177 0022 0134     		adds	r4, r4, #1
+ 178              	.LVL16:
+ 179              	.L10:
+ 105:ThirdPackage/lwip_app/dp83848.c ****      {
+ 180              		.loc 1 105 20 is_stmt 1 discriminator 1 view .LVU55
+ 105:ThirdPackage/lwip_app/dp83848.c ****      {
+ 181              		.loc 1 105 6 is_stmt 0 discriminator 1 view .LVU56
+ 182 0024 1F2C     		cmp	r4, #31
+ 183 0026 0DD8     		bhi	.L12
+ 107:ThirdPackage/lwip_app/dp83848.c ****        {
+ 184              		.loc 1 107 8 is_stmt 1 view .LVU57
+ 107:ThirdPackage/lwip_app/dp83848.c ****        {
+ 185              		.loc 1 107 19 is_stmt 0 view .LVU58
+ 186 0028 6B69     		ldr	r3, [r5, #20]
+ 107:ThirdPackage/lwip_app/dp83848.c ****        {
+ 187              		.loc 1 107 11 view .LVU59
+ 188 002a 01AA     		add	r2, sp, #4
+ 189 002c 1921     		movs	r1, #25
+ 190 002e 2046     		mov	r0, r4
+ 191 0030 9847     		blx	r3
+ 192              	.LVL17:
+ 107:ThirdPackage/lwip_app/dp83848.c ****        {
+ 193              		.loc 1 107 10 view .LVU60
+ 194 0032 0028     		cmp	r0, #0
+ 195 0034 F3DB     		blt	.L20
+ 110:ThirdPackage/lwip_app/dp83848.c ****          /* Can't read from this device address
+ 111:ThirdPackage/lwip_app/dp83848.c ****             continue with next address */
+ 112:ThirdPackage/lwip_app/dp83848.c ****          continue;
+ 113:ThirdPackage/lwip_app/dp83848.c ****        }
+ 114:ThirdPackage/lwip_app/dp83848.c **** 
+ 115:ThirdPackage/lwip_app/dp83848.c ****        if((regvalue & DP83848_SMR_PHY_ADDR) == addr)
+ 196              		.loc 1 115 8 is_stmt 1 view .LVU61
+ 197              		.loc 1 115 21 is_stmt 0 view .LVU62
+ 198 0036 019B     		ldr	r3, [sp, #4]
+ 199 0038 03F01F03 		and	r3, r3, #31
+ 200              		.loc 1 115 10 view .LVU63
+ 201 003c A342     		cmp	r3, r4
+ 202 003e F0D1     		bne	.L11
+ 116:ThirdPackage/lwip_app/dp83848.c ****        {
+ 117:ThirdPackage/lwip_app/dp83848.c ****          pObj->DevAddr = addr;
+ 203              		.loc 1 117 10 is_stmt 1 view .LVU64
+ 204              		.loc 1 117 24 is_stmt 0 view .LVU65
+ 205 0040 2C60     		str	r4, [r5]
+ 118:ThirdPackage/lwip_app/dp83848.c ****          status = DP83848_STATUS_OK;
+ 206              		.loc 1 118 10 is_stmt 1 view .LVU66
+ 207              	.LVL18:
+ 119:ThirdPackage/lwip_app/dp83848.c ****          break;
+ 208              		.loc 1 119 10 view .LVU67
+ 118:ThirdPackage/lwip_app/dp83848.c ****          status = DP83848_STATUS_OK;
+ 209              		.loc 1 118 17 is_stmt 0 view .LVU68
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 7
+
+
+ 210 0042 0026     		movs	r6, #0
+ 211              	.LVL19:
+ 212              	.L12:
+ 120:ThirdPackage/lwip_app/dp83848.c ****        }
+ 121:ThirdPackage/lwip_app/dp83848.c ****      }
+ 122:ThirdPackage/lwip_app/dp83848.c **** 
+ 123:ThirdPackage/lwip_app/dp83848.c ****      if(pObj->DevAddr > DP83848_MAX_DEV_ADDR)
+ 213              		.loc 1 123 6 is_stmt 1 view .LVU69
+ 214              		.loc 1 123 13 is_stmt 0 view .LVU70
+ 215 0044 2868     		ldr	r0, [r5]
+ 216              		.loc 1 123 8 view .LVU71
+ 217 0046 1F28     		cmp	r0, #31
+ 218 0048 25D8     		bhi	.L21
+ 124:ThirdPackage/lwip_app/dp83848.c ****      {
+ 125:ThirdPackage/lwip_app/dp83848.c ****        status = DP83848_STATUS_ADDRESS_ERROR;
+ 126:ThirdPackage/lwip_app/dp83848.c ****      }
+ 127:ThirdPackage/lwip_app/dp83848.c **** 
+ 128:ThirdPackage/lwip_app/dp83848.c ****      /* if device address is matched */
+ 129:ThirdPackage/lwip_app/dp83848.c ****      if(status == DP83848_STATUS_OK)
+ 219              		.loc 1 129 6 is_stmt 1 view .LVU72
+ 220              		.loc 1 129 8 is_stmt 0 view .LVU73
+ 221 004a 36BB     		cbnz	r6, .L14
+ 130:ThirdPackage/lwip_app/dp83848.c ****      {
+ 131:ThirdPackage/lwip_app/dp83848.c ****        /* set a software reset  */
+ 132:ThirdPackage/lwip_app/dp83848.c ****        if(pObj->IO.WriteReg(pObj->DevAddr, DP83848_BCR, DP83848_BCR_SOFT_RESET) >= 0)
+ 222              		.loc 1 132 8 is_stmt 1 view .LVU74
+ 223              		.loc 1 132 19 is_stmt 0 view .LVU75
+ 224 004c 2B69     		ldr	r3, [r5, #16]
+ 225              		.loc 1 132 11 view .LVU76
+ 226 004e 4FF40042 		mov	r2, #32768
+ 227 0052 0021     		movs	r1, #0
+ 228 0054 9847     		blx	r3
+ 229              	.LVL20:
+ 230              		.loc 1 132 10 view .LVU77
+ 231 0056 0028     		cmp	r0, #0
+ 232 0058 33DB     		blt	.L22
+ 133:ThirdPackage/lwip_app/dp83848.c ****        {
+ 134:ThirdPackage/lwip_app/dp83848.c ****          /* get software reset status */
+ 135:ThirdPackage/lwip_app/dp83848.c ****          if(pObj->IO.ReadReg(pObj->DevAddr, DP83848_BCR, &regvalue) >= 0)
+ 233              		.loc 1 135 10 is_stmt 1 view .LVU78
+ 234              		.loc 1 135 21 is_stmt 0 view .LVU79
+ 235 005a 6B69     		ldr	r3, [r5, #20]
+ 236              		.loc 1 135 13 view .LVU80
+ 237 005c 01AA     		add	r2, sp, #4
+ 238 005e 0021     		movs	r1, #0
+ 239 0060 2868     		ldr	r0, [r5]
+ 240 0062 9847     		blx	r3
+ 241              	.LVL21:
+ 242              		.loc 1 135 12 view .LVU81
+ 243 0064 0028     		cmp	r0, #0
+ 244 0066 2FDB     		blt	.L23
+ 136:ThirdPackage/lwip_app/dp83848.c ****          {
+ 137:ThirdPackage/lwip_app/dp83848.c ****            tickstart = pObj->IO.GetTick();
+ 245              		.loc 1 137 12 is_stmt 1 view .LVU82
+ 246              		.loc 1 137 32 is_stmt 0 view .LVU83
+ 247 0068 AB69     		ldr	r3, [r5, #24]
+ 248              		.loc 1 137 24 view .LVU84
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 8
+
+
+ 249 006a 9847     		blx	r3
+ 250              	.LVL22:
+ 251 006c 0446     		mov	r4, r0
+ 252              	.LVL23:
+ 138:ThirdPackage/lwip_app/dp83848.c **** 
+ 139:ThirdPackage/lwip_app/dp83848.c ****            /* wait until software reset is done or timeout occured  */
+ 140:ThirdPackage/lwip_app/dp83848.c ****            while(regvalue & DP83848_BCR_SOFT_RESET)
+ 253              		.loc 1 140 12 is_stmt 1 view .LVU85
+ 254              	.L16:
+ 255              		.loc 1 140 17 view .LVU86
+ 256 006e 019B     		ldr	r3, [sp, #4]
+ 257 0070 13F4004F 		tst	r3, #32768
+ 258 0074 11D0     		beq	.L14
+ 141:ThirdPackage/lwip_app/dp83848.c ****            {
+ 142:ThirdPackage/lwip_app/dp83848.c ****              if((pObj->IO.GetTick() - tickstart) <= DP83848_SW_RESET_TO)
+ 259              		.loc 1 142 14 view .LVU87
+ 260              		.loc 1 142 26 is_stmt 0 view .LVU88
+ 261 0076 AB69     		ldr	r3, [r5, #24]
+ 262              		.loc 1 142 18 view .LVU89
+ 263 0078 9847     		blx	r3
+ 264              	.LVL24:
+ 265              		.loc 1 142 37 view .LVU90
+ 266 007a 001B     		subs	r0, r0, r4
+ 267              		.loc 1 142 16 view .LVU91
+ 268 007c B0F5FA7F 		cmp	r0, #500
+ 269 0080 0DD8     		bhi	.L24
+ 143:ThirdPackage/lwip_app/dp83848.c ****              {
+ 144:ThirdPackage/lwip_app/dp83848.c ****                if(pObj->IO.ReadReg(pObj->DevAddr, DP83848_BCR, &regvalue) < 0)
+ 270              		.loc 1 144 16 is_stmt 1 view .LVU92
+ 271              		.loc 1 144 27 is_stmt 0 view .LVU93
+ 272 0082 6B69     		ldr	r3, [r5, #20]
+ 273              		.loc 1 144 19 view .LVU94
+ 274 0084 01AA     		add	r2, sp, #4
+ 275 0086 0021     		movs	r1, #0
+ 276 0088 2868     		ldr	r0, [r5]
+ 277 008a 9847     		blx	r3
+ 278              	.LVL25:
+ 279              		.loc 1 144 18 view .LVU95
+ 280 008c 0028     		cmp	r0, #0
+ 281 008e EEDA     		bge	.L16
+ 145:ThirdPackage/lwip_app/dp83848.c ****                {
+ 146:ThirdPackage/lwip_app/dp83848.c ****                  status = DP83848_STATUS_READ_ERROR;
+ 282              		.loc 1 146 25 view .LVU96
+ 283 0090 6FF00406 		mvn	r6, #4
+ 284              	.LVL26:
+ 285              		.loc 1 146 25 view .LVU97
+ 286 0094 01E0     		b	.L14
+ 287              	.LVL27:
+ 288              	.L21:
+ 125:ThirdPackage/lwip_app/dp83848.c ****      }
+ 289              		.loc 1 125 15 view .LVU98
+ 290 0096 6FF00206 		mvn	r6, #2
+ 291              	.LVL28:
+ 292              	.L14:
+ 147:ThirdPackage/lwip_app/dp83848.c ****                  break;
+ 148:ThirdPackage/lwip_app/dp83848.c ****                }
+ 149:ThirdPackage/lwip_app/dp83848.c ****              }
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 9
+
+
+ 150:ThirdPackage/lwip_app/dp83848.c ****              else
+ 151:ThirdPackage/lwip_app/dp83848.c ****              {
+ 152:ThirdPackage/lwip_app/dp83848.c ****                status = DP83848_STATUS_RESET_TIMEOUT;
+ 153:ThirdPackage/lwip_app/dp83848.c ****                break;
+ 154:ThirdPackage/lwip_app/dp83848.c ****              }
+ 155:ThirdPackage/lwip_app/dp83848.c ****            }
+ 156:ThirdPackage/lwip_app/dp83848.c ****          }
+ 157:ThirdPackage/lwip_app/dp83848.c ****          else
+ 158:ThirdPackage/lwip_app/dp83848.c ****          {
+ 159:ThirdPackage/lwip_app/dp83848.c ****            status = DP83848_STATUS_READ_ERROR;
+ 160:ThirdPackage/lwip_app/dp83848.c ****          }
+ 161:ThirdPackage/lwip_app/dp83848.c ****        }
+ 162:ThirdPackage/lwip_app/dp83848.c ****        else
+ 163:ThirdPackage/lwip_app/dp83848.c ****        {
+ 164:ThirdPackage/lwip_app/dp83848.c ****          status = DP83848_STATUS_WRITE_ERROR;
+ 165:ThirdPackage/lwip_app/dp83848.c ****        }
+ 166:ThirdPackage/lwip_app/dp83848.c ****      }
+ 167:ThirdPackage/lwip_app/dp83848.c ****    }
+ 168:ThirdPackage/lwip_app/dp83848.c **** 
+ 169:ThirdPackage/lwip_app/dp83848.c ****    if(status == DP83848_STATUS_OK)
+ 293              		.loc 1 169 4 is_stmt 1 view .LVU99
+ 294              		.loc 1 169 6 is_stmt 0 view .LVU100
+ 295 009a 7EB9     		cbnz	r6, .L7
+ 296 009c 03E0     		b	.L8
+ 297              	.LVL29:
+ 298              	.L24:
+ 152:ThirdPackage/lwip_app/dp83848.c ****                break;
+ 299              		.loc 1 152 23 view .LVU101
+ 300 009e 6FF00106 		mvn	r6, #1
+ 301              	.LVL30:
+ 152:ThirdPackage/lwip_app/dp83848.c ****                break;
+ 302              		.loc 1 152 23 view .LVU102
+ 303 00a2 FAE7     		b	.L14
+ 304              	.LVL31:
+ 305              	.L19:
+  91:ThirdPackage/lwip_app/dp83848.c **** 
+ 306              		.loc 1 91 12 view .LVU103
+ 307 00a4 0026     		movs	r6, #0
+ 308              	.LVL32:
+ 309              	.L8:
+ 170:ThirdPackage/lwip_app/dp83848.c ****    {
+ 171:ThirdPackage/lwip_app/dp83848.c ****      tickstart =  pObj->IO.GetTick();
+ 310              		.loc 1 171 6 is_stmt 1 view .LVU104
+ 311              		.loc 1 171 27 is_stmt 0 view .LVU105
+ 312 00a6 AB69     		ldr	r3, [r5, #24]
+ 313              		.loc 1 171 19 view .LVU106
+ 314 00a8 9847     		blx	r3
+ 315              	.LVL33:
+ 316 00aa 0446     		mov	r4, r0
+ 317              	.LVL34:
+ 172:ThirdPackage/lwip_app/dp83848.c **** 
+ 173:ThirdPackage/lwip_app/dp83848.c ****      /* Wait for 2s to perform initialization */
+ 174:ThirdPackage/lwip_app/dp83848.c ****      while((pObj->IO.GetTick() - tickstart) <= DP83848_INIT_TO)
+ 318              		.loc 1 174 6 is_stmt 1 view .LVU107
+ 319              	.L18:
+ 175:ThirdPackage/lwip_app/dp83848.c ****      {
+ 176:ThirdPackage/lwip_app/dp83848.c ****      }
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 10
+
+
+ 320              		.loc 1 176 6 discriminator 1 view .LVU108
+ 174:ThirdPackage/lwip_app/dp83848.c ****      {
+ 321              		.loc 1 174 11 discriminator 1 view .LVU109
+ 174:ThirdPackage/lwip_app/dp83848.c ****      {
+ 322              		.loc 1 174 21 is_stmt 0 discriminator 1 view .LVU110
+ 323 00ac AB69     		ldr	r3, [r5, #24]
+ 174:ThirdPackage/lwip_app/dp83848.c ****      {
+ 324              		.loc 1 174 13 discriminator 1 view .LVU111
+ 325 00ae 9847     		blx	r3
+ 326              	.LVL35:
+ 174:ThirdPackage/lwip_app/dp83848.c ****      {
+ 327              		.loc 1 174 32 discriminator 1 view .LVU112
+ 328 00b0 031B     		subs	r3, r0, r4
+ 174:ThirdPackage/lwip_app/dp83848.c ****      {
+ 329              		.loc 1 174 11 discriminator 1 view .LVU113
+ 330 00b2 B3F5FA6F 		cmp	r3, #2000
+ 331 00b6 F9D9     		bls	.L18
+ 177:ThirdPackage/lwip_app/dp83848.c ****      pObj->Is_Initialized = 1;
+ 332              		.loc 1 177 6 is_stmt 1 view .LVU114
+ 333              		.loc 1 177 27 is_stmt 0 view .LVU115
+ 334 00b8 0123     		movs	r3, #1
+ 335 00ba 6B60     		str	r3, [r5, #4]
+ 336              	.LVL36:
+ 337              	.L7:
+ 178:ThirdPackage/lwip_app/dp83848.c ****    }
+ 179:ThirdPackage/lwip_app/dp83848.c **** 
+ 180:ThirdPackage/lwip_app/dp83848.c ****    return status;
+ 181:ThirdPackage/lwip_app/dp83848.c ****  }
+ 338              		.loc 1 181 2 view .LVU116
+ 339 00bc 3046     		mov	r0, r6
+ 340 00be 02B0     		add	sp, sp, #8
+ 341              	.LCFI2:
+ 342              		.cfi_remember_state
+ 343              		.cfi_def_cfa_offset 16
+ 344              		@ sp needed
+ 345 00c0 70BD     		pop	{r4, r5, r6, pc}
+ 346              	.LVL37:
+ 347              	.L22:
+ 348              	.LCFI3:
+ 349              		.cfi_restore_state
+ 164:ThirdPackage/lwip_app/dp83848.c ****        }
+ 350              		.loc 1 164 17 view .LVU117
+ 351 00c2 6FF00306 		mvn	r6, #3
+ 352              	.LVL38:
+ 164:ThirdPackage/lwip_app/dp83848.c ****        }
+ 353              		.loc 1 164 17 view .LVU118
+ 354 00c6 F9E7     		b	.L7
+ 355              	.LVL39:
+ 356              	.L23:
+ 159:ThirdPackage/lwip_app/dp83848.c ****          }
+ 357              		.loc 1 159 19 view .LVU119
+ 358 00c8 6FF00406 		mvn	r6, #4
+ 359              	.LVL40:
+ 180:ThirdPackage/lwip_app/dp83848.c ****  }
+ 360              		.loc 1 180 4 is_stmt 1 view .LVU120
+ 180:ThirdPackage/lwip_app/dp83848.c ****  }
+ 361              		.loc 1 180 11 is_stmt 0 view .LVU121
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 11
+
+
+ 362 00cc F6E7     		b	.L7
+ 363              		.cfi_endproc
+ 364              	.LFE1:
+ 366              		.section	.text.DP83848_DeInit,"ax",%progbits
+ 367              		.align	1
+ 368              		.global	DP83848_DeInit
+ 369              		.syntax unified
+ 370              		.thumb
+ 371              		.thumb_func
+ 373              	DP83848_DeInit:
+ 374              	.LVL41:
+ 375              	.LFB2:
+ 182:ThirdPackage/lwip_app/dp83848.c **** 
+ 183:ThirdPackage/lwip_app/dp83848.c **** /**
+ 184:ThirdPackage/lwip_app/dp83848.c ****   * @brief  De-Initialize the dp83848 and it's hardware resources
+ 185:ThirdPackage/lwip_app/dp83848.c ****   * @param  pObj: device object DP83848_Object_t.
+ 186:ThirdPackage/lwip_app/dp83848.c ****   * @retval None
+ 187:ThirdPackage/lwip_app/dp83848.c ****   */
+ 188:ThirdPackage/lwip_app/dp83848.c **** int32_t DP83848_DeInit(dp83848_Object_t *pObj)
+ 189:ThirdPackage/lwip_app/dp83848.c **** {
+ 376              		.loc 1 189 1 is_stmt 1 view -0
+ 377              		.cfi_startproc
+ 378              		@ args = 0, pretend = 0, frame = 0
+ 379              		@ frame_needed = 0, uses_anonymous_args = 0
+ 190:ThirdPackage/lwip_app/dp83848.c ****   if(pObj->Is_Initialized)
+ 380              		.loc 1 190 3 view .LVU123
+ 381              		.loc 1 190 10 is_stmt 0 view .LVU124
+ 382 0000 4368     		ldr	r3, [r0, #4]
+ 383              		.loc 1 190 5 view .LVU125
+ 384 0002 4BB1     		cbz	r3, .L30
+ 189:ThirdPackage/lwip_app/dp83848.c ****   if(pObj->Is_Initialized)
+ 385              		.loc 1 189 1 view .LVU126
+ 386 0004 10B5     		push	{r4, lr}
+ 387              	.LCFI4:
+ 388              		.cfi_def_cfa_offset 8
+ 389              		.cfi_offset 4, -8
+ 390              		.cfi_offset 14, -4
+ 391 0006 0446     		mov	r4, r0
+ 191:ThirdPackage/lwip_app/dp83848.c ****   {
+ 192:ThirdPackage/lwip_app/dp83848.c ****     if(pObj->IO.DeInit != 0)
+ 392              		.loc 1 192 5 is_stmt 1 view .LVU127
+ 393              		.loc 1 192 16 is_stmt 0 view .LVU128
+ 394 0008 C368     		ldr	r3, [r0, #12]
+ 395              		.loc 1 192 7 view .LVU129
+ 396 000a 13B1     		cbz	r3, .L29
+ 193:ThirdPackage/lwip_app/dp83848.c ****     {
+ 194:ThirdPackage/lwip_app/dp83848.c ****       if(pObj->IO.DeInit() < 0)
+ 397              		.loc 1 194 7 is_stmt 1 view .LVU130
+ 398              		.loc 1 194 10 is_stmt 0 view .LVU131
+ 399 000c 9847     		blx	r3
+ 400              	.LVL42:
+ 401              		.loc 1 194 9 view .LVU132
+ 402 000e 0028     		cmp	r0, #0
+ 403 0010 04DB     		blt	.L31
+ 404              	.L29:
+ 195:ThirdPackage/lwip_app/dp83848.c ****       {
+ 196:ThirdPackage/lwip_app/dp83848.c ****         return DP83848_STATUS_ERROR;
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 12
+
+
+ 197:ThirdPackage/lwip_app/dp83848.c ****       }
+ 198:ThirdPackage/lwip_app/dp83848.c ****     }
+ 199:ThirdPackage/lwip_app/dp83848.c **** 
+ 200:ThirdPackage/lwip_app/dp83848.c ****     pObj->Is_Initialized = 0;
+ 405              		.loc 1 200 5 is_stmt 1 view .LVU133
+ 406              		.loc 1 200 26 is_stmt 0 view .LVU134
+ 407 0012 0020     		movs	r0, #0
+ 408 0014 6060     		str	r0, [r4, #4]
+ 409              	.L27:
+ 201:ThirdPackage/lwip_app/dp83848.c ****   }
+ 202:ThirdPackage/lwip_app/dp83848.c **** 
+ 203:ThirdPackage/lwip_app/dp83848.c ****   return DP83848_STATUS_OK;
+ 204:ThirdPackage/lwip_app/dp83848.c **** }
+ 410              		.loc 1 204 1 view .LVU135
+ 411 0016 10BD     		pop	{r4, pc}
+ 412              	.LVL43:
+ 413              	.L30:
+ 414              	.LCFI5:
+ 415              		.cfi_def_cfa_offset 0
+ 416              		.cfi_restore 4
+ 417              		.cfi_restore 14
+ 203:ThirdPackage/lwip_app/dp83848.c **** }
+ 418              		.loc 1 203 10 view .LVU136
+ 419 0018 0020     		movs	r0, #0
+ 420              	.LVL44:
+ 421              		.loc 1 204 1 view .LVU137
+ 422 001a 7047     		bx	lr
+ 423              	.LVL45:
+ 424              	.L31:
+ 425              	.LCFI6:
+ 426              		.cfi_def_cfa_offset 8
+ 427              		.cfi_offset 4, -8
+ 428              		.cfi_offset 14, -4
+ 196:ThirdPackage/lwip_app/dp83848.c ****       }
+ 429              		.loc 1 196 16 view .LVU138
+ 430 001c 4FF0FF30 		mov	r0, #-1
+ 431 0020 F9E7     		b	.L27
+ 432              		.cfi_endproc
+ 433              	.LFE2:
+ 435              		.section	.text.DP83848_DisablePowerDownMode,"ax",%progbits
+ 436              		.align	1
+ 437              		.global	DP83848_DisablePowerDownMode
+ 438              		.syntax unified
+ 439              		.thumb
+ 440              		.thumb_func
+ 442              	DP83848_DisablePowerDownMode:
+ 443              	.LVL46:
+ 444              	.LFB3:
+ 205:ThirdPackage/lwip_app/dp83848.c **** 
+ 206:ThirdPackage/lwip_app/dp83848.c **** /**
+ 207:ThirdPackage/lwip_app/dp83848.c ****   * @brief  Disable the DP83848 power down mode.
+ 208:ThirdPackage/lwip_app/dp83848.c ****   * @param  pObj: device object DP83848_Object_t.
+ 209:ThirdPackage/lwip_app/dp83848.c ****   * @retval DP83848_STATUS_OK  if OK
+ 210:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_READ_ERROR if connot read register
+ 211:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_WRITE_ERROR if connot write to register
+ 212:ThirdPackage/lwip_app/dp83848.c ****   */
+ 213:ThirdPackage/lwip_app/dp83848.c **** int32_t DP83848_DisablePowerDownMode(dp83848_Object_t *pObj)
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 13
+
+
+ 214:ThirdPackage/lwip_app/dp83848.c **** {
+ 445              		.loc 1 214 1 is_stmt 1 view -0
+ 446              		.cfi_startproc
+ 447              		@ args = 0, pretend = 0, frame = 8
+ 448              		@ frame_needed = 0, uses_anonymous_args = 0
+ 449              		.loc 1 214 1 is_stmt 0 view .LVU140
+ 450 0000 10B5     		push	{r4, lr}
+ 451              	.LCFI7:
+ 452              		.cfi_def_cfa_offset 8
+ 453              		.cfi_offset 4, -8
+ 454              		.cfi_offset 14, -4
+ 455 0002 82B0     		sub	sp, sp, #8
+ 456              	.LCFI8:
+ 457              		.cfi_def_cfa_offset 16
+ 458 0004 0446     		mov	r4, r0
+ 215:ThirdPackage/lwip_app/dp83848.c ****   uint32_t readval = 0;
+ 459              		.loc 1 215 3 is_stmt 1 view .LVU141
+ 460              		.loc 1 215 12 is_stmt 0 view .LVU142
+ 461 0006 0021     		movs	r1, #0
+ 462 0008 0191     		str	r1, [sp, #4]
+ 216:ThirdPackage/lwip_app/dp83848.c ****   int32_t status = DP83848_STATUS_OK;
+ 463              		.loc 1 216 3 is_stmt 1 view .LVU143
+ 464              	.LVL47:
+ 217:ThirdPackage/lwip_app/dp83848.c **** 
+ 218:ThirdPackage/lwip_app/dp83848.c ****   if(pObj->IO.ReadReg(pObj->DevAddr, DP83848_BCR, &readval) >= 0)
+ 465              		.loc 1 218 3 view .LVU144
+ 466              		.loc 1 218 14 is_stmt 0 view .LVU145
+ 467 000a 4369     		ldr	r3, [r0, #20]
+ 468              		.loc 1 218 6 view .LVU146
+ 469 000c 01AA     		add	r2, sp, #4
+ 470 000e 0068     		ldr	r0, [r0]
+ 471              	.LVL48:
+ 472              		.loc 1 218 6 view .LVU147
+ 473 0010 9847     		blx	r3
+ 474              	.LVL49:
+ 475              		.loc 1 218 5 view .LVU148
+ 476 0012 0028     		cmp	r0, #0
+ 477 0014 0CDB     		blt	.L38
+ 219:ThirdPackage/lwip_app/dp83848.c ****   {
+ 220:ThirdPackage/lwip_app/dp83848.c ****     readval &= ~DP83848_BCR_POWER_DOWN;
+ 478              		.loc 1 220 5 is_stmt 1 view .LVU149
+ 479              		.loc 1 220 13 is_stmt 0 view .LVU150
+ 480 0016 019A     		ldr	r2, [sp, #4]
+ 481 0018 22F40062 		bic	r2, r2, #2048
+ 482 001c 0192     		str	r2, [sp, #4]
+ 221:ThirdPackage/lwip_app/dp83848.c **** 
+ 222:ThirdPackage/lwip_app/dp83848.c ****     /* Apply configuration */
+ 223:ThirdPackage/lwip_app/dp83848.c ****     if(pObj->IO.WriteReg(pObj->DevAddr, DP83848_BCR, readval) < 0)
+ 483              		.loc 1 223 5 is_stmt 1 view .LVU151
+ 484              		.loc 1 223 16 is_stmt 0 view .LVU152
+ 485 001e 2369     		ldr	r3, [r4, #16]
+ 486              		.loc 1 223 8 view .LVU153
+ 487 0020 0021     		movs	r1, #0
+ 488 0022 2068     		ldr	r0, [r4]
+ 489 0024 9847     		blx	r3
+ 490              	.LVL50:
+ 491              		.loc 1 223 7 view .LVU154
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 14
+
+
+ 492 0026 0028     		cmp	r0, #0
+ 493 0028 05DB     		blt	.L39
+ 216:ThirdPackage/lwip_app/dp83848.c **** 
+ 494              		.loc 1 216 11 view .LVU155
+ 495 002a 0020     		movs	r0, #0
+ 496              	.LVL51:
+ 497              	.L36:
+ 224:ThirdPackage/lwip_app/dp83848.c ****     {
+ 225:ThirdPackage/lwip_app/dp83848.c ****       status =  DP83848_STATUS_WRITE_ERROR;
+ 226:ThirdPackage/lwip_app/dp83848.c ****     }
+ 227:ThirdPackage/lwip_app/dp83848.c ****   }
+ 228:ThirdPackage/lwip_app/dp83848.c ****   else
+ 229:ThirdPackage/lwip_app/dp83848.c ****   {
+ 230:ThirdPackage/lwip_app/dp83848.c ****     status = DP83848_STATUS_READ_ERROR;
+ 231:ThirdPackage/lwip_app/dp83848.c ****   }
+ 232:ThirdPackage/lwip_app/dp83848.c **** 
+ 233:ThirdPackage/lwip_app/dp83848.c ****   return status;
+ 234:ThirdPackage/lwip_app/dp83848.c **** }
+ 498              		.loc 1 234 1 view .LVU156
+ 499 002c 02B0     		add	sp, sp, #8
+ 500              	.LCFI9:
+ 501              		.cfi_remember_state
+ 502              		.cfi_def_cfa_offset 8
+ 503              		@ sp needed
+ 504 002e 10BD     		pop	{r4, pc}
+ 505              	.LVL52:
+ 506              	.L38:
+ 507              	.LCFI10:
+ 508              		.cfi_restore_state
+ 230:ThirdPackage/lwip_app/dp83848.c ****   }
+ 509              		.loc 1 230 12 view .LVU157
+ 510 0030 6FF00400 		mvn	r0, #4
+ 511 0034 FAE7     		b	.L36
+ 512              	.L39:
+ 225:ThirdPackage/lwip_app/dp83848.c ****     }
+ 513              		.loc 1 225 14 view .LVU158
+ 514 0036 6FF00300 		mvn	r0, #3
+ 515              	.LVL53:
+ 233:ThirdPackage/lwip_app/dp83848.c **** }
+ 516              		.loc 1 233 3 is_stmt 1 view .LVU159
+ 233:ThirdPackage/lwip_app/dp83848.c **** }
+ 517              		.loc 1 233 10 is_stmt 0 view .LVU160
+ 518 003a F7E7     		b	.L36
+ 519              		.cfi_endproc
+ 520              	.LFE3:
+ 522              		.section	.text.DP83848_EnablePowerDownMode,"ax",%progbits
+ 523              		.align	1
+ 524              		.global	DP83848_EnablePowerDownMode
+ 525              		.syntax unified
+ 526              		.thumb
+ 527              		.thumb_func
+ 529              	DP83848_EnablePowerDownMode:
+ 530              	.LVL54:
+ 531              	.LFB4:
+ 235:ThirdPackage/lwip_app/dp83848.c **** 
+ 236:ThirdPackage/lwip_app/dp83848.c **** /**
+ 237:ThirdPackage/lwip_app/dp83848.c ****   * @brief  Enable the DP83848 power down mode.
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 15
+
+
+ 238:ThirdPackage/lwip_app/dp83848.c ****   * @param  pObj: device object DP83848_Object_t.
+ 239:ThirdPackage/lwip_app/dp83848.c ****   * @retval DP83848_STATUS_OK  if OK
+ 240:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_READ_ERROR if connot read register
+ 241:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_WRITE_ERROR if connot write to register
+ 242:ThirdPackage/lwip_app/dp83848.c ****   */
+ 243:ThirdPackage/lwip_app/dp83848.c **** int32_t DP83848_EnablePowerDownMode(dp83848_Object_t *pObj)
+ 244:ThirdPackage/lwip_app/dp83848.c **** {
+ 532              		.loc 1 244 1 is_stmt 1 view -0
+ 533              		.cfi_startproc
+ 534              		@ args = 0, pretend = 0, frame = 8
+ 535              		@ frame_needed = 0, uses_anonymous_args = 0
+ 536              		.loc 1 244 1 is_stmt 0 view .LVU162
+ 537 0000 10B5     		push	{r4, lr}
+ 538              	.LCFI11:
+ 539              		.cfi_def_cfa_offset 8
+ 540              		.cfi_offset 4, -8
+ 541              		.cfi_offset 14, -4
+ 542 0002 82B0     		sub	sp, sp, #8
+ 543              	.LCFI12:
+ 544              		.cfi_def_cfa_offset 16
+ 545 0004 0446     		mov	r4, r0
+ 245:ThirdPackage/lwip_app/dp83848.c ****   uint32_t readval = 0;
+ 546              		.loc 1 245 3 is_stmt 1 view .LVU163
+ 547              		.loc 1 245 12 is_stmt 0 view .LVU164
+ 548 0006 0021     		movs	r1, #0
+ 549 0008 0191     		str	r1, [sp, #4]
+ 246:ThirdPackage/lwip_app/dp83848.c ****   int32_t status = DP83848_STATUS_OK;
+ 550              		.loc 1 246 3 is_stmt 1 view .LVU165
+ 551              	.LVL55:
+ 247:ThirdPackage/lwip_app/dp83848.c **** 
+ 248:ThirdPackage/lwip_app/dp83848.c ****   if(pObj->IO.ReadReg(pObj->DevAddr, DP83848_BCR, &readval) >= 0)
+ 552              		.loc 1 248 3 view .LVU166
+ 553              		.loc 1 248 14 is_stmt 0 view .LVU167
+ 554 000a 4369     		ldr	r3, [r0, #20]
+ 555              		.loc 1 248 6 view .LVU168
+ 556 000c 01AA     		add	r2, sp, #4
+ 557 000e 0068     		ldr	r0, [r0]
+ 558              	.LVL56:
+ 559              		.loc 1 248 6 view .LVU169
+ 560 0010 9847     		blx	r3
+ 561              	.LVL57:
+ 562              		.loc 1 248 5 view .LVU170
+ 563 0012 0028     		cmp	r0, #0
+ 564 0014 0CDB     		blt	.L43
+ 249:ThirdPackage/lwip_app/dp83848.c ****   {
+ 250:ThirdPackage/lwip_app/dp83848.c ****     readval |= DP83848_BCR_POWER_DOWN;
+ 565              		.loc 1 250 5 is_stmt 1 view .LVU171
+ 566              		.loc 1 250 13 is_stmt 0 view .LVU172
+ 567 0016 019A     		ldr	r2, [sp, #4]
+ 568 0018 42F40062 		orr	r2, r2, #2048
+ 569 001c 0192     		str	r2, [sp, #4]
+ 251:ThirdPackage/lwip_app/dp83848.c **** 
+ 252:ThirdPackage/lwip_app/dp83848.c ****     /* Apply configuration */
+ 253:ThirdPackage/lwip_app/dp83848.c ****     if(pObj->IO.WriteReg(pObj->DevAddr, DP83848_BCR, readval) < 0)
+ 570              		.loc 1 253 5 is_stmt 1 view .LVU173
+ 571              		.loc 1 253 16 is_stmt 0 view .LVU174
+ 572 001e 2369     		ldr	r3, [r4, #16]
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 16
+
+
+ 573              		.loc 1 253 8 view .LVU175
+ 574 0020 0021     		movs	r1, #0
+ 575 0022 2068     		ldr	r0, [r4]
+ 576 0024 9847     		blx	r3
+ 577              	.LVL58:
+ 578              		.loc 1 253 7 view .LVU176
+ 579 0026 0028     		cmp	r0, #0
+ 580 0028 05DB     		blt	.L44
+ 246:ThirdPackage/lwip_app/dp83848.c **** 
+ 581              		.loc 1 246 11 view .LVU177
+ 582 002a 0020     		movs	r0, #0
+ 583              	.LVL59:
+ 584              	.L41:
+ 254:ThirdPackage/lwip_app/dp83848.c ****     {
+ 255:ThirdPackage/lwip_app/dp83848.c ****       status =  DP83848_STATUS_WRITE_ERROR;
+ 256:ThirdPackage/lwip_app/dp83848.c ****     }
+ 257:ThirdPackage/lwip_app/dp83848.c ****   }
+ 258:ThirdPackage/lwip_app/dp83848.c ****   else
+ 259:ThirdPackage/lwip_app/dp83848.c ****   {
+ 260:ThirdPackage/lwip_app/dp83848.c ****     status = DP83848_STATUS_READ_ERROR;
+ 261:ThirdPackage/lwip_app/dp83848.c ****   }
+ 262:ThirdPackage/lwip_app/dp83848.c **** 
+ 263:ThirdPackage/lwip_app/dp83848.c ****   return status;
+ 264:ThirdPackage/lwip_app/dp83848.c **** }
+ 585              		.loc 1 264 1 view .LVU178
+ 586 002c 02B0     		add	sp, sp, #8
+ 587              	.LCFI13:
+ 588              		.cfi_remember_state
+ 589              		.cfi_def_cfa_offset 8
+ 590              		@ sp needed
+ 591 002e 10BD     		pop	{r4, pc}
+ 592              	.LVL60:
+ 593              	.L43:
+ 594              	.LCFI14:
+ 595              		.cfi_restore_state
+ 260:ThirdPackage/lwip_app/dp83848.c ****   }
+ 596              		.loc 1 260 12 view .LVU179
+ 597 0030 6FF00400 		mvn	r0, #4
+ 598 0034 FAE7     		b	.L41
+ 599              	.L44:
+ 255:ThirdPackage/lwip_app/dp83848.c ****     }
+ 600              		.loc 1 255 14 view .LVU180
+ 601 0036 6FF00300 		mvn	r0, #3
+ 602              	.LVL61:
+ 263:ThirdPackage/lwip_app/dp83848.c **** }
+ 603              		.loc 1 263 3 is_stmt 1 view .LVU181
+ 263:ThirdPackage/lwip_app/dp83848.c **** }
+ 604              		.loc 1 263 10 is_stmt 0 view .LVU182
+ 605 003a F7E7     		b	.L41
+ 606              		.cfi_endproc
+ 607              	.LFE4:
+ 609              		.section	.text.DP83848_StartAutoNego,"ax",%progbits
+ 610              		.align	1
+ 611              		.global	DP83848_StartAutoNego
+ 612              		.syntax unified
+ 613              		.thumb
+ 614              		.thumb_func
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 17
+
+
+ 616              	DP83848_StartAutoNego:
+ 617              	.LVL62:
+ 618              	.LFB5:
+ 265:ThirdPackage/lwip_app/dp83848.c **** 
+ 266:ThirdPackage/lwip_app/dp83848.c **** /**
+ 267:ThirdPackage/lwip_app/dp83848.c ****   * @brief  Start the auto negotiation process.
+ 268:ThirdPackage/lwip_app/dp83848.c ****   * @param  pObj: device object DP83848_Object_t.
+ 269:ThirdPackage/lwip_app/dp83848.c ****   * @retval DP83848_STATUS_OK  if OK
+ 270:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_READ_ERROR if connot read register
+ 271:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_WRITE_ERROR if connot write to register
+ 272:ThirdPackage/lwip_app/dp83848.c ****   */
+ 273:ThirdPackage/lwip_app/dp83848.c **** int32_t DP83848_StartAutoNego(dp83848_Object_t *pObj)
+ 274:ThirdPackage/lwip_app/dp83848.c **** {
+ 619              		.loc 1 274 1 is_stmt 1 view -0
+ 620              		.cfi_startproc
+ 621              		@ args = 0, pretend = 0, frame = 8
+ 622              		@ frame_needed = 0, uses_anonymous_args = 0
+ 623              		.loc 1 274 1 is_stmt 0 view .LVU184
+ 624 0000 10B5     		push	{r4, lr}
+ 625              	.LCFI15:
+ 626              		.cfi_def_cfa_offset 8
+ 627              		.cfi_offset 4, -8
+ 628              		.cfi_offset 14, -4
+ 629 0002 82B0     		sub	sp, sp, #8
+ 630              	.LCFI16:
+ 631              		.cfi_def_cfa_offset 16
+ 632 0004 0446     		mov	r4, r0
+ 275:ThirdPackage/lwip_app/dp83848.c ****   uint32_t readval = 0;
+ 633              		.loc 1 275 3 is_stmt 1 view .LVU185
+ 634              		.loc 1 275 12 is_stmt 0 view .LVU186
+ 635 0006 0021     		movs	r1, #0
+ 636 0008 0191     		str	r1, [sp, #4]
+ 276:ThirdPackage/lwip_app/dp83848.c ****   int32_t status = DP83848_STATUS_OK;
+ 637              		.loc 1 276 3 is_stmt 1 view .LVU187
+ 638              	.LVL63:
+ 277:ThirdPackage/lwip_app/dp83848.c **** 
+ 278:ThirdPackage/lwip_app/dp83848.c ****   if(pObj->IO.ReadReg(pObj->DevAddr, DP83848_BCR, &readval) >= 0)
+ 639              		.loc 1 278 3 view .LVU188
+ 640              		.loc 1 278 14 is_stmt 0 view .LVU189
+ 641 000a 4369     		ldr	r3, [r0, #20]
+ 642              		.loc 1 278 6 view .LVU190
+ 643 000c 01AA     		add	r2, sp, #4
+ 644 000e 0068     		ldr	r0, [r0]
+ 645              	.LVL64:
+ 646              		.loc 1 278 6 view .LVU191
+ 647 0010 9847     		blx	r3
+ 648              	.LVL65:
+ 649              		.loc 1 278 5 view .LVU192
+ 650 0012 0028     		cmp	r0, #0
+ 651 0014 0CDB     		blt	.L48
+ 279:ThirdPackage/lwip_app/dp83848.c ****   {
+ 280:ThirdPackage/lwip_app/dp83848.c ****     readval |= DP83848_BCR_AUTONEGO_EN;
+ 652              		.loc 1 280 5 is_stmt 1 view .LVU193
+ 653              		.loc 1 280 13 is_stmt 0 view .LVU194
+ 654 0016 019A     		ldr	r2, [sp, #4]
+ 655 0018 42F48052 		orr	r2, r2, #4096
+ 656 001c 0192     		str	r2, [sp, #4]
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 18
+
+
+ 281:ThirdPackage/lwip_app/dp83848.c **** 
+ 282:ThirdPackage/lwip_app/dp83848.c ****     /* Apply configuration */
+ 283:ThirdPackage/lwip_app/dp83848.c ****     if(pObj->IO.WriteReg(pObj->DevAddr, DP83848_BCR, readval) < 0)
+ 657              		.loc 1 283 5 is_stmt 1 view .LVU195
+ 658              		.loc 1 283 16 is_stmt 0 view .LVU196
+ 659 001e 2369     		ldr	r3, [r4, #16]
+ 660              		.loc 1 283 8 view .LVU197
+ 661 0020 0021     		movs	r1, #0
+ 662 0022 2068     		ldr	r0, [r4]
+ 663 0024 9847     		blx	r3
+ 664              	.LVL66:
+ 665              		.loc 1 283 7 view .LVU198
+ 666 0026 0028     		cmp	r0, #0
+ 667 0028 05DB     		blt	.L49
+ 276:ThirdPackage/lwip_app/dp83848.c **** 
+ 668              		.loc 1 276 11 view .LVU199
+ 669 002a 0020     		movs	r0, #0
+ 670              	.LVL67:
+ 671              	.L46:
+ 284:ThirdPackage/lwip_app/dp83848.c ****     {
+ 285:ThirdPackage/lwip_app/dp83848.c ****       status =  DP83848_STATUS_WRITE_ERROR;
+ 286:ThirdPackage/lwip_app/dp83848.c ****     }
+ 287:ThirdPackage/lwip_app/dp83848.c ****   }
+ 288:ThirdPackage/lwip_app/dp83848.c ****   else
+ 289:ThirdPackage/lwip_app/dp83848.c ****   {
+ 290:ThirdPackage/lwip_app/dp83848.c ****     status = DP83848_STATUS_READ_ERROR;
+ 291:ThirdPackage/lwip_app/dp83848.c ****   }
+ 292:ThirdPackage/lwip_app/dp83848.c **** 
+ 293:ThirdPackage/lwip_app/dp83848.c ****   return status;
+ 294:ThirdPackage/lwip_app/dp83848.c **** }
+ 672              		.loc 1 294 1 view .LVU200
+ 673 002c 02B0     		add	sp, sp, #8
+ 674              	.LCFI17:
+ 675              		.cfi_remember_state
+ 676              		.cfi_def_cfa_offset 8
+ 677              		@ sp needed
+ 678 002e 10BD     		pop	{r4, pc}
+ 679              	.LVL68:
+ 680              	.L48:
+ 681              	.LCFI18:
+ 682              		.cfi_restore_state
+ 290:ThirdPackage/lwip_app/dp83848.c ****   }
+ 683              		.loc 1 290 12 view .LVU201
+ 684 0030 6FF00400 		mvn	r0, #4
+ 685 0034 FAE7     		b	.L46
+ 686              	.L49:
+ 285:ThirdPackage/lwip_app/dp83848.c ****     }
+ 687              		.loc 1 285 14 view .LVU202
+ 688 0036 6FF00300 		mvn	r0, #3
+ 689              	.LVL69:
+ 293:ThirdPackage/lwip_app/dp83848.c **** }
+ 690              		.loc 1 293 3 is_stmt 1 view .LVU203
+ 293:ThirdPackage/lwip_app/dp83848.c **** }
+ 691              		.loc 1 293 10 is_stmt 0 view .LVU204
+ 692 003a F7E7     		b	.L46
+ 693              		.cfi_endproc
+ 694              	.LFE5:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 19
+
+
+ 696              		.section	.text.DP83848_GetLinkState,"ax",%progbits
+ 697              		.align	1
+ 698              		.global	DP83848_GetLinkState
+ 699              		.syntax unified
+ 700              		.thumb
+ 701              		.thumb_func
+ 703              	DP83848_GetLinkState:
+ 704              	.LVL70:
+ 705              	.LFB6:
+ 295:ThirdPackage/lwip_app/dp83848.c **** 
+ 296:ThirdPackage/lwip_app/dp83848.c **** /**
+ 297:ThirdPackage/lwip_app/dp83848.c ****   * @brief  Get the link state of DP83848 device.
+ 298:ThirdPackage/lwip_app/dp83848.c ****   * @param  pObj: Pointer to device object.
+ 299:ThirdPackage/lwip_app/dp83848.c ****   * @param  pLinkState: Pointer to link state
+ 300:ThirdPackage/lwip_app/dp83848.c ****   * @retval DP83848_STATUS_LINK_DOWN  if link is down
+ 301:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_AUTONEGO_NOTDONE if Auto nego not completed
+ 302:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_100MBITS_FULLDUPLEX if 100Mb/s FD
+ 303:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_100MBITS_HALFDUPLEX if 100Mb/s HD
+ 304:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_10MBITS_FULLDUPLEX  if 10Mb/s FD
+ 305:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_10MBITS_HALFDUPLEX  if 10Mb/s HD
+ 306:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_READ_ERROR if connot read register
+ 307:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_WRITE_ERROR if connot write to register
+ 308:ThirdPackage/lwip_app/dp83848.c ****   */
+ 309:ThirdPackage/lwip_app/dp83848.c **** int32_t DP83848_GetLinkState(dp83848_Object_t *pObj)
+ 310:ThirdPackage/lwip_app/dp83848.c **** {
+ 706              		.loc 1 310 1 is_stmt 1 view -0
+ 707              		.cfi_startproc
+ 708              		@ args = 0, pretend = 0, frame = 8
+ 709              		@ frame_needed = 0, uses_anonymous_args = 0
+ 710              		.loc 1 310 1 is_stmt 0 view .LVU206
+ 711 0000 10B5     		push	{r4, lr}
+ 712              	.LCFI19:
+ 713              		.cfi_def_cfa_offset 8
+ 714              		.cfi_offset 4, -8
+ 715              		.cfi_offset 14, -4
+ 716 0002 82B0     		sub	sp, sp, #8
+ 717              	.LCFI20:
+ 718              		.cfi_def_cfa_offset 16
+ 719 0004 0446     		mov	r4, r0
+ 311:ThirdPackage/lwip_app/dp83848.c ****   uint32_t readval = 0;
+ 720              		.loc 1 311 3 is_stmt 1 view .LVU207
+ 721              		.loc 1 311 12 is_stmt 0 view .LVU208
+ 722 0006 0023     		movs	r3, #0
+ 723 0008 0193     		str	r3, [sp, #4]
+ 312:ThirdPackage/lwip_app/dp83848.c **** 
+ 313:ThirdPackage/lwip_app/dp83848.c ****   /* Read Status register  */
+ 314:ThirdPackage/lwip_app/dp83848.c ****   if(pObj->IO.ReadReg(pObj->DevAddr, DP83848_BSR, &readval) < 0)
+ 724              		.loc 1 314 3 is_stmt 1 view .LVU209
+ 725              		.loc 1 314 14 is_stmt 0 view .LVU210
+ 726 000a 4369     		ldr	r3, [r0, #20]
+ 727              		.loc 1 314 6 view .LVU211
+ 728 000c 01AA     		add	r2, sp, #4
+ 729 000e 0121     		movs	r1, #1
+ 730 0010 0068     		ldr	r0, [r0]
+ 731              	.LVL71:
+ 732              		.loc 1 314 6 view .LVU212
+ 733 0012 9847     		blx	r3
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 20
+
+
+ 734              	.LVL72:
+ 735              		.loc 1 314 5 view .LVU213
+ 736 0014 0028     		cmp	r0, #0
+ 737 0016 38DB     		blt	.L54
+ 315:ThirdPackage/lwip_app/dp83848.c ****   {
+ 316:ThirdPackage/lwip_app/dp83848.c ****     return DP83848_STATUS_READ_ERROR;
+ 317:ThirdPackage/lwip_app/dp83848.c ****   }
+ 318:ThirdPackage/lwip_app/dp83848.c **** 
+ 319:ThirdPackage/lwip_app/dp83848.c ****   /* Read Status register again */
+ 320:ThirdPackage/lwip_app/dp83848.c ****   if(pObj->IO.ReadReg(pObj->DevAddr, DP83848_BSR, &readval) < 0)
+ 738              		.loc 1 320 3 is_stmt 1 view .LVU214
+ 739              		.loc 1 320 14 is_stmt 0 view .LVU215
+ 740 0018 6369     		ldr	r3, [r4, #20]
+ 741              		.loc 1 320 6 view .LVU216
+ 742 001a 01AA     		add	r2, sp, #4
+ 743 001c 0121     		movs	r1, #1
+ 744 001e 2068     		ldr	r0, [r4]
+ 745 0020 9847     		blx	r3
+ 746              	.LVL73:
+ 747              		.loc 1 320 5 view .LVU217
+ 748 0022 0028     		cmp	r0, #0
+ 749 0024 34DB     		blt	.L55
+ 321:ThirdPackage/lwip_app/dp83848.c ****   {
+ 322:ThirdPackage/lwip_app/dp83848.c ****     return DP83848_STATUS_READ_ERROR;
+ 323:ThirdPackage/lwip_app/dp83848.c ****   }
+ 324:ThirdPackage/lwip_app/dp83848.c **** 
+ 325:ThirdPackage/lwip_app/dp83848.c ****   if((readval & DP83848_BSR_LINK_STATUS) == 0)
+ 750              		.loc 1 325 3 is_stmt 1 view .LVU218
+ 751              		.loc 1 325 5 is_stmt 0 view .LVU219
+ 752 0026 019B     		ldr	r3, [sp, #4]
+ 753 0028 13F0040F 		tst	r3, #4
+ 754 002c 33D0     		beq	.L56
+ 326:ThirdPackage/lwip_app/dp83848.c ****   {
+ 327:ThirdPackage/lwip_app/dp83848.c ****     /* Return Link Down status */
+ 328:ThirdPackage/lwip_app/dp83848.c ****     return DP83848_STATUS_LINK_DOWN;
+ 329:ThirdPackage/lwip_app/dp83848.c ****   }
+ 330:ThirdPackage/lwip_app/dp83848.c **** 
+ 331:ThirdPackage/lwip_app/dp83848.c ****   /* Check Auto negotiaition */
+ 332:ThirdPackage/lwip_app/dp83848.c ****   if(pObj->IO.ReadReg(pObj->DevAddr, DP83848_BCR, &readval) < 0)
+ 755              		.loc 1 332 3 is_stmt 1 view .LVU220
+ 756              		.loc 1 332 14 is_stmt 0 view .LVU221
+ 757 002e 6369     		ldr	r3, [r4, #20]
+ 758              		.loc 1 332 6 view .LVU222
+ 759 0030 01AA     		add	r2, sp, #4
+ 760 0032 0021     		movs	r1, #0
+ 761 0034 2068     		ldr	r0, [r4]
+ 762 0036 9847     		blx	r3
+ 763              	.LVL74:
+ 764              		.loc 1 332 5 view .LVU223
+ 765 0038 0028     		cmp	r0, #0
+ 766 003a 2FDB     		blt	.L57
+ 333:ThirdPackage/lwip_app/dp83848.c ****   {
+ 334:ThirdPackage/lwip_app/dp83848.c ****     return DP83848_STATUS_READ_ERROR;
+ 335:ThirdPackage/lwip_app/dp83848.c ****   }
+ 336:ThirdPackage/lwip_app/dp83848.c **** 
+ 337:ThirdPackage/lwip_app/dp83848.c ****   if((readval & DP83848_BCR_AUTONEGO_EN) != DP83848_BCR_AUTONEGO_EN)
+ 767              		.loc 1 337 3 is_stmt 1 view .LVU224
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 21
+
+
+ 768              		.loc 1 337 15 is_stmt 0 view .LVU225
+ 769 003c 019B     		ldr	r3, [sp, #4]
+ 770              		.loc 1 337 5 view .LVU226
+ 771 003e 13F4805F 		tst	r3, #4096
+ 772 0042 0CD1     		bne	.L53
+ 338:ThirdPackage/lwip_app/dp83848.c ****   {
+ 339:ThirdPackage/lwip_app/dp83848.c ****     if(((readval & DP83848_BCR_SPEED_SELECT) == DP83848_BCR_SPEED_SELECT) && ((readval & DP83848_BC
+ 773              		.loc 1 339 5 is_stmt 1 view .LVU227
+ 774              		.loc 1 339 75 is_stmt 0 view .LVU228
+ 775 0044 03F40452 		and	r2, r3, #8448
+ 776              		.loc 1 339 7 view .LVU229
+ 777 0048 B2F5045F 		cmp	r2, #8448
+ 778 004c 29D0     		beq	.L58
+ 340:ThirdPackage/lwip_app/dp83848.c ****     {
+ 341:ThirdPackage/lwip_app/dp83848.c ****       return DP83848_STATUS_100MBITS_FULLDUPLEX;
+ 342:ThirdPackage/lwip_app/dp83848.c ****     }
+ 343:ThirdPackage/lwip_app/dp83848.c ****     else if ((readval & DP83848_BCR_SPEED_SELECT) == DP83848_BCR_SPEED_SELECT)
+ 779              		.loc 1 343 10 is_stmt 1 view .LVU230
+ 780              		.loc 1 343 13 is_stmt 0 view .LVU231
+ 781 004e 13F4005F 		tst	r3, #8192
+ 782 0052 28D1     		bne	.L59
+ 344:ThirdPackage/lwip_app/dp83848.c ****     {
+ 345:ThirdPackage/lwip_app/dp83848.c ****       return DP83848_STATUS_100MBITS_HALFDUPLEX;
+ 346:ThirdPackage/lwip_app/dp83848.c ****     }
+ 347:ThirdPackage/lwip_app/dp83848.c ****     else if ((readval & DP83848_BCR_DUPLEX_MODE) == DP83848_BCR_DUPLEX_MODE)
+ 783              		.loc 1 347 10 is_stmt 1 view .LVU232
+ 784              		.loc 1 347 13 is_stmt 0 view .LVU233
+ 785 0054 13F4807F 		tst	r3, #256
+ 786 0058 27D0     		beq	.L60
+ 348:ThirdPackage/lwip_app/dp83848.c ****     {
+ 349:ThirdPackage/lwip_app/dp83848.c ****       return DP83848_STATUS_10MBITS_FULLDUPLEX;
+ 787              		.loc 1 349 14 view .LVU234
+ 788 005a 0420     		movs	r0, #4
+ 789 005c 1CE0     		b	.L51
+ 790              	.L53:
+ 350:ThirdPackage/lwip_app/dp83848.c ****     }
+ 351:ThirdPackage/lwip_app/dp83848.c ****     else
+ 352:ThirdPackage/lwip_app/dp83848.c ****     {
+ 353:ThirdPackage/lwip_app/dp83848.c ****       return DP83848_STATUS_10MBITS_HALFDUPLEX;
+ 354:ThirdPackage/lwip_app/dp83848.c ****     }
+ 355:ThirdPackage/lwip_app/dp83848.c ****   }
+ 356:ThirdPackage/lwip_app/dp83848.c ****   else /* Auto Nego enabled */
+ 357:ThirdPackage/lwip_app/dp83848.c ****   {
+ 358:ThirdPackage/lwip_app/dp83848.c ****     if(pObj->IO.ReadReg(pObj->DevAddr, DP83848_PHYSCSR, &readval) < 0)
+ 791              		.loc 1 358 5 is_stmt 1 view .LVU235
+ 792              		.loc 1 358 16 is_stmt 0 view .LVU236
+ 793 005e 6369     		ldr	r3, [r4, #20]
+ 794              		.loc 1 358 8 view .LVU237
+ 795 0060 01AA     		add	r2, sp, #4
+ 796 0062 1021     		movs	r1, #16
+ 797 0064 2068     		ldr	r0, [r4]
+ 798 0066 9847     		blx	r3
+ 799              	.LVL75:
+ 800              		.loc 1 358 7 view .LVU238
+ 801 0068 0028     		cmp	r0, #0
+ 802 006a 20DB     		blt	.L61
+ 359:ThirdPackage/lwip_app/dp83848.c ****     {
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 22
+
+
+ 360:ThirdPackage/lwip_app/dp83848.c ****       return DP83848_STATUS_READ_ERROR;
+ 361:ThirdPackage/lwip_app/dp83848.c ****     }
+ 362:ThirdPackage/lwip_app/dp83848.c **** 
+ 363:ThirdPackage/lwip_app/dp83848.c ****     /* Check if auto nego not done */
+ 364:ThirdPackage/lwip_app/dp83848.c ****     if((readval & DP83848_PHYSCSR_AUTONEGO_DONE) == 0)
+ 803              		.loc 1 364 5 is_stmt 1 view .LVU239
+ 804              		.loc 1 364 17 is_stmt 0 view .LVU240
+ 805 006c 019B     		ldr	r3, [sp, #4]
+ 806              		.loc 1 364 7 view .LVU241
+ 807 006e 13F4807F 		tst	r3, #256
+ 808 0072 1FD0     		beq	.L62
+ 365:ThirdPackage/lwip_app/dp83848.c ****     {
+ 366:ThirdPackage/lwip_app/dp83848.c ****       return DP83848_STATUS_AUTONEGO_NOTDONE;
+ 367:ThirdPackage/lwip_app/dp83848.c ****     }
+ 368:ThirdPackage/lwip_app/dp83848.c **** 
+ 369:ThirdPackage/lwip_app/dp83848.c ****     if((readval & DP83848_PHYSCSR_HCDSPEEDMASK) == DP83848_PHYSCSR_100BTX_FD)
+ 809              		.loc 1 369 5 is_stmt 1 view .LVU242
+ 810              		.loc 1 369 17 is_stmt 0 view .LVU243
+ 811 0074 03F00603 		and	r3, r3, #6
+ 812              		.loc 1 369 7 view .LVU244
+ 813 0078 042B     		cmp	r3, #4
+ 814 007a 1DD0     		beq	.L63
+ 370:ThirdPackage/lwip_app/dp83848.c ****     {
+ 371:ThirdPackage/lwip_app/dp83848.c ****       return DP83848_STATUS_100MBITS_FULLDUPLEX;
+ 372:ThirdPackage/lwip_app/dp83848.c ****     }
+ 373:ThirdPackage/lwip_app/dp83848.c ****     else if ((readval & DP83848_PHYSCSR_HCDSPEEDMASK) == DP83848_PHYSCSR_100BTX_HD)
+ 815              		.loc 1 373 10 is_stmt 1 view .LVU245
+ 816              		.loc 1 373 13 is_stmt 0 view .LVU246
+ 817 007c F3B1     		cbz	r3, .L64
+ 374:ThirdPackage/lwip_app/dp83848.c ****     {
+ 375:ThirdPackage/lwip_app/dp83848.c ****       return DP83848_STATUS_100MBITS_HALFDUPLEX;
+ 376:ThirdPackage/lwip_app/dp83848.c ****     }
+ 377:ThirdPackage/lwip_app/dp83848.c ****     else if ((readval & DP83848_PHYSCSR_HCDSPEEDMASK) == DP83848_PHYSCSR_10BT_FD)
+ 818              		.loc 1 377 10 is_stmt 1 view .LVU247
+ 819              		.loc 1 377 13 is_stmt 0 view .LVU248
+ 820 007e 062B     		cmp	r3, #6
+ 821 0080 01D0     		beq	.L67
+ 378:ThirdPackage/lwip_app/dp83848.c ****     {
+ 379:ThirdPackage/lwip_app/dp83848.c ****       return DP83848_STATUS_10MBITS_FULLDUPLEX;
+ 380:ThirdPackage/lwip_app/dp83848.c ****     }
+ 381:ThirdPackage/lwip_app/dp83848.c ****     else
+ 382:ThirdPackage/lwip_app/dp83848.c ****     {
+ 383:ThirdPackage/lwip_app/dp83848.c ****       return DP83848_STATUS_10MBITS_HALFDUPLEX;
+ 822              		.loc 1 383 14 view .LVU249
+ 823 0082 0520     		movs	r0, #5
+ 824 0084 08E0     		b	.L51
+ 825              	.L67:
+ 379:ThirdPackage/lwip_app/dp83848.c ****     }
+ 826              		.loc 1 379 14 view .LVU250
+ 827 0086 0420     		movs	r0, #4
+ 828 0088 06E0     		b	.L51
+ 829              	.L54:
+ 316:ThirdPackage/lwip_app/dp83848.c ****   }
+ 830              		.loc 1 316 12 view .LVU251
+ 831 008a 6FF00400 		mvn	r0, #4
+ 832 008e 03E0     		b	.L51
+ 833              	.L55:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 23
+
+
+ 322:ThirdPackage/lwip_app/dp83848.c ****   }
+ 834              		.loc 1 322 12 view .LVU252
+ 835 0090 6FF00400 		mvn	r0, #4
+ 836 0094 00E0     		b	.L51
+ 837              	.L56:
+ 328:ThirdPackage/lwip_app/dp83848.c ****   }
+ 838              		.loc 1 328 12 view .LVU253
+ 839 0096 0120     		movs	r0, #1
+ 840              	.L51:
+ 384:ThirdPackage/lwip_app/dp83848.c ****     }
+ 385:ThirdPackage/lwip_app/dp83848.c ****   }
+ 386:ThirdPackage/lwip_app/dp83848.c **** }
+ 841              		.loc 1 386 1 view .LVU254
+ 842 0098 02B0     		add	sp, sp, #8
+ 843              	.LCFI21:
+ 844              		.cfi_remember_state
+ 845              		.cfi_def_cfa_offset 8
+ 846              		@ sp needed
+ 847 009a 10BD     		pop	{r4, pc}
+ 848              	.LVL76:
+ 849              	.L57:
+ 850              	.LCFI22:
+ 851              		.cfi_restore_state
+ 334:ThirdPackage/lwip_app/dp83848.c ****   }
+ 852              		.loc 1 334 12 view .LVU255
+ 853 009c 6FF00400 		mvn	r0, #4
+ 854 00a0 FAE7     		b	.L51
+ 855              	.L58:
+ 341:ThirdPackage/lwip_app/dp83848.c ****     }
+ 856              		.loc 1 341 14 view .LVU256
+ 857 00a2 0220     		movs	r0, #2
+ 858 00a4 F8E7     		b	.L51
+ 859              	.L59:
+ 345:ThirdPackage/lwip_app/dp83848.c ****     }
+ 860              		.loc 1 345 14 view .LVU257
+ 861 00a6 0320     		movs	r0, #3
+ 862 00a8 F6E7     		b	.L51
+ 863              	.L60:
+ 353:ThirdPackage/lwip_app/dp83848.c ****     }
+ 864              		.loc 1 353 14 view .LVU258
+ 865 00aa 0520     		movs	r0, #5
+ 866 00ac F4E7     		b	.L51
+ 867              	.L61:
+ 360:ThirdPackage/lwip_app/dp83848.c ****     }
+ 868              		.loc 1 360 14 view .LVU259
+ 869 00ae 6FF00400 		mvn	r0, #4
+ 870 00b2 F1E7     		b	.L51
+ 871              	.L62:
+ 366:ThirdPackage/lwip_app/dp83848.c ****     }
+ 872              		.loc 1 366 14 view .LVU260
+ 873 00b4 0620     		movs	r0, #6
+ 874 00b6 EFE7     		b	.L51
+ 875              	.L63:
+ 371:ThirdPackage/lwip_app/dp83848.c ****     }
+ 876              		.loc 1 371 14 view .LVU261
+ 877 00b8 0220     		movs	r0, #2
+ 878 00ba EDE7     		b	.L51
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 24
+
+
+ 879              	.L64:
+ 375:ThirdPackage/lwip_app/dp83848.c ****     }
+ 880              		.loc 1 375 14 view .LVU262
+ 881 00bc 0320     		movs	r0, #3
+ 882 00be EBE7     		b	.L51
+ 883              		.cfi_endproc
+ 884              	.LFE6:
+ 886              		.section	.text.DP83848_SetLinkState,"ax",%progbits
+ 887              		.align	1
+ 888              		.global	DP83848_SetLinkState
+ 889              		.syntax unified
+ 890              		.thumb
+ 891              		.thumb_func
+ 893              	DP83848_SetLinkState:
+ 894              	.LVL77:
+ 895              	.LFB7:
+ 387:ThirdPackage/lwip_app/dp83848.c **** 
+ 388:ThirdPackage/lwip_app/dp83848.c **** /**
+ 389:ThirdPackage/lwip_app/dp83848.c ****   * @brief  Set the link state of DP83848 device.
+ 390:ThirdPackage/lwip_app/dp83848.c ****   * @param  pObj: Pointer to device object.
+ 391:ThirdPackage/lwip_app/dp83848.c ****   * @param  pLinkState: link state can be one of the following
+ 392:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_100MBITS_FULLDUPLEX if 100Mb/s FD
+ 393:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_100MBITS_HALFDUPLEX if 100Mb/s HD
+ 394:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_10MBITS_FULLDUPLEX  if 10Mb/s FD
+ 395:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_10MBITS_HALFDUPLEX  if 10Mb/s HD
+ 396:ThirdPackage/lwip_app/dp83848.c ****   * @retval DP83848_STATUS_OK  if OK
+ 397:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_ERROR  if parameter error
+ 398:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_READ_ERROR if connot read register
+ 399:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_WRITE_ERROR if connot write to register
+ 400:ThirdPackage/lwip_app/dp83848.c ****   */
+ 401:ThirdPackage/lwip_app/dp83848.c **** int32_t DP83848_SetLinkState(dp83848_Object_t *pObj, uint32_t LinkState)
+ 402:ThirdPackage/lwip_app/dp83848.c **** {
+ 896              		.loc 1 402 1 is_stmt 1 view -0
+ 897              		.cfi_startproc
+ 898              		@ args = 0, pretend = 0, frame = 8
+ 899              		@ frame_needed = 0, uses_anonymous_args = 0
+ 900              		.loc 1 402 1 is_stmt 0 view .LVU264
+ 901 0000 30B5     		push	{r4, r5, lr}
+ 902              	.LCFI23:
+ 903              		.cfi_def_cfa_offset 12
+ 904              		.cfi_offset 4, -12
+ 905              		.cfi_offset 5, -8
+ 906              		.cfi_offset 14, -4
+ 907 0002 83B0     		sub	sp, sp, #12
+ 908              	.LCFI24:
+ 909              		.cfi_def_cfa_offset 24
+ 910 0004 0446     		mov	r4, r0
+ 911 0006 0D46     		mov	r5, r1
+ 403:ThirdPackage/lwip_app/dp83848.c ****   uint32_t bcrvalue = 0;
+ 912              		.loc 1 403 3 is_stmt 1 view .LVU265
+ 913              		.loc 1 403 12 is_stmt 0 view .LVU266
+ 914 0008 0021     		movs	r1, #0
+ 915              	.LVL78:
+ 916              		.loc 1 403 12 view .LVU267
+ 917 000a 0191     		str	r1, [sp, #4]
+ 404:ThirdPackage/lwip_app/dp83848.c ****   int32_t status = DP83848_STATUS_OK;
+ 918              		.loc 1 404 3 is_stmt 1 view .LVU268
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 25
+
+
+ 919              	.LVL79:
+ 405:ThirdPackage/lwip_app/dp83848.c **** 
+ 406:ThirdPackage/lwip_app/dp83848.c ****   if(pObj->IO.ReadReg(pObj->DevAddr, DP83848_BCR, &bcrvalue) >= 0)
+ 920              		.loc 1 406 3 view .LVU269
+ 921              		.loc 1 406 14 is_stmt 0 view .LVU270
+ 922 000c 4369     		ldr	r3, [r0, #20]
+ 923              		.loc 1 406 6 view .LVU271
+ 924 000e 01AA     		add	r2, sp, #4
+ 925 0010 0068     		ldr	r0, [r0]
+ 926              	.LVL80:
+ 927              		.loc 1 406 6 view .LVU272
+ 928 0012 9847     		blx	r3
+ 929              	.LVL81:
+ 930              		.loc 1 406 5 view .LVU273
+ 931 0014 0028     		cmp	r0, #0
+ 932 0016 1EDB     		blt	.L73
+ 407:ThirdPackage/lwip_app/dp83848.c ****   {
+ 408:ThirdPackage/lwip_app/dp83848.c ****     /* Disable link config (Auto nego, speed and duplex) */
+ 409:ThirdPackage/lwip_app/dp83848.c ****     bcrvalue &= ~(DP83848_BCR_AUTONEGO_EN | DP83848_BCR_SPEED_SELECT | DP83848_BCR_DUPLEX_MODE);
+ 933              		.loc 1 409 5 is_stmt 1 view .LVU274
+ 934              		.loc 1 409 14 is_stmt 0 view .LVU275
+ 935 0018 019B     		ldr	r3, [sp, #4]
+ 936 001a 23F44453 		bic	r3, r3, #12544
+ 937 001e 0193     		str	r3, [sp, #4]
+ 410:ThirdPackage/lwip_app/dp83848.c **** 
+ 411:ThirdPackage/lwip_app/dp83848.c ****     if(LinkState == DP83848_STATUS_100MBITS_FULLDUPLEX)
+ 938              		.loc 1 411 5 is_stmt 1 view .LVU276
+ 939              		.loc 1 411 7 is_stmt 0 view .LVU277
+ 940 0020 022D     		cmp	r5, #2
+ 941 0022 10D0     		beq	.L77
+ 412:ThirdPackage/lwip_app/dp83848.c ****     {
+ 413:ThirdPackage/lwip_app/dp83848.c ****       bcrvalue |= (DP83848_BCR_SPEED_SELECT | DP83848_BCR_DUPLEX_MODE);
+ 414:ThirdPackage/lwip_app/dp83848.c ****     }
+ 415:ThirdPackage/lwip_app/dp83848.c ****     else if (LinkState == DP83848_STATUS_100MBITS_HALFDUPLEX)
+ 942              		.loc 1 415 10 is_stmt 1 view .LVU278
+ 943              		.loc 1 415 13 is_stmt 0 view .LVU279
+ 944 0024 032D     		cmp	r5, #3
+ 945 0026 12D0     		beq	.L78
+ 416:ThirdPackage/lwip_app/dp83848.c ****     {
+ 417:ThirdPackage/lwip_app/dp83848.c ****       bcrvalue |= DP83848_BCR_SPEED_SELECT;
+ 418:ThirdPackage/lwip_app/dp83848.c ****     }
+ 419:ThirdPackage/lwip_app/dp83848.c ****     else if (LinkState == DP83848_STATUS_10MBITS_FULLDUPLEX)
+ 946              		.loc 1 419 10 is_stmt 1 view .LVU280
+ 947              		.loc 1 419 13 is_stmt 0 view .LVU281
+ 948 0028 042D     		cmp	r5, #4
+ 949 002a 17D1     		bne	.L74
+ 420:ThirdPackage/lwip_app/dp83848.c ****     {
+ 421:ThirdPackage/lwip_app/dp83848.c ****       bcrvalue |= DP83848_BCR_DUPLEX_MODE;
+ 950              		.loc 1 421 7 is_stmt 1 view .LVU282
+ 951              		.loc 1 421 16 is_stmt 0 view .LVU283
+ 952 002c 43F48073 		orr	r3, r3, #256
+ 953 0030 0193     		str	r3, [sp, #4]
+ 422:ThirdPackage/lwip_app/dp83848.c ****     }
+ 423:ThirdPackage/lwip_app/dp83848.c ****     else
+ 424:ThirdPackage/lwip_app/dp83848.c ****     {
+ 425:ThirdPackage/lwip_app/dp83848.c ****       /* Wrong link status parameter */
+ 426:ThirdPackage/lwip_app/dp83848.c ****       status = DP83848_STATUS_ERROR;
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 26
+
+
+ 427:ThirdPackage/lwip_app/dp83848.c ****     }
+ 428:ThirdPackage/lwip_app/dp83848.c ****   }
+ 429:ThirdPackage/lwip_app/dp83848.c ****   else
+ 430:ThirdPackage/lwip_app/dp83848.c ****   {
+ 431:ThirdPackage/lwip_app/dp83848.c ****     status = DP83848_STATUS_READ_ERROR;
+ 432:ThirdPackage/lwip_app/dp83848.c ****   }
+ 433:ThirdPackage/lwip_app/dp83848.c **** 
+ 434:ThirdPackage/lwip_app/dp83848.c ****   if(status == DP83848_STATUS_OK)
+ 954              		.loc 1 434 3 is_stmt 1 view .LVU284
+ 955              	.L71:
+ 435:ThirdPackage/lwip_app/dp83848.c ****   {
+ 436:ThirdPackage/lwip_app/dp83848.c ****     /* Apply configuration */
+ 437:ThirdPackage/lwip_app/dp83848.c ****     if(pObj->IO.WriteReg(pObj->DevAddr, DP83848_BCR, bcrvalue) < 0)
+ 956              		.loc 1 437 5 view .LVU285
+ 957              		.loc 1 437 16 is_stmt 0 view .LVU286
+ 958 0032 2369     		ldr	r3, [r4, #16]
+ 959              		.loc 1 437 8 view .LVU287
+ 960 0034 019A     		ldr	r2, [sp, #4]
+ 961 0036 0021     		movs	r1, #0
+ 962 0038 2068     		ldr	r0, [r4]
+ 963 003a 9847     		blx	r3
+ 964              	.LVL82:
+ 965              		.loc 1 437 7 view .LVU288
+ 966 003c 0028     		cmp	r0, #0
+ 967 003e 10DB     		blt	.L75
+ 968 0040 0020     		movs	r0, #0
+ 969              	.LVL83:
+ 970              	.L68:
+ 438:ThirdPackage/lwip_app/dp83848.c ****     {
+ 439:ThirdPackage/lwip_app/dp83848.c ****       status = DP83848_STATUS_WRITE_ERROR;
+ 440:ThirdPackage/lwip_app/dp83848.c ****     }
+ 441:ThirdPackage/lwip_app/dp83848.c ****   }
+ 442:ThirdPackage/lwip_app/dp83848.c **** 
+ 443:ThirdPackage/lwip_app/dp83848.c ****   return status;
+ 444:ThirdPackage/lwip_app/dp83848.c **** }
+ 971              		.loc 1 444 1 view .LVU289
+ 972 0042 03B0     		add	sp, sp, #12
+ 973              	.LCFI25:
+ 974              		.cfi_remember_state
+ 975              		.cfi_def_cfa_offset 12
+ 976              		@ sp needed
+ 977 0044 30BD     		pop	{r4, r5, pc}
+ 978              	.LVL84:
+ 979              	.L77:
+ 980              	.LCFI26:
+ 981              		.cfi_restore_state
+ 413:ThirdPackage/lwip_app/dp83848.c ****     }
+ 982              		.loc 1 413 7 is_stmt 1 view .LVU290
+ 413:ThirdPackage/lwip_app/dp83848.c ****     }
+ 983              		.loc 1 413 16 is_stmt 0 view .LVU291
+ 984 0046 43F40453 		orr	r3, r3, #8448
+ 985 004a 0193     		str	r3, [sp, #4]
+ 434:ThirdPackage/lwip_app/dp83848.c ****   {
+ 986              		.loc 1 434 3 is_stmt 1 view .LVU292
+ 987 004c F1E7     		b	.L71
+ 988              	.L78:
+ 417:ThirdPackage/lwip_app/dp83848.c ****     }
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 27
+
+
+ 989              		.loc 1 417 7 view .LVU293
+ 417:ThirdPackage/lwip_app/dp83848.c ****     }
+ 990              		.loc 1 417 16 is_stmt 0 view .LVU294
+ 991 004e 43F40053 		orr	r3, r3, #8192
+ 992 0052 0193     		str	r3, [sp, #4]
+ 434:ThirdPackage/lwip_app/dp83848.c ****   {
+ 993              		.loc 1 434 3 is_stmt 1 view .LVU295
+ 994 0054 EDE7     		b	.L71
+ 995              	.L73:
+ 431:ThirdPackage/lwip_app/dp83848.c ****   }
+ 996              		.loc 1 431 12 is_stmt 0 view .LVU296
+ 997 0056 6FF00400 		mvn	r0, #4
+ 998 005a F2E7     		b	.L68
+ 999              	.L74:
+ 426:ThirdPackage/lwip_app/dp83848.c ****     }
+ 1000              		.loc 1 426 14 view .LVU297
+ 1001 005c 4FF0FF30 		mov	r0, #-1
+ 1002 0060 EFE7     		b	.L68
+ 1003              	.L75:
+ 439:ThirdPackage/lwip_app/dp83848.c ****     }
+ 1004              		.loc 1 439 14 view .LVU298
+ 1005 0062 6FF00300 		mvn	r0, #3
+ 1006              	.LVL85:
+ 443:ThirdPackage/lwip_app/dp83848.c **** }
+ 1007              		.loc 1 443 3 is_stmt 1 view .LVU299
+ 443:ThirdPackage/lwip_app/dp83848.c **** }
+ 1008              		.loc 1 443 10 is_stmt 0 view .LVU300
+ 1009 0066 ECE7     		b	.L68
+ 1010              		.cfi_endproc
+ 1011              	.LFE7:
+ 1013              		.section	.text.DP83848_EnableLoopbackMode,"ax",%progbits
+ 1014              		.align	1
+ 1015              		.global	DP83848_EnableLoopbackMode
+ 1016              		.syntax unified
+ 1017              		.thumb
+ 1018              		.thumb_func
+ 1020              	DP83848_EnableLoopbackMode:
+ 1021              	.LVL86:
+ 1022              	.LFB8:
+ 445:ThirdPackage/lwip_app/dp83848.c **** 
+ 446:ThirdPackage/lwip_app/dp83848.c **** /**
+ 447:ThirdPackage/lwip_app/dp83848.c ****   * @brief  Enable loopback mode.
+ 448:ThirdPackage/lwip_app/dp83848.c ****   * @param  pObj: Pointer to device object.
+ 449:ThirdPackage/lwip_app/dp83848.c ****   * @retval DP83848_STATUS_OK  if OK
+ 450:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_READ_ERROR if connot read register
+ 451:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_WRITE_ERROR if connot write to register
+ 452:ThirdPackage/lwip_app/dp83848.c ****   */
+ 453:ThirdPackage/lwip_app/dp83848.c **** int32_t DP83848_EnableLoopbackMode(dp83848_Object_t *pObj)
+ 454:ThirdPackage/lwip_app/dp83848.c **** {
+ 1023              		.loc 1 454 1 is_stmt 1 view -0
+ 1024              		.cfi_startproc
+ 1025              		@ args = 0, pretend = 0, frame = 8
+ 1026              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1027              		.loc 1 454 1 is_stmt 0 view .LVU302
+ 1028 0000 10B5     		push	{r4, lr}
+ 1029              	.LCFI27:
+ 1030              		.cfi_def_cfa_offset 8
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 28
+
+
+ 1031              		.cfi_offset 4, -8
+ 1032              		.cfi_offset 14, -4
+ 1033 0002 82B0     		sub	sp, sp, #8
+ 1034              	.LCFI28:
+ 1035              		.cfi_def_cfa_offset 16
+ 1036 0004 0446     		mov	r4, r0
+ 455:ThirdPackage/lwip_app/dp83848.c ****   uint32_t readval = 0;
+ 1037              		.loc 1 455 3 is_stmt 1 view .LVU303
+ 1038              		.loc 1 455 12 is_stmt 0 view .LVU304
+ 1039 0006 0021     		movs	r1, #0
+ 1040 0008 0191     		str	r1, [sp, #4]
+ 456:ThirdPackage/lwip_app/dp83848.c ****   int32_t status = DP83848_STATUS_OK;
+ 1041              		.loc 1 456 3 is_stmt 1 view .LVU305
+ 1042              	.LVL87:
+ 457:ThirdPackage/lwip_app/dp83848.c **** 
+ 458:ThirdPackage/lwip_app/dp83848.c ****   if(pObj->IO.ReadReg(pObj->DevAddr, DP83848_BCR, &readval) >= 0)
+ 1043              		.loc 1 458 3 view .LVU306
+ 1044              		.loc 1 458 14 is_stmt 0 view .LVU307
+ 1045 000a 4369     		ldr	r3, [r0, #20]
+ 1046              		.loc 1 458 6 view .LVU308
+ 1047 000c 01AA     		add	r2, sp, #4
+ 1048 000e 0068     		ldr	r0, [r0]
+ 1049              	.LVL88:
+ 1050              		.loc 1 458 6 view .LVU309
+ 1051 0010 9847     		blx	r3
+ 1052              	.LVL89:
+ 1053              		.loc 1 458 5 view .LVU310
+ 1054 0012 0028     		cmp	r0, #0
+ 1055 0014 0CDB     		blt	.L81
+ 459:ThirdPackage/lwip_app/dp83848.c ****   {
+ 460:ThirdPackage/lwip_app/dp83848.c ****     readval |= DP83848_BCR_LOOPBACK;
+ 1056              		.loc 1 460 5 is_stmt 1 view .LVU311
+ 1057              		.loc 1 460 13 is_stmt 0 view .LVU312
+ 1058 0016 019A     		ldr	r2, [sp, #4]
+ 1059 0018 42F48042 		orr	r2, r2, #16384
+ 1060 001c 0192     		str	r2, [sp, #4]
+ 461:ThirdPackage/lwip_app/dp83848.c **** 
+ 462:ThirdPackage/lwip_app/dp83848.c ****     /* Apply configuration */
+ 463:ThirdPackage/lwip_app/dp83848.c ****     if(pObj->IO.WriteReg(pObj->DevAddr, DP83848_BCR, readval) < 0)
+ 1061              		.loc 1 463 5 is_stmt 1 view .LVU313
+ 1062              		.loc 1 463 16 is_stmt 0 view .LVU314
+ 1063 001e 2369     		ldr	r3, [r4, #16]
+ 1064              		.loc 1 463 8 view .LVU315
+ 1065 0020 0021     		movs	r1, #0
+ 1066 0022 2068     		ldr	r0, [r4]
+ 1067 0024 9847     		blx	r3
+ 1068              	.LVL90:
+ 1069              		.loc 1 463 7 view .LVU316
+ 1070 0026 0028     		cmp	r0, #0
+ 1071 0028 05DB     		blt	.L82
+ 456:ThirdPackage/lwip_app/dp83848.c **** 
+ 1072              		.loc 1 456 11 view .LVU317
+ 1073 002a 0020     		movs	r0, #0
+ 1074              	.LVL91:
+ 1075              	.L79:
+ 464:ThirdPackage/lwip_app/dp83848.c ****     {
+ 465:ThirdPackage/lwip_app/dp83848.c ****       status = DP83848_STATUS_WRITE_ERROR;
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 29
+
+
+ 466:ThirdPackage/lwip_app/dp83848.c ****     }
+ 467:ThirdPackage/lwip_app/dp83848.c ****   }
+ 468:ThirdPackage/lwip_app/dp83848.c ****   else
+ 469:ThirdPackage/lwip_app/dp83848.c ****   {
+ 470:ThirdPackage/lwip_app/dp83848.c ****     status = DP83848_STATUS_READ_ERROR;
+ 471:ThirdPackage/lwip_app/dp83848.c ****   }
+ 472:ThirdPackage/lwip_app/dp83848.c **** 
+ 473:ThirdPackage/lwip_app/dp83848.c ****   return status;
+ 474:ThirdPackage/lwip_app/dp83848.c **** }
+ 1076              		.loc 1 474 1 view .LVU318
+ 1077 002c 02B0     		add	sp, sp, #8
+ 1078              	.LCFI29:
+ 1079              		.cfi_remember_state
+ 1080              		.cfi_def_cfa_offset 8
+ 1081              		@ sp needed
+ 1082 002e 10BD     		pop	{r4, pc}
+ 1083              	.LVL92:
+ 1084              	.L81:
+ 1085              	.LCFI30:
+ 1086              		.cfi_restore_state
+ 470:ThirdPackage/lwip_app/dp83848.c ****   }
+ 1087              		.loc 1 470 12 view .LVU319
+ 1088 0030 6FF00400 		mvn	r0, #4
+ 1089 0034 FAE7     		b	.L79
+ 1090              	.L82:
+ 465:ThirdPackage/lwip_app/dp83848.c ****     }
+ 1091              		.loc 1 465 14 view .LVU320
+ 1092 0036 6FF00300 		mvn	r0, #3
+ 1093              	.LVL93:
+ 473:ThirdPackage/lwip_app/dp83848.c **** }
+ 1094              		.loc 1 473 3 is_stmt 1 view .LVU321
+ 473:ThirdPackage/lwip_app/dp83848.c **** }
+ 1095              		.loc 1 473 10 is_stmt 0 view .LVU322
+ 1096 003a F7E7     		b	.L79
+ 1097              		.cfi_endproc
+ 1098              	.LFE8:
+ 1100              		.section	.text.DP83848_DisableLoopbackMode,"ax",%progbits
+ 1101              		.align	1
+ 1102              		.global	DP83848_DisableLoopbackMode
+ 1103              		.syntax unified
+ 1104              		.thumb
+ 1105              		.thumb_func
+ 1107              	DP83848_DisableLoopbackMode:
+ 1108              	.LVL94:
+ 1109              	.LFB9:
+ 475:ThirdPackage/lwip_app/dp83848.c **** 
+ 476:ThirdPackage/lwip_app/dp83848.c **** /**
+ 477:ThirdPackage/lwip_app/dp83848.c ****   * @brief  Disable loopback mode.
+ 478:ThirdPackage/lwip_app/dp83848.c ****   * @param  pObj: Pointer to device object.
+ 479:ThirdPackage/lwip_app/dp83848.c ****   * @retval DP83848_STATUS_OK  if OK
+ 480:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_READ_ERROR if connot read register
+ 481:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_WRITE_ERROR if connot write to register
+ 482:ThirdPackage/lwip_app/dp83848.c ****   */
+ 483:ThirdPackage/lwip_app/dp83848.c **** int32_t DP83848_DisableLoopbackMode(dp83848_Object_t *pObj)
+ 484:ThirdPackage/lwip_app/dp83848.c **** {
+ 1110              		.loc 1 484 1 is_stmt 1 view -0
+ 1111              		.cfi_startproc
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 30
+
+
+ 1112              		@ args = 0, pretend = 0, frame = 8
+ 1113              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1114              		.loc 1 484 1 is_stmt 0 view .LVU324
+ 1115 0000 10B5     		push	{r4, lr}
+ 1116              	.LCFI31:
+ 1117              		.cfi_def_cfa_offset 8
+ 1118              		.cfi_offset 4, -8
+ 1119              		.cfi_offset 14, -4
+ 1120 0002 82B0     		sub	sp, sp, #8
+ 1121              	.LCFI32:
+ 1122              		.cfi_def_cfa_offset 16
+ 1123 0004 0446     		mov	r4, r0
+ 485:ThirdPackage/lwip_app/dp83848.c ****   uint32_t readval = 0;
+ 1124              		.loc 1 485 3 is_stmt 1 view .LVU325
+ 1125              		.loc 1 485 12 is_stmt 0 view .LVU326
+ 1126 0006 0021     		movs	r1, #0
+ 1127 0008 0191     		str	r1, [sp, #4]
+ 486:ThirdPackage/lwip_app/dp83848.c ****   int32_t status = DP83848_STATUS_OK;
+ 1128              		.loc 1 486 3 is_stmt 1 view .LVU327
+ 1129              	.LVL95:
+ 487:ThirdPackage/lwip_app/dp83848.c **** 
+ 488:ThirdPackage/lwip_app/dp83848.c ****   if(pObj->IO.ReadReg(pObj->DevAddr, DP83848_BCR, &readval) >= 0)
+ 1130              		.loc 1 488 3 view .LVU328
+ 1131              		.loc 1 488 14 is_stmt 0 view .LVU329
+ 1132 000a 4369     		ldr	r3, [r0, #20]
+ 1133              		.loc 1 488 6 view .LVU330
+ 1134 000c 01AA     		add	r2, sp, #4
+ 1135 000e 0068     		ldr	r0, [r0]
+ 1136              	.LVL96:
+ 1137              		.loc 1 488 6 view .LVU331
+ 1138 0010 9847     		blx	r3
+ 1139              	.LVL97:
+ 1140              		.loc 1 488 5 view .LVU332
+ 1141 0012 0028     		cmp	r0, #0
+ 1142 0014 0CDB     		blt	.L86
+ 489:ThirdPackage/lwip_app/dp83848.c ****   {
+ 490:ThirdPackage/lwip_app/dp83848.c ****     readval &= ~DP83848_BCR_LOOPBACK;
+ 1143              		.loc 1 490 5 is_stmt 1 view .LVU333
+ 1144              		.loc 1 490 13 is_stmt 0 view .LVU334
+ 1145 0016 019A     		ldr	r2, [sp, #4]
+ 1146 0018 22F48042 		bic	r2, r2, #16384
+ 1147 001c 0192     		str	r2, [sp, #4]
+ 491:ThirdPackage/lwip_app/dp83848.c **** 
+ 492:ThirdPackage/lwip_app/dp83848.c ****     /* Apply configuration */
+ 493:ThirdPackage/lwip_app/dp83848.c ****     if(pObj->IO.WriteReg(pObj->DevAddr, DP83848_BCR, readval) < 0)
+ 1148              		.loc 1 493 5 is_stmt 1 view .LVU335
+ 1149              		.loc 1 493 16 is_stmt 0 view .LVU336
+ 1150 001e 2369     		ldr	r3, [r4, #16]
+ 1151              		.loc 1 493 8 view .LVU337
+ 1152 0020 0021     		movs	r1, #0
+ 1153 0022 2068     		ldr	r0, [r4]
+ 1154 0024 9847     		blx	r3
+ 1155              	.LVL98:
+ 1156              		.loc 1 493 7 view .LVU338
+ 1157 0026 0028     		cmp	r0, #0
+ 1158 0028 05DB     		blt	.L87
+ 486:ThirdPackage/lwip_app/dp83848.c **** 
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 31
+
+
+ 1159              		.loc 1 486 11 view .LVU339
+ 1160 002a 0020     		movs	r0, #0
+ 1161              	.LVL99:
+ 1162              	.L84:
+ 494:ThirdPackage/lwip_app/dp83848.c ****     {
+ 495:ThirdPackage/lwip_app/dp83848.c ****       status =  DP83848_STATUS_WRITE_ERROR;
+ 496:ThirdPackage/lwip_app/dp83848.c ****     }
+ 497:ThirdPackage/lwip_app/dp83848.c ****   }
+ 498:ThirdPackage/lwip_app/dp83848.c ****   else
+ 499:ThirdPackage/lwip_app/dp83848.c ****   {
+ 500:ThirdPackage/lwip_app/dp83848.c ****     status = DP83848_STATUS_READ_ERROR;
+ 501:ThirdPackage/lwip_app/dp83848.c ****   }
+ 502:ThirdPackage/lwip_app/dp83848.c **** 
+ 503:ThirdPackage/lwip_app/dp83848.c ****   return status;
+ 504:ThirdPackage/lwip_app/dp83848.c **** }
+ 1163              		.loc 1 504 1 view .LVU340
+ 1164 002c 02B0     		add	sp, sp, #8
+ 1165              	.LCFI33:
+ 1166              		.cfi_remember_state
+ 1167              		.cfi_def_cfa_offset 8
+ 1168              		@ sp needed
+ 1169 002e 10BD     		pop	{r4, pc}
+ 1170              	.LVL100:
+ 1171              	.L86:
+ 1172              	.LCFI34:
+ 1173              		.cfi_restore_state
+ 500:ThirdPackage/lwip_app/dp83848.c ****   }
+ 1174              		.loc 1 500 12 view .LVU341
+ 1175 0030 6FF00400 		mvn	r0, #4
+ 1176 0034 FAE7     		b	.L84
+ 1177              	.L87:
+ 495:ThirdPackage/lwip_app/dp83848.c ****     }
+ 1178              		.loc 1 495 14 view .LVU342
+ 1179 0036 6FF00300 		mvn	r0, #3
+ 1180              	.LVL101:
+ 503:ThirdPackage/lwip_app/dp83848.c **** }
+ 1181              		.loc 1 503 3 is_stmt 1 view .LVU343
+ 503:ThirdPackage/lwip_app/dp83848.c **** }
+ 1182              		.loc 1 503 10 is_stmt 0 view .LVU344
+ 1183 003a F7E7     		b	.L84
+ 1184              		.cfi_endproc
+ 1185              	.LFE9:
+ 1187              		.section	.text.DP83848_EnableIT,"ax",%progbits
+ 1188              		.align	1
+ 1189              		.global	DP83848_EnableIT
+ 1190              		.syntax unified
+ 1191              		.thumb
+ 1192              		.thumb_func
+ 1194              	DP83848_EnableIT:
+ 1195              	.LVL102:
+ 1196              	.LFB10:
+ 505:ThirdPackage/lwip_app/dp83848.c **** 
+ 506:ThirdPackage/lwip_app/dp83848.c **** /**
+ 507:ThirdPackage/lwip_app/dp83848.c ****   * @brief  Enable IT source.
+ 508:ThirdPackage/lwip_app/dp83848.c ****   * @param  pObj: Pointer to device object.
+ 509:ThirdPackage/lwip_app/dp83848.c ****   * @param  Interrupt: IT source to be enabled
+ 510:ThirdPackage/lwip_app/dp83848.c ****   *         should be a value or a combination of the following:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 32
+
+
+ 511:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_WOL_IT
+ 512:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_ENERGYON_IT
+ 513:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_AUTONEGO_COMPLETE_IT
+ 514:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_REMOTE_FAULT_IT
+ 515:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_LINK_DOWN_IT
+ 516:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_AUTONEGO_LP_ACK_IT
+ 517:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_PARALLEL_DETECTION_FAULT_IT
+ 518:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_AUTONEGO_PAGE_RECEIVED_IT
+ 519:ThirdPackage/lwip_app/dp83848.c ****   * @retval DP83848_STATUS_OK  if OK
+ 520:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_READ_ERROR if connot read register
+ 521:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_WRITE_ERROR if connot write to register
+ 522:ThirdPackage/lwip_app/dp83848.c ****   */
+ 523:ThirdPackage/lwip_app/dp83848.c **** int32_t DP83848_EnableIT(dp83848_Object_t *pObj, uint32_t Interrupt)
+ 524:ThirdPackage/lwip_app/dp83848.c **** {
+ 1197              		.loc 1 524 1 is_stmt 1 view -0
+ 1198              		.cfi_startproc
+ 1199              		@ args = 0, pretend = 0, frame = 8
+ 1200              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1201              		.loc 1 524 1 is_stmt 0 view .LVU346
+ 1202 0000 30B5     		push	{r4, r5, lr}
+ 1203              	.LCFI35:
+ 1204              		.cfi_def_cfa_offset 12
+ 1205              		.cfi_offset 4, -12
+ 1206              		.cfi_offset 5, -8
+ 1207              		.cfi_offset 14, -4
+ 1208 0002 83B0     		sub	sp, sp, #12
+ 1209              	.LCFI36:
+ 1210              		.cfi_def_cfa_offset 24
+ 1211 0004 0446     		mov	r4, r0
+ 1212 0006 0D46     		mov	r5, r1
+ 525:ThirdPackage/lwip_app/dp83848.c ****   uint32_t readval = 0;
+ 1213              		.loc 1 525 3 is_stmt 1 view .LVU347
+ 1214              		.loc 1 525 12 is_stmt 0 view .LVU348
+ 1215 0008 0023     		movs	r3, #0
+ 1216 000a 0193     		str	r3, [sp, #4]
+ 526:ThirdPackage/lwip_app/dp83848.c ****   int32_t status = DP83848_STATUS_OK;
+ 1217              		.loc 1 526 3 is_stmt 1 view .LVU349
+ 1218              	.LVL103:
+ 527:ThirdPackage/lwip_app/dp83848.c **** 
+ 528:ThirdPackage/lwip_app/dp83848.c ****   if(pObj->IO.ReadReg(pObj->DevAddr, DP83848_IMR, &readval) >= 0)
+ 1219              		.loc 1 528 3 view .LVU350
+ 1220              		.loc 1 528 14 is_stmt 0 view .LVU351
+ 1221 000c 4369     		ldr	r3, [r0, #20]
+ 1222              		.loc 1 528 6 view .LVU352
+ 1223 000e 01AA     		add	r2, sp, #4
+ 1224 0010 1121     		movs	r1, #17
+ 1225              	.LVL104:
+ 1226              		.loc 1 528 6 view .LVU353
+ 1227 0012 0068     		ldr	r0, [r0]
+ 1228              	.LVL105:
+ 1229              		.loc 1 528 6 view .LVU354
+ 1230 0014 9847     		blx	r3
+ 1231              	.LVL106:
+ 1232              		.loc 1 528 5 view .LVU355
+ 1233 0016 0028     		cmp	r0, #0
+ 1234 0018 0BDB     		blt	.L91
+ 529:ThirdPackage/lwip_app/dp83848.c ****   {
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 33
+
+
+ 530:ThirdPackage/lwip_app/dp83848.c ****     readval |= Interrupt;
+ 1235              		.loc 1 530 5 is_stmt 1 view .LVU356
+ 1236              		.loc 1 530 13 is_stmt 0 view .LVU357
+ 1237 001a 019A     		ldr	r2, [sp, #4]
+ 1238 001c 2A43     		orrs	r2, r2, r5
+ 1239 001e 0192     		str	r2, [sp, #4]
+ 531:ThirdPackage/lwip_app/dp83848.c **** 
+ 532:ThirdPackage/lwip_app/dp83848.c ****     /* Apply configuration */
+ 533:ThirdPackage/lwip_app/dp83848.c ****     if(pObj->IO.WriteReg(pObj->DevAddr, DP83848_IMR, readval) < 0)
+ 1240              		.loc 1 533 5 is_stmt 1 view .LVU358
+ 1241              		.loc 1 533 16 is_stmt 0 view .LVU359
+ 1242 0020 2369     		ldr	r3, [r4, #16]
+ 1243              		.loc 1 533 8 view .LVU360
+ 1244 0022 1121     		movs	r1, #17
+ 1245 0024 2068     		ldr	r0, [r4]
+ 1246 0026 9847     		blx	r3
+ 1247              	.LVL107:
+ 1248              		.loc 1 533 7 view .LVU361
+ 1249 0028 0028     		cmp	r0, #0
+ 1250 002a 05DB     		blt	.L92
+ 526:ThirdPackage/lwip_app/dp83848.c **** 
+ 1251              		.loc 1 526 11 view .LVU362
+ 1252 002c 0020     		movs	r0, #0
+ 1253              	.LVL108:
+ 1254              	.L89:
+ 534:ThirdPackage/lwip_app/dp83848.c ****     {
+ 535:ThirdPackage/lwip_app/dp83848.c ****       status =  DP83848_STATUS_WRITE_ERROR;
+ 536:ThirdPackage/lwip_app/dp83848.c ****     }
+ 537:ThirdPackage/lwip_app/dp83848.c ****   }
+ 538:ThirdPackage/lwip_app/dp83848.c ****   else
+ 539:ThirdPackage/lwip_app/dp83848.c ****   {
+ 540:ThirdPackage/lwip_app/dp83848.c ****     status = DP83848_STATUS_READ_ERROR;
+ 541:ThirdPackage/lwip_app/dp83848.c ****   }
+ 542:ThirdPackage/lwip_app/dp83848.c **** 
+ 543:ThirdPackage/lwip_app/dp83848.c ****   return status;
+ 544:ThirdPackage/lwip_app/dp83848.c **** }
+ 1255              		.loc 1 544 1 view .LVU363
+ 1256 002e 03B0     		add	sp, sp, #12
+ 1257              	.LCFI37:
+ 1258              		.cfi_remember_state
+ 1259              		.cfi_def_cfa_offset 12
+ 1260              		@ sp needed
+ 1261 0030 30BD     		pop	{r4, r5, pc}
+ 1262              	.LVL109:
+ 1263              	.L91:
+ 1264              	.LCFI38:
+ 1265              		.cfi_restore_state
+ 540:ThirdPackage/lwip_app/dp83848.c ****   }
+ 1266              		.loc 1 540 12 view .LVU364
+ 1267 0032 6FF00400 		mvn	r0, #4
+ 1268 0036 FAE7     		b	.L89
+ 1269              	.L92:
+ 535:ThirdPackage/lwip_app/dp83848.c ****     }
+ 1270              		.loc 1 535 14 view .LVU365
+ 1271 0038 6FF00300 		mvn	r0, #3
+ 1272              	.LVL110:
+ 543:ThirdPackage/lwip_app/dp83848.c **** }
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 34
+
+
+ 1273              		.loc 1 543 3 is_stmt 1 view .LVU366
+ 543:ThirdPackage/lwip_app/dp83848.c **** }
+ 1274              		.loc 1 543 10 is_stmt 0 view .LVU367
+ 1275 003c F7E7     		b	.L89
+ 1276              		.cfi_endproc
+ 1277              	.LFE10:
+ 1279              		.section	.text.DP83848_DisableIT,"ax",%progbits
+ 1280              		.align	1
+ 1281              		.global	DP83848_DisableIT
+ 1282              		.syntax unified
+ 1283              		.thumb
+ 1284              		.thumb_func
+ 1286              	DP83848_DisableIT:
+ 1287              	.LVL111:
+ 1288              	.LFB11:
+ 545:ThirdPackage/lwip_app/dp83848.c **** 
+ 546:ThirdPackage/lwip_app/dp83848.c **** /**
+ 547:ThirdPackage/lwip_app/dp83848.c ****   * @brief  Disable IT source.
+ 548:ThirdPackage/lwip_app/dp83848.c ****   * @param  pObj: Pointer to device object.
+ 549:ThirdPackage/lwip_app/dp83848.c ****   * @param  Interrupt: IT source to be disabled
+ 550:ThirdPackage/lwip_app/dp83848.c ****   *         should be a value or a combination of the following:
+ 551:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_WOL_IT
+ 552:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_ENERGYON_IT
+ 553:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_AUTONEGO_COMPLETE_IT
+ 554:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_REMOTE_FAULT_IT
+ 555:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_LINK_DOWN_IT
+ 556:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_AUTONEGO_LP_ACK_IT
+ 557:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_PARALLEL_DETECTION_FAULT_IT
+ 558:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_AUTONEGO_PAGE_RECEIVED_IT
+ 559:ThirdPackage/lwip_app/dp83848.c ****   * @retval DP83848_STATUS_OK  if OK
+ 560:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_READ_ERROR if connot read register
+ 561:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_WRITE_ERROR if connot write to register
+ 562:ThirdPackage/lwip_app/dp83848.c ****   */
+ 563:ThirdPackage/lwip_app/dp83848.c **** int32_t DP83848_DisableIT(dp83848_Object_t *pObj, uint32_t Interrupt)
+ 564:ThirdPackage/lwip_app/dp83848.c **** {
+ 1289              		.loc 1 564 1 is_stmt 1 view -0
+ 1290              		.cfi_startproc
+ 1291              		@ args = 0, pretend = 0, frame = 8
+ 1292              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1293              		.loc 1 564 1 is_stmt 0 view .LVU369
+ 1294 0000 30B5     		push	{r4, r5, lr}
+ 1295              	.LCFI39:
+ 1296              		.cfi_def_cfa_offset 12
+ 1297              		.cfi_offset 4, -12
+ 1298              		.cfi_offset 5, -8
+ 1299              		.cfi_offset 14, -4
+ 1300 0002 83B0     		sub	sp, sp, #12
+ 1301              	.LCFI40:
+ 1302              		.cfi_def_cfa_offset 24
+ 1303 0004 0446     		mov	r4, r0
+ 1304 0006 0D46     		mov	r5, r1
+ 565:ThirdPackage/lwip_app/dp83848.c ****   uint32_t readval = 0;
+ 1305              		.loc 1 565 3 is_stmt 1 view .LVU370
+ 1306              		.loc 1 565 12 is_stmt 0 view .LVU371
+ 1307 0008 0023     		movs	r3, #0
+ 1308 000a 0193     		str	r3, [sp, #4]
+ 566:ThirdPackage/lwip_app/dp83848.c ****   int32_t status = DP83848_STATUS_OK;
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 35
+
+
+ 1309              		.loc 1 566 3 is_stmt 1 view .LVU372
+ 1310              	.LVL112:
+ 567:ThirdPackage/lwip_app/dp83848.c **** 
+ 568:ThirdPackage/lwip_app/dp83848.c ****   if(pObj->IO.ReadReg(pObj->DevAddr, DP83848_IMR, &readval) >= 0)
+ 1311              		.loc 1 568 3 view .LVU373
+ 1312              		.loc 1 568 14 is_stmt 0 view .LVU374
+ 1313 000c 4369     		ldr	r3, [r0, #20]
+ 1314              		.loc 1 568 6 view .LVU375
+ 1315 000e 01AA     		add	r2, sp, #4
+ 1316 0010 1121     		movs	r1, #17
+ 1317              	.LVL113:
+ 1318              		.loc 1 568 6 view .LVU376
+ 1319 0012 0068     		ldr	r0, [r0]
+ 1320              	.LVL114:
+ 1321              		.loc 1 568 6 view .LVU377
+ 1322 0014 9847     		blx	r3
+ 1323              	.LVL115:
+ 1324              		.loc 1 568 5 view .LVU378
+ 1325 0016 0028     		cmp	r0, #0
+ 1326 0018 0CDB     		blt	.L96
+ 569:ThirdPackage/lwip_app/dp83848.c ****   {
+ 570:ThirdPackage/lwip_app/dp83848.c ****     readval &= ~Interrupt;
+ 1327              		.loc 1 570 5 is_stmt 1 view .LVU379
+ 1328              		.loc 1 570 13 is_stmt 0 view .LVU380
+ 1329 001a 019A     		ldr	r2, [sp, #4]
+ 1330 001c 22EA0502 		bic	r2, r2, r5
+ 1331 0020 0192     		str	r2, [sp, #4]
+ 571:ThirdPackage/lwip_app/dp83848.c **** 
+ 572:ThirdPackage/lwip_app/dp83848.c ****     /* Apply configuration */
+ 573:ThirdPackage/lwip_app/dp83848.c ****     if(pObj->IO.WriteReg(pObj->DevAddr, DP83848_IMR, readval) < 0)
+ 1332              		.loc 1 573 5 is_stmt 1 view .LVU381
+ 1333              		.loc 1 573 16 is_stmt 0 view .LVU382
+ 1334 0022 2369     		ldr	r3, [r4, #16]
+ 1335              		.loc 1 573 8 view .LVU383
+ 1336 0024 1121     		movs	r1, #17
+ 1337 0026 2068     		ldr	r0, [r4]
+ 1338 0028 9847     		blx	r3
+ 1339              	.LVL116:
+ 1340              		.loc 1 573 7 view .LVU384
+ 1341 002a 0028     		cmp	r0, #0
+ 1342 002c 05DB     		blt	.L97
+ 566:ThirdPackage/lwip_app/dp83848.c **** 
+ 1343              		.loc 1 566 11 view .LVU385
+ 1344 002e 0020     		movs	r0, #0
+ 1345              	.LVL117:
+ 1346              	.L94:
+ 574:ThirdPackage/lwip_app/dp83848.c ****     {
+ 575:ThirdPackage/lwip_app/dp83848.c ****       status = DP83848_STATUS_WRITE_ERROR;
+ 576:ThirdPackage/lwip_app/dp83848.c ****     }
+ 577:ThirdPackage/lwip_app/dp83848.c ****   }
+ 578:ThirdPackage/lwip_app/dp83848.c ****   else
+ 579:ThirdPackage/lwip_app/dp83848.c ****   {
+ 580:ThirdPackage/lwip_app/dp83848.c ****     status = DP83848_STATUS_READ_ERROR;
+ 581:ThirdPackage/lwip_app/dp83848.c ****   }
+ 582:ThirdPackage/lwip_app/dp83848.c **** 
+ 583:ThirdPackage/lwip_app/dp83848.c ****   return status;
+ 584:ThirdPackage/lwip_app/dp83848.c **** }
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 36
+
+
+ 1347              		.loc 1 584 1 view .LVU386
+ 1348 0030 03B0     		add	sp, sp, #12
+ 1349              	.LCFI41:
+ 1350              		.cfi_remember_state
+ 1351              		.cfi_def_cfa_offset 12
+ 1352              		@ sp needed
+ 1353 0032 30BD     		pop	{r4, r5, pc}
+ 1354              	.LVL118:
+ 1355              	.L96:
+ 1356              	.LCFI42:
+ 1357              		.cfi_restore_state
+ 580:ThirdPackage/lwip_app/dp83848.c ****   }
+ 1358              		.loc 1 580 12 view .LVU387
+ 1359 0034 6FF00400 		mvn	r0, #4
+ 1360 0038 FAE7     		b	.L94
+ 1361              	.L97:
+ 575:ThirdPackage/lwip_app/dp83848.c ****     }
+ 1362              		.loc 1 575 14 view .LVU388
+ 1363 003a 6FF00300 		mvn	r0, #3
+ 1364              	.LVL119:
+ 583:ThirdPackage/lwip_app/dp83848.c **** }
+ 1365              		.loc 1 583 3 is_stmt 1 view .LVU389
+ 583:ThirdPackage/lwip_app/dp83848.c **** }
+ 1366              		.loc 1 583 10 is_stmt 0 view .LVU390
+ 1367 003e F7E7     		b	.L94
+ 1368              		.cfi_endproc
+ 1369              	.LFE11:
+ 1371              		.section	.text.DP83848_ClearIT,"ax",%progbits
+ 1372              		.align	1
+ 1373              		.global	DP83848_ClearIT
+ 1374              		.syntax unified
+ 1375              		.thumb
+ 1376              		.thumb_func
+ 1378              	DP83848_ClearIT:
+ 1379              	.LVL120:
+ 1380              	.LFB12:
+ 585:ThirdPackage/lwip_app/dp83848.c **** 
+ 586:ThirdPackage/lwip_app/dp83848.c **** /**
+ 587:ThirdPackage/lwip_app/dp83848.c ****   * @brief  Clear IT flag.
+ 588:ThirdPackage/lwip_app/dp83848.c ****   * @param  pObj: Pointer to device object.
+ 589:ThirdPackage/lwip_app/dp83848.c ****   * @param  Interrupt: IT flag to be cleared
+ 590:ThirdPackage/lwip_app/dp83848.c ****   *         should be a value or a combination of the following:
+ 591:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_WOL_IT
+ 592:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_ENERGYON_IT
+ 593:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_AUTONEGO_COMPLETE_IT
+ 594:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_REMOTE_FAULT_IT
+ 595:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_LINK_DOWN_IT
+ 596:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_AUTONEGO_LP_ACK_IT
+ 597:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_PARALLEL_DETECTION_FAULT_IT
+ 598:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_AUTONEGO_PAGE_RECEIVED_IT
+ 599:ThirdPackage/lwip_app/dp83848.c ****   * @retval DP83848_STATUS_OK  if OK
+ 600:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_READ_ERROR if connot read register
+ 601:ThirdPackage/lwip_app/dp83848.c ****   */
+ 602:ThirdPackage/lwip_app/dp83848.c **** int32_t  DP83848_ClearIT(dp83848_Object_t *pObj, uint32_t Interrupt)
+ 603:ThirdPackage/lwip_app/dp83848.c **** {
+ 1381              		.loc 1 603 1 is_stmt 1 view -0
+ 1382              		.cfi_startproc
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 37
+
+
+ 1383              		@ args = 0, pretend = 0, frame = 8
+ 1384              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1385              		.loc 1 603 1 is_stmt 0 view .LVU392
+ 1386 0000 00B5     		push	{lr}
+ 1387              	.LCFI43:
+ 1388              		.cfi_def_cfa_offset 4
+ 1389              		.cfi_offset 14, -4
+ 1390 0002 83B0     		sub	sp, sp, #12
+ 1391              	.LCFI44:
+ 1392              		.cfi_def_cfa_offset 16
+ 604:ThirdPackage/lwip_app/dp83848.c ****   uint32_t readval = 0;
+ 1393              		.loc 1 604 3 is_stmt 1 view .LVU393
+ 1394              		.loc 1 604 12 is_stmt 0 view .LVU394
+ 1395 0004 0023     		movs	r3, #0
+ 1396 0006 0193     		str	r3, [sp, #4]
+ 605:ThirdPackage/lwip_app/dp83848.c ****   int32_t status = DP83848_STATUS_OK;
+ 1397              		.loc 1 605 3 is_stmt 1 view .LVU395
+ 1398              	.LVL121:
+ 606:ThirdPackage/lwip_app/dp83848.c **** 
+ 607:ThirdPackage/lwip_app/dp83848.c ****   if(pObj->IO.ReadReg(pObj->DevAddr, DP83848_ISFR, &readval) < 0)
+ 1399              		.loc 1 607 3 view .LVU396
+ 1400              		.loc 1 607 14 is_stmt 0 view .LVU397
+ 1401 0008 4369     		ldr	r3, [r0, #20]
+ 1402              		.loc 1 607 6 view .LVU398
+ 1403 000a 01AA     		add	r2, sp, #4
+ 1404 000c 1221     		movs	r1, #18
+ 1405              	.LVL122:
+ 1406              		.loc 1 607 6 view .LVU399
+ 1407 000e 0068     		ldr	r0, [r0]
+ 1408              	.LVL123:
+ 1409              		.loc 1 607 6 view .LVU400
+ 1410 0010 9847     		blx	r3
+ 1411              	.LVL124:
+ 1412              		.loc 1 607 5 view .LVU401
+ 1413 0012 0028     		cmp	r0, #0
+ 1414 0014 03DB     		blt	.L101
+ 605:ThirdPackage/lwip_app/dp83848.c ****   int32_t status = DP83848_STATUS_OK;
+ 1415              		.loc 1 605 11 view .LVU402
+ 1416 0016 0020     		movs	r0, #0
+ 1417              	.LVL125:
+ 1418              	.L99:
+ 608:ThirdPackage/lwip_app/dp83848.c ****   {
+ 609:ThirdPackage/lwip_app/dp83848.c ****     status =  DP83848_STATUS_READ_ERROR;
+ 610:ThirdPackage/lwip_app/dp83848.c ****   }
+ 611:ThirdPackage/lwip_app/dp83848.c **** 
+ 612:ThirdPackage/lwip_app/dp83848.c ****   return status;
+ 613:ThirdPackage/lwip_app/dp83848.c **** }
+ 1419              		.loc 1 613 1 view .LVU403
+ 1420 0018 03B0     		add	sp, sp, #12
+ 1421              	.LCFI45:
+ 1422              		.cfi_remember_state
+ 1423              		.cfi_def_cfa_offset 4
+ 1424              		@ sp needed
+ 1425 001a 5DF804FB 		ldr	pc, [sp], #4
+ 1426              	.LVL126:
+ 1427              	.L101:
+ 1428              	.LCFI46:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 38
+
+
+ 1429              		.cfi_restore_state
+ 609:ThirdPackage/lwip_app/dp83848.c ****   }
+ 1430              		.loc 1 609 12 view .LVU404
+ 1431 001e 6FF00400 		mvn	r0, #4
+ 1432              	.LVL127:
+ 612:ThirdPackage/lwip_app/dp83848.c **** }
+ 1433              		.loc 1 612 3 is_stmt 1 view .LVU405
+ 612:ThirdPackage/lwip_app/dp83848.c **** }
+ 1434              		.loc 1 612 10 is_stmt 0 view .LVU406
+ 1435 0022 F9E7     		b	.L99
+ 1436              		.cfi_endproc
+ 1437              	.LFE12:
+ 1439              		.section	.text.DP83848_GetITStatus,"ax",%progbits
+ 1440              		.align	1
+ 1441              		.global	DP83848_GetITStatus
+ 1442              		.syntax unified
+ 1443              		.thumb
+ 1444              		.thumb_func
+ 1446              	DP83848_GetITStatus:
+ 1447              	.LVL128:
+ 1448              	.LFB13:
+ 614:ThirdPackage/lwip_app/dp83848.c **** 
+ 615:ThirdPackage/lwip_app/dp83848.c **** /**
+ 616:ThirdPackage/lwip_app/dp83848.c ****   * @brief  Get IT Flag status.
+ 617:ThirdPackage/lwip_app/dp83848.c ****   * @param  pObj: Pointer to device object.
+ 618:ThirdPackage/lwip_app/dp83848.c ****   * @param  Interrupt: IT Flag to be checked,
+ 619:ThirdPackage/lwip_app/dp83848.c ****   *         should be a value or a combination of the following:
+ 620:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_WOL_IT
+ 621:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_ENERGYON_IT
+ 622:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_AUTONEGO_COMPLETE_IT
+ 623:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_REMOTE_FAULT_IT
+ 624:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_LINK_DOWN_IT
+ 625:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_AUTONEGO_LP_ACK_IT
+ 626:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_PARALLEL_DETECTION_FAULT_IT
+ 627:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_AUTONEGO_PAGE_RECEIVED_IT
+ 628:ThirdPackage/lwip_app/dp83848.c ****   * @retval 1 IT flag is SET
+ 629:ThirdPackage/lwip_app/dp83848.c ****   *         0 IT flag is RESET
+ 630:ThirdPackage/lwip_app/dp83848.c ****   *         DP83848_STATUS_READ_ERROR if connot read register
+ 631:ThirdPackage/lwip_app/dp83848.c ****   */
+ 632:ThirdPackage/lwip_app/dp83848.c **** int32_t DP83848_GetITStatus(dp83848_Object_t *pObj, uint32_t Interrupt)
+ 633:ThirdPackage/lwip_app/dp83848.c **** {
+ 1449              		.loc 1 633 1 is_stmt 1 view -0
+ 1450              		.cfi_startproc
+ 1451              		@ args = 0, pretend = 0, frame = 8
+ 1452              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1453              		.loc 1 633 1 is_stmt 0 view .LVU408
+ 1454 0000 10B5     		push	{r4, lr}
+ 1455              	.LCFI47:
+ 1456              		.cfi_def_cfa_offset 8
+ 1457              		.cfi_offset 4, -8
+ 1458              		.cfi_offset 14, -4
+ 1459 0002 82B0     		sub	sp, sp, #8
+ 1460              	.LCFI48:
+ 1461              		.cfi_def_cfa_offset 16
+ 1462 0004 0C46     		mov	r4, r1
+ 634:ThirdPackage/lwip_app/dp83848.c ****   uint32_t readval = 0;
+ 1463              		.loc 1 634 3 is_stmt 1 view .LVU409
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 39
+
+
+ 1464              		.loc 1 634 12 is_stmt 0 view .LVU410
+ 1465 0006 0023     		movs	r3, #0
+ 1466 0008 0193     		str	r3, [sp, #4]
+ 635:ThirdPackage/lwip_app/dp83848.c ****   int32_t status = 0;
+ 1467              		.loc 1 635 3 is_stmt 1 view .LVU411
+ 1468              	.LVL129:
+ 636:ThirdPackage/lwip_app/dp83848.c **** 
+ 637:ThirdPackage/lwip_app/dp83848.c ****   if(pObj->IO.ReadReg(pObj->DevAddr, DP83848_ISFR, &readval) >= 0)
+ 1469              		.loc 1 637 3 view .LVU412
+ 1470              		.loc 1 637 14 is_stmt 0 view .LVU413
+ 1471 000a 4369     		ldr	r3, [r0, #20]
+ 1472              		.loc 1 637 6 view .LVU414
+ 1473 000c 01AA     		add	r2, sp, #4
+ 1474 000e 1221     		movs	r1, #18
+ 1475              	.LVL130:
+ 1476              		.loc 1 637 6 view .LVU415
+ 1477 0010 0068     		ldr	r0, [r0]
+ 1478              	.LVL131:
+ 1479              		.loc 1 637 6 view .LVU416
+ 1480 0012 9847     		blx	r3
+ 1481              	.LVL132:
+ 1482              		.loc 1 637 5 view .LVU417
+ 1483 0014 0028     		cmp	r0, #0
+ 1484 0016 07DB     		blt	.L105
+ 638:ThirdPackage/lwip_app/dp83848.c ****   {
+ 639:ThirdPackage/lwip_app/dp83848.c ****     status = ((readval & Interrupt) == Interrupt);
+ 1485              		.loc 1 639 5 is_stmt 1 view .LVU418
+ 1486              		.loc 1 639 37 is_stmt 0 view .LVU419
+ 1487 0018 019B     		ldr	r3, [sp, #4]
+ 1488 001a 34EA0303 		bics	r3, r4, r3
+ 1489 001e 0CBF     		ite	eq
+ 1490 0020 0120     		moveq	r0, #1
+ 1491 0022 0020     		movne	r0, #0
+ 1492              	.LVL133:
+ 1493              	.L103:
+ 640:ThirdPackage/lwip_app/dp83848.c ****   }
+ 641:ThirdPackage/lwip_app/dp83848.c ****   else
+ 642:ThirdPackage/lwip_app/dp83848.c ****   {
+ 643:ThirdPackage/lwip_app/dp83848.c ****     status = DP83848_STATUS_READ_ERROR;
+ 644:ThirdPackage/lwip_app/dp83848.c ****   }
+ 645:ThirdPackage/lwip_app/dp83848.c **** 
+ 646:ThirdPackage/lwip_app/dp83848.c ****   return status;
+ 647:ThirdPackage/lwip_app/dp83848.c **** }
+ 1494              		.loc 1 647 1 view .LVU420
+ 1495 0024 02B0     		add	sp, sp, #8
+ 1496              	.LCFI49:
+ 1497              		.cfi_remember_state
+ 1498              		.cfi_def_cfa_offset 8
+ 1499              		@ sp needed
+ 1500 0026 10BD     		pop	{r4, pc}
+ 1501              	.LVL134:
+ 1502              	.L105:
+ 1503              	.LCFI50:
+ 1504              		.cfi_restore_state
+ 643:ThirdPackage/lwip_app/dp83848.c ****   }
+ 1505              		.loc 1 643 12 view .LVU421
+ 1506 0028 6FF00400 		mvn	r0, #4
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 40
+
+
+ 1507              	.LVL135:
+ 646:ThirdPackage/lwip_app/dp83848.c **** }
+ 1508              		.loc 1 646 3 is_stmt 1 view .LVU422
+ 646:ThirdPackage/lwip_app/dp83848.c **** }
+ 1509              		.loc 1 646 10 is_stmt 0 view .LVU423
+ 1510 002c FAE7     		b	.L103
+ 1511              		.cfi_endproc
+ 1512              	.LFE13:
+ 1514              		.text
+ 1515              	.Letext0:
+ 1516              		.file 2 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 1517              		.file 3 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 1518              		.file 4 "ThirdPackage/lwip_app/dp83848.h"
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccSaOD66.s 			page 41
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 dp83848.c
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:20     .text.DP83848_RegisterBusIO:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:26     .text.DP83848_RegisterBusIO:00000000 DP83848_RegisterBusIO
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:113    .text.DP83848_Init:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:119    .text.DP83848_Init:00000000 DP83848_Init
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:367    .text.DP83848_DeInit:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:373    .text.DP83848_DeInit:00000000 DP83848_DeInit
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:436    .text.DP83848_DisablePowerDownMode:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:442    .text.DP83848_DisablePowerDownMode:00000000 DP83848_DisablePowerDownMode
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:523    .text.DP83848_EnablePowerDownMode:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:529    .text.DP83848_EnablePowerDownMode:00000000 DP83848_EnablePowerDownMode
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:610    .text.DP83848_StartAutoNego:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:616    .text.DP83848_StartAutoNego:00000000 DP83848_StartAutoNego
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:697    .text.DP83848_GetLinkState:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:703    .text.DP83848_GetLinkState:00000000 DP83848_GetLinkState
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:887    .text.DP83848_SetLinkState:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:893    .text.DP83848_SetLinkState:00000000 DP83848_SetLinkState
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:1014   .text.DP83848_EnableLoopbackMode:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:1020   .text.DP83848_EnableLoopbackMode:00000000 DP83848_EnableLoopbackMode
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:1101   .text.DP83848_DisableLoopbackMode:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:1107   .text.DP83848_DisableLoopbackMode:00000000 DP83848_DisableLoopbackMode
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:1188   .text.DP83848_EnableIT:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:1194   .text.DP83848_EnableIT:00000000 DP83848_EnableIT
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:1280   .text.DP83848_DisableIT:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:1286   .text.DP83848_DisableIT:00000000 DP83848_DisableIT
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:1372   .text.DP83848_ClearIT:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:1378   .text.DP83848_ClearIT:00000000 DP83848_ClearIT
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:1440   .text.DP83848_GetITStatus:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccSaOD66.s:1446   .text.DP83848_GetITStatus:00000000 DP83848_GetITStatus
+
+NO UNDEFINED SYMBOLS

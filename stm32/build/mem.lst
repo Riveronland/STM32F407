@@ -1,0 +1,3377 @@
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"mem.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.ptr_to_mem,"ax",%progbits
+  20              		.align	1
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	ptr_to_mem:
+  26              	.LVL0:
+  27              	.LFB160:
+  28              		.file 1 "ThirdPackage/lwip220/core/mem.c"
+   1:ThirdPackage/lwip220/core/mem.c **** /**
+   2:ThirdPackage/lwip220/core/mem.c ****  * @file
+   3:ThirdPackage/lwip220/core/mem.c ****  * Dynamic memory manager
+   4:ThirdPackage/lwip220/core/mem.c ****  *
+   5:ThirdPackage/lwip220/core/mem.c ****  * This is a lightweight replacement for the standard C library malloc().
+   6:ThirdPackage/lwip220/core/mem.c ****  *
+   7:ThirdPackage/lwip220/core/mem.c ****  * If you want to use the standard C library malloc() instead, define
+   8:ThirdPackage/lwip220/core/mem.c ****  * MEM_LIBC_MALLOC to 1 in your lwipopts.h
+   9:ThirdPackage/lwip220/core/mem.c ****  *
+  10:ThirdPackage/lwip220/core/mem.c ****  * To let mem_malloc() use pools (prevents fragmentation and is much faster than
+  11:ThirdPackage/lwip220/core/mem.c ****  * a heap but might waste some memory), define MEM_USE_POOLS to 1, define
+  12:ThirdPackage/lwip220/core/mem.c ****  * MEMP_USE_CUSTOM_POOLS to 1 and create a file "lwippools.h" that includes a list
+  13:ThirdPackage/lwip220/core/mem.c ****  * of pools like this (more pools can be added between _START and _END):
+  14:ThirdPackage/lwip220/core/mem.c ****  *
+  15:ThirdPackage/lwip220/core/mem.c ****  * Define three pools with sizes 256, 512, and 1512 bytes
+  16:ThirdPackage/lwip220/core/mem.c ****  * LWIP_MALLOC_MEMPOOL_START
+  17:ThirdPackage/lwip220/core/mem.c ****  * LWIP_MALLOC_MEMPOOL(20, 256)
+  18:ThirdPackage/lwip220/core/mem.c ****  * LWIP_MALLOC_MEMPOOL(10, 512)
+  19:ThirdPackage/lwip220/core/mem.c ****  * LWIP_MALLOC_MEMPOOL(5, 1512)
+  20:ThirdPackage/lwip220/core/mem.c ****  * LWIP_MALLOC_MEMPOOL_END
+  21:ThirdPackage/lwip220/core/mem.c ****  */
+  22:ThirdPackage/lwip220/core/mem.c **** 
+  23:ThirdPackage/lwip220/core/mem.c **** /*
+  24:ThirdPackage/lwip220/core/mem.c ****  * Copyright (c) 2001-2004 Swedish Institute of Computer Science.
+  25:ThirdPackage/lwip220/core/mem.c ****  * All rights reserved.
+  26:ThirdPackage/lwip220/core/mem.c ****  *
+  27:ThirdPackage/lwip220/core/mem.c ****  * Redistribution and use in source and binary forms, with or without modification,
+  28:ThirdPackage/lwip220/core/mem.c ****  * are permitted provided that the following conditions are met:
+  29:ThirdPackage/lwip220/core/mem.c ****  *
+  30:ThirdPackage/lwip220/core/mem.c ****  * 1. Redistributions of source code must retain the above copyright notice,
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 2
+
+
+  31:ThirdPackage/lwip220/core/mem.c ****  *    this list of conditions and the following disclaimer.
+  32:ThirdPackage/lwip220/core/mem.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice,
+  33:ThirdPackage/lwip220/core/mem.c ****  *    this list of conditions and the following disclaimer in the documentation
+  34:ThirdPackage/lwip220/core/mem.c ****  *    and/or other materials provided with the distribution.
+  35:ThirdPackage/lwip220/core/mem.c ****  * 3. The name of the author may not be used to endorse or promote products
+  36:ThirdPackage/lwip220/core/mem.c ****  *    derived from this software without specific prior written permission.
+  37:ThirdPackage/lwip220/core/mem.c ****  *
+  38:ThirdPackage/lwip220/core/mem.c ****  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
+  39:ThirdPackage/lwip220/core/mem.c ****  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+  40:ThirdPackage/lwip220/core/mem.c ****  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+  41:ThirdPackage/lwip220/core/mem.c ****  * SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  42:ThirdPackage/lwip220/core/mem.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+  43:ThirdPackage/lwip220/core/mem.c ****  * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  44:ThirdPackage/lwip220/core/mem.c ****  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  45:ThirdPackage/lwip220/core/mem.c ****  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+  46:ThirdPackage/lwip220/core/mem.c ****  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+  47:ThirdPackage/lwip220/core/mem.c ****  * OF SUCH DAMAGE.
+  48:ThirdPackage/lwip220/core/mem.c ****  *
+  49:ThirdPackage/lwip220/core/mem.c ****  * This file is part of the lwIP TCP/IP stack.
+  50:ThirdPackage/lwip220/core/mem.c ****  *
+  51:ThirdPackage/lwip220/core/mem.c ****  * Author: Adam Dunkels <adam@sics.se>
+  52:ThirdPackage/lwip220/core/mem.c ****  *         Simon Goldschmidt
+  53:ThirdPackage/lwip220/core/mem.c ****  *
+  54:ThirdPackage/lwip220/core/mem.c ****  */
+  55:ThirdPackage/lwip220/core/mem.c **** 
+  56:ThirdPackage/lwip220/core/mem.c **** #include "lwip/opt.h"
+  57:ThirdPackage/lwip220/core/mem.c **** #include "lwip/mem.h"
+  58:ThirdPackage/lwip220/core/mem.c **** #include "lwip/def.h"
+  59:ThirdPackage/lwip220/core/mem.c **** #include "lwip/sys.h"
+  60:ThirdPackage/lwip220/core/mem.c **** #include "lwip/stats.h"
+  61:ThirdPackage/lwip220/core/mem.c **** #include "lwip/err.h"
+  62:ThirdPackage/lwip220/core/mem.c **** 
+  63:ThirdPackage/lwip220/core/mem.c **** #include <string.h>
+  64:ThirdPackage/lwip220/core/mem.c **** 
+  65:ThirdPackage/lwip220/core/mem.c **** #if MEM_LIBC_MALLOC
+  66:ThirdPackage/lwip220/core/mem.c **** #include <stdlib.h> /* for malloc()/free() */
+  67:ThirdPackage/lwip220/core/mem.c **** #endif
+  68:ThirdPackage/lwip220/core/mem.c **** 
+  69:ThirdPackage/lwip220/core/mem.c **** /* This is overridable for tests only... */
+  70:ThirdPackage/lwip220/core/mem.c **** #ifndef LWIP_MEM_ILLEGAL_FREE
+  71:ThirdPackage/lwip220/core/mem.c **** #define LWIP_MEM_ILLEGAL_FREE(msg)         LWIP_ASSERT(msg, 0)
+  72:ThirdPackage/lwip220/core/mem.c **** #endif
+  73:ThirdPackage/lwip220/core/mem.c **** 
+  74:ThirdPackage/lwip220/core/mem.c **** #define MEM_STATS_INC_LOCKED(x)         SYS_ARCH_LOCKED(MEM_STATS_INC(x))
+  75:ThirdPackage/lwip220/core/mem.c **** #define MEM_STATS_INC_USED_LOCKED(x, y) SYS_ARCH_LOCKED(MEM_STATS_INC_USED(x, y))
+  76:ThirdPackage/lwip220/core/mem.c **** #define MEM_STATS_DEC_USED_LOCKED(x, y) SYS_ARCH_LOCKED(MEM_STATS_DEC_USED(x, y))
+  77:ThirdPackage/lwip220/core/mem.c **** 
+  78:ThirdPackage/lwip220/core/mem.c **** #if MEM_OVERFLOW_CHECK
+  79:ThirdPackage/lwip220/core/mem.c **** #define MEM_SANITY_OFFSET   MEM_SANITY_REGION_BEFORE_ALIGNED
+  80:ThirdPackage/lwip220/core/mem.c **** #define MEM_SANITY_OVERHEAD (MEM_SANITY_REGION_BEFORE_ALIGNED + MEM_SANITY_REGION_AFTER_ALIGNED)
+  81:ThirdPackage/lwip220/core/mem.c **** #else
+  82:ThirdPackage/lwip220/core/mem.c **** #define MEM_SANITY_OFFSET   0
+  83:ThirdPackage/lwip220/core/mem.c **** #define MEM_SANITY_OVERHEAD 0
+  84:ThirdPackage/lwip220/core/mem.c **** #endif
+  85:ThirdPackage/lwip220/core/mem.c **** 
+  86:ThirdPackage/lwip220/core/mem.c **** #if MEM_OVERFLOW_CHECK || MEMP_OVERFLOW_CHECK
+  87:ThirdPackage/lwip220/core/mem.c **** /**
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 3
+
+
+  88:ThirdPackage/lwip220/core/mem.c ****  * Check if a mep element was victim of an overflow or underflow
+  89:ThirdPackage/lwip220/core/mem.c ****  * (e.g. the restricted area after/before it has been altered)
+  90:ThirdPackage/lwip220/core/mem.c ****  *
+  91:ThirdPackage/lwip220/core/mem.c ****  * @param p the mem element to check
+  92:ThirdPackage/lwip220/core/mem.c ****  * @param size allocated size of the element
+  93:ThirdPackage/lwip220/core/mem.c ****  * @param descr1 description of the element source shown on error
+  94:ThirdPackage/lwip220/core/mem.c ****  * @param descr2 description of the element source shown on error
+  95:ThirdPackage/lwip220/core/mem.c ****  */
+  96:ThirdPackage/lwip220/core/mem.c **** void
+  97:ThirdPackage/lwip220/core/mem.c **** mem_overflow_check_raw(void *p, size_t size, const char *descr1, const char *descr2)
+  98:ThirdPackage/lwip220/core/mem.c **** {
+  99:ThirdPackage/lwip220/core/mem.c **** #if MEM_SANITY_REGION_AFTER_ALIGNED || MEM_SANITY_REGION_BEFORE_ALIGNED
+ 100:ThirdPackage/lwip220/core/mem.c ****   u16_t k;
+ 101:ThirdPackage/lwip220/core/mem.c ****   u8_t *m;
+ 102:ThirdPackage/lwip220/core/mem.c **** 
+ 103:ThirdPackage/lwip220/core/mem.c **** #if MEM_SANITY_REGION_AFTER_ALIGNED > 0
+ 104:ThirdPackage/lwip220/core/mem.c ****   m = (u8_t *)p + size;
+ 105:ThirdPackage/lwip220/core/mem.c ****   for (k = 0; k < MEM_SANITY_REGION_AFTER_ALIGNED; k++) {
+ 106:ThirdPackage/lwip220/core/mem.c ****     if (m[k] != 0xcd) {
+ 107:ThirdPackage/lwip220/core/mem.c ****       char errstr[128];
+ 108:ThirdPackage/lwip220/core/mem.c ****       snprintf(errstr, sizeof(errstr), "detected mem overflow in %s%s", descr1, descr2);
+ 109:ThirdPackage/lwip220/core/mem.c ****       LWIP_ASSERT(errstr, 0);
+ 110:ThirdPackage/lwip220/core/mem.c ****     }
+ 111:ThirdPackage/lwip220/core/mem.c ****   }
+ 112:ThirdPackage/lwip220/core/mem.c **** #endif /* MEM_SANITY_REGION_AFTER_ALIGNED > 0 */
+ 113:ThirdPackage/lwip220/core/mem.c **** 
+ 114:ThirdPackage/lwip220/core/mem.c **** #if MEM_SANITY_REGION_BEFORE_ALIGNED > 0
+ 115:ThirdPackage/lwip220/core/mem.c ****   m = (u8_t *)p - MEM_SANITY_REGION_BEFORE_ALIGNED;
+ 116:ThirdPackage/lwip220/core/mem.c ****   for (k = 0; k < MEM_SANITY_REGION_BEFORE_ALIGNED; k++) {
+ 117:ThirdPackage/lwip220/core/mem.c ****     if (m[k] != 0xcd) {
+ 118:ThirdPackage/lwip220/core/mem.c ****       char errstr[128];
+ 119:ThirdPackage/lwip220/core/mem.c ****       snprintf(errstr, sizeof(errstr), "detected mem underflow in %s%s", descr1, descr2);
+ 120:ThirdPackage/lwip220/core/mem.c ****       LWIP_ASSERT(errstr, 0);
+ 121:ThirdPackage/lwip220/core/mem.c ****     }
+ 122:ThirdPackage/lwip220/core/mem.c ****   }
+ 123:ThirdPackage/lwip220/core/mem.c **** #endif /* MEM_SANITY_REGION_BEFORE_ALIGNED > 0 */
+ 124:ThirdPackage/lwip220/core/mem.c **** #else
+ 125:ThirdPackage/lwip220/core/mem.c ****   LWIP_UNUSED_ARG(p);
+ 126:ThirdPackage/lwip220/core/mem.c ****   LWIP_UNUSED_ARG(desc);
+ 127:ThirdPackage/lwip220/core/mem.c ****   LWIP_UNUSED_ARG(descr);
+ 128:ThirdPackage/lwip220/core/mem.c **** #endif
+ 129:ThirdPackage/lwip220/core/mem.c **** }
+ 130:ThirdPackage/lwip220/core/mem.c **** 
+ 131:ThirdPackage/lwip220/core/mem.c **** /**
+ 132:ThirdPackage/lwip220/core/mem.c ****  * Initialize the restricted area of a mem element.
+ 133:ThirdPackage/lwip220/core/mem.c ****  */
+ 134:ThirdPackage/lwip220/core/mem.c **** void
+ 135:ThirdPackage/lwip220/core/mem.c **** mem_overflow_init_raw(void *p, size_t size)
+ 136:ThirdPackage/lwip220/core/mem.c **** {
+ 137:ThirdPackage/lwip220/core/mem.c **** #if MEM_SANITY_REGION_BEFORE_ALIGNED > 0 || MEM_SANITY_REGION_AFTER_ALIGNED > 0
+ 138:ThirdPackage/lwip220/core/mem.c ****   u8_t *m;
+ 139:ThirdPackage/lwip220/core/mem.c **** #if MEM_SANITY_REGION_BEFORE_ALIGNED > 0
+ 140:ThirdPackage/lwip220/core/mem.c ****   m = (u8_t *)p - MEM_SANITY_REGION_BEFORE_ALIGNED;
+ 141:ThirdPackage/lwip220/core/mem.c ****   memset(m, 0xcd, MEM_SANITY_REGION_BEFORE_ALIGNED);
+ 142:ThirdPackage/lwip220/core/mem.c **** #endif
+ 143:ThirdPackage/lwip220/core/mem.c **** #if MEM_SANITY_REGION_AFTER_ALIGNED > 0
+ 144:ThirdPackage/lwip220/core/mem.c ****   m = (u8_t *)p + size;
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 4
+
+
+ 145:ThirdPackage/lwip220/core/mem.c ****   memset(m, 0xcd, MEM_SANITY_REGION_AFTER_ALIGNED);
+ 146:ThirdPackage/lwip220/core/mem.c **** #endif
+ 147:ThirdPackage/lwip220/core/mem.c **** #else /* MEM_SANITY_REGION_BEFORE_ALIGNED > 0 || MEM_SANITY_REGION_AFTER_ALIGNED > 0 */
+ 148:ThirdPackage/lwip220/core/mem.c ****   LWIP_UNUSED_ARG(p);
+ 149:ThirdPackage/lwip220/core/mem.c ****   LWIP_UNUSED_ARG(desc);
+ 150:ThirdPackage/lwip220/core/mem.c **** #endif /* MEM_SANITY_REGION_BEFORE_ALIGNED > 0 || MEM_SANITY_REGION_AFTER_ALIGNED > 0 */
+ 151:ThirdPackage/lwip220/core/mem.c **** }
+ 152:ThirdPackage/lwip220/core/mem.c **** #endif /* MEM_OVERFLOW_CHECK || MEMP_OVERFLOW_CHECK */
+ 153:ThirdPackage/lwip220/core/mem.c **** 
+ 154:ThirdPackage/lwip220/core/mem.c **** #if MEM_LIBC_MALLOC || MEM_USE_POOLS
+ 155:ThirdPackage/lwip220/core/mem.c **** 
+ 156:ThirdPackage/lwip220/core/mem.c **** /** mem_init is not used when using pools instead of a heap or using
+ 157:ThirdPackage/lwip220/core/mem.c ****  * C library malloc().
+ 158:ThirdPackage/lwip220/core/mem.c ****  */
+ 159:ThirdPackage/lwip220/core/mem.c **** void
+ 160:ThirdPackage/lwip220/core/mem.c **** mem_init(void)
+ 161:ThirdPackage/lwip220/core/mem.c **** {
+ 162:ThirdPackage/lwip220/core/mem.c **** }
+ 163:ThirdPackage/lwip220/core/mem.c **** 
+ 164:ThirdPackage/lwip220/core/mem.c **** /** mem_trim is not used when using pools instead of a heap or using
+ 165:ThirdPackage/lwip220/core/mem.c ****  * C library malloc(): we can't free part of a pool element and the stack
+ 166:ThirdPackage/lwip220/core/mem.c ****  * support mem_trim() to return a different pointer
+ 167:ThirdPackage/lwip220/core/mem.c ****  */
+ 168:ThirdPackage/lwip220/core/mem.c **** void *
+ 169:ThirdPackage/lwip220/core/mem.c **** mem_trim(void *mem, mem_size_t size)
+ 170:ThirdPackage/lwip220/core/mem.c **** {
+ 171:ThirdPackage/lwip220/core/mem.c ****   LWIP_UNUSED_ARG(size);
+ 172:ThirdPackage/lwip220/core/mem.c ****   return mem;
+ 173:ThirdPackage/lwip220/core/mem.c **** }
+ 174:ThirdPackage/lwip220/core/mem.c **** #endif /* MEM_LIBC_MALLOC || MEM_USE_POOLS */
+ 175:ThirdPackage/lwip220/core/mem.c **** 
+ 176:ThirdPackage/lwip220/core/mem.c **** #if MEM_LIBC_MALLOC
+ 177:ThirdPackage/lwip220/core/mem.c **** /* lwIP heap implemented using C library malloc() */
+ 178:ThirdPackage/lwip220/core/mem.c **** 
+ 179:ThirdPackage/lwip220/core/mem.c **** /* in case C library malloc() needs extra protection,
+ 180:ThirdPackage/lwip220/core/mem.c ****  * allow these defines to be overridden.
+ 181:ThirdPackage/lwip220/core/mem.c ****  */
+ 182:ThirdPackage/lwip220/core/mem.c **** #ifndef mem_clib_free
+ 183:ThirdPackage/lwip220/core/mem.c **** #define mem_clib_free free
+ 184:ThirdPackage/lwip220/core/mem.c **** #endif
+ 185:ThirdPackage/lwip220/core/mem.c **** #ifndef mem_clib_malloc
+ 186:ThirdPackage/lwip220/core/mem.c **** #define mem_clib_malloc malloc
+ 187:ThirdPackage/lwip220/core/mem.c **** #endif
+ 188:ThirdPackage/lwip220/core/mem.c **** #ifndef mem_clib_calloc
+ 189:ThirdPackage/lwip220/core/mem.c **** #define mem_clib_calloc calloc
+ 190:ThirdPackage/lwip220/core/mem.c **** #endif
+ 191:ThirdPackage/lwip220/core/mem.c **** 
+ 192:ThirdPackage/lwip220/core/mem.c **** #if LWIP_STATS && MEM_STATS
+ 193:ThirdPackage/lwip220/core/mem.c **** #define MEM_LIBC_STATSHELPER_SIZE LWIP_MEM_ALIGN_SIZE(sizeof(mem_size_t))
+ 194:ThirdPackage/lwip220/core/mem.c **** #else
+ 195:ThirdPackage/lwip220/core/mem.c **** #define MEM_LIBC_STATSHELPER_SIZE 0
+ 196:ThirdPackage/lwip220/core/mem.c **** #endif
+ 197:ThirdPackage/lwip220/core/mem.c **** 
+ 198:ThirdPackage/lwip220/core/mem.c **** /**
+ 199:ThirdPackage/lwip220/core/mem.c ****  * Allocate a block of memory with a minimum of 'size' bytes.
+ 200:ThirdPackage/lwip220/core/mem.c ****  *
+ 201:ThirdPackage/lwip220/core/mem.c ****  * @param size is the minimum size of the requested block in bytes.
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 5
+
+
+ 202:ThirdPackage/lwip220/core/mem.c ****  * @return pointer to allocated memory or NULL if no free memory was found.
+ 203:ThirdPackage/lwip220/core/mem.c ****  *
+ 204:ThirdPackage/lwip220/core/mem.c ****  * Note that the returned value must always be aligned (as defined by MEM_ALIGNMENT).
+ 205:ThirdPackage/lwip220/core/mem.c ****  */
+ 206:ThirdPackage/lwip220/core/mem.c **** void *
+ 207:ThirdPackage/lwip220/core/mem.c **** mem_malloc(mem_size_t size)
+ 208:ThirdPackage/lwip220/core/mem.c **** {
+ 209:ThirdPackage/lwip220/core/mem.c ****   void *ret = mem_clib_malloc(size + MEM_LIBC_STATSHELPER_SIZE);
+ 210:ThirdPackage/lwip220/core/mem.c ****   if (ret == NULL) {
+ 211:ThirdPackage/lwip220/core/mem.c ****     MEM_STATS_INC_LOCKED(err);
+ 212:ThirdPackage/lwip220/core/mem.c ****   } else {
+ 213:ThirdPackage/lwip220/core/mem.c ****     LWIP_ASSERT("malloc() must return aligned memory", LWIP_MEM_ALIGN(ret) == ret);
+ 214:ThirdPackage/lwip220/core/mem.c **** #if LWIP_STATS && MEM_STATS
+ 215:ThirdPackage/lwip220/core/mem.c ****     *(mem_size_t *)ret = size;
+ 216:ThirdPackage/lwip220/core/mem.c ****     ret = (u8_t *)ret + MEM_LIBC_STATSHELPER_SIZE;
+ 217:ThirdPackage/lwip220/core/mem.c ****     MEM_STATS_INC_USED_LOCKED(used, size);
+ 218:ThirdPackage/lwip220/core/mem.c **** #endif
+ 219:ThirdPackage/lwip220/core/mem.c ****   }
+ 220:ThirdPackage/lwip220/core/mem.c ****   return ret;
+ 221:ThirdPackage/lwip220/core/mem.c **** }
+ 222:ThirdPackage/lwip220/core/mem.c **** 
+ 223:ThirdPackage/lwip220/core/mem.c **** /** Put memory back on the heap
+ 224:ThirdPackage/lwip220/core/mem.c ****  *
+ 225:ThirdPackage/lwip220/core/mem.c ****  * @param rmem is the pointer as returned by a previous call to mem_malloc()
+ 226:ThirdPackage/lwip220/core/mem.c ****  */
+ 227:ThirdPackage/lwip220/core/mem.c **** void
+ 228:ThirdPackage/lwip220/core/mem.c **** mem_free(void *rmem)
+ 229:ThirdPackage/lwip220/core/mem.c **** {
+ 230:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("rmem != NULL", (rmem != NULL));
+ 231:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("rmem == MEM_ALIGN(rmem)", (rmem == LWIP_MEM_ALIGN(rmem)));
+ 232:ThirdPackage/lwip220/core/mem.c **** #if LWIP_STATS && MEM_STATS
+ 233:ThirdPackage/lwip220/core/mem.c ****   rmem = (u8_t *)rmem - MEM_LIBC_STATSHELPER_SIZE;
+ 234:ThirdPackage/lwip220/core/mem.c ****   MEM_STATS_DEC_USED_LOCKED(used, *(mem_size_t *)rmem);
+ 235:ThirdPackage/lwip220/core/mem.c **** #endif
+ 236:ThirdPackage/lwip220/core/mem.c ****   mem_clib_free(rmem);
+ 237:ThirdPackage/lwip220/core/mem.c **** }
+ 238:ThirdPackage/lwip220/core/mem.c **** 
+ 239:ThirdPackage/lwip220/core/mem.c **** #elif MEM_USE_POOLS
+ 240:ThirdPackage/lwip220/core/mem.c **** 
+ 241:ThirdPackage/lwip220/core/mem.c **** /* lwIP heap implemented with different sized pools */
+ 242:ThirdPackage/lwip220/core/mem.c **** 
+ 243:ThirdPackage/lwip220/core/mem.c **** /**
+ 244:ThirdPackage/lwip220/core/mem.c ****  * Allocate memory: determine the smallest pool that is big enough
+ 245:ThirdPackage/lwip220/core/mem.c ****  * to contain an element of 'size' and get an element from that pool.
+ 246:ThirdPackage/lwip220/core/mem.c ****  *
+ 247:ThirdPackage/lwip220/core/mem.c ****  * @param size the size in bytes of the memory needed
+ 248:ThirdPackage/lwip220/core/mem.c ****  * @return a pointer to the allocated memory or NULL if the pool is empty
+ 249:ThirdPackage/lwip220/core/mem.c ****  */
+ 250:ThirdPackage/lwip220/core/mem.c **** void *
+ 251:ThirdPackage/lwip220/core/mem.c **** mem_malloc(mem_size_t size)
+ 252:ThirdPackage/lwip220/core/mem.c **** {
+ 253:ThirdPackage/lwip220/core/mem.c ****   void *ret;
+ 254:ThirdPackage/lwip220/core/mem.c ****   struct memp_malloc_helper *element = NULL;
+ 255:ThirdPackage/lwip220/core/mem.c ****   memp_t poolnr;
+ 256:ThirdPackage/lwip220/core/mem.c ****   mem_size_t required_size = size + LWIP_MEM_ALIGN_SIZE(sizeof(struct memp_malloc_helper));
+ 257:ThirdPackage/lwip220/core/mem.c **** 
+ 258:ThirdPackage/lwip220/core/mem.c ****   for (poolnr = MEMP_POOL_FIRST; poolnr <= MEMP_POOL_LAST; poolnr = (memp_t)(poolnr + 1)) {
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 6
+
+
+ 259:ThirdPackage/lwip220/core/mem.c ****     /* is this pool big enough to hold an element of the required size
+ 260:ThirdPackage/lwip220/core/mem.c ****        plus a struct memp_malloc_helper that saves the pool this element came from? */
+ 261:ThirdPackage/lwip220/core/mem.c ****     if (required_size <= memp_pools[poolnr]->size) {
+ 262:ThirdPackage/lwip220/core/mem.c ****       element = (struct memp_malloc_helper *)memp_malloc(poolnr);
+ 263:ThirdPackage/lwip220/core/mem.c ****       if (element == NULL) {
+ 264:ThirdPackage/lwip220/core/mem.c ****         /* No need to DEBUGF or ASSERT: This error is already taken care of in memp.c */
+ 265:ThirdPackage/lwip220/core/mem.c **** #if MEM_USE_POOLS_TRY_BIGGER_POOL
+ 266:ThirdPackage/lwip220/core/mem.c ****         /** Try a bigger pool if this one is empty! */
+ 267:ThirdPackage/lwip220/core/mem.c ****         if (poolnr < MEMP_POOL_LAST) {
+ 268:ThirdPackage/lwip220/core/mem.c ****           continue;
+ 269:ThirdPackage/lwip220/core/mem.c ****         }
+ 270:ThirdPackage/lwip220/core/mem.c **** #endif /* MEM_USE_POOLS_TRY_BIGGER_POOL */
+ 271:ThirdPackage/lwip220/core/mem.c ****         MEM_STATS_INC_LOCKED(err);
+ 272:ThirdPackage/lwip220/core/mem.c ****         return NULL;
+ 273:ThirdPackage/lwip220/core/mem.c ****       }
+ 274:ThirdPackage/lwip220/core/mem.c ****       break;
+ 275:ThirdPackage/lwip220/core/mem.c ****     }
+ 276:ThirdPackage/lwip220/core/mem.c ****   }
+ 277:ThirdPackage/lwip220/core/mem.c ****   if (poolnr > MEMP_POOL_LAST) {
+ 278:ThirdPackage/lwip220/core/mem.c ****     LWIP_ASSERT("mem_malloc(): no pool is that big!", 0);
+ 279:ThirdPackage/lwip220/core/mem.c ****     MEM_STATS_INC_LOCKED(err);
+ 280:ThirdPackage/lwip220/core/mem.c ****     return NULL;
+ 281:ThirdPackage/lwip220/core/mem.c ****   }
+ 282:ThirdPackage/lwip220/core/mem.c **** 
+ 283:ThirdPackage/lwip220/core/mem.c ****   /* save the pool number this element came from */
+ 284:ThirdPackage/lwip220/core/mem.c ****   element->poolnr = poolnr;
+ 285:ThirdPackage/lwip220/core/mem.c ****   /* and return a pointer to the memory directly after the struct memp_malloc_helper */
+ 286:ThirdPackage/lwip220/core/mem.c ****   ret = (u8_t *)element + LWIP_MEM_ALIGN_SIZE(sizeof(struct memp_malloc_helper));
+ 287:ThirdPackage/lwip220/core/mem.c **** 
+ 288:ThirdPackage/lwip220/core/mem.c **** #if MEMP_OVERFLOW_CHECK || (LWIP_STATS && MEM_STATS)
+ 289:ThirdPackage/lwip220/core/mem.c ****   /* truncating to u16_t is safe because struct memp_desc::size is u16_t */
+ 290:ThirdPackage/lwip220/core/mem.c ****   element->size = (u16_t)size;
+ 291:ThirdPackage/lwip220/core/mem.c ****   MEM_STATS_INC_USED_LOCKED(used, element->size);
+ 292:ThirdPackage/lwip220/core/mem.c **** #endif /* MEMP_OVERFLOW_CHECK || (LWIP_STATS && MEM_STATS) */
+ 293:ThirdPackage/lwip220/core/mem.c **** #if MEMP_OVERFLOW_CHECK
+ 294:ThirdPackage/lwip220/core/mem.c ****   /* initialize unused memory (diff between requested size and selected pool's size) */
+ 295:ThirdPackage/lwip220/core/mem.c ****   memset((u8_t *)ret + size, 0xcd, memp_pools[poolnr]->size - size);
+ 296:ThirdPackage/lwip220/core/mem.c **** #endif /* MEMP_OVERFLOW_CHECK */
+ 297:ThirdPackage/lwip220/core/mem.c ****   return ret;
+ 298:ThirdPackage/lwip220/core/mem.c **** }
+ 299:ThirdPackage/lwip220/core/mem.c **** 
+ 300:ThirdPackage/lwip220/core/mem.c **** /**
+ 301:ThirdPackage/lwip220/core/mem.c ****  * Free memory previously allocated by mem_malloc. Loads the pool number
+ 302:ThirdPackage/lwip220/core/mem.c ****  * and calls memp_free with that pool number to put the element back into
+ 303:ThirdPackage/lwip220/core/mem.c ****  * its pool
+ 304:ThirdPackage/lwip220/core/mem.c ****  *
+ 305:ThirdPackage/lwip220/core/mem.c ****  * @param rmem the memory element to free
+ 306:ThirdPackage/lwip220/core/mem.c ****  */
+ 307:ThirdPackage/lwip220/core/mem.c **** void
+ 308:ThirdPackage/lwip220/core/mem.c **** mem_free(void *rmem)
+ 309:ThirdPackage/lwip220/core/mem.c **** {
+ 310:ThirdPackage/lwip220/core/mem.c ****   struct memp_malloc_helper *hmem;
+ 311:ThirdPackage/lwip220/core/mem.c **** 
+ 312:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("rmem != NULL", (rmem != NULL));
+ 313:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("rmem == MEM_ALIGN(rmem)", (rmem == LWIP_MEM_ALIGN(rmem)));
+ 314:ThirdPackage/lwip220/core/mem.c **** 
+ 315:ThirdPackage/lwip220/core/mem.c ****   /* get the original struct memp_malloc_helper */
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 7
+
+
+ 316:ThirdPackage/lwip220/core/mem.c ****   /* cast through void* to get rid of alignment warnings */
+ 317:ThirdPackage/lwip220/core/mem.c ****   hmem = (struct memp_malloc_helper *)(void *)((u8_t *)rmem - LWIP_MEM_ALIGN_SIZE(sizeof(struct mem
+ 318:ThirdPackage/lwip220/core/mem.c **** 
+ 319:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("hmem != NULL", (hmem != NULL));
+ 320:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("hmem == MEM_ALIGN(hmem)", (hmem == LWIP_MEM_ALIGN(hmem)));
+ 321:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("hmem->poolnr < MEMP_MAX", (hmem->poolnr < MEMP_MAX));
+ 322:ThirdPackage/lwip220/core/mem.c **** 
+ 323:ThirdPackage/lwip220/core/mem.c ****   MEM_STATS_DEC_USED_LOCKED(used, hmem->size);
+ 324:ThirdPackage/lwip220/core/mem.c **** #if MEMP_OVERFLOW_CHECK
+ 325:ThirdPackage/lwip220/core/mem.c ****   {
+ 326:ThirdPackage/lwip220/core/mem.c ****     u16_t i;
+ 327:ThirdPackage/lwip220/core/mem.c ****     LWIP_ASSERT("MEM_USE_POOLS: invalid chunk size",
+ 328:ThirdPackage/lwip220/core/mem.c ****                 hmem->size <= memp_pools[hmem->poolnr]->size);
+ 329:ThirdPackage/lwip220/core/mem.c ****     /* check that unused memory remained untouched (diff between requested size and selected pool's
+ 330:ThirdPackage/lwip220/core/mem.c ****     for (i = hmem->size; i < memp_pools[hmem->poolnr]->size; i++) {
+ 331:ThirdPackage/lwip220/core/mem.c ****       u8_t data = *((u8_t *)rmem + i);
+ 332:ThirdPackage/lwip220/core/mem.c ****       LWIP_ASSERT("MEM_USE_POOLS: mem overflow detected", data == 0xcd);
+ 333:ThirdPackage/lwip220/core/mem.c ****     }
+ 334:ThirdPackage/lwip220/core/mem.c ****   }
+ 335:ThirdPackage/lwip220/core/mem.c **** #endif /* MEMP_OVERFLOW_CHECK */
+ 336:ThirdPackage/lwip220/core/mem.c **** 
+ 337:ThirdPackage/lwip220/core/mem.c ****   /* and put it in the pool we saved earlier */
+ 338:ThirdPackage/lwip220/core/mem.c ****   memp_free(hmem->poolnr, hmem);
+ 339:ThirdPackage/lwip220/core/mem.c **** }
+ 340:ThirdPackage/lwip220/core/mem.c **** 
+ 341:ThirdPackage/lwip220/core/mem.c **** #else /* MEM_USE_POOLS */
+ 342:ThirdPackage/lwip220/core/mem.c **** /* lwIP replacement for your libc malloc() */
+ 343:ThirdPackage/lwip220/core/mem.c **** 
+ 344:ThirdPackage/lwip220/core/mem.c **** /**
+ 345:ThirdPackage/lwip220/core/mem.c ****  * The heap is made up as a list of structs of this type.
+ 346:ThirdPackage/lwip220/core/mem.c ****  * This does not have to be aligned since for getting its size,
+ 347:ThirdPackage/lwip220/core/mem.c ****  * we only use the macro SIZEOF_STRUCT_MEM, which automatically aligns.
+ 348:ThirdPackage/lwip220/core/mem.c ****  */
+ 349:ThirdPackage/lwip220/core/mem.c **** struct mem {
+ 350:ThirdPackage/lwip220/core/mem.c ****   /** index (-> ram[next]) of the next struct */
+ 351:ThirdPackage/lwip220/core/mem.c ****   mem_size_t next;
+ 352:ThirdPackage/lwip220/core/mem.c ****   /** index (-> ram[prev]) of the previous struct */
+ 353:ThirdPackage/lwip220/core/mem.c ****   mem_size_t prev;
+ 354:ThirdPackage/lwip220/core/mem.c ****   /** 1: this area is used; 0: this area is unused */
+ 355:ThirdPackage/lwip220/core/mem.c ****   u8_t used;
+ 356:ThirdPackage/lwip220/core/mem.c **** #if MEM_OVERFLOW_CHECK
+ 357:ThirdPackage/lwip220/core/mem.c ****   /** this keeps track of the user allocation size for guard checks */
+ 358:ThirdPackage/lwip220/core/mem.c ****   mem_size_t user_size;
+ 359:ThirdPackage/lwip220/core/mem.c **** #endif
+ 360:ThirdPackage/lwip220/core/mem.c **** };
+ 361:ThirdPackage/lwip220/core/mem.c **** 
+ 362:ThirdPackage/lwip220/core/mem.c **** /** All allocated blocks will be MIN_SIZE bytes big, at least!
+ 363:ThirdPackage/lwip220/core/mem.c ****  * MIN_SIZE can be overridden to suit your needs. Smaller values save space,
+ 364:ThirdPackage/lwip220/core/mem.c ****  * larger values could prevent too small blocks to fragment the RAM too much. */
+ 365:ThirdPackage/lwip220/core/mem.c **** #ifndef MIN_SIZE
+ 366:ThirdPackage/lwip220/core/mem.c **** #define MIN_SIZE             12
+ 367:ThirdPackage/lwip220/core/mem.c **** #endif /* MIN_SIZE */
+ 368:ThirdPackage/lwip220/core/mem.c **** /* some alignment macros: we define them here for better source code layout */
+ 369:ThirdPackage/lwip220/core/mem.c **** #define MIN_SIZE_ALIGNED     LWIP_MEM_ALIGN_SIZE(MIN_SIZE)
+ 370:ThirdPackage/lwip220/core/mem.c **** #define SIZEOF_STRUCT_MEM    LWIP_MEM_ALIGN_SIZE(sizeof(struct mem))
+ 371:ThirdPackage/lwip220/core/mem.c **** #define MEM_SIZE_ALIGNED     LWIP_MEM_ALIGN_SIZE(MEM_SIZE)
+ 372:ThirdPackage/lwip220/core/mem.c **** 
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 8
+
+
+ 373:ThirdPackage/lwip220/core/mem.c **** /** If you want to relocate the heap to external memory, simply define
+ 374:ThirdPackage/lwip220/core/mem.c ****  * LWIP_RAM_HEAP_POINTER as a void-pointer to that location.
+ 375:ThirdPackage/lwip220/core/mem.c ****  * If so, make sure the memory at that location is big enough (see below on
+ 376:ThirdPackage/lwip220/core/mem.c ****  * how that space is calculated). */
+ 377:ThirdPackage/lwip220/core/mem.c **** #ifndef LWIP_RAM_HEAP_POINTER
+ 378:ThirdPackage/lwip220/core/mem.c **** /** the heap. we need one struct mem at the end and some room for alignment */
+ 379:ThirdPackage/lwip220/core/mem.c **** LWIP_DECLARE_MEMORY_ALIGNED(ram_heap, MEM_SIZE_ALIGNED + (2U * SIZEOF_STRUCT_MEM));
+ 380:ThirdPackage/lwip220/core/mem.c **** #define LWIP_RAM_HEAP_POINTER ram_heap
+ 381:ThirdPackage/lwip220/core/mem.c **** #endif /* LWIP_RAM_HEAP_POINTER */
+ 382:ThirdPackage/lwip220/core/mem.c **** 
+ 383:ThirdPackage/lwip220/core/mem.c **** /** pointer to the heap (ram_heap): for alignment, ram is now a pointer instead of an array */
+ 384:ThirdPackage/lwip220/core/mem.c **** static u8_t *ram;
+ 385:ThirdPackage/lwip220/core/mem.c **** /** the last entry, always unused! */
+ 386:ThirdPackage/lwip220/core/mem.c **** static struct mem *ram_end;
+ 387:ThirdPackage/lwip220/core/mem.c **** 
+ 388:ThirdPackage/lwip220/core/mem.c **** /** concurrent access protection */
+ 389:ThirdPackage/lwip220/core/mem.c **** #if !NO_SYS
+ 390:ThirdPackage/lwip220/core/mem.c **** static sys_mutex_t mem_mutex;
+ 391:ThirdPackage/lwip220/core/mem.c **** #endif
+ 392:ThirdPackage/lwip220/core/mem.c **** 
+ 393:ThirdPackage/lwip220/core/mem.c **** #if LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT
+ 394:ThirdPackage/lwip220/core/mem.c **** 
+ 395:ThirdPackage/lwip220/core/mem.c **** static volatile u8_t mem_free_count;
+ 396:ThirdPackage/lwip220/core/mem.c **** 
+ 397:ThirdPackage/lwip220/core/mem.c **** /* Allow mem_free from other (e.g. interrupt) context */
+ 398:ThirdPackage/lwip220/core/mem.c **** #define LWIP_MEM_FREE_DECL_PROTECT()  SYS_ARCH_DECL_PROTECT(lev_free)
+ 399:ThirdPackage/lwip220/core/mem.c **** #define LWIP_MEM_FREE_PROTECT()       SYS_ARCH_PROTECT(lev_free)
+ 400:ThirdPackage/lwip220/core/mem.c **** #define LWIP_MEM_FREE_UNPROTECT()     SYS_ARCH_UNPROTECT(lev_free)
+ 401:ThirdPackage/lwip220/core/mem.c **** #define LWIP_MEM_ALLOC_DECL_PROTECT() SYS_ARCH_DECL_PROTECT(lev_alloc)
+ 402:ThirdPackage/lwip220/core/mem.c **** #define LWIP_MEM_ALLOC_PROTECT()      SYS_ARCH_PROTECT(lev_alloc)
+ 403:ThirdPackage/lwip220/core/mem.c **** #define LWIP_MEM_ALLOC_UNPROTECT()    SYS_ARCH_UNPROTECT(lev_alloc)
+ 404:ThirdPackage/lwip220/core/mem.c **** #define LWIP_MEM_LFREE_VOLATILE       volatile
+ 405:ThirdPackage/lwip220/core/mem.c **** 
+ 406:ThirdPackage/lwip220/core/mem.c **** #else /* LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT */
+ 407:ThirdPackage/lwip220/core/mem.c **** 
+ 408:ThirdPackage/lwip220/core/mem.c **** /* Protect the heap only by using a mutex */
+ 409:ThirdPackage/lwip220/core/mem.c **** #define LWIP_MEM_FREE_DECL_PROTECT()
+ 410:ThirdPackage/lwip220/core/mem.c **** #define LWIP_MEM_FREE_PROTECT()    sys_mutex_lock(&mem_mutex)
+ 411:ThirdPackage/lwip220/core/mem.c **** #define LWIP_MEM_FREE_UNPROTECT()  sys_mutex_unlock(&mem_mutex)
+ 412:ThirdPackage/lwip220/core/mem.c **** /* mem_malloc is protected using mutex AND LWIP_MEM_ALLOC_PROTECT */
+ 413:ThirdPackage/lwip220/core/mem.c **** #define LWIP_MEM_ALLOC_DECL_PROTECT()
+ 414:ThirdPackage/lwip220/core/mem.c **** #define LWIP_MEM_ALLOC_PROTECT()
+ 415:ThirdPackage/lwip220/core/mem.c **** #define LWIP_MEM_ALLOC_UNPROTECT()
+ 416:ThirdPackage/lwip220/core/mem.c **** #define LWIP_MEM_LFREE_VOLATILE
+ 417:ThirdPackage/lwip220/core/mem.c **** 
+ 418:ThirdPackage/lwip220/core/mem.c **** #endif /* LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT */
+ 419:ThirdPackage/lwip220/core/mem.c **** 
+ 420:ThirdPackage/lwip220/core/mem.c **** /** pointer to the lowest free block, this is used for faster search */
+ 421:ThirdPackage/lwip220/core/mem.c **** static struct mem * LWIP_MEM_LFREE_VOLATILE lfree;
+ 422:ThirdPackage/lwip220/core/mem.c **** 
+ 423:ThirdPackage/lwip220/core/mem.c **** #if MEM_SANITY_CHECK
+ 424:ThirdPackage/lwip220/core/mem.c **** static void mem_sanity(void);
+ 425:ThirdPackage/lwip220/core/mem.c **** #define MEM_SANITY() mem_sanity()
+ 426:ThirdPackage/lwip220/core/mem.c **** #else
+ 427:ThirdPackage/lwip220/core/mem.c **** #define MEM_SANITY()
+ 428:ThirdPackage/lwip220/core/mem.c **** #endif
+ 429:ThirdPackage/lwip220/core/mem.c **** 
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 9
+
+
+ 430:ThirdPackage/lwip220/core/mem.c **** #if MEM_OVERFLOW_CHECK
+ 431:ThirdPackage/lwip220/core/mem.c **** static void
+ 432:ThirdPackage/lwip220/core/mem.c **** mem_overflow_init_element(struct mem *mem, mem_size_t user_size)
+ 433:ThirdPackage/lwip220/core/mem.c **** {
+ 434:ThirdPackage/lwip220/core/mem.c ****   void *p = (u8_t *)mem + SIZEOF_STRUCT_MEM + MEM_SANITY_OFFSET;
+ 435:ThirdPackage/lwip220/core/mem.c ****   mem->user_size = user_size;
+ 436:ThirdPackage/lwip220/core/mem.c ****   mem_overflow_init_raw(p, user_size);
+ 437:ThirdPackage/lwip220/core/mem.c **** }
+ 438:ThirdPackage/lwip220/core/mem.c **** 
+ 439:ThirdPackage/lwip220/core/mem.c **** static void
+ 440:ThirdPackage/lwip220/core/mem.c **** mem_overflow_check_element(struct mem *mem)
+ 441:ThirdPackage/lwip220/core/mem.c **** {
+ 442:ThirdPackage/lwip220/core/mem.c ****   void *p = (u8_t *)mem + SIZEOF_STRUCT_MEM + MEM_SANITY_OFFSET;
+ 443:ThirdPackage/lwip220/core/mem.c ****   mem_overflow_check_raw(p, mem->user_size, "heap", "");
+ 444:ThirdPackage/lwip220/core/mem.c **** }
+ 445:ThirdPackage/lwip220/core/mem.c **** #else /* MEM_OVERFLOW_CHECK */
+ 446:ThirdPackage/lwip220/core/mem.c **** #define mem_overflow_init_element(mem, size)
+ 447:ThirdPackage/lwip220/core/mem.c **** #define mem_overflow_check_element(mem)
+ 448:ThirdPackage/lwip220/core/mem.c **** #endif /* MEM_OVERFLOW_CHECK */
+ 449:ThirdPackage/lwip220/core/mem.c **** 
+ 450:ThirdPackage/lwip220/core/mem.c **** static struct mem *
+ 451:ThirdPackage/lwip220/core/mem.c **** ptr_to_mem(mem_size_t ptr)
+ 452:ThirdPackage/lwip220/core/mem.c **** {
+  29              		.loc 1 452 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+ 453:ThirdPackage/lwip220/core/mem.c ****   return (struct mem *)(void *)&ram[ptr];
+  34              		.loc 1 453 3 view .LVU1
+  35              		.loc 1 453 32 is_stmt 0 view .LVU2
+  36 0000 014B     		ldr	r3, .L2
+  37 0002 1B68     		ldr	r3, [r3]
+ 454:ThirdPackage/lwip220/core/mem.c **** }
+  38              		.loc 1 454 1 view .LVU3
+  39 0004 1844     		add	r0, r0, r3
+  40              	.LVL1:
+  41              		.loc 1 454 1 view .LVU4
+  42 0006 7047     		bx	lr
+  43              	.L3:
+  44              		.align	2
+  45              	.L2:
+  46 0008 00000000 		.word	.LANCHOR0
+  47              		.cfi_endproc
+  48              	.LFE160:
+  50              		.section	.text.mem_to_ptr,"ax",%progbits
+  51              		.align	1
+  52              		.syntax unified
+  53              		.thumb
+  54              		.thumb_func
+  56              	mem_to_ptr:
+  57              	.LVL2:
+  58              	.LFB161:
+ 455:ThirdPackage/lwip220/core/mem.c **** 
+ 456:ThirdPackage/lwip220/core/mem.c **** static mem_size_t
+ 457:ThirdPackage/lwip220/core/mem.c **** mem_to_ptr(void *mem)
+ 458:ThirdPackage/lwip220/core/mem.c **** {
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 10
+
+
+  59              		.loc 1 458 1 is_stmt 1 view -0
+  60              		.cfi_startproc
+  61              		@ args = 0, pretend = 0, frame = 0
+  62              		@ frame_needed = 0, uses_anonymous_args = 0
+  63              		@ link register save eliminated.
+ 459:ThirdPackage/lwip220/core/mem.c ****   return (mem_size_t)((u8_t *)mem - ram);
+  64              		.loc 1 459 3 view .LVU6
+  65              		.loc 1 459 35 is_stmt 0 view .LVU7
+  66 0000 024B     		ldr	r3, .L5
+  67 0002 1B68     		ldr	r3, [r3]
+  68 0004 C01A     		subs	r0, r0, r3
+  69              	.LVL3:
+ 460:ThirdPackage/lwip220/core/mem.c **** }
+  70              		.loc 1 460 1 view .LVU8
+  71 0006 80B2     		uxth	r0, r0
+  72 0008 7047     		bx	lr
+  73              	.L6:
+  74 000a 00BF     		.align	2
+  75              	.L5:
+  76 000c 00000000 		.word	.LANCHOR0
+  77              		.cfi_endproc
+  78              	.LFE161:
+  80              		.section	.text.mem_link_valid,"ax",%progbits
+  81              		.align	1
+  82              		.syntax unified
+  83              		.thumb
+  84              		.thumb_func
+  86              	mem_link_valid:
+  87              	.LVL4:
+  88              	.LFB164:
+ 461:ThirdPackage/lwip220/core/mem.c **** 
+ 462:ThirdPackage/lwip220/core/mem.c **** /**
+ 463:ThirdPackage/lwip220/core/mem.c ****  * "Plug holes" by combining adjacent empty struct mems.
+ 464:ThirdPackage/lwip220/core/mem.c ****  * After this function is through, there should not exist
+ 465:ThirdPackage/lwip220/core/mem.c ****  * one empty struct mem pointing to another empty struct mem.
+ 466:ThirdPackage/lwip220/core/mem.c ****  *
+ 467:ThirdPackage/lwip220/core/mem.c ****  * @param mem this points to a struct mem which just has been freed
+ 468:ThirdPackage/lwip220/core/mem.c ****  * @internal this function is only called by mem_free() and mem_trim()
+ 469:ThirdPackage/lwip220/core/mem.c ****  *
+ 470:ThirdPackage/lwip220/core/mem.c ****  * This assumes access to the heap is protected by the calling function
+ 471:ThirdPackage/lwip220/core/mem.c ****  * already.
+ 472:ThirdPackage/lwip220/core/mem.c ****  */
+ 473:ThirdPackage/lwip220/core/mem.c **** static void
+ 474:ThirdPackage/lwip220/core/mem.c **** plug_holes(struct mem *mem)
+ 475:ThirdPackage/lwip220/core/mem.c **** {
+ 476:ThirdPackage/lwip220/core/mem.c ****   struct mem *nmem;
+ 477:ThirdPackage/lwip220/core/mem.c ****   struct mem *pmem;
+ 478:ThirdPackage/lwip220/core/mem.c **** 
+ 479:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("plug_holes: mem >= ram", (u8_t *)mem >= ram);
+ 480:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("plug_holes: mem < ram_end", (u8_t *)mem < (u8_t *)ram_end);
+ 481:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("plug_holes: mem->used == 0", mem->used == 0);
+ 482:ThirdPackage/lwip220/core/mem.c **** 
+ 483:ThirdPackage/lwip220/core/mem.c ****   /* plug hole forward */
+ 484:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("plug_holes: mem->next <= MEM_SIZE_ALIGNED", mem->next <= MEM_SIZE_ALIGNED);
+ 485:ThirdPackage/lwip220/core/mem.c **** 
+ 486:ThirdPackage/lwip220/core/mem.c ****   nmem = ptr_to_mem(mem->next);
+ 487:ThirdPackage/lwip220/core/mem.c ****   if (mem != nmem && nmem->used == 0 && (u8_t *)nmem != (u8_t *)ram_end) {
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 11
+
+
+ 488:ThirdPackage/lwip220/core/mem.c ****     /* if mem->next is unused and not end of ram, combine mem and mem->next */
+ 489:ThirdPackage/lwip220/core/mem.c ****     if (lfree == nmem) {
+ 490:ThirdPackage/lwip220/core/mem.c ****       lfree = mem;
+ 491:ThirdPackage/lwip220/core/mem.c ****     }
+ 492:ThirdPackage/lwip220/core/mem.c ****     mem->next = nmem->next;
+ 493:ThirdPackage/lwip220/core/mem.c ****     if (nmem->next != MEM_SIZE_ALIGNED) {
+ 494:ThirdPackage/lwip220/core/mem.c ****       ptr_to_mem(nmem->next)->prev = mem_to_ptr(mem);
+ 495:ThirdPackage/lwip220/core/mem.c ****     }
+ 496:ThirdPackage/lwip220/core/mem.c ****   }
+ 497:ThirdPackage/lwip220/core/mem.c **** 
+ 498:ThirdPackage/lwip220/core/mem.c ****   /* plug hole backward */
+ 499:ThirdPackage/lwip220/core/mem.c ****   pmem = ptr_to_mem(mem->prev);
+ 500:ThirdPackage/lwip220/core/mem.c ****   if (pmem != mem && pmem->used == 0) {
+ 501:ThirdPackage/lwip220/core/mem.c ****     /* if mem->prev is unused, combine mem and mem->prev */
+ 502:ThirdPackage/lwip220/core/mem.c ****     if (lfree == mem) {
+ 503:ThirdPackage/lwip220/core/mem.c ****       lfree = pmem;
+ 504:ThirdPackage/lwip220/core/mem.c ****     }
+ 505:ThirdPackage/lwip220/core/mem.c ****     pmem->next = mem->next;
+ 506:ThirdPackage/lwip220/core/mem.c ****     if (mem->next != MEM_SIZE_ALIGNED) {
+ 507:ThirdPackage/lwip220/core/mem.c ****       ptr_to_mem(mem->next)->prev = mem_to_ptr(pmem);
+ 508:ThirdPackage/lwip220/core/mem.c ****     }
+ 509:ThirdPackage/lwip220/core/mem.c ****   }
+ 510:ThirdPackage/lwip220/core/mem.c **** }
+ 511:ThirdPackage/lwip220/core/mem.c **** 
+ 512:ThirdPackage/lwip220/core/mem.c **** /**
+ 513:ThirdPackage/lwip220/core/mem.c ****  * Zero the heap and initialize start, end and lowest-free
+ 514:ThirdPackage/lwip220/core/mem.c ****  */
+ 515:ThirdPackage/lwip220/core/mem.c **** void
+ 516:ThirdPackage/lwip220/core/mem.c **** mem_init(void)
+ 517:ThirdPackage/lwip220/core/mem.c **** {
+ 518:ThirdPackage/lwip220/core/mem.c ****   struct mem *mem;
+ 519:ThirdPackage/lwip220/core/mem.c **** 
+ 520:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("Sanity check alignment",
+ 521:ThirdPackage/lwip220/core/mem.c ****               (SIZEOF_STRUCT_MEM & (MEM_ALIGNMENT - 1)) == 0);
+ 522:ThirdPackage/lwip220/core/mem.c **** 
+ 523:ThirdPackage/lwip220/core/mem.c ****   /* align the heap */
+ 524:ThirdPackage/lwip220/core/mem.c ****   ram = (u8_t *)LWIP_MEM_ALIGN(LWIP_RAM_HEAP_POINTER);
+ 525:ThirdPackage/lwip220/core/mem.c ****   /* initialize the start of the heap */
+ 526:ThirdPackage/lwip220/core/mem.c ****   mem = (struct mem *)(void *)ram;
+ 527:ThirdPackage/lwip220/core/mem.c ****   mem->next = MEM_SIZE_ALIGNED;
+ 528:ThirdPackage/lwip220/core/mem.c ****   mem->prev = 0;
+ 529:ThirdPackage/lwip220/core/mem.c ****   mem->used = 0;
+ 530:ThirdPackage/lwip220/core/mem.c ****   /* initialize the end of the heap */
+ 531:ThirdPackage/lwip220/core/mem.c ****   ram_end = ptr_to_mem(MEM_SIZE_ALIGNED);
+ 532:ThirdPackage/lwip220/core/mem.c ****   ram_end->used = 1;
+ 533:ThirdPackage/lwip220/core/mem.c ****   ram_end->next = MEM_SIZE_ALIGNED;
+ 534:ThirdPackage/lwip220/core/mem.c ****   ram_end->prev = MEM_SIZE_ALIGNED;
+ 535:ThirdPackage/lwip220/core/mem.c ****   MEM_SANITY();
+ 536:ThirdPackage/lwip220/core/mem.c **** 
+ 537:ThirdPackage/lwip220/core/mem.c ****   /* initialize the lowest-free pointer to the start of the heap */
+ 538:ThirdPackage/lwip220/core/mem.c ****   lfree = (struct mem *)(void *)ram;
+ 539:ThirdPackage/lwip220/core/mem.c **** 
+ 540:ThirdPackage/lwip220/core/mem.c ****   MEM_STATS_AVAIL(avail, MEM_SIZE_ALIGNED);
+ 541:ThirdPackage/lwip220/core/mem.c **** 
+ 542:ThirdPackage/lwip220/core/mem.c ****   if (sys_mutex_new(&mem_mutex) != ERR_OK) {
+ 543:ThirdPackage/lwip220/core/mem.c ****     LWIP_ASSERT("failed to create mem_mutex", 0);
+ 544:ThirdPackage/lwip220/core/mem.c ****   }
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 12
+
+
+ 545:ThirdPackage/lwip220/core/mem.c **** }
+ 546:ThirdPackage/lwip220/core/mem.c **** 
+ 547:ThirdPackage/lwip220/core/mem.c **** /* Check if a struct mem is correctly linked.
+ 548:ThirdPackage/lwip220/core/mem.c ****  * If not, double-free is a possible reason.
+ 549:ThirdPackage/lwip220/core/mem.c ****  */
+ 550:ThirdPackage/lwip220/core/mem.c **** static int
+ 551:ThirdPackage/lwip220/core/mem.c **** mem_link_valid(struct mem *mem)
+ 552:ThirdPackage/lwip220/core/mem.c **** {
+  89              		.loc 1 552 1 is_stmt 1 view -0
+  90              		.cfi_startproc
+  91              		@ args = 0, pretend = 0, frame = 0
+  92              		@ frame_needed = 0, uses_anonymous_args = 0
+  93              		.loc 1 552 1 is_stmt 0 view .LVU10
+  94 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+  95              	.LCFI0:
+  96              		.cfi_def_cfa_offset 24
+  97              		.cfi_offset 3, -24
+  98              		.cfi_offset 4, -20
+  99              		.cfi_offset 5, -16
+ 100              		.cfi_offset 6, -12
+ 101              		.cfi_offset 7, -8
+ 102              		.cfi_offset 14, -4
+ 103 0002 0446     		mov	r4, r0
+ 553:ThirdPackage/lwip220/core/mem.c ****   struct mem *nmem, *pmem;
+ 104              		.loc 1 553 3 is_stmt 1 view .LVU11
+ 554:ThirdPackage/lwip220/core/mem.c ****   mem_size_t rmem_idx;
+ 105              		.loc 1 554 3 view .LVU12
+ 555:ThirdPackage/lwip220/core/mem.c ****   rmem_idx = mem_to_ptr(mem);
+ 106              		.loc 1 555 3 view .LVU13
+ 107              		.loc 1 555 14 is_stmt 0 view .LVU14
+ 108 0004 FFF7FEFF 		bl	mem_to_ptr
+ 109              	.LVL5:
+ 110              		.loc 1 555 14 view .LVU15
+ 111 0008 0746     		mov	r7, r0
+ 112              	.LVL6:
+ 556:ThirdPackage/lwip220/core/mem.c ****   nmem = ptr_to_mem(mem->next);
+ 113              		.loc 1 556 3 is_stmt 1 view .LVU16
+ 114              		.loc 1 556 10 is_stmt 0 view .LVU17
+ 115 000a 2588     		ldrh	r5, [r4]
+ 116 000c 2846     		mov	r0, r5
+ 117 000e FFF7FEFF 		bl	ptr_to_mem
+ 118              	.LVL7:
+ 119 0012 0646     		mov	r6, r0
+ 120              	.LVL8:
+ 557:ThirdPackage/lwip220/core/mem.c ****   pmem = ptr_to_mem(mem->prev);
+ 121              		.loc 1 557 3 is_stmt 1 view .LVU18
+ 122              		.loc 1 557 10 is_stmt 0 view .LVU19
+ 123 0014 6488     		ldrh	r4, [r4, #2]
+ 124              	.LVL9:
+ 125              		.loc 1 557 10 view .LVU20
+ 126 0016 2046     		mov	r0, r4
+ 127              	.LVL10:
+ 128              		.loc 1 557 10 view .LVU21
+ 129 0018 FFF7FEFF 		bl	ptr_to_mem
+ 130              	.LVL11:
+ 558:ThirdPackage/lwip220/core/mem.c ****   if ((mem->next > MEM_SIZE_ALIGNED) || (mem->prev > MEM_SIZE_ALIGNED) ||
+ 131              		.loc 1 558 3 is_stmt 1 view .LVU22
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 13
+
+
+ 132              		.loc 1 558 6 is_stmt 0 view .LVU23
+ 133 001c B5F5C86F 		cmp	r5, #1600
+ 134 0020 10D8     		bhi	.L10
+ 135              		.loc 1 558 38 discriminator 1 view .LVU24
+ 136 0022 B4F5C86F 		cmp	r4, #1600
+ 137 0026 0FD8     		bhi	.L11
+ 138              		.loc 1 558 72 discriminator 2 view .LVU25
+ 139 0028 BC42     		cmp	r4, r7
+ 140 002a 02D0     		beq	.L9
+ 559:ThirdPackage/lwip220/core/mem.c ****       ((mem->prev != rmem_idx) && (pmem->next != rmem_idx)) ||
+ 141              		.loc 1 559 40 view .LVU26
+ 142 002c 0388     		ldrh	r3, [r0]
+ 143              		.loc 1 559 32 view .LVU27
+ 144 002e BB42     		cmp	r3, r7
+ 145 0030 0CD1     		bne	.L12
+ 146              	.L9:
+ 560:ThirdPackage/lwip220/core/mem.c ****       ((nmem != ram_end) && (nmem->prev != rmem_idx))) {
+ 147              		.loc 1 560 14 discriminator 1 view .LVU28
+ 148 0032 094B     		ldr	r3, .L16
+ 149 0034 1B68     		ldr	r3, [r3]
+ 559:ThirdPackage/lwip220/core/mem.c ****       ((mem->prev != rmem_idx) && (pmem->next != rmem_idx)) ||
+ 150              		.loc 1 559 61 discriminator 1 view .LVU29
+ 151 0036 B342     		cmp	r3, r6
+ 152 0038 0AD0     		beq	.L13
+ 153              		.loc 1 560 34 view .LVU30
+ 154 003a 7388     		ldrh	r3, [r6, #2]
+ 155              		.loc 1 560 26 view .LVU31
+ 156 003c BB42     		cmp	r3, r7
+ 157 003e 09D1     		bne	.L14
+ 561:ThirdPackage/lwip220/core/mem.c ****     return 0;
+ 562:ThirdPackage/lwip220/core/mem.c ****   }
+ 563:ThirdPackage/lwip220/core/mem.c ****   return 1;
+ 158              		.loc 1 563 10 view .LVU32
+ 159 0040 0120     		movs	r0, #1
+ 160              	.LVL12:
+ 161              		.loc 1 563 10 view .LVU33
+ 162 0042 00E0     		b	.L7
+ 163              	.LVL13:
+ 164              	.L10:
+ 561:ThirdPackage/lwip220/core/mem.c ****     return 0;
+ 165              		.loc 1 561 12 view .LVU34
+ 166 0044 0020     		movs	r0, #0
+ 167              	.LVL14:
+ 168              	.L7:
+ 564:ThirdPackage/lwip220/core/mem.c **** }
+ 169              		.loc 1 564 1 view .LVU35
+ 170 0046 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 171              	.LVL15:
+ 172              	.L11:
+ 561:ThirdPackage/lwip220/core/mem.c ****     return 0;
+ 173              		.loc 1 561 12 view .LVU36
+ 174 0048 0020     		movs	r0, #0
+ 175              	.LVL16:
+ 561:ThirdPackage/lwip220/core/mem.c ****     return 0;
+ 176              		.loc 1 561 12 view .LVU37
+ 177 004a FCE7     		b	.L7
+ 178              	.LVL17:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 14
+
+
+ 179              	.L12:
+ 561:ThirdPackage/lwip220/core/mem.c ****     return 0;
+ 180              		.loc 1 561 12 view .LVU38
+ 181 004c 0020     		movs	r0, #0
+ 182              	.LVL18:
+ 561:ThirdPackage/lwip220/core/mem.c ****     return 0;
+ 183              		.loc 1 561 12 view .LVU39
+ 184 004e FAE7     		b	.L7
+ 185              	.LVL19:
+ 186              	.L13:
+ 563:ThirdPackage/lwip220/core/mem.c **** }
+ 187              		.loc 1 563 10 view .LVU40
+ 188 0050 0120     		movs	r0, #1
+ 189              	.LVL20:
+ 563:ThirdPackage/lwip220/core/mem.c **** }
+ 190              		.loc 1 563 10 view .LVU41
+ 191 0052 F8E7     		b	.L7
+ 192              	.LVL21:
+ 193              	.L14:
+ 561:ThirdPackage/lwip220/core/mem.c ****     return 0;
+ 194              		.loc 1 561 12 view .LVU42
+ 195 0054 0020     		movs	r0, #0
+ 196              	.LVL22:
+ 561:ThirdPackage/lwip220/core/mem.c ****     return 0;
+ 197              		.loc 1 561 12 view .LVU43
+ 198 0056 F6E7     		b	.L7
+ 199              	.L17:
+ 200              		.align	2
+ 201              	.L16:
+ 202 0058 00000000 		.word	.LANCHOR1
+ 203              		.cfi_endproc
+ 204              	.LFE164:
+ 206              		.section	.rodata.plug_holes.str1.4,"aMS",%progbits,1
+ 207              		.align	2
+ 208              	.LC0:
+ 209 0000 54686972 		.ascii	"ThirdPackage/lwip220/core/mem.c\000"
+ 209      64506163 
+ 209      6B616765 
+ 209      2F6C7769 
+ 209      70323230 
+ 210              		.align	2
+ 211              	.LC1:
+ 212 0020 706C7567 		.ascii	"plug_holes: mem >= ram\000"
+ 212      5F686F6C 
+ 212      65733A20 
+ 212      6D656D20 
+ 212      3E3D2072 
+ 213 0037 00       		.align	2
+ 214              	.LC2:
+ 215 0038 41737365 		.ascii	"Assertion \"%s\" failed at line %d in %s\012\000"
+ 215      7274696F 
+ 215      6E202225 
+ 215      73222066 
+ 215      61696C65 
+ 216              		.align	2
+ 217              	.LC3:
+ 218 0060 706C7567 		.ascii	"plug_holes: mem < ram_end\000"
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 15
+
+
+ 218      5F686F6C 
+ 218      65733A20 
+ 218      6D656D20 
+ 218      3C207261 
+ 219 007a 0000     		.align	2
+ 220              	.LC4:
+ 221 007c 706C7567 		.ascii	"plug_holes: mem->used == 0\000"
+ 221      5F686F6C 
+ 221      65733A20 
+ 221      6D656D2D 
+ 221      3E757365 
+ 222 0097 00       		.align	2
+ 223              	.LC5:
+ 224 0098 706C7567 		.ascii	"plug_holes: mem->next <= MEM_SIZE_ALIGNED\000"
+ 224      5F686F6C 
+ 224      65733A20 
+ 224      6D656D2D 
+ 224      3E6E6578 
+ 225              		.section	.text.plug_holes,"ax",%progbits
+ 226              		.align	1
+ 227              		.syntax unified
+ 228              		.thumb
+ 229              		.thumb_func
+ 231              	plug_holes:
+ 232              	.LVL23:
+ 233              	.LFB162:
+ 475:ThirdPackage/lwip220/core/mem.c ****   struct mem *nmem;
+ 234              		.loc 1 475 1 is_stmt 1 view -0
+ 235              		.cfi_startproc
+ 236              		@ args = 0, pretend = 0, frame = 0
+ 237              		@ frame_needed = 0, uses_anonymous_args = 0
+ 475:ThirdPackage/lwip220/core/mem.c ****   struct mem *nmem;
+ 238              		.loc 1 475 1 is_stmt 0 view .LVU45
+ 239 0000 38B5     		push	{r3, r4, r5, lr}
+ 240              	.LCFI1:
+ 241              		.cfi_def_cfa_offset 16
+ 242              		.cfi_offset 3, -16
+ 243              		.cfi_offset 4, -12
+ 244              		.cfi_offset 5, -8
+ 245              		.cfi_offset 14, -4
+ 246 0002 0446     		mov	r4, r0
+ 476:ThirdPackage/lwip220/core/mem.c ****   struct mem *pmem;
+ 247              		.loc 1 476 3 is_stmt 1 view .LVU46
+ 477:ThirdPackage/lwip220/core/mem.c **** 
+ 248              		.loc 1 477 3 view .LVU47
+ 479:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("plug_holes: mem < ram_end", (u8_t *)mem < (u8_t *)ram_end);
+ 249              		.loc 1 479 3 view .LVU48
+ 479:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("plug_holes: mem < ram_end", (u8_t *)mem < (u8_t *)ram_end);
+ 250              		.loc 1 479 3 view .LVU49
+ 251 0004 354B     		ldr	r3, .L34
+ 252 0006 1B68     		ldr	r3, [r3]
+ 253 0008 8342     		cmp	r3, r0
+ 254 000a 40D8     		bhi	.L28
+ 255              	.LVL24:
+ 256              	.L19:
+ 479:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("plug_holes: mem < ram_end", (u8_t *)mem < (u8_t *)ram_end);
+ 257              		.loc 1 479 3 discriminator 3 view .LVU50
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 16
+
+
+ 479:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("plug_holes: mem < ram_end", (u8_t *)mem < (u8_t *)ram_end);
+ 258              		.loc 1 479 3 discriminator 3 view .LVU51
+ 480:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("plug_holes: mem->used == 0", mem->used == 0);
+ 259              		.loc 1 480 3 discriminator 3 view .LVU52
+ 480:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("plug_holes: mem->used == 0", mem->used == 0);
+ 260              		.loc 1 480 3 discriminator 3 view .LVU53
+ 261 000c 344B     		ldr	r3, .L34+4
+ 262 000e 1B68     		ldr	r3, [r3]
+ 263 0010 A342     		cmp	r3, r4
+ 264 0012 44D9     		bls	.L29
+ 265              	.L20:
+ 480:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("plug_holes: mem->used == 0", mem->used == 0);
+ 266              		.loc 1 480 3 discriminator 3 view .LVU54
+ 480:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("plug_holes: mem->used == 0", mem->used == 0);
+ 267              		.loc 1 480 3 discriminator 3 view .LVU55
+ 481:ThirdPackage/lwip220/core/mem.c **** 
+ 268              		.loc 1 481 3 discriminator 3 view .LVU56
+ 481:ThirdPackage/lwip220/core/mem.c **** 
+ 269              		.loc 1 481 3 discriminator 3 view .LVU57
+ 270 0014 2379     		ldrb	r3, [r4, #4]	@ zero_extendqisi2
+ 271 0016 002B     		cmp	r3, #0
+ 272 0018 49D1     		bne	.L30
+ 273              	.L21:
+ 481:ThirdPackage/lwip220/core/mem.c **** 
+ 274              		.loc 1 481 3 discriminator 3 view .LVU58
+ 481:ThirdPackage/lwip220/core/mem.c **** 
+ 275              		.loc 1 481 3 discriminator 3 view .LVU59
+ 484:ThirdPackage/lwip220/core/mem.c **** 
+ 276              		.loc 1 484 3 discriminator 3 view .LVU60
+ 484:ThirdPackage/lwip220/core/mem.c **** 
+ 277              		.loc 1 484 3 discriminator 3 view .LVU61
+ 278 001a 2388     		ldrh	r3, [r4]
+ 279 001c B3F5C86F 		cmp	r3, #1600
+ 280 0020 4DD8     		bhi	.L31
+ 281              	.L22:
+ 484:ThirdPackage/lwip220/core/mem.c **** 
+ 282              		.loc 1 484 3 discriminator 3 view .LVU62
+ 484:ThirdPackage/lwip220/core/mem.c **** 
+ 283              		.loc 1 484 3 discriminator 3 view .LVU63
+ 486:ThirdPackage/lwip220/core/mem.c ****   if (mem != nmem && nmem->used == 0 && (u8_t *)nmem != (u8_t *)ram_end) {
+ 284              		.loc 1 486 3 discriminator 3 view .LVU64
+ 486:ThirdPackage/lwip220/core/mem.c ****   if (mem != nmem && nmem->used == 0 && (u8_t *)nmem != (u8_t *)ram_end) {
+ 285              		.loc 1 486 10 is_stmt 0 discriminator 3 view .LVU65
+ 286 0022 2088     		ldrh	r0, [r4]
+ 287 0024 FFF7FEFF 		bl	ptr_to_mem
+ 288              	.LVL25:
+ 487:ThirdPackage/lwip220/core/mem.c ****     /* if mem->next is unused and not end of ram, combine mem and mem->next */
+ 289              		.loc 1 487 3 is_stmt 1 discriminator 3 view .LVU66
+ 487:ThirdPackage/lwip220/core/mem.c ****     /* if mem->next is unused and not end of ram, combine mem and mem->next */
+ 290              		.loc 1 487 6 is_stmt 0 discriminator 3 view .LVU67
+ 291 0028 8442     		cmp	r4, r0
+ 292 002a 16D0     		beq	.L23
+ 487:ThirdPackage/lwip220/core/mem.c ****     /* if mem->next is unused and not end of ram, combine mem and mem->next */
+ 293              		.loc 1 487 26 discriminator 1 view .LVU68
+ 294 002c 0379     		ldrb	r3, [r0, #4]	@ zero_extendqisi2
+ 487:ThirdPackage/lwip220/core/mem.c ****     /* if mem->next is unused and not end of ram, combine mem and mem->next */
+ 295              		.loc 1 487 19 discriminator 1 view .LVU69
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 17
+
+
+ 296 002e A3B9     		cbnz	r3, .L23
+ 487:ThirdPackage/lwip220/core/mem.c ****     /* if mem->next is unused and not end of ram, combine mem and mem->next */
+ 297              		.loc 1 487 57 discriminator 2 view .LVU70
+ 298 0030 2B4B     		ldr	r3, .L34+4
+ 299 0032 1B68     		ldr	r3, [r3]
+ 487:ThirdPackage/lwip220/core/mem.c ****     /* if mem->next is unused and not end of ram, combine mem and mem->next */
+ 300              		.loc 1 487 38 discriminator 2 view .LVU71
+ 301 0034 8342     		cmp	r3, r0
+ 302 0036 10D0     		beq	.L23
+ 489:ThirdPackage/lwip220/core/mem.c ****       lfree = mem;
+ 303              		.loc 1 489 5 is_stmt 1 view .LVU72
+ 489:ThirdPackage/lwip220/core/mem.c ****       lfree = mem;
+ 304              		.loc 1 489 15 is_stmt 0 view .LVU73
+ 305 0038 2A4B     		ldr	r3, .L34+8
+ 306 003a 1B68     		ldr	r3, [r3]
+ 489:ThirdPackage/lwip220/core/mem.c ****       lfree = mem;
+ 307              		.loc 1 489 8 view .LVU74
+ 308 003c 8342     		cmp	r3, r0
+ 309 003e 46D0     		beq	.L32
+ 310              	.L24:
+ 492:ThirdPackage/lwip220/core/mem.c ****     if (nmem->next != MEM_SIZE_ALIGNED) {
+ 311              		.loc 1 492 5 is_stmt 1 view .LVU75
+ 492:ThirdPackage/lwip220/core/mem.c ****     if (nmem->next != MEM_SIZE_ALIGNED) {
+ 312              		.loc 1 492 21 is_stmt 0 view .LVU76
+ 313 0040 0388     		ldrh	r3, [r0]
+ 492:ThirdPackage/lwip220/core/mem.c ****     if (nmem->next != MEM_SIZE_ALIGNED) {
+ 314              		.loc 1 492 15 view .LVU77
+ 315 0042 2380     		strh	r3, [r4]	@ movhi
+ 493:ThirdPackage/lwip220/core/mem.c ****       ptr_to_mem(nmem->next)->prev = mem_to_ptr(mem);
+ 316              		.loc 1 493 5 is_stmt 1 view .LVU78
+ 493:ThirdPackage/lwip220/core/mem.c ****       ptr_to_mem(nmem->next)->prev = mem_to_ptr(mem);
+ 317              		.loc 1 493 13 is_stmt 0 view .LVU79
+ 318 0044 0088     		ldrh	r0, [r0]
+ 319              	.LVL26:
+ 493:ThirdPackage/lwip220/core/mem.c ****       ptr_to_mem(nmem->next)->prev = mem_to_ptr(mem);
+ 320              		.loc 1 493 8 view .LVU80
+ 321 0046 B0F5C86F 		cmp	r0, #1600
+ 322 004a 06D0     		beq	.L23
+ 494:ThirdPackage/lwip220/core/mem.c ****     }
+ 323              		.loc 1 494 7 is_stmt 1 view .LVU81
+ 324 004c FFF7FEFF 		bl	ptr_to_mem
+ 325              	.LVL27:
+ 326 0050 0546     		mov	r5, r0
+ 494:ThirdPackage/lwip220/core/mem.c ****     }
+ 327              		.loc 1 494 38 is_stmt 0 view .LVU82
+ 328 0052 2046     		mov	r0, r4
+ 329 0054 FFF7FEFF 		bl	mem_to_ptr
+ 330              	.LVL28:
+ 494:ThirdPackage/lwip220/core/mem.c ****     }
+ 331              		.loc 1 494 36 view .LVU83
+ 332 0058 6880     		strh	r0, [r5, #2]	@ movhi
+ 333              	.L23:
+ 499:ThirdPackage/lwip220/core/mem.c ****   if (pmem != mem && pmem->used == 0) {
+ 334              		.loc 1 499 3 is_stmt 1 view .LVU84
+ 499:ThirdPackage/lwip220/core/mem.c ****   if (pmem != mem && pmem->used == 0) {
+ 335              		.loc 1 499 10 is_stmt 0 view .LVU85
+ 336 005a 6088     		ldrh	r0, [r4, #2]
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 18
+
+
+ 337 005c FFF7FEFF 		bl	ptr_to_mem
+ 338              	.LVL29:
+ 339 0060 0546     		mov	r5, r0
+ 340              	.LVL30:
+ 500:ThirdPackage/lwip220/core/mem.c ****     /* if mem->prev is unused, combine mem and mem->prev */
+ 341              		.loc 1 500 3 is_stmt 1 view .LVU86
+ 500:ThirdPackage/lwip220/core/mem.c ****     /* if mem->prev is unused, combine mem and mem->prev */
+ 342              		.loc 1 500 6 is_stmt 0 view .LVU87
+ 343 0062 8442     		cmp	r4, r0
+ 344 0064 12D0     		beq	.L18
+ 500:ThirdPackage/lwip220/core/mem.c ****     /* if mem->prev is unused, combine mem and mem->prev */
+ 345              		.loc 1 500 26 discriminator 1 view .LVU88
+ 346 0066 0379     		ldrb	r3, [r0, #4]	@ zero_extendqisi2
+ 500:ThirdPackage/lwip220/core/mem.c ****     /* if mem->prev is unused, combine mem and mem->prev */
+ 347              		.loc 1 500 19 discriminator 1 view .LVU89
+ 348 0068 83B9     		cbnz	r3, .L18
+ 502:ThirdPackage/lwip220/core/mem.c ****       lfree = pmem;
+ 349              		.loc 1 502 5 is_stmt 1 view .LVU90
+ 502:ThirdPackage/lwip220/core/mem.c ****       lfree = pmem;
+ 350              		.loc 1 502 15 is_stmt 0 view .LVU91
+ 351 006a 1E4B     		ldr	r3, .L34+8
+ 352 006c 1B68     		ldr	r3, [r3]
+ 502:ThirdPackage/lwip220/core/mem.c ****       lfree = pmem;
+ 353              		.loc 1 502 8 view .LVU92
+ 354 006e A342     		cmp	r3, r4
+ 355 0070 30D0     		beq	.L33
+ 356              	.L26:
+ 505:ThirdPackage/lwip220/core/mem.c ****     if (mem->next != MEM_SIZE_ALIGNED) {
+ 357              		.loc 1 505 5 is_stmt 1 view .LVU93
+ 505:ThirdPackage/lwip220/core/mem.c ****     if (mem->next != MEM_SIZE_ALIGNED) {
+ 358              		.loc 1 505 21 is_stmt 0 view .LVU94
+ 359 0072 2388     		ldrh	r3, [r4]
+ 505:ThirdPackage/lwip220/core/mem.c ****     if (mem->next != MEM_SIZE_ALIGNED) {
+ 360              		.loc 1 505 16 view .LVU95
+ 361 0074 2B80     		strh	r3, [r5]	@ movhi
+ 506:ThirdPackage/lwip220/core/mem.c ****       ptr_to_mem(mem->next)->prev = mem_to_ptr(pmem);
+ 362              		.loc 1 506 5 is_stmt 1 view .LVU96
+ 506:ThirdPackage/lwip220/core/mem.c ****       ptr_to_mem(mem->next)->prev = mem_to_ptr(pmem);
+ 363              		.loc 1 506 12 is_stmt 0 view .LVU97
+ 364 0076 2088     		ldrh	r0, [r4]
+ 365              	.LVL31:
+ 506:ThirdPackage/lwip220/core/mem.c ****       ptr_to_mem(mem->next)->prev = mem_to_ptr(pmem);
+ 366              		.loc 1 506 8 view .LVU98
+ 367 0078 B0F5C86F 		cmp	r0, #1600
+ 368 007c 06D0     		beq	.L18
+ 507:ThirdPackage/lwip220/core/mem.c ****     }
+ 369              		.loc 1 507 7 is_stmt 1 view .LVU99
+ 370 007e FFF7FEFF 		bl	ptr_to_mem
+ 371              	.LVL32:
+ 372 0082 0446     		mov	r4, r0
+ 373              	.LVL33:
+ 507:ThirdPackage/lwip220/core/mem.c ****     }
+ 374              		.loc 1 507 37 is_stmt 0 view .LVU100
+ 375 0084 2846     		mov	r0, r5
+ 376 0086 FFF7FEFF 		bl	mem_to_ptr
+ 377              	.LVL34:
+ 507:ThirdPackage/lwip220/core/mem.c ****     }
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 19
+
+
+ 378              		.loc 1 507 35 view .LVU101
+ 379 008a 6080     		strh	r0, [r4, #2]	@ movhi
+ 380              	.L18:
+ 510:ThirdPackage/lwip220/core/mem.c **** 
+ 381              		.loc 1 510 1 view .LVU102
+ 382 008c 38BD     		pop	{r3, r4, r5, pc}
+ 383              	.LVL35:
+ 384              	.L28:
+ 479:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("plug_holes: mem < ram_end", (u8_t *)mem < (u8_t *)ram_end);
+ 385              		.loc 1 479 3 is_stmt 1 discriminator 1 view .LVU103
+ 479:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("plug_holes: mem < ram_end", (u8_t *)mem < (u8_t *)ram_end);
+ 386              		.loc 1 479 3 discriminator 1 view .LVU104
+ 387 008e 164B     		ldr	r3, .L34+12
+ 388 0090 40F2DF12 		movw	r2, #479
+ 389 0094 1549     		ldr	r1, .L34+16
+ 390 0096 1648     		ldr	r0, .L34+20
+ 391              	.LVL36:
+ 479:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("plug_holes: mem < ram_end", (u8_t *)mem < (u8_t *)ram_end);
+ 392              		.loc 1 479 3 is_stmt 0 discriminator 1 view .LVU105
+ 393 0098 FFF7FEFF 		bl	printf
+ 394              	.LVL37:
+ 395 009c B6E7     		b	.L19
+ 396              	.L29:
+ 480:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("plug_holes: mem->used == 0", mem->used == 0);
+ 397              		.loc 1 480 3 is_stmt 1 discriminator 1 view .LVU106
+ 480:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("plug_holes: mem->used == 0", mem->used == 0);
+ 398              		.loc 1 480 3 discriminator 1 view .LVU107
+ 399 009e 124B     		ldr	r3, .L34+12
+ 400 00a0 4FF4F072 		mov	r2, #480
+ 401 00a4 1349     		ldr	r1, .L34+24
+ 402 00a6 1248     		ldr	r0, .L34+20
+ 403 00a8 FFF7FEFF 		bl	printf
+ 404              	.LVL38:
+ 405 00ac B2E7     		b	.L20
+ 406              	.L30:
+ 481:ThirdPackage/lwip220/core/mem.c **** 
+ 407              		.loc 1 481 3 discriminator 1 view .LVU108
+ 481:ThirdPackage/lwip220/core/mem.c **** 
+ 408              		.loc 1 481 3 discriminator 1 view .LVU109
+ 409 00ae 0E4B     		ldr	r3, .L34+12
+ 410 00b0 40F2E112 		movw	r2, #481
+ 411 00b4 1049     		ldr	r1, .L34+28
+ 412 00b6 0E48     		ldr	r0, .L34+20
+ 413 00b8 FFF7FEFF 		bl	printf
+ 414              	.LVL39:
+ 415 00bc ADE7     		b	.L21
+ 416              	.L31:
+ 484:ThirdPackage/lwip220/core/mem.c **** 
+ 417              		.loc 1 484 3 discriminator 1 view .LVU110
+ 484:ThirdPackage/lwip220/core/mem.c **** 
+ 418              		.loc 1 484 3 discriminator 1 view .LVU111
+ 419 00be 0A4B     		ldr	r3, .L34+12
+ 420 00c0 4FF4F272 		mov	r2, #484
+ 421 00c4 0D49     		ldr	r1, .L34+32
+ 422 00c6 0A48     		ldr	r0, .L34+20
+ 423 00c8 FFF7FEFF 		bl	printf
+ 424              	.LVL40:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 20
+
+
+ 425 00cc A9E7     		b	.L22
+ 426              	.LVL41:
+ 427              	.L32:
+ 490:ThirdPackage/lwip220/core/mem.c ****     }
+ 428              		.loc 1 490 7 view .LVU112
+ 490:ThirdPackage/lwip220/core/mem.c ****     }
+ 429              		.loc 1 490 13 is_stmt 0 view .LVU113
+ 430 00ce 054B     		ldr	r3, .L34+8
+ 431 00d0 1C60     		str	r4, [r3]
+ 432 00d2 B5E7     		b	.L24
+ 433              	.LVL42:
+ 434              	.L33:
+ 503:ThirdPackage/lwip220/core/mem.c ****     }
+ 435              		.loc 1 503 7 is_stmt 1 view .LVU114
+ 503:ThirdPackage/lwip220/core/mem.c ****     }
+ 436              		.loc 1 503 13 is_stmt 0 view .LVU115
+ 437 00d4 034B     		ldr	r3, .L34+8
+ 438 00d6 1860     		str	r0, [r3]
+ 439 00d8 CBE7     		b	.L26
+ 440              	.L35:
+ 441 00da 00BF     		.align	2
+ 442              	.L34:
+ 443 00dc 00000000 		.word	.LANCHOR0
+ 444 00e0 00000000 		.word	.LANCHOR1
+ 445 00e4 00000000 		.word	.LANCHOR2
+ 446 00e8 00000000 		.word	.LC0
+ 447 00ec 20000000 		.word	.LC1
+ 448 00f0 38000000 		.word	.LC2
+ 449 00f4 60000000 		.word	.LC3
+ 450 00f8 7C000000 		.word	.LC4
+ 451 00fc 98000000 		.word	.LC5
+ 452              		.cfi_endproc
+ 453              	.LFE162:
+ 455              		.section	.rodata.mem_init.str1.4,"aMS",%progbits,1
+ 456              		.align	2
+ 457              	.LC6:
+ 458 0000 6661696C 		.ascii	"failed to create mem_mutex\000"
+ 458      65642074 
+ 458      6F206372 
+ 458      65617465 
+ 458      206D656D 
+ 459              		.section	.text.mem_init,"ax",%progbits
+ 460              		.align	1
+ 461              		.global	mem_init
+ 462              		.syntax unified
+ 463              		.thumb
+ 464              		.thumb_func
+ 466              	mem_init:
+ 467              	.LFB163:
+ 517:ThirdPackage/lwip220/core/mem.c ****   struct mem *mem;
+ 468              		.loc 1 517 1 is_stmt 1 view -0
+ 469              		.cfi_startproc
+ 470              		@ args = 0, pretend = 0, frame = 0
+ 471              		@ frame_needed = 0, uses_anonymous_args = 0
+ 472 0000 38B5     		push	{r3, r4, r5, lr}
+ 473              	.LCFI2:
+ 474              		.cfi_def_cfa_offset 16
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 21
+
+
+ 475              		.cfi_offset 3, -16
+ 476              		.cfi_offset 4, -12
+ 477              		.cfi_offset 5, -8
+ 478              		.cfi_offset 14, -4
+ 518:ThirdPackage/lwip220/core/mem.c **** 
+ 479              		.loc 1 518 3 view .LVU117
+ 520:ThirdPackage/lwip220/core/mem.c ****               (SIZEOF_STRUCT_MEM & (MEM_ALIGNMENT - 1)) == 0);
+ 480              		.loc 1 520 3 view .LVU118
+ 520:ThirdPackage/lwip220/core/mem.c ****               (SIZEOF_STRUCT_MEM & (MEM_ALIGNMENT - 1)) == 0);
+ 481              		.loc 1 520 3 view .LVU119
+ 520:ThirdPackage/lwip220/core/mem.c ****               (SIZEOF_STRUCT_MEM & (MEM_ALIGNMENT - 1)) == 0);
+ 482              		.loc 1 520 3 view .LVU120
+ 520:ThirdPackage/lwip220/core/mem.c ****               (SIZEOF_STRUCT_MEM & (MEM_ALIGNMENT - 1)) == 0);
+ 483              		.loc 1 520 3 view .LVU121
+ 524:ThirdPackage/lwip220/core/mem.c ****   /* initialize the start of the heap */
+ 484              		.loc 1 524 3 view .LVU122
+ 524:ThirdPackage/lwip220/core/mem.c ****   /* initialize the start of the heap */
+ 485              		.loc 1 524 17 is_stmt 0 view .LVU123
+ 486 0002 114C     		ldr	r4, .L40
+ 487 0004 24F00304 		bic	r4, r4, #3
+ 524:ThirdPackage/lwip220/core/mem.c ****   /* initialize the start of the heap */
+ 488              		.loc 1 524 7 view .LVU124
+ 489 0008 104B     		ldr	r3, .L40+4
+ 490 000a 1C60     		str	r4, [r3]
+ 526:ThirdPackage/lwip220/core/mem.c ****   mem->next = MEM_SIZE_ALIGNED;
+ 491              		.loc 1 526 3 is_stmt 1 view .LVU125
+ 492              	.LVL43:
+ 527:ThirdPackage/lwip220/core/mem.c ****   mem->prev = 0;
+ 493              		.loc 1 527 3 view .LVU126
+ 527:ThirdPackage/lwip220/core/mem.c ****   mem->prev = 0;
+ 494              		.loc 1 527 13 is_stmt 0 view .LVU127
+ 495 000c 4FF4C865 		mov	r5, #1600
+ 496 0010 2580     		strh	r5, [r4]	@ movhi
+ 528:ThirdPackage/lwip220/core/mem.c ****   mem->used = 0;
+ 497              		.loc 1 528 3 is_stmt 1 view .LVU128
+ 528:ThirdPackage/lwip220/core/mem.c ****   mem->used = 0;
+ 498              		.loc 1 528 13 is_stmt 0 view .LVU129
+ 499 0012 0023     		movs	r3, #0
+ 500 0014 6380     		strh	r3, [r4, #2]	@ movhi
+ 529:ThirdPackage/lwip220/core/mem.c ****   /* initialize the end of the heap */
+ 501              		.loc 1 529 3 is_stmt 1 view .LVU130
+ 529:ThirdPackage/lwip220/core/mem.c ****   /* initialize the end of the heap */
+ 502              		.loc 1 529 13 is_stmt 0 view .LVU131
+ 503 0016 2371     		strb	r3, [r4, #4]
+ 531:ThirdPackage/lwip220/core/mem.c ****   ram_end->used = 1;
+ 504              		.loc 1 531 3 is_stmt 1 view .LVU132
+ 531:ThirdPackage/lwip220/core/mem.c ****   ram_end->used = 1;
+ 505              		.loc 1 531 13 is_stmt 0 view .LVU133
+ 506 0018 2846     		mov	r0, r5
+ 507 001a FFF7FEFF 		bl	ptr_to_mem
+ 508              	.LVL44:
+ 531:ThirdPackage/lwip220/core/mem.c ****   ram_end->used = 1;
+ 509              		.loc 1 531 11 view .LVU134
+ 510 001e 0C4B     		ldr	r3, .L40+8
+ 511 0020 1860     		str	r0, [r3]
+ 532:ThirdPackage/lwip220/core/mem.c ****   ram_end->next = MEM_SIZE_ALIGNED;
+ 512              		.loc 1 532 3 is_stmt 1 view .LVU135
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 22
+
+
+ 532:ThirdPackage/lwip220/core/mem.c ****   ram_end->next = MEM_SIZE_ALIGNED;
+ 513              		.loc 1 532 17 is_stmt 0 view .LVU136
+ 514 0022 0123     		movs	r3, #1
+ 515 0024 0371     		strb	r3, [r0, #4]
+ 533:ThirdPackage/lwip220/core/mem.c ****   ram_end->prev = MEM_SIZE_ALIGNED;
+ 516              		.loc 1 533 3 is_stmt 1 view .LVU137
+ 533:ThirdPackage/lwip220/core/mem.c ****   ram_end->prev = MEM_SIZE_ALIGNED;
+ 517              		.loc 1 533 17 is_stmt 0 view .LVU138
+ 518 0026 0580     		strh	r5, [r0]	@ movhi
+ 534:ThirdPackage/lwip220/core/mem.c ****   MEM_SANITY();
+ 519              		.loc 1 534 3 is_stmt 1 view .LVU139
+ 534:ThirdPackage/lwip220/core/mem.c ****   MEM_SANITY();
+ 520              		.loc 1 534 17 is_stmt 0 view .LVU140
+ 521 0028 4580     		strh	r5, [r0, #2]	@ movhi
+ 535:ThirdPackage/lwip220/core/mem.c **** 
+ 522              		.loc 1 535 15 is_stmt 1 view .LVU141
+ 538:ThirdPackage/lwip220/core/mem.c **** 
+ 523              		.loc 1 538 3 view .LVU142
+ 538:ThirdPackage/lwip220/core/mem.c **** 
+ 524              		.loc 1 538 9 is_stmt 0 view .LVU143
+ 525 002a 0A4B     		ldr	r3, .L40+12
+ 526 002c 1C60     		str	r4, [r3]
+ 540:ThirdPackage/lwip220/core/mem.c **** 
+ 527              		.loc 1 540 43 is_stmt 1 view .LVU144
+ 542:ThirdPackage/lwip220/core/mem.c ****     LWIP_ASSERT("failed to create mem_mutex", 0);
+ 528              		.loc 1 542 3 view .LVU145
+ 542:ThirdPackage/lwip220/core/mem.c ****     LWIP_ASSERT("failed to create mem_mutex", 0);
+ 529              		.loc 1 542 7 is_stmt 0 view .LVU146
+ 530 002e 0A48     		ldr	r0, .L40+16
+ 531 0030 FFF7FEFF 		bl	sys_mutex_new
+ 532              	.LVL45:
+ 542:ThirdPackage/lwip220/core/mem.c ****     LWIP_ASSERT("failed to create mem_mutex", 0);
+ 533              		.loc 1 542 6 view .LVU147
+ 534 0034 00B9     		cbnz	r0, .L39
+ 535              	.L36:
+ 545:ThirdPackage/lwip220/core/mem.c **** 
+ 536              		.loc 1 545 1 view .LVU148
+ 537 0036 38BD     		pop	{r3, r4, r5, pc}
+ 538              	.LVL46:
+ 539              	.L39:
+ 543:ThirdPackage/lwip220/core/mem.c ****   }
+ 540              		.loc 1 543 5 is_stmt 1 discriminator 1 view .LVU149
+ 543:ThirdPackage/lwip220/core/mem.c ****   }
+ 541              		.loc 1 543 5 discriminator 1 view .LVU150
+ 543:ThirdPackage/lwip220/core/mem.c ****   }
+ 542              		.loc 1 543 5 discriminator 1 view .LVU151
+ 543:ThirdPackage/lwip220/core/mem.c ****   }
+ 543              		.loc 1 543 5 discriminator 1 view .LVU152
+ 544 0038 084B     		ldr	r3, .L40+20
+ 545 003a 40F21F22 		movw	r2, #543
+ 546 003e 0849     		ldr	r1, .L40+24
+ 547 0040 0848     		ldr	r0, .L40+28
+ 548 0042 FFF7FEFF 		bl	printf
+ 549              	.LVL47:
+ 543:ThirdPackage/lwip220/core/mem.c ****   }
+ 550              		.loc 1 543 5 discriminator 1 view .LVU153
+ 543:ThirdPackage/lwip220/core/mem.c ****   }
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 23
+
+
+ 551              		.loc 1 543 5 discriminator 1 view .LVU154
+ 545:ThirdPackage/lwip220/core/mem.c **** 
+ 552              		.loc 1 545 1 is_stmt 0 discriminator 1 view .LVU155
+ 553 0046 F6E7     		b	.L36
+ 554              	.L41:
+ 555              		.align	2
+ 556              	.L40:
+ 557 0048 03000000 		.word	.LANCHOR3+3
+ 558 004c 00000000 		.word	.LANCHOR0
+ 559 0050 00000000 		.word	.LANCHOR1
+ 560 0054 00000000 		.word	.LANCHOR2
+ 561 0058 00000000 		.word	.LANCHOR4
+ 562 005c 00000000 		.word	.LC0
+ 563 0060 00000000 		.word	.LC6
+ 564 0064 38000000 		.word	.LC2
+ 565              		.cfi_endproc
+ 566              	.LFE163:
+ 568              		.section	.rodata.mem_free.str1.4,"aMS",%progbits,1
+ 569              		.align	2
+ 570              	.LC7:
+ 571 0000 6D656D5F 		.ascii	"mem_free: sanity check alignment\000"
+ 571      66726565 
+ 571      3A207361 
+ 571      6E697479 
+ 571      20636865 
+ 572 0021 000000   		.align	2
+ 573              	.LC8:
+ 574 0024 6D656D5F 		.ascii	"mem_free: illegal memory\000"
+ 574      66726565 
+ 574      3A20696C 
+ 574      6C656761 
+ 574      6C206D65 
+ 575 003d 000000   		.align	2
+ 576              	.LC9:
+ 577 0040 6D656D5F 		.ascii	"mem_free: illegal memory: double free\000"
+ 577      66726565 
+ 577      3A20696C 
+ 577      6C656761 
+ 577      6C206D65 
+ 578 0066 0000     		.align	2
+ 579              	.LC10:
+ 580 0068 6D656D5F 		.ascii	"mem_free: illegal memory: non-linked: double free\000"
+ 580      66726565 
+ 580      3A20696C 
+ 580      6C656761 
+ 580      6C206D65 
+ 581              		.section	.text.mem_free,"ax",%progbits
+ 582              		.align	1
+ 583              		.global	mem_free
+ 584              		.syntax unified
+ 585              		.thumb
+ 586              		.thumb_func
+ 588              	mem_free:
+ 589              	.LVL48:
+ 590              	.LFB165:
+ 565:ThirdPackage/lwip220/core/mem.c **** 
+ 566:ThirdPackage/lwip220/core/mem.c **** #if MEM_SANITY_CHECK
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 24
+
+
+ 567:ThirdPackage/lwip220/core/mem.c **** static void
+ 568:ThirdPackage/lwip220/core/mem.c **** mem_sanity(void)
+ 569:ThirdPackage/lwip220/core/mem.c **** {
+ 570:ThirdPackage/lwip220/core/mem.c ****   struct mem *mem;
+ 571:ThirdPackage/lwip220/core/mem.c ****   u8_t last_used;
+ 572:ThirdPackage/lwip220/core/mem.c **** 
+ 573:ThirdPackage/lwip220/core/mem.c ****   /* begin with first element here */
+ 574:ThirdPackage/lwip220/core/mem.c ****   mem = (struct mem *)ram;
+ 575:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("heap element used valid", (mem->used == 0) || (mem->used == 1));
+ 576:ThirdPackage/lwip220/core/mem.c ****   last_used = mem->used;
+ 577:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("heap element prev ptr valid", mem->prev == 0);
+ 578:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("heap element next ptr valid", mem->next <= MEM_SIZE_ALIGNED);
+ 579:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("heap element next ptr aligned", LWIP_MEM_ALIGN(ptr_to_mem(mem->next) == ptr_to_mem(m
+ 580:ThirdPackage/lwip220/core/mem.c **** 
+ 581:ThirdPackage/lwip220/core/mem.c ****   /* check all elements before the end of the heap */
+ 582:ThirdPackage/lwip220/core/mem.c ****   for (mem = ptr_to_mem(mem->next);
+ 583:ThirdPackage/lwip220/core/mem.c ****        ((u8_t *)mem > ram) && (mem < ram_end);
+ 584:ThirdPackage/lwip220/core/mem.c ****        mem = ptr_to_mem(mem->next)) {
+ 585:ThirdPackage/lwip220/core/mem.c ****     LWIP_ASSERT("heap element aligned", LWIP_MEM_ALIGN(mem) == mem);
+ 586:ThirdPackage/lwip220/core/mem.c ****     LWIP_ASSERT("heap element prev ptr valid", mem->prev <= MEM_SIZE_ALIGNED);
+ 587:ThirdPackage/lwip220/core/mem.c ****     LWIP_ASSERT("heap element next ptr valid", mem->next <= MEM_SIZE_ALIGNED);
+ 588:ThirdPackage/lwip220/core/mem.c ****     LWIP_ASSERT("heap element prev ptr aligned", LWIP_MEM_ALIGN(ptr_to_mem(mem->prev) == ptr_to_mem
+ 589:ThirdPackage/lwip220/core/mem.c ****     LWIP_ASSERT("heap element next ptr aligned", LWIP_MEM_ALIGN(ptr_to_mem(mem->next) == ptr_to_mem
+ 590:ThirdPackage/lwip220/core/mem.c **** 
+ 591:ThirdPackage/lwip220/core/mem.c ****     if (last_used == 0) {
+ 592:ThirdPackage/lwip220/core/mem.c ****       /* 2 unused elements in a row? */
+ 593:ThirdPackage/lwip220/core/mem.c ****       LWIP_ASSERT("heap element unused?", mem->used == 1);
+ 594:ThirdPackage/lwip220/core/mem.c ****     } else {
+ 595:ThirdPackage/lwip220/core/mem.c ****       LWIP_ASSERT("heap element unused member", (mem->used == 0) || (mem->used == 1));
+ 596:ThirdPackage/lwip220/core/mem.c ****     }
+ 597:ThirdPackage/lwip220/core/mem.c **** 
+ 598:ThirdPackage/lwip220/core/mem.c ****     LWIP_ASSERT("heap element link valid", mem_link_valid(mem));
+ 599:ThirdPackage/lwip220/core/mem.c **** 
+ 600:ThirdPackage/lwip220/core/mem.c ****     /* used/unused altering */
+ 601:ThirdPackage/lwip220/core/mem.c ****     last_used = mem->used;
+ 602:ThirdPackage/lwip220/core/mem.c ****   }
+ 603:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("heap end ptr sanity", mem == ptr_to_mem(MEM_SIZE_ALIGNED));
+ 604:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("heap element used valid", mem->used == 1);
+ 605:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("heap element prev ptr valid", mem->prev == MEM_SIZE_ALIGNED);
+ 606:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("heap element next ptr valid", mem->next == MEM_SIZE_ALIGNED);
+ 607:ThirdPackage/lwip220/core/mem.c **** }
+ 608:ThirdPackage/lwip220/core/mem.c **** #endif /* MEM_SANITY_CHECK */
+ 609:ThirdPackage/lwip220/core/mem.c **** 
+ 610:ThirdPackage/lwip220/core/mem.c **** /**
+ 611:ThirdPackage/lwip220/core/mem.c ****  * Put a struct mem back on the heap
+ 612:ThirdPackage/lwip220/core/mem.c ****  *
+ 613:ThirdPackage/lwip220/core/mem.c ****  * @param rmem is the data portion of a struct mem as returned by a previous
+ 614:ThirdPackage/lwip220/core/mem.c ****  *             call to mem_malloc()
+ 615:ThirdPackage/lwip220/core/mem.c ****  */
+ 616:ThirdPackage/lwip220/core/mem.c **** void
+ 617:ThirdPackage/lwip220/core/mem.c **** mem_free(void *rmem)
+ 618:ThirdPackage/lwip220/core/mem.c **** {
+ 591              		.loc 1 618 1 is_stmt 1 view -0
+ 592              		.cfi_startproc
+ 593              		@ args = 0, pretend = 0, frame = 0
+ 594              		@ frame_needed = 0, uses_anonymous_args = 0
+ 619:ThirdPackage/lwip220/core/mem.c ****   struct mem *mem;
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 25
+
+
+ 595              		.loc 1 619 3 view .LVU157
+ 620:ThirdPackage/lwip220/core/mem.c ****   LWIP_MEM_FREE_DECL_PROTECT();
+ 596              		.loc 1 620 31 view .LVU158
+ 621:ThirdPackage/lwip220/core/mem.c **** 
+ 622:ThirdPackage/lwip220/core/mem.c ****   if (rmem == NULL) {
+ 597              		.loc 1 622 3 view .LVU159
+ 598              		.loc 1 622 6 is_stmt 0 view .LVU160
+ 599 0000 0028     		cmp	r0, #0
+ 600 0002 60D0     		beq	.L51
+ 618:ThirdPackage/lwip220/core/mem.c ****   struct mem *mem;
+ 601              		.loc 1 618 1 view .LVU161
+ 602 0004 38B5     		push	{r3, r4, r5, lr}
+ 603              	.LCFI3:
+ 604              		.cfi_def_cfa_offset 16
+ 605              		.cfi_offset 3, -16
+ 606              		.cfi_offset 4, -12
+ 607              		.cfi_offset 5, -8
+ 608              		.cfi_offset 14, -4
+ 609 0006 0446     		mov	r4, r0
+ 623:ThirdPackage/lwip220/core/mem.c ****     LWIP_DEBUGF(MEM_DEBUG | LWIP_DBG_TRACE | LWIP_DBG_LEVEL_SERIOUS, ("mem_free(p == NULL) was call
+ 624:ThirdPackage/lwip220/core/mem.c ****     return;
+ 625:ThirdPackage/lwip220/core/mem.c ****   }
+ 626:ThirdPackage/lwip220/core/mem.c ****   if ((((mem_ptr_t)rmem) & (MEM_ALIGNMENT - 1)) != 0) {
+ 610              		.loc 1 626 3 is_stmt 1 view .LVU162
+ 611              		.loc 1 626 6 is_stmt 0 view .LVU163
+ 612 0008 10F0030F 		tst	r0, #3
+ 613 000c 17D1     		bne	.L54
+ 627:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_ILLEGAL_FREE("mem_free: sanity check alignment");
+ 628:ThirdPackage/lwip220/core/mem.c ****     LWIP_DEBUGF(MEM_DEBUG | LWIP_DBG_LEVEL_SEVERE, ("mem_free: sanity check alignment\n"));
+ 629:ThirdPackage/lwip220/core/mem.c ****     /* protect mem stats from concurrent access */
+ 630:ThirdPackage/lwip220/core/mem.c ****     MEM_STATS_INC_LOCKED(illegal);
+ 631:ThirdPackage/lwip220/core/mem.c ****     return;
+ 632:ThirdPackage/lwip220/core/mem.c ****   }
+ 633:ThirdPackage/lwip220/core/mem.c **** 
+ 634:ThirdPackage/lwip220/core/mem.c ****   /* Get the corresponding struct mem: */
+ 635:ThirdPackage/lwip220/core/mem.c ****   /* cast through void* to get rid of alignment warnings */
+ 636:ThirdPackage/lwip220/core/mem.c ****   mem = (struct mem *)(void *)((u8_t *)rmem - (SIZEOF_STRUCT_MEM + MEM_SANITY_OFFSET));
+ 614              		.loc 1 636 3 is_stmt 1 view .LVU164
+ 615              		.loc 1 636 7 is_stmt 0 view .LVU165
+ 616 000e A0F10805 		sub	r5, r0, #8
+ 617              	.LVL49:
+ 637:ThirdPackage/lwip220/core/mem.c **** 
+ 638:ThirdPackage/lwip220/core/mem.c ****   if ((u8_t *)mem < ram || (u8_t *)rmem + MIN_SIZE_ALIGNED > (u8_t *)ram_end) {
+ 618              		.loc 1 638 3 is_stmt 1 view .LVU166
+ 619              		.loc 1 638 19 is_stmt 0 view .LVU167
+ 620 0012 2D4B     		ldr	r3, .L57
+ 621 0014 1B68     		ldr	r3, [r3]
+ 622              		.loc 1 638 6 view .LVU168
+ 623 0016 AB42     		cmp	r3, r5
+ 624 0018 05D8     		bhi	.L45
+ 625              		.loc 1 638 41 discriminator 1 view .LVU169
+ 626 001a 00F10C03 		add	r3, r0, #12
+ 627              		.loc 1 638 62 discriminator 1 view .LVU170
+ 628 001e 2B4A     		ldr	r2, .L57+4
+ 629 0020 1268     		ldr	r2, [r2]
+ 630              		.loc 1 638 25 discriminator 1 view .LVU171
+ 631 0022 9342     		cmp	r3, r2
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 26
+
+
+ 632 0024 17D9     		bls	.L46
+ 633              	.L45:
+ 639:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_ILLEGAL_FREE("mem_free: illegal memory");
+ 634              		.loc 1 639 5 is_stmt 1 discriminator 1 view .LVU172
+ 635              		.loc 1 639 5 discriminator 1 view .LVU173
+ 636              		.loc 1 639 5 discriminator 1 view .LVU174
+ 637              		.loc 1 639 5 discriminator 1 view .LVU175
+ 638 0026 2A4B     		ldr	r3, .L57+8
+ 639 0028 40F27F22 		movw	r2, #639
+ 640 002c 2949     		ldr	r1, .L57+12
+ 641 002e 2A48     		ldr	r0, .L57+16
+ 642              	.LVL50:
+ 643              		.loc 1 639 5 is_stmt 0 discriminator 1 view .LVU176
+ 644 0030 FFF7FEFF 		bl	printf
+ 645              	.LVL51:
+ 646              		.loc 1 639 5 is_stmt 1 discriminator 1 view .LVU177
+ 647              		.loc 1 639 5 discriminator 1 view .LVU178
+ 640:ThirdPackage/lwip220/core/mem.c ****     LWIP_DEBUGF(MEM_DEBUG | LWIP_DBG_LEVEL_SEVERE, ("mem_free: illegal memory\n"));
+ 648              		.loc 1 640 83 discriminator 1 view .LVU179
+ 641:ThirdPackage/lwip220/core/mem.c ****     /* protect mem stats from concurrent access */
+ 642:ThirdPackage/lwip220/core/mem.c ****     MEM_STATS_INC_LOCKED(illegal);
+ 649              		.loc 1 642 5 discriminator 1 view .LVU180
+ 650              	.LBB2:
+ 651              		.loc 1 642 5 discriminator 1 view .LVU181
+ 652              		.loc 1 642 5 discriminator 1 view .LVU182
+ 653 0034 FFF7FEFF 		bl	sys_arch_protect
+ 654              	.LVL52:
+ 655              		.loc 1 642 5 discriminator 1 view .LVU183
+ 656              		.loc 1 642 5 discriminator 1 view .LVU184
+ 657 0038 FFF7FEFF 		bl	sys_arch_unprotect
+ 658              	.LVL53:
+ 659              		.loc 1 642 5 is_stmt 0 discriminator 1 view .LVU185
+ 660              	.LBE2:
+ 661              		.loc 1 642 5 is_stmt 1 discriminator 1 view .LVU186
+ 643:ThirdPackage/lwip220/core/mem.c ****     return;
+ 662              		.loc 1 643 5 discriminator 1 view .LVU187
+ 663              	.L42:
+ 644:ThirdPackage/lwip220/core/mem.c ****   }
+ 645:ThirdPackage/lwip220/core/mem.c **** #if MEM_OVERFLOW_CHECK
+ 646:ThirdPackage/lwip220/core/mem.c ****   mem_overflow_check_element(mem);
+ 647:ThirdPackage/lwip220/core/mem.c **** #endif
+ 648:ThirdPackage/lwip220/core/mem.c ****   /* protect the heap from concurrent access */
+ 649:ThirdPackage/lwip220/core/mem.c ****   LWIP_MEM_FREE_PROTECT();
+ 650:ThirdPackage/lwip220/core/mem.c ****   /* mem has to be in a used state */
+ 651:ThirdPackage/lwip220/core/mem.c ****   if (!mem->used) {
+ 652:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_ILLEGAL_FREE("mem_free: illegal memory: double free");
+ 653:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_FREE_UNPROTECT();
+ 654:ThirdPackage/lwip220/core/mem.c ****     LWIP_DEBUGF(MEM_DEBUG | LWIP_DBG_LEVEL_SEVERE, ("mem_free: illegal memory: double free?\n"));
+ 655:ThirdPackage/lwip220/core/mem.c ****     /* protect mem stats from concurrent access */
+ 656:ThirdPackage/lwip220/core/mem.c ****     MEM_STATS_INC_LOCKED(illegal);
+ 657:ThirdPackage/lwip220/core/mem.c ****     return;
+ 658:ThirdPackage/lwip220/core/mem.c ****   }
+ 659:ThirdPackage/lwip220/core/mem.c **** 
+ 660:ThirdPackage/lwip220/core/mem.c ****   if (!mem_link_valid(mem)) {
+ 661:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_ILLEGAL_FREE("mem_free: illegal memory: non-linked: double free");
+ 662:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_FREE_UNPROTECT();
+ 663:ThirdPackage/lwip220/core/mem.c ****     LWIP_DEBUGF(MEM_DEBUG | LWIP_DBG_LEVEL_SEVERE, ("mem_free: illegal memory: non-linked: double f
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 27
+
+
+ 664:ThirdPackage/lwip220/core/mem.c ****     /* protect mem stats from concurrent access */
+ 665:ThirdPackage/lwip220/core/mem.c ****     MEM_STATS_INC_LOCKED(illegal);
+ 666:ThirdPackage/lwip220/core/mem.c ****     return;
+ 667:ThirdPackage/lwip220/core/mem.c ****   }
+ 668:ThirdPackage/lwip220/core/mem.c **** 
+ 669:ThirdPackage/lwip220/core/mem.c ****   /* mem is now unused. */
+ 670:ThirdPackage/lwip220/core/mem.c ****   mem->used = 0;
+ 671:ThirdPackage/lwip220/core/mem.c **** 
+ 672:ThirdPackage/lwip220/core/mem.c ****   if (mem < lfree) {
+ 673:ThirdPackage/lwip220/core/mem.c ****     /* the newly freed struct is now the lowest */
+ 674:ThirdPackage/lwip220/core/mem.c ****     lfree = mem;
+ 675:ThirdPackage/lwip220/core/mem.c ****   }
+ 676:ThirdPackage/lwip220/core/mem.c **** 
+ 677:ThirdPackage/lwip220/core/mem.c ****   MEM_STATS_DEC_USED(used, mem->next - (mem_size_t)(((u8_t *)mem - ram)));
+ 678:ThirdPackage/lwip220/core/mem.c **** 
+ 679:ThirdPackage/lwip220/core/mem.c ****   /* finally, see if prev or next are free also */
+ 680:ThirdPackage/lwip220/core/mem.c ****   plug_holes(mem);
+ 681:ThirdPackage/lwip220/core/mem.c ****   MEM_SANITY();
+ 682:ThirdPackage/lwip220/core/mem.c **** #if LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT
+ 683:ThirdPackage/lwip220/core/mem.c ****   mem_free_count = 1;
+ 684:ThirdPackage/lwip220/core/mem.c **** #endif /* LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT */
+ 685:ThirdPackage/lwip220/core/mem.c ****   LWIP_MEM_FREE_UNPROTECT();
+ 686:ThirdPackage/lwip220/core/mem.c **** }
+ 664              		.loc 1 686 1 is_stmt 0 view .LVU188
+ 665 003c 38BD     		pop	{r3, r4, r5, pc}
+ 666              	.LVL54:
+ 667              	.L54:
+ 627:ThirdPackage/lwip220/core/mem.c ****     LWIP_DEBUGF(MEM_DEBUG | LWIP_DBG_LEVEL_SEVERE, ("mem_free: sanity check alignment\n"));
+ 668              		.loc 1 627 5 is_stmt 1 discriminator 1 view .LVU189
+ 627:ThirdPackage/lwip220/core/mem.c ****     LWIP_DEBUGF(MEM_DEBUG | LWIP_DBG_LEVEL_SEVERE, ("mem_free: sanity check alignment\n"));
+ 669              		.loc 1 627 5 discriminator 1 view .LVU190
+ 627:ThirdPackage/lwip220/core/mem.c ****     LWIP_DEBUGF(MEM_DEBUG | LWIP_DBG_LEVEL_SEVERE, ("mem_free: sanity check alignment\n"));
+ 670              		.loc 1 627 5 discriminator 1 view .LVU191
+ 627:ThirdPackage/lwip220/core/mem.c ****     LWIP_DEBUGF(MEM_DEBUG | LWIP_DBG_LEVEL_SEVERE, ("mem_free: sanity check alignment\n"));
+ 671              		.loc 1 627 5 discriminator 1 view .LVU192
+ 672 003e 244B     		ldr	r3, .L57+8
+ 673 0040 40F27322 		movw	r2, #627
+ 674 0044 2549     		ldr	r1, .L57+20
+ 675 0046 2448     		ldr	r0, .L57+16
+ 676              	.LVL55:
+ 627:ThirdPackage/lwip220/core/mem.c ****     LWIP_DEBUGF(MEM_DEBUG | LWIP_DBG_LEVEL_SEVERE, ("mem_free: sanity check alignment\n"));
+ 677              		.loc 1 627 5 is_stmt 0 discriminator 1 view .LVU193
+ 678 0048 FFF7FEFF 		bl	printf
+ 679              	.LVL56:
+ 627:ThirdPackage/lwip220/core/mem.c ****     LWIP_DEBUGF(MEM_DEBUG | LWIP_DBG_LEVEL_SEVERE, ("mem_free: sanity check alignment\n"));
+ 680              		.loc 1 627 5 is_stmt 1 discriminator 1 view .LVU194
+ 627:ThirdPackage/lwip220/core/mem.c ****     LWIP_DEBUGF(MEM_DEBUG | LWIP_DBG_LEVEL_SEVERE, ("mem_free: sanity check alignment\n"));
+ 681              		.loc 1 627 5 discriminator 1 view .LVU195
+ 628:ThirdPackage/lwip220/core/mem.c ****     /* protect mem stats from concurrent access */
+ 682              		.loc 1 628 91 discriminator 1 view .LVU196
+ 630:ThirdPackage/lwip220/core/mem.c ****     return;
+ 683              		.loc 1 630 5 discriminator 1 view .LVU197
+ 684              	.LBB3:
+ 630:ThirdPackage/lwip220/core/mem.c ****     return;
+ 685              		.loc 1 630 5 discriminator 1 view .LVU198
+ 630:ThirdPackage/lwip220/core/mem.c ****     return;
+ 686              		.loc 1 630 5 discriminator 1 view .LVU199
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 28
+
+
+ 687 004c FFF7FEFF 		bl	sys_arch_protect
+ 688              	.LVL57:
+ 630:ThirdPackage/lwip220/core/mem.c ****     return;
+ 689              		.loc 1 630 5 discriminator 1 view .LVU200
+ 630:ThirdPackage/lwip220/core/mem.c ****     return;
+ 690              		.loc 1 630 5 discriminator 1 view .LVU201
+ 691 0050 FFF7FEFF 		bl	sys_arch_unprotect
+ 692              	.LVL58:
+ 630:ThirdPackage/lwip220/core/mem.c ****     return;
+ 693              		.loc 1 630 5 is_stmt 0 discriminator 1 view .LVU202
+ 694              	.LBE3:
+ 630:ThirdPackage/lwip220/core/mem.c ****     return;
+ 695              		.loc 1 630 5 is_stmt 1 discriminator 1 view .LVU203
+ 631:ThirdPackage/lwip220/core/mem.c ****   }
+ 696              		.loc 1 631 5 discriminator 1 view .LVU204
+ 697 0054 F2E7     		b	.L42
+ 698              	.LVL59:
+ 699              	.L46:
+ 649:ThirdPackage/lwip220/core/mem.c ****   /* mem has to be in a used state */
+ 700              		.loc 1 649 3 view .LVU205
+ 701 0056 2248     		ldr	r0, .L57+24
+ 702              	.LVL60:
+ 649:ThirdPackage/lwip220/core/mem.c ****   /* mem has to be in a used state */
+ 703              		.loc 1 649 3 is_stmt 0 view .LVU206
+ 704 0058 FFF7FEFF 		bl	sys_mutex_lock
+ 705              	.LVL61:
+ 651:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_ILLEGAL_FREE("mem_free: illegal memory: double free");
+ 706              		.loc 1 651 3 is_stmt 1 view .LVU207
+ 651:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_ILLEGAL_FREE("mem_free: illegal memory: double free");
+ 707              		.loc 1 651 11 is_stmt 0 view .LVU208
+ 708 005c 14F8043C 		ldrb	r3, [r4, #-4]	@ zero_extendqisi2
+ 651:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_ILLEGAL_FREE("mem_free: illegal memory: double free");
+ 709              		.loc 1 651 6 view .LVU209
+ 710 0060 9BB1     		cbz	r3, .L55
+ 660:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_ILLEGAL_FREE("mem_free: illegal memory: non-linked: double free");
+ 711              		.loc 1 660 3 is_stmt 1 view .LVU210
+ 660:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_ILLEGAL_FREE("mem_free: illegal memory: non-linked: double free");
+ 712              		.loc 1 660 8 is_stmt 0 view .LVU211
+ 713 0062 2846     		mov	r0, r5
+ 714 0064 FFF7FEFF 		bl	mem_link_valid
+ 715              	.LVL62:
+ 660:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_ILLEGAL_FREE("mem_free: illegal memory: non-linked: double free");
+ 716              		.loc 1 660 6 view .LVU212
+ 717 0068 F0B1     		cbz	r0, .L56
+ 670:ThirdPackage/lwip220/core/mem.c **** 
+ 718              		.loc 1 670 3 is_stmt 1 view .LVU213
+ 670:ThirdPackage/lwip220/core/mem.c **** 
+ 719              		.loc 1 670 13 is_stmt 0 view .LVU214
+ 720 006a 0023     		movs	r3, #0
+ 721 006c 04F8043C 		strb	r3, [r4, #-4]
+ 672:ThirdPackage/lwip220/core/mem.c ****     /* the newly freed struct is now the lowest */
+ 722              		.loc 1 672 3 is_stmt 1 view .LVU215
+ 672:ThirdPackage/lwip220/core/mem.c ****     /* the newly freed struct is now the lowest */
+ 723              		.loc 1 672 11 is_stmt 0 view .LVU216
+ 724 0070 1C4B     		ldr	r3, .L57+28
+ 725 0072 1B68     		ldr	r3, [r3]
+ 672:ThirdPackage/lwip220/core/mem.c ****     /* the newly freed struct is now the lowest */
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 29
+
+
+ 726              		.loc 1 672 6 view .LVU217
+ 727 0074 AB42     		cmp	r3, r5
+ 728 0076 01D9     		bls	.L49
+ 674:ThirdPackage/lwip220/core/mem.c ****   }
+ 729              		.loc 1 674 5 is_stmt 1 view .LVU218
+ 674:ThirdPackage/lwip220/core/mem.c ****   }
+ 730              		.loc 1 674 11 is_stmt 0 view .LVU219
+ 731 0078 1A4B     		ldr	r3, .L57+28
+ 732 007a 1D60     		str	r5, [r3]
+ 733              	.L49:
+ 677:ThirdPackage/lwip220/core/mem.c **** 
+ 734              		.loc 1 677 74 is_stmt 1 view .LVU220
+ 680:ThirdPackage/lwip220/core/mem.c ****   MEM_SANITY();
+ 735              		.loc 1 680 3 view .LVU221
+ 736 007c 2846     		mov	r0, r5
+ 737 007e FFF7FEFF 		bl	plug_holes
+ 738              	.LVL63:
+ 681:ThirdPackage/lwip220/core/mem.c **** #if LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT
+ 739              		.loc 1 681 15 view .LVU222
+ 685:ThirdPackage/lwip220/core/mem.c **** }
+ 740              		.loc 1 685 3 view .LVU223
+ 741 0082 1748     		ldr	r0, .L57+24
+ 742 0084 FFF7FEFF 		bl	sys_mutex_unlock
+ 743              	.LVL64:
+ 744 0088 D8E7     		b	.L42
+ 745              	.L55:
+ 652:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_FREE_UNPROTECT();
+ 746              		.loc 1 652 5 discriminator 1 view .LVU224
+ 652:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_FREE_UNPROTECT();
+ 747              		.loc 1 652 5 discriminator 1 view .LVU225
+ 652:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_FREE_UNPROTECT();
+ 748              		.loc 1 652 5 discriminator 1 view .LVU226
+ 652:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_FREE_UNPROTECT();
+ 749              		.loc 1 652 5 discriminator 1 view .LVU227
+ 750 008a 114B     		ldr	r3, .L57+8
+ 751 008c 4FF42372 		mov	r2, #652
+ 752 0090 1549     		ldr	r1, .L57+32
+ 753 0092 1148     		ldr	r0, .L57+16
+ 754 0094 FFF7FEFF 		bl	printf
+ 755              	.LVL65:
+ 652:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_FREE_UNPROTECT();
+ 756              		.loc 1 652 5 discriminator 1 view .LVU228
+ 652:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_FREE_UNPROTECT();
+ 757              		.loc 1 652 5 discriminator 1 view .LVU229
+ 653:ThirdPackage/lwip220/core/mem.c ****     LWIP_DEBUGF(MEM_DEBUG | LWIP_DBG_LEVEL_SEVERE, ("mem_free: illegal memory: double free?\n"));
+ 758              		.loc 1 653 5 discriminator 1 view .LVU230
+ 759 0098 1148     		ldr	r0, .L57+24
+ 760 009a FFF7FEFF 		bl	sys_mutex_unlock
+ 761              	.LVL66:
+ 654:ThirdPackage/lwip220/core/mem.c ****     /* protect mem stats from concurrent access */
+ 762              		.loc 1 654 97 discriminator 1 view .LVU231
+ 656:ThirdPackage/lwip220/core/mem.c ****     return;
+ 763              		.loc 1 656 5 discriminator 1 view .LVU232
+ 764              	.LBB4:
+ 656:ThirdPackage/lwip220/core/mem.c ****     return;
+ 765              		.loc 1 656 5 discriminator 1 view .LVU233
+ 656:ThirdPackage/lwip220/core/mem.c ****     return;
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 30
+
+
+ 766              		.loc 1 656 5 discriminator 1 view .LVU234
+ 767 009e FFF7FEFF 		bl	sys_arch_protect
+ 768              	.LVL67:
+ 656:ThirdPackage/lwip220/core/mem.c ****     return;
+ 769              		.loc 1 656 5 discriminator 1 view .LVU235
+ 656:ThirdPackage/lwip220/core/mem.c ****     return;
+ 770              		.loc 1 656 5 discriminator 1 view .LVU236
+ 771 00a2 FFF7FEFF 		bl	sys_arch_unprotect
+ 772              	.LVL68:
+ 656:ThirdPackage/lwip220/core/mem.c ****     return;
+ 773              		.loc 1 656 5 is_stmt 0 discriminator 1 view .LVU237
+ 774              	.LBE4:
+ 656:ThirdPackage/lwip220/core/mem.c ****     return;
+ 775              		.loc 1 656 5 is_stmt 1 discriminator 1 view .LVU238
+ 657:ThirdPackage/lwip220/core/mem.c ****   }
+ 776              		.loc 1 657 5 discriminator 1 view .LVU239
+ 777 00a6 C9E7     		b	.L42
+ 778              	.L56:
+ 661:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_FREE_UNPROTECT();
+ 779              		.loc 1 661 5 discriminator 1 view .LVU240
+ 661:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_FREE_UNPROTECT();
+ 780              		.loc 1 661 5 discriminator 1 view .LVU241
+ 661:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_FREE_UNPROTECT();
+ 781              		.loc 1 661 5 discriminator 1 view .LVU242
+ 661:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_FREE_UNPROTECT();
+ 782              		.loc 1 661 5 discriminator 1 view .LVU243
+ 783 00a8 094B     		ldr	r3, .L57+8
+ 784 00aa 40F29522 		movw	r2, #661
+ 785 00ae 0F49     		ldr	r1, .L57+36
+ 786 00b0 0948     		ldr	r0, .L57+16
+ 787 00b2 FFF7FEFF 		bl	printf
+ 788              	.LVL69:
+ 661:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_FREE_UNPROTECT();
+ 789              		.loc 1 661 5 discriminator 1 view .LVU244
+ 661:ThirdPackage/lwip220/core/mem.c ****     LWIP_MEM_FREE_UNPROTECT();
+ 790              		.loc 1 661 5 discriminator 1 view .LVU245
+ 662:ThirdPackage/lwip220/core/mem.c ****     LWIP_DEBUGF(MEM_DEBUG | LWIP_DBG_LEVEL_SEVERE, ("mem_free: illegal memory: non-linked: double f
+ 791              		.loc 1 662 5 discriminator 1 view .LVU246
+ 792 00b6 0A48     		ldr	r0, .L57+24
+ 793 00b8 FFF7FEFF 		bl	sys_mutex_unlock
+ 794              	.LVL70:
+ 663:ThirdPackage/lwip220/core/mem.c ****     /* protect mem stats from concurrent access */
+ 795              		.loc 1 663 109 discriminator 1 view .LVU247
+ 665:ThirdPackage/lwip220/core/mem.c ****     return;
+ 796              		.loc 1 665 5 discriminator 1 view .LVU248
+ 797              	.LBB5:
+ 665:ThirdPackage/lwip220/core/mem.c ****     return;
+ 798              		.loc 1 665 5 discriminator 1 view .LVU249
+ 665:ThirdPackage/lwip220/core/mem.c ****     return;
+ 799              		.loc 1 665 5 discriminator 1 view .LVU250
+ 800 00bc FFF7FEFF 		bl	sys_arch_protect
+ 801              	.LVL71:
+ 665:ThirdPackage/lwip220/core/mem.c ****     return;
+ 802              		.loc 1 665 5 discriminator 1 view .LVU251
+ 665:ThirdPackage/lwip220/core/mem.c ****     return;
+ 803              		.loc 1 665 5 discriminator 1 view .LVU252
+ 804 00c0 FFF7FEFF 		bl	sys_arch_unprotect
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 31
+
+
+ 805              	.LVL72:
+ 665:ThirdPackage/lwip220/core/mem.c ****     return;
+ 806              		.loc 1 665 5 is_stmt 0 discriminator 1 view .LVU253
+ 807              	.LBE5:
+ 665:ThirdPackage/lwip220/core/mem.c ****     return;
+ 808              		.loc 1 665 5 is_stmt 1 discriminator 1 view .LVU254
+ 666:ThirdPackage/lwip220/core/mem.c ****   }
+ 809              		.loc 1 666 5 discriminator 1 view .LVU255
+ 810 00c4 BAE7     		b	.L42
+ 811              	.LVL73:
+ 812              	.L51:
+ 813              	.LCFI4:
+ 814              		.cfi_def_cfa_offset 0
+ 815              		.cfi_restore 3
+ 816              		.cfi_restore 4
+ 817              		.cfi_restore 5
+ 818              		.cfi_restore 14
+ 666:ThirdPackage/lwip220/core/mem.c ****   }
+ 819              		.loc 1 666 5 is_stmt 0 discriminator 1 view .LVU256
+ 820 00c6 7047     		bx	lr
+ 821              	.L58:
+ 822              		.align	2
+ 823              	.L57:
+ 824 00c8 00000000 		.word	.LANCHOR0
+ 825 00cc 00000000 		.word	.LANCHOR1
+ 826 00d0 00000000 		.word	.LC0
+ 827 00d4 24000000 		.word	.LC8
+ 828 00d8 38000000 		.word	.LC2
+ 829 00dc 00000000 		.word	.LC7
+ 830 00e0 00000000 		.word	.LANCHOR4
+ 831 00e4 00000000 		.word	.LANCHOR2
+ 832 00e8 40000000 		.word	.LC9
+ 833 00ec 68000000 		.word	.LC10
+ 834              		.cfi_endproc
+ 835              	.LFE165:
+ 837              		.section	.rodata.mem_trim.str1.4,"aMS",%progbits,1
+ 838              		.align	2
+ 839              	.LC11:
+ 840 0000 6D656D5F 		.ascii	"mem_trim: legal memory\000"
+ 840      7472696D 
+ 840      3A206C65 
+ 840      67616C20 
+ 840      6D656D6F 
+ 841 0017 00       		.align	2
+ 842              	.LC12:
+ 843 0018 6D656D5F 		.ascii	"mem_trim can only shrink memory\000"
+ 843      7472696D 
+ 843      2063616E 
+ 843      206F6E6C 
+ 843      79207368 
+ 844              		.align	2
+ 845              	.LC13:
+ 846 0038 696E7661 		.ascii	"invalid next ptr\000"
+ 846      6C696420 
+ 846      6E657874 
+ 846      20707472 
+ 846      00
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 32
+
+
+ 847              		.section	.text.mem_trim,"ax",%progbits
+ 848              		.align	1
+ 849              		.global	mem_trim
+ 850              		.syntax unified
+ 851              		.thumb
+ 852              		.thumb_func
+ 854              	mem_trim:
+ 855              	.LVL74:
+ 856              	.LFB166:
+ 687:ThirdPackage/lwip220/core/mem.c **** 
+ 688:ThirdPackage/lwip220/core/mem.c **** /**
+ 689:ThirdPackage/lwip220/core/mem.c ****  * Shrink memory returned by mem_malloc().
+ 690:ThirdPackage/lwip220/core/mem.c ****  *
+ 691:ThirdPackage/lwip220/core/mem.c ****  * @param rmem pointer to memory allocated by mem_malloc the is to be shrunk
+ 692:ThirdPackage/lwip220/core/mem.c ****  * @param new_size required size after shrinking (needs to be smaller than or
+ 693:ThirdPackage/lwip220/core/mem.c ****  *                equal to the previous size)
+ 694:ThirdPackage/lwip220/core/mem.c ****  * @return for compatibility reasons: is always == rmem, at the moment
+ 695:ThirdPackage/lwip220/core/mem.c ****  *         or NULL if newsize is > old size, in which case rmem is NOT touched
+ 696:ThirdPackage/lwip220/core/mem.c ****  *         or freed!
+ 697:ThirdPackage/lwip220/core/mem.c ****  */
+ 698:ThirdPackage/lwip220/core/mem.c **** void *
+ 699:ThirdPackage/lwip220/core/mem.c **** mem_trim(void *rmem, mem_size_t new_size)
+ 700:ThirdPackage/lwip220/core/mem.c **** {
+ 857              		.loc 1 700 1 is_stmt 1 view -0
+ 858              		.cfi_startproc
+ 859              		@ args = 0, pretend = 0, frame = 0
+ 860              		@ frame_needed = 0, uses_anonymous_args = 0
+ 861              		.loc 1 700 1 is_stmt 0 view .LVU258
+ 862 0000 2DE9F843 		push	{r3, r4, r5, r6, r7, r8, r9, lr}
+ 863              	.LCFI5:
+ 864              		.cfi_def_cfa_offset 32
+ 865              		.cfi_offset 3, -32
+ 866              		.cfi_offset 4, -28
+ 867              		.cfi_offset 5, -24
+ 868              		.cfi_offset 6, -20
+ 869              		.cfi_offset 7, -16
+ 870              		.cfi_offset 8, -12
+ 871              		.cfi_offset 9, -8
+ 872              		.cfi_offset 14, -4
+ 873 0004 0546     		mov	r5, r0
+ 701:ThirdPackage/lwip220/core/mem.c ****   mem_size_t size, newsize;
+ 874              		.loc 1 701 3 is_stmt 1 view .LVU259
+ 702:ThirdPackage/lwip220/core/mem.c ****   mem_size_t ptr, ptr2;
+ 875              		.loc 1 702 3 view .LVU260
+ 703:ThirdPackage/lwip220/core/mem.c ****   struct mem *mem, *mem2;
+ 876              		.loc 1 703 3 view .LVU261
+ 704:ThirdPackage/lwip220/core/mem.c ****   /* use the FREE_PROTECT here: it protects with sem OR SYS_ARCH_PROTECT */
+ 705:ThirdPackage/lwip220/core/mem.c ****   LWIP_MEM_FREE_DECL_PROTECT();
+ 877              		.loc 1 705 31 view .LVU262
+ 706:ThirdPackage/lwip220/core/mem.c **** 
+ 707:ThirdPackage/lwip220/core/mem.c ****   /* Expand the size of the allocated memory region so that we can
+ 708:ThirdPackage/lwip220/core/mem.c ****      adjust for alignment. */
+ 709:ThirdPackage/lwip220/core/mem.c ****   newsize = (mem_size_t)LWIP_MEM_ALIGN_SIZE(new_size);
+ 878              		.loc 1 709 3 view .LVU263
+ 879              		.loc 1 709 25 is_stmt 0 view .LVU264
+ 880 0006 CC1C     		adds	r4, r1, #3
+ 881 0008 A4B2     		uxth	r4, r4
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 33
+
+
+ 882              		.loc 1 709 11 view .LVU265
+ 883 000a 24F00304 		bic	r4, r4, #3
+ 884 000e A4B2     		uxth	r4, r4
+ 885              	.LVL75:
+ 710:ThirdPackage/lwip220/core/mem.c ****   if (newsize < MIN_SIZE_ALIGNED) {
+ 886              		.loc 1 710 3 is_stmt 1 view .LVU266
+ 887              		.loc 1 710 6 is_stmt 0 view .LVU267
+ 888 0010 0B2C     		cmp	r4, #11
+ 889 0012 04D9     		bls	.L73
+ 711:ThirdPackage/lwip220/core/mem.c ****     /* every data block must be at least MIN_SIZE_ALIGNED long */
+ 712:ThirdPackage/lwip220/core/mem.c ****     newsize = MIN_SIZE_ALIGNED;
+ 713:ThirdPackage/lwip220/core/mem.c ****   }
+ 714:ThirdPackage/lwip220/core/mem.c **** #if MEM_OVERFLOW_CHECK
+ 715:ThirdPackage/lwip220/core/mem.c ****   newsize += MEM_SANITY_REGION_BEFORE_ALIGNED + MEM_SANITY_REGION_AFTER_ALIGNED;
+ 716:ThirdPackage/lwip220/core/mem.c **** #endif
+ 717:ThirdPackage/lwip220/core/mem.c ****   if ((newsize > MEM_SIZE_ALIGNED) || (newsize < new_size)) {
+ 890              		.loc 1 717 3 is_stmt 1 view .LVU268
+ 891              		.loc 1 717 6 is_stmt 0 view .LVU269
+ 892 0014 B4F5C86F 		cmp	r4, #1600
+ 893 0018 02D9     		bls	.L60
+ 718:ThirdPackage/lwip220/core/mem.c ****     return NULL;
+ 894              		.loc 1 718 12 view .LVU270
+ 895 001a 0020     		movs	r0, #0
+ 896              	.LVL76:
+ 897              		.loc 1 718 12 view .LVU271
+ 898 001c 61E0     		b	.L59
+ 899              	.LVL77:
+ 900              	.L73:
+ 712:ThirdPackage/lwip220/core/mem.c ****   }
+ 901              		.loc 1 712 13 view .LVU272
+ 902 001e 0C24     		movs	r4, #12
+ 903              	.LVL78:
+ 904              	.L60:
+ 717:ThirdPackage/lwip220/core/mem.c ****     return NULL;
+ 905              		.loc 1 717 36 discriminator 1 view .LVU273
+ 906 0020 8C42     		cmp	r4, r1
+ 907 0022 C0F0A280 		bcc	.L75
+ 719:ThirdPackage/lwip220/core/mem.c ****   }
+ 720:ThirdPackage/lwip220/core/mem.c **** 
+ 721:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("mem_trim: legal memory", (u8_t *)rmem >= (u8_t *)ram &&
+ 908              		.loc 1 721 3 is_stmt 1 view .LVU274
+ 909              		.loc 1 721 3 view .LVU275
+ 910 0026 544B     		ldr	r3, .L83
+ 911 0028 1B68     		ldr	r3, [r3]
+ 912 002a AB42     		cmp	r3, r5
+ 913 002c 03D8     		bhi	.L62
+ 914              		.loc 1 721 3 is_stmt 0 discriminator 2 view .LVU276
+ 915 002e 534B     		ldr	r3, .L83+4
+ 916 0030 1B68     		ldr	r3, [r3]
+ 917 0032 AB42     		cmp	r3, r5
+ 918 0034 06D8     		bhi	.L63
+ 919              	.L62:
+ 920              		.loc 1 721 3 is_stmt 1 discriminator 3 view .LVU277
+ 921              		.loc 1 721 3 discriminator 3 view .LVU278
+ 922 0036 524B     		ldr	r3, .L83+8
+ 923 0038 40F2D122 		movw	r2, #721
+ 924 003c 5149     		ldr	r1, .L83+12
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 34
+
+
+ 925              	.LVL79:
+ 926              		.loc 1 721 3 is_stmt 0 discriminator 3 view .LVU279
+ 927 003e 5248     		ldr	r0, .L83+16
+ 928              	.LVL80:
+ 929              		.loc 1 721 3 discriminator 3 view .LVU280
+ 930 0040 FFF7FEFF 		bl	printf
+ 931              	.LVL81:
+ 932              	.L63:
+ 933              		.loc 1 721 3 is_stmt 1 discriminator 5 view .LVU281
+ 934              		.loc 1 721 3 discriminator 5 view .LVU282
+ 722:ThirdPackage/lwip220/core/mem.c ****               (u8_t *)rmem < (u8_t *)ram_end);
+ 723:ThirdPackage/lwip220/core/mem.c **** 
+ 724:ThirdPackage/lwip220/core/mem.c ****   if ((u8_t *)rmem < (u8_t *)ram || (u8_t *)rmem >= (u8_t *)ram_end) {
+ 935              		.loc 1 724 3 discriminator 5 view .LVU283
+ 936              		.loc 1 724 20 is_stmt 0 discriminator 5 view .LVU284
+ 937 0044 4C4B     		ldr	r3, .L83
+ 938 0046 1B68     		ldr	r3, [r3]
+ 939              		.loc 1 724 6 discriminator 5 view .LVU285
+ 940 0048 AB42     		cmp	r3, r5
+ 941 004a 45D8     		bhi	.L64
+ 942              		.loc 1 724 53 discriminator 1 view .LVU286
+ 943 004c 4B4B     		ldr	r3, .L83+4
+ 944 004e 1B68     		ldr	r3, [r3]
+ 945              		.loc 1 724 34 discriminator 1 view .LVU287
+ 946 0050 AB42     		cmp	r3, r5
+ 947 0052 41D9     		bls	.L64
+ 725:ThirdPackage/lwip220/core/mem.c ****     LWIP_DEBUGF(MEM_DEBUG | LWIP_DBG_LEVEL_SEVERE, ("mem_trim: illegal memory\n"));
+ 726:ThirdPackage/lwip220/core/mem.c ****     /* protect mem stats from concurrent access */
+ 727:ThirdPackage/lwip220/core/mem.c ****     MEM_STATS_INC_LOCKED(illegal);
+ 728:ThirdPackage/lwip220/core/mem.c ****     return rmem;
+ 729:ThirdPackage/lwip220/core/mem.c ****   }
+ 730:ThirdPackage/lwip220/core/mem.c ****   /* Get the corresponding struct mem ... */
+ 731:ThirdPackage/lwip220/core/mem.c ****   /* cast through void* to get rid of alignment warnings */
+ 732:ThirdPackage/lwip220/core/mem.c ****   mem = (struct mem *)(void *)((u8_t *)rmem - (SIZEOF_STRUCT_MEM + MEM_SANITY_OFFSET));
+ 948              		.loc 1 732 3 is_stmt 1 view .LVU288
+ 949              	.LVL82:
+ 733:ThirdPackage/lwip220/core/mem.c **** #if MEM_OVERFLOW_CHECK
+ 734:ThirdPackage/lwip220/core/mem.c ****   mem_overflow_check_element(mem);
+ 735:ThirdPackage/lwip220/core/mem.c **** #endif
+ 736:ThirdPackage/lwip220/core/mem.c ****   /* ... and its offset pointer */
+ 737:ThirdPackage/lwip220/core/mem.c ****   ptr = mem_to_ptr(mem);
+ 950              		.loc 1 737 3 view .LVU289
+ 951              		.loc 1 737 9 is_stmt 0 view .LVU290
+ 952 0054 A5F10800 		sub	r0, r5, #8
+ 953              	.LVL83:
+ 954              		.loc 1 737 9 view .LVU291
+ 955 0058 FFF7FEFF 		bl	mem_to_ptr
+ 956              	.LVL84:
+ 957              		.loc 1 737 9 view .LVU292
+ 958 005c 0646     		mov	r6, r0
+ 959              	.LVL85:
+ 738:ThirdPackage/lwip220/core/mem.c **** 
+ 739:ThirdPackage/lwip220/core/mem.c ****   size = (mem_size_t)((mem_size_t)(mem->next - ptr) - (SIZEOF_STRUCT_MEM + MEM_SANITY_OVERHEAD));
+ 960              		.loc 1 739 3 is_stmt 1 view .LVU293
+ 961              		.loc 1 739 39 is_stmt 0 view .LVU294
+ 962 005e 35F8088C 		ldrh	r8, [r5, #-8]
+ 963              		.loc 1 739 23 view .LVU295
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 35
+
+
+ 964 0062 A8EB0008 		sub	r8, r8, r0
+ 965 0066 1FFA88F8 		uxth	r8, r8
+ 966              		.loc 1 739 8 view .LVU296
+ 967 006a A8F10808 		sub	r8, r8, #8
+ 968 006e 1FFA88F8 		uxth	r8, r8
+ 969              	.LVL86:
+ 740:ThirdPackage/lwip220/core/mem.c ****   LWIP_ASSERT("mem_trim can only shrink memory", newsize <= size);
+ 970              		.loc 1 740 3 is_stmt 1 view .LVU297
+ 971              		.loc 1 740 3 view .LVU298
+ 972 0072 4445     		cmp	r4, r8
+ 973 0074 37D8     		bhi	.L79
+ 974              	.LVL87:
+ 975              	.L66:
+ 976              		.loc 1 740 3 discriminator 3 view .LVU299
+ 977              		.loc 1 740 3 discriminator 3 view .LVU300
+ 741:ThirdPackage/lwip220/core/mem.c ****   if (newsize > size) {
+ 978              		.loc 1 741 3 discriminator 3 view .LVU301
+ 979              		.loc 1 741 6 is_stmt 0 discriminator 3 view .LVU302
+ 980 0076 4445     		cmp	r4, r8
+ 981 0078 79D8     		bhi	.L76
+ 742:ThirdPackage/lwip220/core/mem.c ****     /* not supported */
+ 743:ThirdPackage/lwip220/core/mem.c ****     return NULL;
+ 744:ThirdPackage/lwip220/core/mem.c ****   }
+ 745:ThirdPackage/lwip220/core/mem.c ****   if (newsize == size) {
+ 982              		.loc 1 745 3 is_stmt 1 view .LVU303
+ 983              		.loc 1 745 6 is_stmt 0 view .LVU304
+ 984 007a 7AD0     		beq	.L77
+ 746:ThirdPackage/lwip220/core/mem.c ****     /* No change in size, simply return */
+ 747:ThirdPackage/lwip220/core/mem.c ****     return rmem;
+ 748:ThirdPackage/lwip220/core/mem.c ****   }
+ 749:ThirdPackage/lwip220/core/mem.c **** 
+ 750:ThirdPackage/lwip220/core/mem.c ****   /* protect the heap from concurrent access */
+ 751:ThirdPackage/lwip220/core/mem.c ****   LWIP_MEM_FREE_PROTECT();
+ 985              		.loc 1 751 3 is_stmt 1 view .LVU305
+ 986 007c 4348     		ldr	r0, .L83+20
+ 987 007e FFF7FEFF 		bl	sys_mutex_lock
+ 988              	.LVL88:
+ 752:ThirdPackage/lwip220/core/mem.c **** 
+ 753:ThirdPackage/lwip220/core/mem.c ****   mem2 = ptr_to_mem(mem->next);
+ 989              		.loc 1 753 3 view .LVU306
+ 990              		.loc 1 753 10 is_stmt 0 view .LVU307
+ 991 0082 35F8087C 		ldrh	r7, [r5, #-8]
+ 992 0086 3846     		mov	r0, r7
+ 993 0088 FFF7FEFF 		bl	ptr_to_mem
+ 994              	.LVL89:
+ 995 008c 8146     		mov	r9, r0
+ 996              	.LVL90:
+ 754:ThirdPackage/lwip220/core/mem.c ****   if (mem2->used == 0) {
+ 997              		.loc 1 754 3 is_stmt 1 view .LVU308
+ 998              		.loc 1 754 11 is_stmt 0 view .LVU309
+ 999 008e 0379     		ldrb	r3, [r0, #4]	@ zero_extendqisi2
+ 1000              		.loc 1 754 6 view .LVU310
+ 1001 0090 002B     		cmp	r3, #0
+ 1002 0092 3ED1     		bne	.L67
+ 1003              	.LBB6:
+ 755:ThirdPackage/lwip220/core/mem.c ****     /* The next struct is unused, we can simply move it at little */
+ 756:ThirdPackage/lwip220/core/mem.c ****     mem_size_t next;
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 36
+
+
+ 1004              		.loc 1 756 5 is_stmt 1 view .LVU311
+ 757:ThirdPackage/lwip220/core/mem.c ****     LWIP_ASSERT("invalid next ptr", mem->next != MEM_SIZE_ALIGNED);
+ 1005              		.loc 1 757 5 view .LVU312
+ 1006              		.loc 1 757 5 view .LVU313
+ 1007 0094 B7F5C86F 		cmp	r7, #1600
+ 1008 0098 2DD0     		beq	.L80
+ 1009              	.LVL91:
+ 1010              	.L68:
+ 1011              		.loc 1 757 5 discriminator 3 view .LVU314
+ 1012              		.loc 1 757 5 discriminator 3 view .LVU315
+ 758:ThirdPackage/lwip220/core/mem.c ****     /* remember the old next pointer */
+ 759:ThirdPackage/lwip220/core/mem.c ****     next = mem2->next;
+ 1013              		.loc 1 759 5 discriminator 3 view .LVU316
+ 1014              		.loc 1 759 10 is_stmt 0 discriminator 3 view .LVU317
+ 1015 009a B9F80070 		ldrh	r7, [r9]
+ 1016              	.LVL92:
+ 760:ThirdPackage/lwip220/core/mem.c ****     /* create new struct mem which is moved directly after the shrunk mem */
+ 761:ThirdPackage/lwip220/core/mem.c ****     ptr2 = (mem_size_t)(ptr + SIZEOF_STRUCT_MEM + newsize);
+ 1017              		.loc 1 761 5 is_stmt 1 discriminator 3 view .LVU318
+ 1018              		.loc 1 761 49 is_stmt 0 discriminator 3 view .LVU319
+ 1019 009e 3444     		add	r4, r4, r6
+ 1020 00a0 A4B2     		uxth	r4, r4
+ 1021              		.loc 1 761 10 discriminator 3 view .LVU320
+ 1022 00a2 0834     		adds	r4, r4, #8
+ 1023 00a4 A4B2     		uxth	r4, r4
+ 1024              	.LVL93:
+ 762:ThirdPackage/lwip220/core/mem.c ****     if (lfree == mem2) {
+ 1025              		.loc 1 762 5 is_stmt 1 discriminator 3 view .LVU321
+ 1026              		.loc 1 762 15 is_stmt 0 discriminator 3 view .LVU322
+ 1027 00a6 3A4B     		ldr	r3, .L83+24
+ 1028 00a8 1B68     		ldr	r3, [r3]
+ 1029              		.loc 1 762 8 discriminator 3 view .LVU323
+ 1030 00aa 4B45     		cmp	r3, r9
+ 1031 00ac 2BD0     		beq	.L81
+ 1032              	.L69:
+ 763:ThirdPackage/lwip220/core/mem.c ****       lfree = ptr_to_mem(ptr2);
+ 764:ThirdPackage/lwip220/core/mem.c ****     }
+ 765:ThirdPackage/lwip220/core/mem.c ****     mem2 = ptr_to_mem(ptr2);
+ 1033              		.loc 1 765 5 is_stmt 1 view .LVU324
+ 1034              		.loc 1 765 12 is_stmt 0 view .LVU325
+ 1035 00ae 2046     		mov	r0, r4
+ 1036 00b0 FFF7FEFF 		bl	ptr_to_mem
+ 1037              	.LVL94:
+ 766:ThirdPackage/lwip220/core/mem.c ****     mem2->used = 0;
+ 1038              		.loc 1 766 5 is_stmt 1 view .LVU326
+ 1039              		.loc 1 766 16 is_stmt 0 view .LVU327
+ 1040 00b4 0023     		movs	r3, #0
+ 1041 00b6 0371     		strb	r3, [r0, #4]
+ 767:ThirdPackage/lwip220/core/mem.c ****     /* restore the next pointer */
+ 768:ThirdPackage/lwip220/core/mem.c ****     mem2->next = next;
+ 1042              		.loc 1 768 5 is_stmt 1 view .LVU328
+ 1043              		.loc 1 768 16 is_stmt 0 view .LVU329
+ 1044 00b8 0780     		strh	r7, [r0]	@ movhi
+ 769:ThirdPackage/lwip220/core/mem.c ****     /* link it back to mem */
+ 770:ThirdPackage/lwip220/core/mem.c ****     mem2->prev = ptr;
+ 1045              		.loc 1 770 5 is_stmt 1 view .LVU330
+ 1046              		.loc 1 770 16 is_stmt 0 view .LVU331
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 37
+
+
+ 1047 00ba 4680     		strh	r6, [r0, #2]	@ movhi
+ 771:ThirdPackage/lwip220/core/mem.c ****     /* link mem to it */
+ 772:ThirdPackage/lwip220/core/mem.c ****     mem->next = ptr2;
+ 1048              		.loc 1 772 5 is_stmt 1 view .LVU332
+ 1049              		.loc 1 772 15 is_stmt 0 view .LVU333
+ 1050 00bc 25F8084C 		strh	r4, [r5, #-8]	@ movhi
+ 773:ThirdPackage/lwip220/core/mem.c ****     /* last thing to restore linked list: as we have moved mem2,
+ 774:ThirdPackage/lwip220/core/mem.c ****      * let 'mem2->next->prev' point to mem2 again. but only if mem2->next is not
+ 775:ThirdPackage/lwip220/core/mem.c ****      * the end of the heap */
+ 776:ThirdPackage/lwip220/core/mem.c ****     if (mem2->next != MEM_SIZE_ALIGNED) {
+ 1051              		.loc 1 776 5 is_stmt 1 view .LVU334
+ 1052              		.loc 1 776 13 is_stmt 0 view .LVU335
+ 1053 00c0 0088     		ldrh	r0, [r0]
+ 1054              	.LVL95:
+ 1055              		.loc 1 776 8 view .LVU336
+ 1056 00c2 B0F5C86F 		cmp	r0, #1600
+ 1057 00c6 02D0     		beq	.L70
+ 777:ThirdPackage/lwip220/core/mem.c ****       ptr_to_mem(mem2->next)->prev = ptr2;
+ 1058              		.loc 1 777 7 is_stmt 1 view .LVU337
+ 1059 00c8 FFF7FEFF 		bl	ptr_to_mem
+ 1060              	.LVL96:
+ 1061              		.loc 1 777 36 is_stmt 0 view .LVU338
+ 1062 00cc 4480     		strh	r4, [r0, #2]	@ movhi
+ 1063              	.LVL97:
+ 1064              	.L70:
+ 1065              		.loc 1 777 36 view .LVU339
+ 1066              	.LBE6:
+ 778:ThirdPackage/lwip220/core/mem.c ****     }
+ 779:ThirdPackage/lwip220/core/mem.c ****     MEM_STATS_DEC_USED(used, (size - newsize));
+ 780:ThirdPackage/lwip220/core/mem.c ****     /* no need to plug holes, we've already done that */
+ 781:ThirdPackage/lwip220/core/mem.c ****   } else if (newsize + SIZEOF_STRUCT_MEM + MIN_SIZE_ALIGNED <= size) {
+ 782:ThirdPackage/lwip220/core/mem.c ****     /* Next struct is used but there's room for another struct mem with
+ 783:ThirdPackage/lwip220/core/mem.c ****      * at least MIN_SIZE_ALIGNED of data.
+ 784:ThirdPackage/lwip220/core/mem.c ****      * Old size ('size') must be big enough to contain at least 'newsize' plus a struct mem
+ 785:ThirdPackage/lwip220/core/mem.c ****      * ('SIZEOF_STRUCT_MEM') with some data ('MIN_SIZE_ALIGNED').
+ 786:ThirdPackage/lwip220/core/mem.c ****      * @todo we could leave out MIN_SIZE_ALIGNED. We would create an empty
+ 787:ThirdPackage/lwip220/core/mem.c ****      *       region that couldn't hold data, but when mem->next gets freed,
+ 788:ThirdPackage/lwip220/core/mem.c ****      *       the 2 regions would be combined, resulting in more free memory */
+ 789:ThirdPackage/lwip220/core/mem.c ****     ptr2 = (mem_size_t)(ptr + SIZEOF_STRUCT_MEM + newsize);
+ 790:ThirdPackage/lwip220/core/mem.c ****     LWIP_ASSERT("invalid next ptr", mem->next != MEM_SIZE_ALIGNED);
+ 791:ThirdPackage/lwip220/core/mem.c ****     mem2 = ptr_to_mem(ptr2);
+ 792:ThirdPackage/lwip220/core/mem.c ****     if (mem2 < lfree) {
+ 793:ThirdPackage/lwip220/core/mem.c ****       lfree = mem2;
+ 794:ThirdPackage/lwip220/core/mem.c ****     }
+ 795:ThirdPackage/lwip220/core/mem.c ****     mem2->used = 0;
+ 796:ThirdPackage/lwip220/core/mem.c ****     mem2->next = mem->next;
+ 797:ThirdPackage/lwip220/core/mem.c ****     mem2->prev = ptr;
+ 798:ThirdPackage/lwip220/core/mem.c ****     mem->next = ptr2;
+ 799:ThirdPackage/lwip220/core/mem.c ****     if (mem2->next != MEM_SIZE_ALIGNED) {
+ 800:ThirdPackage/lwip220/core/mem.c ****       ptr_to_mem(mem2->next)->prev = ptr2;
+ 801:ThirdPackage/lwip220/core/mem.c ****     }
+ 802:ThirdPackage/lwip220/core/mem.c ****     MEM_STATS_DEC_USED(used, (size - newsize));
+ 1067              		.loc 1 802 47 is_stmt 1 view .LVU340
+ 803:ThirdPackage/lwip220/core/mem.c ****     /* the original mem->next is used, so no need to plug holes! */
+ 804:ThirdPackage/lwip220/core/mem.c ****   }
+ 805:ThirdPackage/lwip220/core/mem.c ****   /* else {
+ 806:ThirdPackage/lwip220/core/mem.c ****     next struct mem is used but size between mem and mem2 is not big enough
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 38
+
+
+ 807:ThirdPackage/lwip220/core/mem.c ****     to create another struct mem
+ 808:ThirdPackage/lwip220/core/mem.c ****     -> don't do anyhting.
+ 809:ThirdPackage/lwip220/core/mem.c ****     -> the remaining space stays unused since it is too small
+ 810:ThirdPackage/lwip220/core/mem.c ****   } */
+ 811:ThirdPackage/lwip220/core/mem.c **** #if MEM_OVERFLOW_CHECK
+ 812:ThirdPackage/lwip220/core/mem.c ****   mem_overflow_init_element(mem, new_size);
+ 813:ThirdPackage/lwip220/core/mem.c **** #endif
+ 814:ThirdPackage/lwip220/core/mem.c ****   MEM_SANITY();
+ 1068              		.loc 1 814 15 view .LVU341
+ 815:ThirdPackage/lwip220/core/mem.c **** #if LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT
+ 816:ThirdPackage/lwip220/core/mem.c ****   mem_free_count = 1;
+ 817:ThirdPackage/lwip220/core/mem.c **** #endif /* LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT */
+ 818:ThirdPackage/lwip220/core/mem.c ****   LWIP_MEM_FREE_UNPROTECT();
+ 1069              		.loc 1 818 3 view .LVU342
+ 1070 00ce 2F48     		ldr	r0, .L83+20
+ 1071 00d0 FFF7FEFF 		bl	sys_mutex_unlock
+ 1072              	.LVL98:
+ 819:ThirdPackage/lwip220/core/mem.c ****   return rmem;
+ 1073              		.loc 1 819 3 view .LVU343
+ 1074              		.loc 1 819 10 is_stmt 0 view .LVU344
+ 1075 00d4 2846     		mov	r0, r5
+ 1076 00d6 04E0     		b	.L59
+ 1077              	.LVL99:
+ 1078              	.L64:
+ 725:ThirdPackage/lwip220/core/mem.c ****     /* protect mem stats from concurrent access */
+ 1079              		.loc 1 725 83 is_stmt 1 view .LVU345
+ 727:ThirdPackage/lwip220/core/mem.c ****     return rmem;
+ 1080              		.loc 1 727 5 view .LVU346
+ 1081              	.LBB7:
+ 727:ThirdPackage/lwip220/core/mem.c ****     return rmem;
+ 1082              		.loc 1 727 5 view .LVU347
+ 727:ThirdPackage/lwip220/core/mem.c ****     return rmem;
+ 1083              		.loc 1 727 5 view .LVU348
+ 1084 00d8 FFF7FEFF 		bl	sys_arch_protect
+ 1085              	.LVL100:
+ 727:ThirdPackage/lwip220/core/mem.c ****     return rmem;
+ 1086              		.loc 1 727 5 view .LVU349
+ 727:ThirdPackage/lwip220/core/mem.c ****     return rmem;
+ 1087              		.loc 1 727 5 view .LVU350
+ 1088 00dc FFF7FEFF 		bl	sys_arch_unprotect
+ 1089              	.LVL101:
+ 727:ThirdPackage/lwip220/core/mem.c ****     return rmem;
+ 1090              		.loc 1 727 5 is_stmt 0 view .LVU351
+ 1091              	.LBE7:
+ 727:ThirdPackage/lwip220/core/mem.c ****     return rmem;
+ 1092              		.loc 1 727 5 is_stmt 1 view .LVU352
+ 728:ThirdPackage/lwip220/core/mem.c ****   }
+ 1093              		.loc 1 728 5 view .LVU353
+ 728:ThirdPackage/lwip220/core/mem.c ****   }
+ 1094              		.loc 1 728 12 is_stmt 0 view .LVU354
+ 1095 00e0 2846     		mov	r0, r5
+ 1096              	.L59:
+ 820:ThirdPackage/lwip220/core/mem.c **** }
+ 1097              		.loc 1 820 1 view .LVU355
+ 1098 00e2 BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 1099              	.LVL102:
+ 1100              	.L79:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 39
+
+
+ 740:ThirdPackage/lwip220/core/mem.c ****   if (newsize > size) {
+ 1101              		.loc 1 740 3 is_stmt 1 discriminator 1 view .LVU356
+ 740:ThirdPackage/lwip220/core/mem.c ****   if (newsize > size) {
+ 1102              		.loc 1 740 3 discriminator 1 view .LVU357
+ 1103 00e6 264B     		ldr	r3, .L83+8
+ 1104 00e8 4FF43972 		mov	r2, #740
+ 1105 00ec 2949     		ldr	r1, .L83+28
+ 1106 00ee 2648     		ldr	r0, .L83+16
+ 1107              	.LVL103:
+ 740:ThirdPackage/lwip220/core/mem.c ****   if (newsize > size) {
+ 1108              		.loc 1 740 3 is_stmt 0 discriminator 1 view .LVU358
+ 1109 00f0 FFF7FEFF 		bl	printf
+ 1110              	.LVL104:
+ 1111 00f4 BFE7     		b	.L66
+ 1112              	.LVL105:
+ 1113              	.L80:
+ 1114              	.LBB8:
+ 757:ThirdPackage/lwip220/core/mem.c ****     /* remember the old next pointer */
+ 1115              		.loc 1 757 5 is_stmt 1 discriminator 1 view .LVU359
+ 757:ThirdPackage/lwip220/core/mem.c ****     /* remember the old next pointer */
+ 1116              		.loc 1 757 5 discriminator 1 view .LVU360
+ 1117 00f6 224B     		ldr	r3, .L83+8
+ 1118 00f8 40F2F522 		movw	r2, #757
+ 1119 00fc 2649     		ldr	r1, .L83+32
+ 1120 00fe 2248     		ldr	r0, .L83+16
+ 1121              	.LVL106:
+ 757:ThirdPackage/lwip220/core/mem.c ****     /* remember the old next pointer */
+ 1122              		.loc 1 757 5 is_stmt 0 discriminator 1 view .LVU361
+ 1123 0100 FFF7FEFF 		bl	printf
+ 1124              	.LVL107:
+ 1125 0104 C9E7     		b	.L68
+ 1126              	.LVL108:
+ 1127              	.L81:
+ 763:ThirdPackage/lwip220/core/mem.c ****     }
+ 1128              		.loc 1 763 7 is_stmt 1 view .LVU362
+ 763:ThirdPackage/lwip220/core/mem.c ****     }
+ 1129              		.loc 1 763 15 is_stmt 0 view .LVU363
+ 1130 0106 2046     		mov	r0, r4
+ 1131 0108 FFF7FEFF 		bl	ptr_to_mem
+ 1132              	.LVL109:
+ 763:ThirdPackage/lwip220/core/mem.c ****     }
+ 1133              		.loc 1 763 13 view .LVU364
+ 1134 010c 204B     		ldr	r3, .L83+24
+ 1135 010e 1860     		str	r0, [r3]
+ 1136 0110 CDE7     		b	.L69
+ 1137              	.LVL110:
+ 1138              	.L67:
+ 763:ThirdPackage/lwip220/core/mem.c ****     }
+ 1139              		.loc 1 763 13 view .LVU365
+ 1140              	.LBE8:
+ 781:ThirdPackage/lwip220/core/mem.c ****     /* Next struct is used but there's room for another struct mem with
+ 1141              		.loc 1 781 10 is_stmt 1 view .LVU366
+ 781:ThirdPackage/lwip220/core/mem.c ****     /* Next struct is used but there's room for another struct mem with
+ 1142              		.loc 1 781 42 is_stmt 0 view .LVU367
+ 1143 0112 04F11403 		add	r3, r4, #20
+ 781:ThirdPackage/lwip220/core/mem.c ****     /* Next struct is used but there's room for another struct mem with
+ 1144              		.loc 1 781 13 view .LVU368
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 40
+
+
+ 1145 0116 4345     		cmp	r3, r8
+ 1146 0118 D9D8     		bhi	.L70
+ 789:ThirdPackage/lwip220/core/mem.c ****     LWIP_ASSERT("invalid next ptr", mem->next != MEM_SIZE_ALIGNED);
+ 1147              		.loc 1 789 5 is_stmt 1 view .LVU369
+ 789:ThirdPackage/lwip220/core/mem.c ****     LWIP_ASSERT("invalid next ptr", mem->next != MEM_SIZE_ALIGNED);
+ 1148              		.loc 1 789 49 is_stmt 0 view .LVU370
+ 1149 011a 3444     		add	r4, r4, r6
+ 1150 011c A4B2     		uxth	r4, r4
+ 789:ThirdPackage/lwip220/core/mem.c ****     LWIP_ASSERT("invalid next ptr", mem->next != MEM_SIZE_ALIGNED);
+ 1151              		.loc 1 789 10 view .LVU371
+ 1152 011e 0834     		adds	r4, r4, #8
+ 1153 0120 A4B2     		uxth	r4, r4
+ 1154              	.LVL111:
+ 790:ThirdPackage/lwip220/core/mem.c ****     mem2 = ptr_to_mem(ptr2);
+ 1155              		.loc 1 790 5 is_stmt 1 view .LVU372
+ 790:ThirdPackage/lwip220/core/mem.c ****     mem2 = ptr_to_mem(ptr2);
+ 1156              		.loc 1 790 5 view .LVU373
+ 1157 0122 B7F5C86F 		cmp	r7, #1600
+ 1158 0126 18D0     		beq	.L82
+ 1159              	.LVL112:
+ 1160              	.L71:
+ 790:ThirdPackage/lwip220/core/mem.c ****     mem2 = ptr_to_mem(ptr2);
+ 1161              		.loc 1 790 5 discriminator 3 view .LVU374
+ 790:ThirdPackage/lwip220/core/mem.c ****     mem2 = ptr_to_mem(ptr2);
+ 1162              		.loc 1 790 5 discriminator 3 view .LVU375
+ 791:ThirdPackage/lwip220/core/mem.c ****     if (mem2 < lfree) {
+ 1163              		.loc 1 791 5 discriminator 3 view .LVU376
+ 791:ThirdPackage/lwip220/core/mem.c ****     if (mem2 < lfree) {
+ 1164              		.loc 1 791 12 is_stmt 0 discriminator 3 view .LVU377
+ 1165 0128 2046     		mov	r0, r4
+ 1166 012a FFF7FEFF 		bl	ptr_to_mem
+ 1167              	.LVL113:
+ 792:ThirdPackage/lwip220/core/mem.c ****       lfree = mem2;
+ 1168              		.loc 1 792 5 is_stmt 1 discriminator 3 view .LVU378
+ 792:ThirdPackage/lwip220/core/mem.c ****       lfree = mem2;
+ 1169              		.loc 1 792 14 is_stmt 0 discriminator 3 view .LVU379
+ 1170 012e 184B     		ldr	r3, .L83+24
+ 1171 0130 1B68     		ldr	r3, [r3]
+ 792:ThirdPackage/lwip220/core/mem.c ****       lfree = mem2;
+ 1172              		.loc 1 792 8 discriminator 3 view .LVU380
+ 1173 0132 8342     		cmp	r3, r0
+ 1174 0134 01D9     		bls	.L72
+ 793:ThirdPackage/lwip220/core/mem.c ****     }
+ 1175              		.loc 1 793 7 is_stmt 1 view .LVU381
+ 793:ThirdPackage/lwip220/core/mem.c ****     }
+ 1176              		.loc 1 793 13 is_stmt 0 view .LVU382
+ 1177 0136 164B     		ldr	r3, .L83+24
+ 1178 0138 1860     		str	r0, [r3]
+ 1179              	.L72:
+ 795:ThirdPackage/lwip220/core/mem.c ****     mem2->next = mem->next;
+ 1180              		.loc 1 795 5 is_stmt 1 view .LVU383
+ 795:ThirdPackage/lwip220/core/mem.c ****     mem2->next = mem->next;
+ 1181              		.loc 1 795 16 is_stmt 0 view .LVU384
+ 1182 013a 0023     		movs	r3, #0
+ 1183 013c 0371     		strb	r3, [r0, #4]
+ 796:ThirdPackage/lwip220/core/mem.c ****     mem2->prev = ptr;
+ 1184              		.loc 1 796 5 is_stmt 1 view .LVU385
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 41
+
+
+ 796:ThirdPackage/lwip220/core/mem.c ****     mem2->prev = ptr;
+ 1185              		.loc 1 796 21 is_stmt 0 view .LVU386
+ 1186 013e 35F8083C 		ldrh	r3, [r5, #-8]
+ 796:ThirdPackage/lwip220/core/mem.c ****     mem2->prev = ptr;
+ 1187              		.loc 1 796 16 view .LVU387
+ 1188 0142 0380     		strh	r3, [r0]	@ movhi
+ 797:ThirdPackage/lwip220/core/mem.c ****     mem->next = ptr2;
+ 1189              		.loc 1 797 5 is_stmt 1 view .LVU388
+ 797:ThirdPackage/lwip220/core/mem.c ****     mem->next = ptr2;
+ 1190              		.loc 1 797 16 is_stmt 0 view .LVU389
+ 1191 0144 4680     		strh	r6, [r0, #2]	@ movhi
+ 798:ThirdPackage/lwip220/core/mem.c ****     if (mem2->next != MEM_SIZE_ALIGNED) {
+ 1192              		.loc 1 798 5 is_stmt 1 view .LVU390
+ 798:ThirdPackage/lwip220/core/mem.c ****     if (mem2->next != MEM_SIZE_ALIGNED) {
+ 1193              		.loc 1 798 15 is_stmt 0 view .LVU391
+ 1194 0146 25F8084C 		strh	r4, [r5, #-8]	@ movhi
+ 799:ThirdPackage/lwip220/core/mem.c ****       ptr_to_mem(mem2->next)->prev = ptr2;
+ 1195              		.loc 1 799 5 is_stmt 1 view .LVU392
+ 799:ThirdPackage/lwip220/core/mem.c ****       ptr_to_mem(mem2->next)->prev = ptr2;
+ 1196              		.loc 1 799 13 is_stmt 0 view .LVU393
+ 1197 014a 0088     		ldrh	r0, [r0]
+ 1198              	.LVL114:
+ 799:ThirdPackage/lwip220/core/mem.c ****       ptr_to_mem(mem2->next)->prev = ptr2;
+ 1199              		.loc 1 799 8 view .LVU394
+ 1200 014c B0F5C86F 		cmp	r0, #1600
+ 1201 0150 BDD0     		beq	.L70
+ 800:ThirdPackage/lwip220/core/mem.c ****     }
+ 1202              		.loc 1 800 7 is_stmt 1 view .LVU395
+ 1203 0152 FFF7FEFF 		bl	ptr_to_mem
+ 1204              	.LVL115:
+ 800:ThirdPackage/lwip220/core/mem.c ****     }
+ 1205              		.loc 1 800 36 is_stmt 0 view .LVU396
+ 1206 0156 4480     		strh	r4, [r0, #2]	@ movhi
+ 1207 0158 B9E7     		b	.L70
+ 1208              	.LVL116:
+ 1209              	.L82:
+ 790:ThirdPackage/lwip220/core/mem.c ****     mem2 = ptr_to_mem(ptr2);
+ 1210              		.loc 1 790 5 is_stmt 1 discriminator 1 view .LVU397
+ 790:ThirdPackage/lwip220/core/mem.c ****     mem2 = ptr_to_mem(ptr2);
+ 1211              		.loc 1 790 5 discriminator 1 view .LVU398
+ 1212 015a 094B     		ldr	r3, .L83+8
+ 1213 015c 40F21632 		movw	r2, #790
+ 1214 0160 0D49     		ldr	r1, .L83+32
+ 1215 0162 0948     		ldr	r0, .L83+16
+ 1216              	.LVL117:
+ 790:ThirdPackage/lwip220/core/mem.c ****     mem2 = ptr_to_mem(ptr2);
+ 1217              		.loc 1 790 5 is_stmt 0 discriminator 1 view .LVU399
+ 1218 0164 FFF7FEFF 		bl	printf
+ 1219              	.LVL118:
+ 1220 0168 DEE7     		b	.L71
+ 1221              	.LVL119:
+ 1222              	.L75:
+ 718:ThirdPackage/lwip220/core/mem.c ****   }
+ 1223              		.loc 1 718 12 view .LVU400
+ 1224 016a 0020     		movs	r0, #0
+ 1225              	.LVL120:
+ 718:ThirdPackage/lwip220/core/mem.c ****   }
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 42
+
+
+ 1226              		.loc 1 718 12 view .LVU401
+ 1227 016c B9E7     		b	.L59
+ 1228              	.LVL121:
+ 1229              	.L76:
+ 743:ThirdPackage/lwip220/core/mem.c ****   }
+ 1230              		.loc 1 743 12 view .LVU402
+ 1231 016e 0020     		movs	r0, #0
+ 1232 0170 B7E7     		b	.L59
+ 1233              	.L77:
+ 747:ThirdPackage/lwip220/core/mem.c ****   }
+ 1234              		.loc 1 747 12 view .LVU403
+ 1235 0172 2846     		mov	r0, r5
+ 1236 0174 B5E7     		b	.L59
+ 1237              	.L84:
+ 1238 0176 00BF     		.align	2
+ 1239              	.L83:
+ 1240 0178 00000000 		.word	.LANCHOR0
+ 1241 017c 00000000 		.word	.LANCHOR1
+ 1242 0180 00000000 		.word	.LC0
+ 1243 0184 00000000 		.word	.LC11
+ 1244 0188 38000000 		.word	.LC2
+ 1245 018c 00000000 		.word	.LANCHOR4
+ 1246 0190 00000000 		.word	.LANCHOR2
+ 1247 0194 18000000 		.word	.LC12
+ 1248 0198 38000000 		.word	.LC13
+ 1249              		.cfi_endproc
+ 1250              	.LFE166:
+ 1252              		.section	.rodata.mem_malloc.str1.4,"aMS",%progbits,1
+ 1253              		.align	2
+ 1254              	.LC14:
+ 1255 0000 6D656D5F 		.ascii	"mem_malloc: !lfree->used\000"
+ 1255      6D616C6C 
+ 1255      6F633A20 
+ 1255      216C6672 
+ 1255      65652D3E 
+ 1256 0019 000000   		.align	2
+ 1257              	.LC15:
+ 1258 001c 6D656D5F 		.ascii	"mem_malloc: allocated memory not above ram_end.\000"
+ 1258      6D616C6C 
+ 1258      6F633A20 
+ 1258      616C6C6F 
+ 1258      63617465 
+ 1259              		.align	2
+ 1260              	.LC16:
+ 1261 004c 6D656D5F 		.ascii	"mem_malloc: allocated memory properly aligned.\000"
+ 1261      6D616C6C 
+ 1261      6F633A20 
+ 1261      616C6C6F 
+ 1261      63617465 
+ 1262 007b 00       		.align	2
+ 1263              	.LC17:
+ 1264 007c 6D656D5F 		.ascii	"mem_malloc: sanity check alignment\000"
+ 1264      6D616C6C 
+ 1264      6F633A20 
+ 1264      73616E69 
+ 1264      74792063 
+ 1265              		.section	.text.mem_malloc,"ax",%progbits
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 43
+
+
+ 1266              		.align	1
+ 1267              		.global	mem_malloc
+ 1268              		.syntax unified
+ 1269              		.thumb
+ 1270              		.thumb_func
+ 1272              	mem_malloc:
+ 1273              	.LVL122:
+ 1274              	.LFB167:
+ 821:ThirdPackage/lwip220/core/mem.c **** 
+ 822:ThirdPackage/lwip220/core/mem.c **** /**
+ 823:ThirdPackage/lwip220/core/mem.c ****  * Allocate a block of memory with a minimum of 'size' bytes.
+ 824:ThirdPackage/lwip220/core/mem.c ****  *
+ 825:ThirdPackage/lwip220/core/mem.c ****  * @param size_in is the minimum size of the requested block in bytes.
+ 826:ThirdPackage/lwip220/core/mem.c ****  * @return pointer to allocated memory or NULL if no free memory was found.
+ 827:ThirdPackage/lwip220/core/mem.c ****  *
+ 828:ThirdPackage/lwip220/core/mem.c ****  * Note that the returned value will always be aligned (as defined by MEM_ALIGNMENT).
+ 829:ThirdPackage/lwip220/core/mem.c ****  */
+ 830:ThirdPackage/lwip220/core/mem.c **** void *
+ 831:ThirdPackage/lwip220/core/mem.c **** mem_malloc(mem_size_t size_in)
+ 832:ThirdPackage/lwip220/core/mem.c **** {
+ 1275              		.loc 1 832 1 is_stmt 1 view -0
+ 1276              		.cfi_startproc
+ 1277              		@ args = 0, pretend = 0, frame = 0
+ 1278              		@ frame_needed = 0, uses_anonymous_args = 0
+ 833:ThirdPackage/lwip220/core/mem.c ****   mem_size_t ptr, ptr2, size;
+ 1279              		.loc 1 833 3 view .LVU405
+ 834:ThirdPackage/lwip220/core/mem.c ****   struct mem *mem, *mem2;
+ 1280              		.loc 1 834 3 view .LVU406
+ 835:ThirdPackage/lwip220/core/mem.c **** #if LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT
+ 836:ThirdPackage/lwip220/core/mem.c ****   u8_t local_mem_free_count = 0;
+ 837:ThirdPackage/lwip220/core/mem.c **** #endif /* LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT */
+ 838:ThirdPackage/lwip220/core/mem.c ****   LWIP_MEM_ALLOC_DECL_PROTECT();
+ 1281              		.loc 1 838 32 view .LVU407
+ 839:ThirdPackage/lwip220/core/mem.c **** 
+ 840:ThirdPackage/lwip220/core/mem.c ****   if (size_in == 0) {
+ 1282              		.loc 1 840 3 view .LVU408
+ 1283              		.loc 1 840 6 is_stmt 0 view .LVU409
+ 1284 0000 0028     		cmp	r0, #0
+ 1285 0002 00F0A380 		beq	.L101
+ 832:ThirdPackage/lwip220/core/mem.c ****   mem_size_t ptr, ptr2, size;
+ 1286              		.loc 1 832 1 view .LVU410
+ 1287 0006 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 1288              	.LCFI6:
+ 1289              		.cfi_def_cfa_offset 24
+ 1290              		.cfi_offset 4, -24
+ 1291              		.cfi_offset 5, -20
+ 1292              		.cfi_offset 6, -16
+ 1293              		.cfi_offset 7, -12
+ 1294              		.cfi_offset 8, -8
+ 1295              		.cfi_offset 14, -4
+ 1296 000a 0346     		mov	r3, r0
+ 841:ThirdPackage/lwip220/core/mem.c ****     return NULL;
+ 842:ThirdPackage/lwip220/core/mem.c ****   }
+ 843:ThirdPackage/lwip220/core/mem.c **** 
+ 844:ThirdPackage/lwip220/core/mem.c ****   /* Expand the size of the allocated memory region so that we can
+ 845:ThirdPackage/lwip220/core/mem.c ****      adjust for alignment. */
+ 846:ThirdPackage/lwip220/core/mem.c ****   size = (mem_size_t)LWIP_MEM_ALIGN_SIZE(size_in);
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 44
+
+
+ 1297              		.loc 1 846 3 is_stmt 1 view .LVU411
+ 1298              		.loc 1 846 22 is_stmt 0 view .LVU412
+ 1299 000c C61C     		adds	r6, r0, #3
+ 1300 000e B6B2     		uxth	r6, r6
+ 1301              		.loc 1 846 8 view .LVU413
+ 1302 0010 26F00306 		bic	r6, r6, #3
+ 1303 0014 B6B2     		uxth	r6, r6
+ 1304              	.LVL123:
+ 847:ThirdPackage/lwip220/core/mem.c ****   if (size < MIN_SIZE_ALIGNED) {
+ 1305              		.loc 1 847 3 is_stmt 1 view .LVU414
+ 1306              		.loc 1 847 6 is_stmt 0 view .LVU415
+ 1307 0016 0B2E     		cmp	r6, #11
+ 1308 0018 04D9     		bls	.L102
+ 848:ThirdPackage/lwip220/core/mem.c ****     /* every data block must be at least MIN_SIZE_ALIGNED long */
+ 849:ThirdPackage/lwip220/core/mem.c ****     size = MIN_SIZE_ALIGNED;
+ 850:ThirdPackage/lwip220/core/mem.c ****   }
+ 851:ThirdPackage/lwip220/core/mem.c **** #if MEM_OVERFLOW_CHECK
+ 852:ThirdPackage/lwip220/core/mem.c ****   size += MEM_SANITY_REGION_BEFORE_ALIGNED + MEM_SANITY_REGION_AFTER_ALIGNED;
+ 853:ThirdPackage/lwip220/core/mem.c **** #endif
+ 854:ThirdPackage/lwip220/core/mem.c ****   if ((size > MEM_SIZE_ALIGNED) || (size < size_in)) {
+ 1309              		.loc 1 854 3 is_stmt 1 view .LVU416
+ 1310              		.loc 1 854 6 is_stmt 0 view .LVU417
+ 1311 001a B6F5C86F 		cmp	r6, #1600
+ 1312 001e 02D9     		bls	.L87
+ 855:ThirdPackage/lwip220/core/mem.c ****     return NULL;
+ 1313              		.loc 1 855 12 view .LVU418
+ 1314 0020 0020     		movs	r0, #0
+ 1315              	.LVL124:
+ 1316              		.loc 1 855 12 view .LVU419
+ 1317 0022 91E0     		b	.L85
+ 1318              	.LVL125:
+ 1319              	.L102:
+ 849:ThirdPackage/lwip220/core/mem.c ****   }
+ 1320              		.loc 1 849 10 view .LVU420
+ 1321 0024 0C26     		movs	r6, #12
+ 1322              	.LVL126:
+ 1323              	.L87:
+ 854:ThirdPackage/lwip220/core/mem.c ****     return NULL;
+ 1324              		.loc 1 854 33 discriminator 1 view .LVU421
+ 1325 0026 9E42     		cmp	r6, r3
+ 1326 0028 C0F09280 		bcc	.L104
+ 856:ThirdPackage/lwip220/core/mem.c ****   }
+ 857:ThirdPackage/lwip220/core/mem.c **** 
+ 858:ThirdPackage/lwip220/core/mem.c ****   /* protect the heap from concurrent access */
+ 859:ThirdPackage/lwip220/core/mem.c ****   sys_mutex_lock(&mem_mutex);
+ 1327              		.loc 1 859 3 is_stmt 1 view .LVU422
+ 1328 002c 4948     		ldr	r0, .L114
+ 1329              	.LVL127:
+ 1330              		.loc 1 859 3 is_stmt 0 view .LVU423
+ 1331 002e FFF7FEFF 		bl	sys_mutex_lock
+ 1332              	.LVL128:
+ 860:ThirdPackage/lwip220/core/mem.c ****   LWIP_MEM_ALLOC_PROTECT();
+ 1333              		.loc 1 860 27 is_stmt 1 view .LVU424
+ 861:ThirdPackage/lwip220/core/mem.c **** #if LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT
+ 862:ThirdPackage/lwip220/core/mem.c ****   /* run as long as a mem_free disturbed mem_malloc or mem_trim */
+ 863:ThirdPackage/lwip220/core/mem.c ****   do {
+ 864:ThirdPackage/lwip220/core/mem.c ****     local_mem_free_count = 0;
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 45
+
+
+ 865:ThirdPackage/lwip220/core/mem.c **** #endif /* LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT */
+ 866:ThirdPackage/lwip220/core/mem.c **** 
+ 867:ThirdPackage/lwip220/core/mem.c ****     /* Scan through the heap searching for a free block that is big enough,
+ 868:ThirdPackage/lwip220/core/mem.c ****      * beginning with the lowest free block.
+ 869:ThirdPackage/lwip220/core/mem.c ****      */
+ 870:ThirdPackage/lwip220/core/mem.c ****     for (ptr = mem_to_ptr(lfree); ptr < MEM_SIZE_ALIGNED - size;
+ 1334              		.loc 1 870 5 view .LVU425
+ 1335              		.loc 1 870 16 is_stmt 0 view .LVU426
+ 1336 0032 494B     		ldr	r3, .L114+4
+ 1337 0034 1868     		ldr	r0, [r3]
+ 1338 0036 FFF7FEFF 		bl	mem_to_ptr
+ 1339              	.LVL129:
+ 1340 003a 0546     		mov	r5, r0
+ 1341              	.LVL130:
+ 1342              		.loc 1 870 5 view .LVU427
+ 1343 003c 4FE0     		b	.L88
+ 1344              	.LVL131:
+ 1345              	.L113:
+ 871:ThirdPackage/lwip220/core/mem.c ****          ptr = ptr_to_mem(ptr)->next) {
+ 872:ThirdPackage/lwip220/core/mem.c ****       mem = ptr_to_mem(ptr);
+ 873:ThirdPackage/lwip220/core/mem.c **** #if LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT
+ 874:ThirdPackage/lwip220/core/mem.c ****       mem_free_count = 0;
+ 875:ThirdPackage/lwip220/core/mem.c ****       LWIP_MEM_ALLOC_UNPROTECT();
+ 876:ThirdPackage/lwip220/core/mem.c ****       /* allow mem_free or mem_trim to run */
+ 877:ThirdPackage/lwip220/core/mem.c ****       LWIP_MEM_ALLOC_PROTECT();
+ 878:ThirdPackage/lwip220/core/mem.c ****       if (mem_free_count != 0) {
+ 879:ThirdPackage/lwip220/core/mem.c ****         /* If mem_free or mem_trim have run, we have to restart since they
+ 880:ThirdPackage/lwip220/core/mem.c ****            could have altered our current struct mem. */
+ 881:ThirdPackage/lwip220/core/mem.c ****         local_mem_free_count = 1;
+ 882:ThirdPackage/lwip220/core/mem.c ****         break;
+ 883:ThirdPackage/lwip220/core/mem.c ****       }
+ 884:ThirdPackage/lwip220/core/mem.c **** #endif /* LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT */
+ 885:ThirdPackage/lwip220/core/mem.c **** 
+ 886:ThirdPackage/lwip220/core/mem.c ****       if ((!mem->used) &&
+ 887:ThirdPackage/lwip220/core/mem.c ****           (mem->next - (ptr + SIZEOF_STRUCT_MEM)) >= size) {
+ 888:ThirdPackage/lwip220/core/mem.c ****         /* mem is not used and at least perfect fit is possible:
+ 889:ThirdPackage/lwip220/core/mem.c ****          * mem->next - (ptr + SIZEOF_STRUCT_MEM) gives us the 'user data size' of mem */
+ 890:ThirdPackage/lwip220/core/mem.c **** 
+ 891:ThirdPackage/lwip220/core/mem.c ****         if (mem->next - (ptr + SIZEOF_STRUCT_MEM) >= (size + SIZEOF_STRUCT_MEM + MIN_SIZE_ALIGNED))
+ 892:ThirdPackage/lwip220/core/mem.c ****           /* (in addition to the above, we test if another struct mem (SIZEOF_STRUCT_MEM) containin
+ 893:ThirdPackage/lwip220/core/mem.c ****            * at least MIN_SIZE_ALIGNED of data also fits in the 'user data space' of 'mem')
+ 894:ThirdPackage/lwip220/core/mem.c ****            * -> split large block, create empty remainder,
+ 895:ThirdPackage/lwip220/core/mem.c ****            * remainder must be large enough to contain MIN_SIZE_ALIGNED data: if
+ 896:ThirdPackage/lwip220/core/mem.c ****            * mem->next - (ptr + (2*SIZEOF_STRUCT_MEM)) == size,
+ 897:ThirdPackage/lwip220/core/mem.c ****            * struct mem would fit in but no data between mem2 and mem2->next
+ 898:ThirdPackage/lwip220/core/mem.c ****            * @todo we could leave out MIN_SIZE_ALIGNED. We would create an empty
+ 899:ThirdPackage/lwip220/core/mem.c ****            *       region that couldn't hold data, but when mem->next gets freed,
+ 900:ThirdPackage/lwip220/core/mem.c ****            *       the 2 regions would be combined, resulting in more free memory
+ 901:ThirdPackage/lwip220/core/mem.c ****            */
+ 902:ThirdPackage/lwip220/core/mem.c ****           ptr2 = (mem_size_t)(ptr + SIZEOF_STRUCT_MEM + size);
+ 903:ThirdPackage/lwip220/core/mem.c ****           LWIP_ASSERT("invalid next ptr",ptr2 != MEM_SIZE_ALIGNED);
+ 1346              		.loc 1 903 11 is_stmt 1 discriminator 1 view .LVU428
+ 1347              		.loc 1 903 11 discriminator 1 view .LVU429
+ 1348 003e 474B     		ldr	r3, .L114+8
+ 1349 0040 40F28732 		movw	r2, #903
+ 1350 0044 4649     		ldr	r1, .L114+12
+ 1351 0046 4748     		ldr	r0, .L114+16
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 46
+
+
+ 1352              	.LVL132:
+ 1353              		.loc 1 903 11 is_stmt 0 discriminator 1 view .LVU430
+ 1354 0048 FFF7FEFF 		bl	printf
+ 1355              	.LVL133:
+ 1356 004c 65E0     		b	.L91
+ 1357              	.LVL134:
+ 1358              	.L90:
+ 904:ThirdPackage/lwip220/core/mem.c ****           /* create mem2 struct */
+ 905:ThirdPackage/lwip220/core/mem.c ****           mem2 = ptr_to_mem(ptr2);
+ 906:ThirdPackage/lwip220/core/mem.c ****           mem2->used = 0;
+ 907:ThirdPackage/lwip220/core/mem.c ****           mem2->next = mem->next;
+ 908:ThirdPackage/lwip220/core/mem.c ****           mem2->prev = ptr;
+ 909:ThirdPackage/lwip220/core/mem.c ****           /* and insert it between mem and mem->next */
+ 910:ThirdPackage/lwip220/core/mem.c ****           mem->next = ptr2;
+ 911:ThirdPackage/lwip220/core/mem.c ****           mem->used = 1;
+ 912:ThirdPackage/lwip220/core/mem.c **** 
+ 913:ThirdPackage/lwip220/core/mem.c ****           if (mem2->next != MEM_SIZE_ALIGNED) {
+ 914:ThirdPackage/lwip220/core/mem.c ****             ptr_to_mem(mem2->next)->prev = ptr2;
+ 915:ThirdPackage/lwip220/core/mem.c ****           }
+ 916:ThirdPackage/lwip220/core/mem.c ****           MEM_STATS_INC_USED(used, (size + SIZEOF_STRUCT_MEM));
+ 917:ThirdPackage/lwip220/core/mem.c ****         } else {
+ 918:ThirdPackage/lwip220/core/mem.c ****           /* (a mem2 struct does no fit into the user data space of mem and mem->next will always
+ 919:ThirdPackage/lwip220/core/mem.c ****            * be used at this point: if not we have 2 unused structs in a row, plug_holes should hav
+ 920:ThirdPackage/lwip220/core/mem.c ****            * take care of this).
+ 921:ThirdPackage/lwip220/core/mem.c ****            * -> near fit or exact fit: do not split, no mem2 creation
+ 922:ThirdPackage/lwip220/core/mem.c ****            * also can't move mem->next directly behind mem, since mem->next
+ 923:ThirdPackage/lwip220/core/mem.c ****            * will always be used at this point!
+ 924:ThirdPackage/lwip220/core/mem.c ****            */
+ 925:ThirdPackage/lwip220/core/mem.c ****           mem->used = 1;
+ 1359              		.loc 1 925 11 is_stmt 1 view .LVU431
+ 1360              		.loc 1 925 21 is_stmt 0 view .LVU432
+ 1361 004e 0123     		movs	r3, #1
+ 1362 0050 0371     		strb	r3, [r0, #4]
+ 1363              	.LVL135:
+ 1364              	.L92:
+ 926:ThirdPackage/lwip220/core/mem.c ****           MEM_STATS_INC_USED(used, mem->next - mem_to_ptr(mem));
+ 1365              		.loc 1 926 64 is_stmt 1 view .LVU433
+ 927:ThirdPackage/lwip220/core/mem.c ****         }
+ 928:ThirdPackage/lwip220/core/mem.c **** #if LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT
+ 929:ThirdPackage/lwip220/core/mem.c **** mem_malloc_adjust_lfree:
+ 930:ThirdPackage/lwip220/core/mem.c **** #endif /* LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT */
+ 931:ThirdPackage/lwip220/core/mem.c ****         if (mem == lfree) {
+ 1366              		.loc 1 931 9 view .LVU434
+ 1367              		.loc 1 931 17 is_stmt 0 view .LVU435
+ 1368 0052 414B     		ldr	r3, .L114+4
+ 1369 0054 1868     		ldr	r0, [r3]
+ 1370              		.loc 1 931 12 view .LVU436
+ 1371 0056 A042     		cmp	r0, r4
+ 1372 0058 12D0     		beq	.L93
+ 1373              	.L94:
+ 1374              	.LBB9:
+ 932:ThirdPackage/lwip220/core/mem.c ****           struct mem *cur = lfree;
+ 933:ThirdPackage/lwip220/core/mem.c ****           /* Find next free block after mem and update lowest free pointer */
+ 934:ThirdPackage/lwip220/core/mem.c ****           while (cur->used && cur != ram_end) {
+ 935:ThirdPackage/lwip220/core/mem.c **** #if LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT
+ 936:ThirdPackage/lwip220/core/mem.c ****             mem_free_count = 0;
+ 937:ThirdPackage/lwip220/core/mem.c ****             LWIP_MEM_ALLOC_UNPROTECT();
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 47
+
+
+ 938:ThirdPackage/lwip220/core/mem.c ****             /* prevent high interrupt latency... */
+ 939:ThirdPackage/lwip220/core/mem.c ****             LWIP_MEM_ALLOC_PROTECT();
+ 940:ThirdPackage/lwip220/core/mem.c ****             if (mem_free_count != 0) {
+ 941:ThirdPackage/lwip220/core/mem.c ****               /* If mem_free or mem_trim have run, we have to restart since they
+ 942:ThirdPackage/lwip220/core/mem.c ****                  could have altered our current struct mem or lfree. */
+ 943:ThirdPackage/lwip220/core/mem.c ****               goto mem_malloc_adjust_lfree;
+ 944:ThirdPackage/lwip220/core/mem.c ****             }
+ 945:ThirdPackage/lwip220/core/mem.c **** #endif /* LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT */
+ 946:ThirdPackage/lwip220/core/mem.c ****             cur = ptr_to_mem(cur->next);
+ 947:ThirdPackage/lwip220/core/mem.c ****           }
+ 948:ThirdPackage/lwip220/core/mem.c ****           lfree = cur;
+ 949:ThirdPackage/lwip220/core/mem.c ****           LWIP_ASSERT("mem_malloc: !lfree->used", ((lfree == ram_end) || (!lfree->used)));
+ 1375              		.loc 1 949 11 is_stmt 1 discriminator 5 view .LVU437
+ 1376              		.loc 1 949 11 discriminator 5 view .LVU438
+ 1377              	.LBE9:
+ 950:ThirdPackage/lwip220/core/mem.c ****         }
+ 951:ThirdPackage/lwip220/core/mem.c ****         LWIP_MEM_ALLOC_UNPROTECT();
+ 1378              		.loc 1 951 35 discriminator 5 view .LVU439
+ 952:ThirdPackage/lwip220/core/mem.c ****         sys_mutex_unlock(&mem_mutex);
+ 1379              		.loc 1 952 9 discriminator 5 view .LVU440
+ 1380 005a 3E48     		ldr	r0, .L114
+ 1381 005c FFF7FEFF 		bl	sys_mutex_unlock
+ 1382              	.LVL136:
+ 953:ThirdPackage/lwip220/core/mem.c ****         LWIP_ASSERT("mem_malloc: allocated memory not above ram_end.",
+ 1383              		.loc 1 953 9 discriminator 5 view .LVU441
+ 1384              		.loc 1 953 9 discriminator 5 view .LVU442
+ 1385 0060 2744     		add	r7, r7, r4
+ 1386 0062 0837     		adds	r7, r7, #8
+ 1387 0064 404B     		ldr	r3, .L114+20
+ 1388 0066 1B68     		ldr	r3, [r3]
+ 1389 0068 9F42     		cmp	r7, r3
+ 1390 006a 1FD8     		bhi	.L109
+ 1391              	.L97:
+ 1392              		.loc 1 953 9 discriminator 3 view .LVU443
+ 1393              		.loc 1 953 9 discriminator 3 view .LVU444
+ 954:ThirdPackage/lwip220/core/mem.c ****                     (mem_ptr_t)mem + SIZEOF_STRUCT_MEM + size <= (mem_ptr_t)ram_end);
+ 955:ThirdPackage/lwip220/core/mem.c ****         LWIP_ASSERT("mem_malloc: allocated memory properly aligned.",
+ 1394              		.loc 1 955 9 discriminator 3 view .LVU445
+ 1395              		.loc 1 955 9 discriminator 3 view .LVU446
+ 1396 006c 14F00305 		ands	r5, r4, #3
+ 1397              	.LVL137:
+ 1398              		.loc 1 955 9 is_stmt 0 discriminator 3 view .LVU447
+ 1399 0070 24D1     		bne	.L110
+ 1400              	.L98:
+ 1401              		.loc 1 955 9 is_stmt 1 discriminator 3 view .LVU448
+ 1402              		.loc 1 955 9 discriminator 3 view .LVU449
+ 956:ThirdPackage/lwip220/core/mem.c ****                     ((mem_ptr_t)mem + SIZEOF_STRUCT_MEM) % MEM_ALIGNMENT == 0);
+ 957:ThirdPackage/lwip220/core/mem.c ****         LWIP_ASSERT("mem_malloc: sanity check alignment",
+ 1403              		.loc 1 957 9 discriminator 3 view .LVU450
+ 1404              		.loc 1 957 9 discriminator 3 view .LVU451
+ 1405 0072 5DBB     		cbnz	r5, .L111
+ 1406              	.L99:
+ 1407              		.loc 1 957 9 discriminator 3 view .LVU452
+ 1408              		.loc 1 957 9 discriminator 3 view .LVU453
+ 958:ThirdPackage/lwip220/core/mem.c ****                     (((mem_ptr_t)mem) & (MEM_ALIGNMENT - 1)) == 0);
+ 959:ThirdPackage/lwip220/core/mem.c **** 
+ 960:ThirdPackage/lwip220/core/mem.c **** #if MEM_OVERFLOW_CHECK
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 48
+
+
+ 961:ThirdPackage/lwip220/core/mem.c ****         mem_overflow_init_element(mem, size_in);
+ 962:ThirdPackage/lwip220/core/mem.c **** #endif
+ 963:ThirdPackage/lwip220/core/mem.c ****         MEM_SANITY();
+ 1409              		.loc 1 963 21 discriminator 3 view .LVU454
+ 964:ThirdPackage/lwip220/core/mem.c ****         return (u8_t *)mem + SIZEOF_STRUCT_MEM + MEM_SANITY_OFFSET;
+ 1410              		.loc 1 964 9 discriminator 3 view .LVU455
+ 1411              		.loc 1 964 48 is_stmt 0 discriminator 3 view .LVU456
+ 1412 0074 04F10800 		add	r0, r4, #8
+ 1413 0078 66E0     		b	.L85
+ 1414              	.LVL138:
+ 1415              	.L96:
+ 1416              	.LBB10:
+ 946:ThirdPackage/lwip220/core/mem.c ****           }
+ 1417              		.loc 1 946 13 is_stmt 1 view .LVU457
+ 946:ThirdPackage/lwip220/core/mem.c ****           }
+ 1418              		.loc 1 946 19 is_stmt 0 view .LVU458
+ 1419 007a 0088     		ldrh	r0, [r0]
+ 1420              	.LVL139:
+ 946:ThirdPackage/lwip220/core/mem.c ****           }
+ 1421              		.loc 1 946 19 view .LVU459
+ 1422 007c FFF7FEFF 		bl	ptr_to_mem
+ 1423              	.LVL140:
+ 1424              	.L93:
+ 934:ThirdPackage/lwip220/core/mem.c **** #if LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT
+ 1425              		.loc 1 934 17 is_stmt 1 view .LVU460
+ 934:ThirdPackage/lwip220/core/mem.c **** #if LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT
+ 1426              		.loc 1 934 21 is_stmt 0 view .LVU461
+ 1427 0080 0379     		ldrb	r3, [r0, #4]	@ zero_extendqisi2
+ 934:ThirdPackage/lwip220/core/mem.c **** #if LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT
+ 1428              		.loc 1 934 17 view .LVU462
+ 1429 0082 1BB1     		cbz	r3, .L95
+ 934:ThirdPackage/lwip220/core/mem.c **** #if LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT
+ 1430              		.loc 1 934 35 discriminator 1 view .LVU463
+ 1431 0084 384A     		ldr	r2, .L114+20
+ 1432 0086 1268     		ldr	r2, [r2]
+ 934:ThirdPackage/lwip220/core/mem.c **** #if LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT
+ 1433              		.loc 1 934 28 discriminator 1 view .LVU464
+ 1434 0088 8242     		cmp	r2, r0
+ 1435 008a F6D1     		bne	.L96
+ 1436              	.L95:
+ 948:ThirdPackage/lwip220/core/mem.c ****           LWIP_ASSERT("mem_malloc: !lfree->used", ((lfree == ram_end) || (!lfree->used)));
+ 1437              		.loc 1 948 11 is_stmt 1 view .LVU465
+ 948:ThirdPackage/lwip220/core/mem.c ****           LWIP_ASSERT("mem_malloc: !lfree->used", ((lfree == ram_end) || (!lfree->used)));
+ 1438              		.loc 1 948 17 is_stmt 0 view .LVU466
+ 1439 008c 324A     		ldr	r2, .L114+4
+ 1440 008e 1060     		str	r0, [r2]
+ 949:ThirdPackage/lwip220/core/mem.c ****         }
+ 1441              		.loc 1 949 11 is_stmt 1 view .LVU467
+ 949:ThirdPackage/lwip220/core/mem.c ****         }
+ 1442              		.loc 1 949 11 view .LVU468
+ 1443 0090 354A     		ldr	r2, .L114+20
+ 1444 0092 1268     		ldr	r2, [r2]
+ 1445 0094 8242     		cmp	r2, r0
+ 1446 0096 E0D0     		beq	.L94
+ 949:ThirdPackage/lwip220/core/mem.c ****         }
+ 1447              		.loc 1 949 11 is_stmt 0 discriminator 1 view .LVU469
+ 1448 0098 002B     		cmp	r3, #0
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 49
+
+
+ 1449 009a DED0     		beq	.L94
+ 949:ThirdPackage/lwip220/core/mem.c ****         }
+ 1450              		.loc 1 949 11 is_stmt 1 discriminator 3 view .LVU470
+ 949:ThirdPackage/lwip220/core/mem.c ****         }
+ 1451              		.loc 1 949 11 discriminator 3 view .LVU471
+ 1452 009c 2F4B     		ldr	r3, .L114+8
+ 1453 009e 40F2B532 		movw	r2, #949
+ 1454 00a2 3249     		ldr	r1, .L114+24
+ 1455 00a4 2F48     		ldr	r0, .L114+16
+ 1456              	.LVL141:
+ 949:ThirdPackage/lwip220/core/mem.c ****         }
+ 1457              		.loc 1 949 11 is_stmt 0 discriminator 3 view .LVU472
+ 1458 00a6 FFF7FEFF 		bl	printf
+ 1459              	.LVL142:
+ 949:ThirdPackage/lwip220/core/mem.c ****         }
+ 1460              		.loc 1 949 11 discriminator 3 view .LVU473
+ 1461 00aa D6E7     		b	.L94
+ 1462              	.L109:
+ 949:ThirdPackage/lwip220/core/mem.c ****         }
+ 1463              		.loc 1 949 11 discriminator 3 view .LVU474
+ 1464              	.LBE10:
+ 953:ThirdPackage/lwip220/core/mem.c ****                     (mem_ptr_t)mem + SIZEOF_STRUCT_MEM + size <= (mem_ptr_t)ram_end);
+ 1465              		.loc 1 953 9 is_stmt 1 discriminator 1 view .LVU475
+ 953:ThirdPackage/lwip220/core/mem.c ****                     (mem_ptr_t)mem + SIZEOF_STRUCT_MEM + size <= (mem_ptr_t)ram_end);
+ 1466              		.loc 1 953 9 discriminator 1 view .LVU476
+ 1467 00ac 2B4B     		ldr	r3, .L114+8
+ 1468 00ae 40F2B932 		movw	r2, #953
+ 1469 00b2 2F49     		ldr	r1, .L114+28
+ 1470 00b4 2B48     		ldr	r0, .L114+16
+ 1471 00b6 FFF7FEFF 		bl	printf
+ 1472              	.LVL143:
+ 1473 00ba D7E7     		b	.L97
+ 1474              	.LVL144:
+ 1475              	.L110:
+ 955:ThirdPackage/lwip220/core/mem.c ****                     ((mem_ptr_t)mem + SIZEOF_STRUCT_MEM) % MEM_ALIGNMENT == 0);
+ 1476              		.loc 1 955 9 discriminator 1 view .LVU477
+ 955:ThirdPackage/lwip220/core/mem.c ****                     ((mem_ptr_t)mem + SIZEOF_STRUCT_MEM) % MEM_ALIGNMENT == 0);
+ 1477              		.loc 1 955 9 discriminator 1 view .LVU478
+ 1478 00bc 274B     		ldr	r3, .L114+8
+ 1479 00be 40F2BB32 		movw	r2, #955
+ 1480 00c2 2C49     		ldr	r1, .L114+32
+ 1481 00c4 2748     		ldr	r0, .L114+16
+ 1482 00c6 FFF7FEFF 		bl	printf
+ 1483              	.LVL145:
+ 1484 00ca D2E7     		b	.L98
+ 1485              	.L111:
+ 957:ThirdPackage/lwip220/core/mem.c ****                     (((mem_ptr_t)mem) & (MEM_ALIGNMENT - 1)) == 0);
+ 1486              		.loc 1 957 9 discriminator 1 view .LVU479
+ 957:ThirdPackage/lwip220/core/mem.c ****                     (((mem_ptr_t)mem) & (MEM_ALIGNMENT - 1)) == 0);
+ 1487              		.loc 1 957 9 discriminator 1 view .LVU480
+ 1488 00cc 234B     		ldr	r3, .L114+8
+ 1489 00ce 40F2BD32 		movw	r2, #957
+ 1490 00d2 2949     		ldr	r1, .L114+36
+ 1491 00d4 2348     		ldr	r0, .L114+16
+ 1492 00d6 FFF7FEFF 		bl	printf
+ 1493              	.LVL146:
+ 1494 00da CBE7     		b	.L99
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 50
+
+
+ 1495              	.LVL147:
+ 1496              	.L89:
+ 871:ThirdPackage/lwip220/core/mem.c ****       mem = ptr_to_mem(ptr);
+ 1497              		.loc 1 871 10 view .LVU481
+ 871:ThirdPackage/lwip220/core/mem.c ****       mem = ptr_to_mem(ptr);
+ 1498              		.loc 1 871 14 is_stmt 0 view .LVU482
+ 1499 00dc 2588     		ldrh	r5, [r4]
+ 1500              	.LVL148:
+ 1501              	.L88:
+ 870:ThirdPackage/lwip220/core/mem.c ****          ptr = ptr_to_mem(ptr)->next) {
+ 1502              		.loc 1 870 35 is_stmt 1 discriminator 1 view .LVU483
+ 870:ThirdPackage/lwip220/core/mem.c ****          ptr = ptr_to_mem(ptr)->next) {
+ 1503              		.loc 1 870 39 is_stmt 0 discriminator 1 view .LVU484
+ 1504 00de A846     		mov	r8, r5
+ 870:ThirdPackage/lwip220/core/mem.c ****          ptr = ptr_to_mem(ptr)->next) {
+ 1505              		.loc 1 870 58 discriminator 1 view .LVU485
+ 1506 00e0 3746     		mov	r7, r6
+ 1507 00e2 C6F5C863 		rsb	r3, r6, #1600
+ 870:ThirdPackage/lwip220/core/mem.c ****          ptr = ptr_to_mem(ptr)->next) {
+ 1508              		.loc 1 870 5 discriminator 1 view .LVU486
+ 1509 00e6 9D42     		cmp	r5, r3
+ 1510 00e8 2AD2     		bcs	.L112
+ 872:ThirdPackage/lwip220/core/mem.c **** #if LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT
+ 1511              		.loc 1 872 7 is_stmt 1 view .LVU487
+ 872:ThirdPackage/lwip220/core/mem.c **** #if LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT
+ 1512              		.loc 1 872 13 is_stmt 0 view .LVU488
+ 1513 00ea 2846     		mov	r0, r5
+ 1514 00ec FFF7FEFF 		bl	ptr_to_mem
+ 1515              	.LVL149:
+ 1516 00f0 0446     		mov	r4, r0
+ 1517              	.LVL150:
+ 886:ThirdPackage/lwip220/core/mem.c ****           (mem->next - (ptr + SIZEOF_STRUCT_MEM)) >= size) {
+ 1518              		.loc 1 886 7 is_stmt 1 view .LVU489
+ 886:ThirdPackage/lwip220/core/mem.c ****           (mem->next - (ptr + SIZEOF_STRUCT_MEM)) >= size) {
+ 1519              		.loc 1 886 16 is_stmt 0 view .LVU490
+ 1520 00f2 0379     		ldrb	r3, [r0, #4]	@ zero_extendqisi2
+ 886:ThirdPackage/lwip220/core/mem.c ****           (mem->next - (ptr + SIZEOF_STRUCT_MEM)) >= size) {
+ 1521              		.loc 1 886 10 view .LVU491
+ 1522 00f4 002B     		cmp	r3, #0
+ 1523 00f6 F1D1     		bne	.L89
+ 887:ThirdPackage/lwip220/core/mem.c ****         /* mem is not used and at least perfect fit is possible:
+ 1524              		.loc 1 887 15 discriminator 1 view .LVU492
+ 1525 00f8 0388     		ldrh	r3, [r0]
+ 887:ThirdPackage/lwip220/core/mem.c ****         /* mem is not used and at least perfect fit is possible:
+ 1526              		.loc 1 887 22 discriminator 1 view .LVU493
+ 1527 00fa A3EB0803 		sub	r3, r3, r8
+ 1528 00fe 083B     		subs	r3, r3, #8
+ 886:ThirdPackage/lwip220/core/mem.c ****           (mem->next - (ptr + SIZEOF_STRUCT_MEM)) >= size) {
+ 1529              		.loc 1 886 24 discriminator 1 view .LVU494
+ 1530 0100 BB42     		cmp	r3, r7
+ 1531 0102 EBD3     		bcc	.L89
+ 891:ThirdPackage/lwip220/core/mem.c ****           /* (in addition to the above, we test if another struct mem (SIZEOF_STRUCT_MEM) containin
+ 1532              		.loc 1 891 9 is_stmt 1 view .LVU495
+ 891:ThirdPackage/lwip220/core/mem.c ****           /* (in addition to the above, we test if another struct mem (SIZEOF_STRUCT_MEM) containin
+ 1533              		.loc 1 891 80 is_stmt 0 view .LVU496
+ 1534 0104 07F11402 		add	r2, r7, #20
+ 891:ThirdPackage/lwip220/core/mem.c ****           /* (in addition to the above, we test if another struct mem (SIZEOF_STRUCT_MEM) containin
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 51
+
+
+ 1535              		.loc 1 891 12 view .LVU497
+ 1536 0108 9342     		cmp	r3, r2
+ 1537 010a A0D3     		bcc	.L90
+ 902:ThirdPackage/lwip220/core/mem.c ****           LWIP_ASSERT("invalid next ptr",ptr2 != MEM_SIZE_ALIGNED);
+ 1538              		.loc 1 902 11 is_stmt 1 view .LVU498
+ 902:ThirdPackage/lwip220/core/mem.c ****           LWIP_ASSERT("invalid next ptr",ptr2 != MEM_SIZE_ALIGNED);
+ 1539              		.loc 1 902 55 is_stmt 0 view .LVU499
+ 1540 010c 2E44     		add	r6, r6, r5
+ 1541 010e B6B2     		uxth	r6, r6
+ 902:ThirdPackage/lwip220/core/mem.c ****           LWIP_ASSERT("invalid next ptr",ptr2 != MEM_SIZE_ALIGNED);
+ 1542              		.loc 1 902 16 view .LVU500
+ 1543 0110 0836     		adds	r6, r6, #8
+ 1544 0112 B6B2     		uxth	r6, r6
+ 1545              	.LVL151:
+ 903:ThirdPackage/lwip220/core/mem.c ****           /* create mem2 struct */
+ 1546              		.loc 1 903 11 is_stmt 1 view .LVU501
+ 903:ThirdPackage/lwip220/core/mem.c ****           /* create mem2 struct */
+ 1547              		.loc 1 903 11 view .LVU502
+ 1548 0114 B6F5C86F 		cmp	r6, #1600
+ 1549 0118 91D0     		beq	.L113
+ 1550              	.LVL152:
+ 1551              	.L91:
+ 903:ThirdPackage/lwip220/core/mem.c ****           /* create mem2 struct */
+ 1552              		.loc 1 903 11 discriminator 3 view .LVU503
+ 903:ThirdPackage/lwip220/core/mem.c ****           /* create mem2 struct */
+ 1553              		.loc 1 903 11 discriminator 3 view .LVU504
+ 905:ThirdPackage/lwip220/core/mem.c ****           mem2->used = 0;
+ 1554              		.loc 1 905 11 discriminator 3 view .LVU505
+ 905:ThirdPackage/lwip220/core/mem.c ****           mem2->used = 0;
+ 1555              		.loc 1 905 18 is_stmt 0 discriminator 3 view .LVU506
+ 1556 011a 3046     		mov	r0, r6
+ 1557 011c FFF7FEFF 		bl	ptr_to_mem
+ 1558              	.LVL153:
+ 906:ThirdPackage/lwip220/core/mem.c ****           mem2->next = mem->next;
+ 1559              		.loc 1 906 11 is_stmt 1 discriminator 3 view .LVU507
+ 906:ThirdPackage/lwip220/core/mem.c ****           mem2->next = mem->next;
+ 1560              		.loc 1 906 22 is_stmt 0 discriminator 3 view .LVU508
+ 1561 0120 0023     		movs	r3, #0
+ 1562 0122 0371     		strb	r3, [r0, #4]
+ 907:ThirdPackage/lwip220/core/mem.c ****           mem2->prev = ptr;
+ 1563              		.loc 1 907 11 is_stmt 1 discriminator 3 view .LVU509
+ 907:ThirdPackage/lwip220/core/mem.c ****           mem2->prev = ptr;
+ 1564              		.loc 1 907 27 is_stmt 0 discriminator 3 view .LVU510
+ 1565 0124 2388     		ldrh	r3, [r4]
+ 907:ThirdPackage/lwip220/core/mem.c ****           mem2->prev = ptr;
+ 1566              		.loc 1 907 22 discriminator 3 view .LVU511
+ 1567 0126 0380     		strh	r3, [r0]	@ movhi
+ 908:ThirdPackage/lwip220/core/mem.c ****           /* and insert it between mem and mem->next */
+ 1568              		.loc 1 908 11 is_stmt 1 discriminator 3 view .LVU512
+ 908:ThirdPackage/lwip220/core/mem.c ****           /* and insert it between mem and mem->next */
+ 1569              		.loc 1 908 22 is_stmt 0 discriminator 3 view .LVU513
+ 1570 0128 4580     		strh	r5, [r0, #2]	@ movhi
+ 910:ThirdPackage/lwip220/core/mem.c ****           mem->used = 1;
+ 1571              		.loc 1 910 11 is_stmt 1 discriminator 3 view .LVU514
+ 910:ThirdPackage/lwip220/core/mem.c ****           mem->used = 1;
+ 1572              		.loc 1 910 21 is_stmt 0 discriminator 3 view .LVU515
+ 1573 012a 2680     		strh	r6, [r4]	@ movhi
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 52
+
+
+ 911:ThirdPackage/lwip220/core/mem.c **** 
+ 1574              		.loc 1 911 11 is_stmt 1 discriminator 3 view .LVU516
+ 911:ThirdPackage/lwip220/core/mem.c **** 
+ 1575              		.loc 1 911 21 is_stmt 0 discriminator 3 view .LVU517
+ 1576 012c 0123     		movs	r3, #1
+ 1577 012e 2371     		strb	r3, [r4, #4]
+ 913:ThirdPackage/lwip220/core/mem.c ****             ptr_to_mem(mem2->next)->prev = ptr2;
+ 1578              		.loc 1 913 11 is_stmt 1 discriminator 3 view .LVU518
+ 913:ThirdPackage/lwip220/core/mem.c ****             ptr_to_mem(mem2->next)->prev = ptr2;
+ 1579              		.loc 1 913 19 is_stmt 0 discriminator 3 view .LVU519
+ 1580 0130 0088     		ldrh	r0, [r0]
+ 1581              	.LVL154:
+ 913:ThirdPackage/lwip220/core/mem.c ****             ptr_to_mem(mem2->next)->prev = ptr2;
+ 1582              		.loc 1 913 14 discriminator 3 view .LVU520
+ 1583 0132 B0F5C86F 		cmp	r0, #1600
+ 1584 0136 8CD0     		beq	.L92
+ 914:ThirdPackage/lwip220/core/mem.c ****           }
+ 1585              		.loc 1 914 13 is_stmt 1 view .LVU521
+ 1586 0138 FFF7FEFF 		bl	ptr_to_mem
+ 1587              	.LVL155:
+ 914:ThirdPackage/lwip220/core/mem.c ****           }
+ 1588              		.loc 1 914 42 is_stmt 0 view .LVU522
+ 1589 013c 4680     		strh	r6, [r0, #2]	@ movhi
+ 1590 013e 88E7     		b	.L92
+ 1591              	.LVL156:
+ 1592              	.L112:
+ 965:ThirdPackage/lwip220/core/mem.c ****       }
+ 966:ThirdPackage/lwip220/core/mem.c ****     }
+ 967:ThirdPackage/lwip220/core/mem.c **** #if LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT
+ 968:ThirdPackage/lwip220/core/mem.c ****     /* if we got interrupted by a mem_free, try again */
+ 969:ThirdPackage/lwip220/core/mem.c ****   } while (local_mem_free_count != 0);
+ 970:ThirdPackage/lwip220/core/mem.c **** #endif /* LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT */
+ 971:ThirdPackage/lwip220/core/mem.c ****   MEM_STATS_INC(err);
+ 1593              		.loc 1 971 21 is_stmt 1 view .LVU523
+ 972:ThirdPackage/lwip220/core/mem.c ****   LWIP_MEM_ALLOC_UNPROTECT();
+ 1594              		.loc 1 972 29 view .LVU524
+ 973:ThirdPackage/lwip220/core/mem.c ****   sys_mutex_unlock(&mem_mutex);
+ 1595              		.loc 1 973 3 view .LVU525
+ 1596 0140 0448     		ldr	r0, .L114
+ 1597 0142 FFF7FEFF 		bl	sys_mutex_unlock
+ 1598              	.LVL157:
+ 974:ThirdPackage/lwip220/core/mem.c ****   LWIP_DEBUGF(MEM_DEBUG | LWIP_DBG_LEVEL_SERIOUS, ("mem_malloc: could not allocate %"S16_F" bytes\n
+ 1599              		.loc 1 974 116 view .LVU526
+ 975:ThirdPackage/lwip220/core/mem.c ****   return NULL;
+ 1600              		.loc 1 975 3 view .LVU527
+ 1601              		.loc 1 975 10 is_stmt 0 view .LVU528
+ 1602 0146 0020     		movs	r0, #0
+ 1603              	.LVL158:
+ 1604              	.L85:
+ 976:ThirdPackage/lwip220/core/mem.c **** }
+ 1605              		.loc 1 976 1 view .LVU529
+ 1606 0148 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 1607              	.LVL159:
+ 1608              	.L101:
+ 1609              	.LCFI7:
+ 1610              		.cfi_def_cfa_offset 0
+ 1611              		.cfi_restore 4
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 53
+
+
+ 1612              		.cfi_restore 5
+ 1613              		.cfi_restore 6
+ 1614              		.cfi_restore 7
+ 1615              		.cfi_restore 8
+ 1616              		.cfi_restore 14
+ 841:ThirdPackage/lwip220/core/mem.c ****   }
+ 1617              		.loc 1 841 12 view .LVU530
+ 1618 014c 0020     		movs	r0, #0
+ 1619              	.LVL160:
+ 1620              		.loc 1 976 1 view .LVU531
+ 1621 014e 7047     		bx	lr
+ 1622              	.LVL161:
+ 1623              	.L104:
+ 1624              	.LCFI8:
+ 1625              		.cfi_def_cfa_offset 24
+ 1626              		.cfi_offset 4, -24
+ 1627              		.cfi_offset 5, -20
+ 1628              		.cfi_offset 6, -16
+ 1629              		.cfi_offset 7, -12
+ 1630              		.cfi_offset 8, -8
+ 1631              		.cfi_offset 14, -4
+ 855:ThirdPackage/lwip220/core/mem.c ****   }
+ 1632              		.loc 1 855 12 view .LVU532
+ 1633 0150 0020     		movs	r0, #0
+ 1634              	.LVL162:
+ 855:ThirdPackage/lwip220/core/mem.c ****   }
+ 1635              		.loc 1 855 12 view .LVU533
+ 1636 0152 F9E7     		b	.L85
+ 1637              	.L115:
+ 1638              		.align	2
+ 1639              	.L114:
+ 1640 0154 00000000 		.word	.LANCHOR4
+ 1641 0158 00000000 		.word	.LANCHOR2
+ 1642 015c 00000000 		.word	.LC0
+ 1643 0160 38000000 		.word	.LC13
+ 1644 0164 38000000 		.word	.LC2
+ 1645 0168 00000000 		.word	.LANCHOR1
+ 1646 016c 00000000 		.word	.LC14
+ 1647 0170 1C000000 		.word	.LC15
+ 1648 0174 4C000000 		.word	.LC16
+ 1649 0178 7C000000 		.word	.LC17
+ 1650              		.cfi_endproc
+ 1651              	.LFE167:
+ 1653              		.section	.text.mem_calloc,"ax",%progbits
+ 1654              		.align	1
+ 1655              		.global	mem_calloc
+ 1656              		.syntax unified
+ 1657              		.thumb
+ 1658              		.thumb_func
+ 1660              	mem_calloc:
+ 1661              	.LVL163:
+ 1662              	.LFB168:
+ 977:ThirdPackage/lwip220/core/mem.c **** 
+ 978:ThirdPackage/lwip220/core/mem.c **** #endif /* MEM_USE_POOLS */
+ 979:ThirdPackage/lwip220/core/mem.c **** 
+ 980:ThirdPackage/lwip220/core/mem.c **** #if MEM_LIBC_MALLOC && (!LWIP_STATS || !MEM_STATS)
+ 981:ThirdPackage/lwip220/core/mem.c **** void *
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 54
+
+
+ 982:ThirdPackage/lwip220/core/mem.c **** mem_calloc(mem_size_t count, mem_size_t size)
+ 983:ThirdPackage/lwip220/core/mem.c **** {
+ 984:ThirdPackage/lwip220/core/mem.c ****   return mem_clib_calloc(count, size);
+ 985:ThirdPackage/lwip220/core/mem.c **** }
+ 986:ThirdPackage/lwip220/core/mem.c **** 
+ 987:ThirdPackage/lwip220/core/mem.c **** #else /* MEM_LIBC_MALLOC && (!LWIP_STATS || !MEM_STATS) */
+ 988:ThirdPackage/lwip220/core/mem.c **** /**
+ 989:ThirdPackage/lwip220/core/mem.c ****  * Contiguously allocates enough space for count objects that are size bytes
+ 990:ThirdPackage/lwip220/core/mem.c ****  * of memory each and returns a pointer to the allocated memory.
+ 991:ThirdPackage/lwip220/core/mem.c ****  *
+ 992:ThirdPackage/lwip220/core/mem.c ****  * The allocated memory is filled with bytes of value zero.
+ 993:ThirdPackage/lwip220/core/mem.c ****  *
+ 994:ThirdPackage/lwip220/core/mem.c ****  * @param count number of objects to allocate
+ 995:ThirdPackage/lwip220/core/mem.c ****  * @param size size of the objects to allocate
+ 996:ThirdPackage/lwip220/core/mem.c ****  * @return pointer to allocated memory / NULL pointer if there is an error
+ 997:ThirdPackage/lwip220/core/mem.c ****  */
+ 998:ThirdPackage/lwip220/core/mem.c **** void *
+ 999:ThirdPackage/lwip220/core/mem.c **** mem_calloc(mem_size_t count, mem_size_t size)
+1000:ThirdPackage/lwip220/core/mem.c **** {
+ 1663              		.loc 1 1000 1 is_stmt 1 view -0
+ 1664              		.cfi_startproc
+ 1665              		@ args = 0, pretend = 0, frame = 0
+ 1666              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1667              		.loc 1 1000 1 is_stmt 0 view .LVU535
+ 1668 0000 38B5     		push	{r3, r4, r5, lr}
+ 1669              	.LCFI9:
+ 1670              		.cfi_def_cfa_offset 16
+ 1671              		.cfi_offset 3, -16
+ 1672              		.cfi_offset 4, -12
+ 1673              		.cfi_offset 5, -8
+ 1674              		.cfi_offset 14, -4
+1001:ThirdPackage/lwip220/core/mem.c ****   void *p;
+ 1675              		.loc 1 1001 3 is_stmt 1 view .LVU536
+1002:ThirdPackage/lwip220/core/mem.c ****   size_t alloc_size = (size_t)count * (size_t)size;
+ 1676              		.loc 1 1002 3 view .LVU537
+ 1677              		.loc 1 1002 10 is_stmt 0 view .LVU538
+ 1678 0002 01FB00F4 		mul	r4, r1, r0
+ 1679              	.LVL164:
+1003:ThirdPackage/lwip220/core/mem.c **** 
+1004:ThirdPackage/lwip220/core/mem.c ****   if ((size_t)(mem_size_t)alloc_size != alloc_size) {
+ 1680              		.loc 1 1004 3 is_stmt 1 view .LVU539
+ 1681              		.loc 1 1004 15 is_stmt 0 view .LVU540
+ 1682 0006 A0B2     		uxth	r0, r4
+ 1683              	.LVL165:
+ 1684              		.loc 1 1004 6 view .LVU541
+ 1685 0008 8442     		cmp	r4, r0
+ 1686 000a 08D1     		bne	.L118
+1005:ThirdPackage/lwip220/core/mem.c ****     LWIP_DEBUGF(MEM_DEBUG | LWIP_DBG_LEVEL_SERIOUS, ("mem_calloc: could not allocate %"SZT_F" bytes
+1006:ThirdPackage/lwip220/core/mem.c ****     return NULL;
+1007:ThirdPackage/lwip220/core/mem.c ****   }
+1008:ThirdPackage/lwip220/core/mem.c **** 
+1009:ThirdPackage/lwip220/core/mem.c ****   /* allocate 'count' objects of size 'size' */
+1010:ThirdPackage/lwip220/core/mem.c ****   p = mem_malloc((mem_size_t)alloc_size);
+ 1687              		.loc 1 1010 3 is_stmt 1 view .LVU542
+ 1688              		.loc 1 1010 7 is_stmt 0 view .LVU543
+ 1689 000c FFF7FEFF 		bl	mem_malloc
+ 1690              	.LVL166:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 55
+
+
+1011:ThirdPackage/lwip220/core/mem.c ****   if (p) {
+ 1691              		.loc 1 1011 3 is_stmt 1 view .LVU544
+ 1692              		.loc 1 1011 6 is_stmt 0 view .LVU545
+ 1693 0010 0546     		mov	r5, r0
+ 1694 0012 28B1     		cbz	r0, .L116
+1012:ThirdPackage/lwip220/core/mem.c ****     /* zero the memory */
+1013:ThirdPackage/lwip220/core/mem.c ****     memset(p, 0, alloc_size);
+ 1695              		.loc 1 1013 5 is_stmt 1 view .LVU546
+ 1696 0014 2246     		mov	r2, r4
+ 1697 0016 0021     		movs	r1, #0
+ 1698 0018 FFF7FEFF 		bl	memset
+ 1699              	.LVL167:
+ 1700              		.loc 1 1013 5 is_stmt 0 view .LVU547
+ 1701 001c 00E0     		b	.L116
+ 1702              	.LVL168:
+ 1703              	.L118:
+1006:ThirdPackage/lwip220/core/mem.c ****   }
+ 1704              		.loc 1 1006 12 view .LVU548
+ 1705 001e 0025     		movs	r5, #0
+ 1706              	.LVL169:
+ 1707              	.L116:
+1014:ThirdPackage/lwip220/core/mem.c ****   }
+1015:ThirdPackage/lwip220/core/mem.c ****   return p;
+1016:ThirdPackage/lwip220/core/mem.c **** }
+ 1708              		.loc 1 1016 1 view .LVU549
+ 1709 0020 2846     		mov	r0, r5
+ 1710 0022 38BD     		pop	{r3, r4, r5, pc}
+ 1711              		.loc 1 1016 1 view .LVU550
+ 1712              		.cfi_endproc
+ 1713              	.LFE168:
+ 1715              		.global	ram_heap
+ 1716              		.section	.bss.lfree,"aw",%nobits
+ 1717              		.align	2
+ 1718              		.set	.LANCHOR2,. + 0
+ 1721              	lfree:
+ 1722 0000 00000000 		.space	4
+ 1723              		.section	.bss.mem_mutex,"aw",%nobits
+ 1724              		.align	2
+ 1725              		.set	.LANCHOR4,. + 0
+ 1728              	mem_mutex:
+ 1729 0000 00000000 		.space	4
+ 1730              		.section	.bss.ram,"aw",%nobits
+ 1731              		.align	2
+ 1732              		.set	.LANCHOR0,. + 0
+ 1735              	ram:
+ 1736 0000 00000000 		.space	4
+ 1737              		.section	.bss.ram_end,"aw",%nobits
+ 1738              		.align	2
+ 1739              		.set	.LANCHOR1,. + 0
+ 1742              	ram_end:
+ 1743 0000 00000000 		.space	4
+ 1744              		.section	.bss.ram_heap,"aw",%nobits
+ 1745              		.align	2
+ 1746              		.set	.LANCHOR3,. + 0
+ 1749              	ram_heap:
+ 1750 0000 00000000 		.space	1619
+ 1750      00000000 
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 56
+
+
+ 1750      00000000 
+ 1750      00000000 
+ 1750      00000000 
+ 1751              		.text
+ 1752              	.Letext0:
+ 1753              		.file 2 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 1754              		.file 3 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 1755              		.file 4 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\lib\\gcc\\arm-none-eabi\
+ 1756              		.file 5 "ThirdPackage/freertos/include/queue.h"
+ 1757              		.file 6 "ThirdPackage/lwip220/include/arch/cc.h"
+ 1758              		.file 7 "ThirdPackage/lwip220/include/lwip/arch.h"
+ 1759              		.file 8 "ThirdPackage/lwip220/include/lwip/mem.h"
+ 1760              		.file 9 "ThirdPackage/freertos/include/semphr.h"
+ 1761              		.file 10 "ThirdPackage/lwip220/include/arch/sys_arch.h"
+ 1762              		.file 11 "ThirdPackage/lwip220/include/lwip/err.h"
+ 1763              		.file 12 "ThirdPackage/lwip220/include/lwip/memp.h"
+ 1764              		.file 13 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\
+ 1765              		.file 14 "ThirdPackage/lwip220/include/lwip/sys.h"
+ 1766              		.file 15 "<built-in>"
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cc52rFPH.s 			page 57
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 mem.c
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:20     .text.ptr_to_mem:00000000 $t
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:25     .text.ptr_to_mem:00000000 ptr_to_mem
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:46     .text.ptr_to_mem:00000008 $d
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:51     .text.mem_to_ptr:00000000 $t
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:56     .text.mem_to_ptr:00000000 mem_to_ptr
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:76     .text.mem_to_ptr:0000000c $d
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:81     .text.mem_link_valid:00000000 $t
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:86     .text.mem_link_valid:00000000 mem_link_valid
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:202    .text.mem_link_valid:00000058 $d
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:207    .rodata.plug_holes.str1.4:00000000 $d
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:226    .text.plug_holes:00000000 $t
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:231    .text.plug_holes:00000000 plug_holes
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:443    .text.plug_holes:000000dc $d
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:456    .rodata.mem_init.str1.4:00000000 $d
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:460    .text.mem_init:00000000 $t
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:466    .text.mem_init:00000000 mem_init
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:557    .text.mem_init:00000048 $d
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:569    .rodata.mem_free.str1.4:00000000 $d
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:582    .text.mem_free:00000000 $t
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:588    .text.mem_free:00000000 mem_free
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:824    .text.mem_free:000000c8 $d
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:838    .rodata.mem_trim.str1.4:00000000 $d
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:848    .text.mem_trim:00000000 $t
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:854    .text.mem_trim:00000000 mem_trim
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:1240   .text.mem_trim:00000178 $d
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:1253   .rodata.mem_malloc.str1.4:00000000 $d
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:1266   .text.mem_malloc:00000000 $t
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:1272   .text.mem_malloc:00000000 mem_malloc
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:1640   .text.mem_malloc:00000154 $d
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:1654   .text.mem_calloc:00000000 $t
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:1660   .text.mem_calloc:00000000 mem_calloc
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:1749   .bss.ram_heap:00000000 ram_heap
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:1717   .bss.lfree:00000000 $d
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:1721   .bss.lfree:00000000 lfree
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:1724   .bss.mem_mutex:00000000 $d
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:1728   .bss.mem_mutex:00000000 mem_mutex
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:1731   .bss.ram:00000000 $d
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:1735   .bss.ram:00000000 ram
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:1738   .bss.ram_end:00000000 $d
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:1742   .bss.ram_end:00000000 ram_end
+C:\Users\86188\AppData\Local\Temp\cc52rFPH.s:1745   .bss.ram_heap:00000000 $d
+
+UNDEFINED SYMBOLS
+printf
+sys_mutex_new
+sys_arch_protect
+sys_arch_unprotect
+sys_mutex_lock
+sys_mutex_unlock
+memset

@@ -22,7 +22,20 @@ build/main.o: Core/Src/main.c Core/Inc/main.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
- Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
+ ThirdPackage/freertos/include/FreeRTOS.h \
+ ThirdPackage/freertos/include/FreeRTOSConfig.h \
+ ThirdPackage/freertos/include/projdefs.h \
+ ThirdPackage/freertos/include/portable.h \
+ ThirdPackage/freertos/include/deprecated_definitions.h \
+ ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h \
+ ThirdPackage/freertos/include/mpu_wrappers.h \
+ ThirdPackage/freertos/include/FreeRTOSConfig.h \
+ ThirdPackage/freertos/include/task.h \
+ ThirdPackage/freertos/include/list.h \
+ ThirdPackage/freertos/include/queue.h \
+ ThirdPackage/freertos/include/task.h \
+ ThirdPackage/freertos/include/croutine.h
 Core/Inc/main.h:
 Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 Core/Inc/stm32f4xx_hal_conf.h:
@@ -50,3 +63,16 @@ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h:
 Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h:
 Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h:
 Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
+ThirdPackage/freertos/include/FreeRTOS.h:
+ThirdPackage/freertos/include/FreeRTOSConfig.h:
+ThirdPackage/freertos/include/projdefs.h:
+ThirdPackage/freertos/include/portable.h:
+ThirdPackage/freertos/include/deprecated_definitions.h:
+ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h:
+ThirdPackage/freertos/include/mpu_wrappers.h:
+ThirdPackage/freertos/include/FreeRTOSConfig.h:
+ThirdPackage/freertos/include/task.h:
+ThirdPackage/freertos/include/list.h:
+ThirdPackage/freertos/include/queue.h:
+ThirdPackage/freertos/include/task.h:
+ThirdPackage/freertos/include/croutine.h:

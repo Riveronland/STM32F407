@@ -1,0 +1,171 @@
+build/sockets.o: ThirdPackage/lwip220/api/sockets.c \
+ ThirdPackage/lwip220/include/lwip/opt.h ThirdPackage/lwip_app/lwipopts.h \
+ Core/Inc/main.h Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
+ Core/Inc/stm32f4xx_hal_conf.h \
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h \
+ Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h \
+ Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h \
+ Drivers/CMSIS/Include/core_cm4.h Drivers/CMSIS/Include/cmsis_version.h \
+ Drivers/CMSIS/Include/cmsis_compiler.h Drivers/CMSIS/Include/cmsis_gcc.h \
+ Drivers/CMSIS/Include/mpu_armv7.h \
+ Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h \
+ Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h \
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h \
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h \
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h \
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h \
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h \
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h \
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h \
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_eth.h \
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h \
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h \
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
+ ThirdPackage/freertos/include/FreeRTOS.h \
+ ThirdPackage/freertos/include/FreeRTOSConfig.h \
+ ThirdPackage/freertos/include/projdefs.h \
+ ThirdPackage/freertos/include/portable.h \
+ ThirdPackage/freertos/include/deprecated_definitions.h \
+ ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h \
+ ThirdPackage/freertos/include/mpu_wrappers.h \
+ ThirdPackage/freertos/include/FreeRTOSConfig.h \
+ ThirdPackage/freertos/include/task.h \
+ ThirdPackage/freertos/include/list.h \
+ ThirdPackage/freertos/include/queue.h \
+ ThirdPackage/freertos/include/task.h \
+ ThirdPackage/freertos/include/croutine.h \
+ ThirdPackage/lwip220/include/lwip/debug.h \
+ ThirdPackage/lwip220/include/lwip/arch.h \
+ ThirdPackage/lwip220/include/arch/cc.h \
+ ThirdPackage/lwip220/include/arch/cpu.h \
+ ThirdPackage/lwip220/include/lwip/sockets.h \
+ ThirdPackage/lwip220/include/lwip/ip_addr.h \
+ ThirdPackage/lwip220/include/lwip/def.h \
+ ThirdPackage/lwip220/include/lwip/ip4_addr.h \
+ ThirdPackage/lwip220/include/lwip/ip6_addr.h \
+ ThirdPackage/lwip220/include/lwip/def.h \
+ ThirdPackage/lwip220/include/lwip/netif.h \
+ ThirdPackage/lwip220/include/lwip/err.h \
+ ThirdPackage/lwip220/include/lwip/pbuf.h \
+ ThirdPackage/lwip220/include/lwip/stats.h \
+ ThirdPackage/lwip220/include/lwip/mem.h \
+ ThirdPackage/lwip220/include/lwip/memp.h \
+ ThirdPackage/lwip220/include/lwip/priv/memp_std.h \
+ ThirdPackage/lwip220/include/lwip/priv/memp_priv.h \
+ ThirdPackage/lwip220/include/lwip/priv/mem_priv.h \
+ ThirdPackage/lwip220/include/lwip/inet.h \
+ ThirdPackage/lwip220/include/lwip/errno.h \
+ ThirdPackage/lwip220/include/lwip/priv/sockets_priv.h \
+ ThirdPackage/lwip220/include/lwip/sys.h \
+ ThirdPackage/lwip220/include/arch/sys_arch.h \
+ ThirdPackage/freertos/include/semphr.h \
+ ThirdPackage/freertos/include/queue.h \
+ ThirdPackage/lwip220/include/lwip/api.h \
+ ThirdPackage/lwip220/include/lwip/netbuf.h \
+ ThirdPackage/lwip220/include/lwip/igmp.h \
+ ThirdPackage/lwip220/include/lwip/tcp.h \
+ ThirdPackage/lwip220/include/lwip/tcpbase.h \
+ ThirdPackage/lwip220/include/lwip/ip.h \
+ ThirdPackage/lwip220/include/lwip/ip4.h \
+ ThirdPackage/lwip220/include/lwip/prot/ip4.h \
+ ThirdPackage/lwip220/include/lwip/ip6.h \
+ ThirdPackage/lwip220/include/lwip/prot/ip.h \
+ ThirdPackage/lwip220/include/lwip/icmp.h \
+ ThirdPackage/lwip220/include/lwip/prot/icmp.h \
+ ThirdPackage/lwip220/include/lwip/raw.h \
+ ThirdPackage/lwip220/include/lwip/udp.h \
+ ThirdPackage/lwip220/include/lwip/prot/udp.h \
+ ThirdPackage/lwip220/include/lwip/priv/tcpip_priv.h \
+ ThirdPackage/lwip220/include/lwip/tcpip.h \
+ ThirdPackage/lwip220/include/lwip/timeouts.h \
+ ThirdPackage/lwip220/include/lwip/mld6.h
+ThirdPackage/lwip220/include/lwip/opt.h:
+ThirdPackage/lwip_app/lwipopts.h:
+Core/Inc/main.h:
+Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
+Core/Inc/stm32f4xx_hal_conf.h:
+Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h:
+Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h:
+Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h:
+Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h:
+Drivers/CMSIS/Include/core_cm4.h:
+Drivers/CMSIS/Include/cmsis_version.h:
+Drivers/CMSIS/Include/cmsis_compiler.h:
+Drivers/CMSIS/Include/cmsis_gcc.h:
+Drivers/CMSIS/Include/mpu_armv7.h:
+Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h:
+Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h:
+Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h:
+Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h:
+Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h:
+Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h:
+Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h:
+Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h:
+Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h:
+Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_eth.h:
+Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h:
+Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h:
+Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h:
+Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h:
+Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
+ThirdPackage/freertos/include/FreeRTOS.h:
+ThirdPackage/freertos/include/FreeRTOSConfig.h:
+ThirdPackage/freertos/include/projdefs.h:
+ThirdPackage/freertos/include/portable.h:
+ThirdPackage/freertos/include/deprecated_definitions.h:
+ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h:
+ThirdPackage/freertos/include/mpu_wrappers.h:
+ThirdPackage/freertos/include/FreeRTOSConfig.h:
+ThirdPackage/freertos/include/task.h:
+ThirdPackage/freertos/include/list.h:
+ThirdPackage/freertos/include/queue.h:
+ThirdPackage/freertos/include/task.h:
+ThirdPackage/freertos/include/croutine.h:
+ThirdPackage/lwip220/include/lwip/debug.h:
+ThirdPackage/lwip220/include/lwip/arch.h:
+ThirdPackage/lwip220/include/arch/cc.h:
+ThirdPackage/lwip220/include/arch/cpu.h:
+ThirdPackage/lwip220/include/lwip/sockets.h:
+ThirdPackage/lwip220/include/lwip/ip_addr.h:
+ThirdPackage/lwip220/include/lwip/def.h:
+ThirdPackage/lwip220/include/lwip/ip4_addr.h:
+ThirdPackage/lwip220/include/lwip/ip6_addr.h:
+ThirdPackage/lwip220/include/lwip/def.h:
+ThirdPackage/lwip220/include/lwip/netif.h:
+ThirdPackage/lwip220/include/lwip/err.h:
+ThirdPackage/lwip220/include/lwip/pbuf.h:
+ThirdPackage/lwip220/include/lwip/stats.h:
+ThirdPackage/lwip220/include/lwip/mem.h:
+ThirdPackage/lwip220/include/lwip/memp.h:
+ThirdPackage/lwip220/include/lwip/priv/memp_std.h:
+ThirdPackage/lwip220/include/lwip/priv/memp_priv.h:
+ThirdPackage/lwip220/include/lwip/priv/mem_priv.h:
+ThirdPackage/lwip220/include/lwip/inet.h:
+ThirdPackage/lwip220/include/lwip/errno.h:
+ThirdPackage/lwip220/include/lwip/priv/sockets_priv.h:
+ThirdPackage/lwip220/include/lwip/sys.h:
+ThirdPackage/lwip220/include/arch/sys_arch.h:
+ThirdPackage/freertos/include/semphr.h:
+ThirdPackage/freertos/include/queue.h:
+ThirdPackage/lwip220/include/lwip/api.h:
+ThirdPackage/lwip220/include/lwip/netbuf.h:
+ThirdPackage/lwip220/include/lwip/igmp.h:
+ThirdPackage/lwip220/include/lwip/tcp.h:
+ThirdPackage/lwip220/include/lwip/tcpbase.h:
+ThirdPackage/lwip220/include/lwip/ip.h:
+ThirdPackage/lwip220/include/lwip/ip4.h:
+ThirdPackage/lwip220/include/lwip/prot/ip4.h:
+ThirdPackage/lwip220/include/lwip/ip6.h:
+ThirdPackage/lwip220/include/lwip/prot/ip.h:
+ThirdPackage/lwip220/include/lwip/icmp.h:
+ThirdPackage/lwip220/include/lwip/prot/icmp.h:
+ThirdPackage/lwip220/include/lwip/raw.h:
+ThirdPackage/lwip220/include/lwip/udp.h:
+ThirdPackage/lwip220/include/lwip/prot/udp.h:
+ThirdPackage/lwip220/include/lwip/priv/tcpip_priv.h:
+ThirdPackage/lwip220/include/lwip/tcpip.h:
+ThirdPackage/lwip220/include/lwip/timeouts.h:
+ThirdPackage/lwip220/include/lwip/mld6.h:

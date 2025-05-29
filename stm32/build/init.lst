@@ -1,0 +1,516 @@
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccYlPVm7.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"init.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.lwip_init,"ax",%progbits
+  20              		.align	1
+  21              		.global	lwip_init
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	lwip_init:
+  27              	.LFB160:
+  28              		.file 1 "ThirdPackage/lwip220/core/init.c"
+   1:ThirdPackage/lwip220/core/init.c **** /**
+   2:ThirdPackage/lwip220/core/init.c ****  * @file
+   3:ThirdPackage/lwip220/core/init.c ****  * Modules initialization
+   4:ThirdPackage/lwip220/core/init.c ****  *
+   5:ThirdPackage/lwip220/core/init.c ****  */
+   6:ThirdPackage/lwip220/core/init.c **** 
+   7:ThirdPackage/lwip220/core/init.c **** /*
+   8:ThirdPackage/lwip220/core/init.c ****  * Copyright (c) 2001-2004 Swedish Institute of Computer Science.
+   9:ThirdPackage/lwip220/core/init.c ****  * All rights reserved.
+  10:ThirdPackage/lwip220/core/init.c ****  *
+  11:ThirdPackage/lwip220/core/init.c ****  * Redistribution and use in source and binary forms, with or without modification,
+  12:ThirdPackage/lwip220/core/init.c ****  * are permitted provided that the following conditions are met:
+  13:ThirdPackage/lwip220/core/init.c ****  *
+  14:ThirdPackage/lwip220/core/init.c ****  * 1. Redistributions of source code must retain the above copyright notice,
+  15:ThirdPackage/lwip220/core/init.c ****  *    this list of conditions and the following disclaimer.
+  16:ThirdPackage/lwip220/core/init.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice,
+  17:ThirdPackage/lwip220/core/init.c ****  *    this list of conditions and the following disclaimer in the documentation
+  18:ThirdPackage/lwip220/core/init.c ****  *    and/or other materials provided with the distribution.
+  19:ThirdPackage/lwip220/core/init.c ****  * 3. The name of the author may not be used to endorse or promote products
+  20:ThirdPackage/lwip220/core/init.c ****  *    derived from this software without specific prior written permission.
+  21:ThirdPackage/lwip220/core/init.c ****  *
+  22:ThirdPackage/lwip220/core/init.c ****  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
+  23:ThirdPackage/lwip220/core/init.c ****  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+  24:ThirdPackage/lwip220/core/init.c ****  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+  25:ThirdPackage/lwip220/core/init.c ****  * SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  26:ThirdPackage/lwip220/core/init.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+  27:ThirdPackage/lwip220/core/init.c ****  * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  28:ThirdPackage/lwip220/core/init.c ****  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  29:ThirdPackage/lwip220/core/init.c ****  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+  30:ThirdPackage/lwip220/core/init.c ****  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccYlPVm7.s 			page 2
+
+
+  31:ThirdPackage/lwip220/core/init.c ****  * OF SUCH DAMAGE.
+  32:ThirdPackage/lwip220/core/init.c ****  *
+  33:ThirdPackage/lwip220/core/init.c ****  * This file is part of the lwIP TCP/IP stack.
+  34:ThirdPackage/lwip220/core/init.c ****  *
+  35:ThirdPackage/lwip220/core/init.c ****  * Author: Adam Dunkels <adam@sics.se>
+  36:ThirdPackage/lwip220/core/init.c ****  */
+  37:ThirdPackage/lwip220/core/init.c **** 
+  38:ThirdPackage/lwip220/core/init.c **** #include "lwip/opt.h"
+  39:ThirdPackage/lwip220/core/init.c **** 
+  40:ThirdPackage/lwip220/core/init.c **** #include "lwip/init.h"
+  41:ThirdPackage/lwip220/core/init.c **** #include "lwip/stats.h"
+  42:ThirdPackage/lwip220/core/init.c **** #include "lwip/sys.h"
+  43:ThirdPackage/lwip220/core/init.c **** #include "lwip/mem.h"
+  44:ThirdPackage/lwip220/core/init.c **** #include "lwip/memp.h"
+  45:ThirdPackage/lwip220/core/init.c **** #include "lwip/pbuf.h"
+  46:ThirdPackage/lwip220/core/init.c **** #include "lwip/netif.h"
+  47:ThirdPackage/lwip220/core/init.c **** #include "lwip/sockets.h"
+  48:ThirdPackage/lwip220/core/init.c **** #include "lwip/ip.h"
+  49:ThirdPackage/lwip220/core/init.c **** #include "lwip/raw.h"
+  50:ThirdPackage/lwip220/core/init.c **** #include "lwip/udp.h"
+  51:ThirdPackage/lwip220/core/init.c **** #include "lwip/priv/tcp_priv.h"
+  52:ThirdPackage/lwip220/core/init.c **** #include "lwip/igmp.h"
+  53:ThirdPackage/lwip220/core/init.c **** #include "lwip/dns.h"
+  54:ThirdPackage/lwip220/core/init.c **** #include "lwip/timeouts.h"
+  55:ThirdPackage/lwip220/core/init.c **** #include "lwip/etharp.h"
+  56:ThirdPackage/lwip220/core/init.c **** #include "lwip/ip6.h"
+  57:ThirdPackage/lwip220/core/init.c **** #include "lwip/nd6.h"
+  58:ThirdPackage/lwip220/core/init.c **** #include "lwip/mld6.h"
+  59:ThirdPackage/lwip220/core/init.c **** #include "lwip/api.h"
+  60:ThirdPackage/lwip220/core/init.c **** 
+  61:ThirdPackage/lwip220/core/init.c **** #include "netif/ppp/ppp_opts.h"
+  62:ThirdPackage/lwip220/core/init.c **** #include "netif/ppp/ppp_impl.h"
+  63:ThirdPackage/lwip220/core/init.c **** 
+  64:ThirdPackage/lwip220/core/init.c **** #ifndef LWIP_SKIP_PACKING_CHECK
+  65:ThirdPackage/lwip220/core/init.c **** 
+  66:ThirdPackage/lwip220/core/init.c **** #ifdef PACK_STRUCT_USE_INCLUDES
+  67:ThirdPackage/lwip220/core/init.c **** #  include "arch/bpstruct.h"
+  68:ThirdPackage/lwip220/core/init.c **** #endif
+  69:ThirdPackage/lwip220/core/init.c **** PACK_STRUCT_BEGIN
+  70:ThirdPackage/lwip220/core/init.c **** struct packed_struct_test {
+  71:ThirdPackage/lwip220/core/init.c ****   PACK_STRUCT_FLD_8(u8_t  dummy1);
+  72:ThirdPackage/lwip220/core/init.c ****   PACK_STRUCT_FIELD(u32_t dummy2);
+  73:ThirdPackage/lwip220/core/init.c **** } PACK_STRUCT_STRUCT;
+  74:ThirdPackage/lwip220/core/init.c **** PACK_STRUCT_END
+  75:ThirdPackage/lwip220/core/init.c **** #ifdef PACK_STRUCT_USE_INCLUDES
+  76:ThirdPackage/lwip220/core/init.c **** #  include "arch/epstruct.h"
+  77:ThirdPackage/lwip220/core/init.c **** #endif
+  78:ThirdPackage/lwip220/core/init.c **** #define PACKED_STRUCT_TEST_EXPECTED_SIZE 5
+  79:ThirdPackage/lwip220/core/init.c **** 
+  80:ThirdPackage/lwip220/core/init.c **** #endif
+  81:ThirdPackage/lwip220/core/init.c **** 
+  82:ThirdPackage/lwip220/core/init.c **** /* Compile-time sanity checks for configuration errors.
+  83:ThirdPackage/lwip220/core/init.c ****  * These can be done independently of LWIP_DEBUG, without penalty.
+  84:ThirdPackage/lwip220/core/init.c ****  */
+  85:ThirdPackage/lwip220/core/init.c **** #ifndef BYTE_ORDER
+  86:ThirdPackage/lwip220/core/init.c **** #error "BYTE_ORDER is not defined, you have to define it in your cc.h"
+  87:ThirdPackage/lwip220/core/init.c **** #endif
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccYlPVm7.s 			page 3
+
+
+  88:ThirdPackage/lwip220/core/init.c **** #if (!IP_SOF_BROADCAST && IP_SOF_BROADCAST_RECV)
+  89:ThirdPackage/lwip220/core/init.c **** #error "If you want to use broadcast filter per pcb on recv operations, you have to define IP_SOF_B
+  90:ThirdPackage/lwip220/core/init.c **** #endif
+  91:ThirdPackage/lwip220/core/init.c **** #if (!LWIP_UDP && LWIP_UDPLITE)
+  92:ThirdPackage/lwip220/core/init.c **** #error "If you want to use UDP Lite, you have to define LWIP_UDP=1 in your lwipopts.h"
+  93:ThirdPackage/lwip220/core/init.c **** #endif
+  94:ThirdPackage/lwip220/core/init.c **** #if (!LWIP_UDP && LWIP_DHCP)
+  95:ThirdPackage/lwip220/core/init.c **** #error "If you want to use DHCP, you have to define LWIP_UDP=1 in your lwipopts.h"
+  96:ThirdPackage/lwip220/core/init.c **** #endif
+  97:ThirdPackage/lwip220/core/init.c **** #if (!LWIP_UDP && !LWIP_RAW && LWIP_MULTICAST_TX_OPTIONS)
+  98:ThirdPackage/lwip220/core/init.c **** #error "If you want to use LWIP_MULTICAST_TX_OPTIONS, you have to define LWIP_UDP=1 and/or LWIP_RAW
+  99:ThirdPackage/lwip220/core/init.c **** #endif
+ 100:ThirdPackage/lwip220/core/init.c **** #if (!LWIP_UDP && LWIP_DNS)
+ 101:ThirdPackage/lwip220/core/init.c **** #error "If you want to use DNS, you have to define LWIP_UDP=1 in your lwipopts.h"
+ 102:ThirdPackage/lwip220/core/init.c **** #endif
+ 103:ThirdPackage/lwip220/core/init.c **** #if !MEMP_MEM_MALLOC /* MEMP_NUM_* checks are disabled when not using the pool allocator */
+ 104:ThirdPackage/lwip220/core/init.c **** #if (LWIP_ARP && ARP_QUEUEING && (MEMP_NUM_ARP_QUEUE<=0))
+ 105:ThirdPackage/lwip220/core/init.c **** #error "If you want to use ARP Queueing, you have to define MEMP_NUM_ARP_QUEUE>=1 in your lwipopts.
+ 106:ThirdPackage/lwip220/core/init.c **** #endif
+ 107:ThirdPackage/lwip220/core/init.c **** #if (LWIP_RAW && (MEMP_NUM_RAW_PCB<=0))
+ 108:ThirdPackage/lwip220/core/init.c **** #error "If you want to use RAW, you have to define MEMP_NUM_RAW_PCB>=1 in your lwipopts.h"
+ 109:ThirdPackage/lwip220/core/init.c **** #endif
+ 110:ThirdPackage/lwip220/core/init.c **** #if (LWIP_UDP && (MEMP_NUM_UDP_PCB<=0))
+ 111:ThirdPackage/lwip220/core/init.c **** #error "If you want to use UDP, you have to define MEMP_NUM_UDP_PCB>=1 in your lwipopts.h"
+ 112:ThirdPackage/lwip220/core/init.c **** #endif
+ 113:ThirdPackage/lwip220/core/init.c **** #if (LWIP_TCP && (MEMP_NUM_TCP_PCB<=0))
+ 114:ThirdPackage/lwip220/core/init.c **** #error "If you want to use TCP, you have to define MEMP_NUM_TCP_PCB>=1 in your lwipopts.h"
+ 115:ThirdPackage/lwip220/core/init.c **** #endif
+ 116:ThirdPackage/lwip220/core/init.c **** #if (LWIP_IGMP && (MEMP_NUM_IGMP_GROUP<=1))
+ 117:ThirdPackage/lwip220/core/init.c **** #error "If you want to use IGMP, you have to define MEMP_NUM_IGMP_GROUP>1 in your lwipopts.h"
+ 118:ThirdPackage/lwip220/core/init.c **** #endif
+ 119:ThirdPackage/lwip220/core/init.c **** #if (LWIP_IGMP && !LWIP_MULTICAST_TX_OPTIONS)
+ 120:ThirdPackage/lwip220/core/init.c **** #error "If you want to use IGMP, you have to define LWIP_MULTICAST_TX_OPTIONS==1 in your lwipopts.h
+ 121:ThirdPackage/lwip220/core/init.c **** #endif
+ 122:ThirdPackage/lwip220/core/init.c **** #if (LWIP_IGMP && !LWIP_IPV4)
+ 123:ThirdPackage/lwip220/core/init.c **** #error "IGMP needs LWIP_IPV4 enabled in your lwipopts.h"
+ 124:ThirdPackage/lwip220/core/init.c **** #endif
+ 125:ThirdPackage/lwip220/core/init.c **** #if ((LWIP_NETCONN || LWIP_SOCKET) && (MEMP_NUM_TCPIP_MSG_API<=0))
+ 126:ThirdPackage/lwip220/core/init.c **** #error "If you want to use Sequential API, you have to define MEMP_NUM_TCPIP_MSG_API>=1 in your lwi
+ 127:ThirdPackage/lwip220/core/init.c **** #endif
+ 128:ThirdPackage/lwip220/core/init.c **** /* There must be sufficient timeouts, taking into account requirements of the subsystems. */
+ 129:ThirdPackage/lwip220/core/init.c **** #if LWIP_TIMERS && (MEMP_NUM_SYS_TIMEOUT < LWIP_NUM_SYS_TIMEOUT_INTERNAL)
+ 130:ThirdPackage/lwip220/core/init.c **** #error "MEMP_NUM_SYS_TIMEOUT is too low to accommodate all required timeouts"
+ 131:ThirdPackage/lwip220/core/init.c **** #endif
+ 132:ThirdPackage/lwip220/core/init.c **** #if (IP_REASSEMBLY && (MEMP_NUM_REASSDATA > IP_REASS_MAX_PBUFS))
+ 133:ThirdPackage/lwip220/core/init.c **** #error "MEMP_NUM_REASSDATA > IP_REASS_MAX_PBUFS doesn't make sense since each struct ip_reassdata m
+ 134:ThirdPackage/lwip220/core/init.c **** #endif
+ 135:ThirdPackage/lwip220/core/init.c **** #endif /* !MEMP_MEM_MALLOC */
+ 136:ThirdPackage/lwip220/core/init.c **** #if LWIP_WND_SCALE
+ 137:ThirdPackage/lwip220/core/init.c **** #if (LWIP_TCP && (TCP_WND > 0xffffffff))
+ 138:ThirdPackage/lwip220/core/init.c **** #error "If you want to use TCP, TCP_WND must fit in an u32_t, so, you have to reduce it in your lwi
+ 139:ThirdPackage/lwip220/core/init.c **** #endif
+ 140:ThirdPackage/lwip220/core/init.c **** #if (LWIP_TCP && (TCP_RCV_SCALE > 14))
+ 141:ThirdPackage/lwip220/core/init.c **** #error "The maximum valid window scale value is 14!"
+ 142:ThirdPackage/lwip220/core/init.c **** #endif
+ 143:ThirdPackage/lwip220/core/init.c **** #if (LWIP_TCP && (TCP_WND > (0xFFFFU << TCP_RCV_SCALE)))
+ 144:ThirdPackage/lwip220/core/init.c **** #error "TCP_WND is bigger than the configured LWIP_WND_SCALE allows!"
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccYlPVm7.s 			page 4
+
+
+ 145:ThirdPackage/lwip220/core/init.c **** #endif
+ 146:ThirdPackage/lwip220/core/init.c **** #if (LWIP_TCP && ((TCP_WND >> TCP_RCV_SCALE) == 0))
+ 147:ThirdPackage/lwip220/core/init.c **** #error "TCP_WND is too small for the configured LWIP_WND_SCALE (results in zero window)!"
+ 148:ThirdPackage/lwip220/core/init.c **** #endif
+ 149:ThirdPackage/lwip220/core/init.c **** #else /* LWIP_WND_SCALE */
+ 150:ThirdPackage/lwip220/core/init.c **** #if (LWIP_TCP && (TCP_WND > 0xffff))
+ 151:ThirdPackage/lwip220/core/init.c **** #error "If you want to use TCP, TCP_WND must fit in an u16_t, so, you have to reduce it in your lwi
+ 152:ThirdPackage/lwip220/core/init.c **** #endif
+ 153:ThirdPackage/lwip220/core/init.c **** #endif /* LWIP_WND_SCALE */
+ 154:ThirdPackage/lwip220/core/init.c **** #if (LWIP_TCP && (TCP_SND_QUEUELEN > 0xffff))
+ 155:ThirdPackage/lwip220/core/init.c **** #error "If you want to use TCP, TCP_SND_QUEUELEN must fit in an u16_t, so, you have to reduce it in
+ 156:ThirdPackage/lwip220/core/init.c **** #endif
+ 157:ThirdPackage/lwip220/core/init.c **** #if (LWIP_TCP && (TCP_SND_QUEUELEN < 2))
+ 158:ThirdPackage/lwip220/core/init.c **** #error "TCP_SND_QUEUELEN must be at least 2 for no-copy TCP writes to work"
+ 159:ThirdPackage/lwip220/core/init.c **** #endif
+ 160:ThirdPackage/lwip220/core/init.c **** #if (LWIP_TCP && ((TCP_MAXRTX > 12) || (TCP_SYNMAXRTX > 12)))
+ 161:ThirdPackage/lwip220/core/init.c **** #error "If you want to use TCP, TCP_MAXRTX and TCP_SYNMAXRTX must less or equal to 12 (due to tcp_b
+ 162:ThirdPackage/lwip220/core/init.c **** #endif
+ 163:ThirdPackage/lwip220/core/init.c **** #if (LWIP_TCP && TCP_LISTEN_BACKLOG && ((TCP_DEFAULT_LISTEN_BACKLOG < 0) || (TCP_DEFAULT_LISTEN_BAC
+ 164:ThirdPackage/lwip220/core/init.c **** #error "If you want to use TCP backlog, TCP_DEFAULT_LISTEN_BACKLOG must fit into an u8_t"
+ 165:ThirdPackage/lwip220/core/init.c **** #endif
+ 166:ThirdPackage/lwip220/core/init.c **** #if (LWIP_TCP && LWIP_TCP_SACK_OUT && !TCP_QUEUE_OOSEQ)
+ 167:ThirdPackage/lwip220/core/init.c **** #error "To use LWIP_TCP_SACK_OUT, TCP_QUEUE_OOSEQ needs to be enabled"
+ 168:ThirdPackage/lwip220/core/init.c **** #endif
+ 169:ThirdPackage/lwip220/core/init.c **** #if (LWIP_TCP && LWIP_TCP_SACK_OUT && (LWIP_TCP_MAX_SACK_NUM < 1))
+ 170:ThirdPackage/lwip220/core/init.c **** #error "LWIP_TCP_MAX_SACK_NUM must be greater than 0"
+ 171:ThirdPackage/lwip220/core/init.c **** #endif
+ 172:ThirdPackage/lwip220/core/init.c **** #if (LWIP_NETIF_API && (NO_SYS==1))
+ 173:ThirdPackage/lwip220/core/init.c **** #error "If you want to use NETIF API, you have to define NO_SYS=0 in your lwipopts.h"
+ 174:ThirdPackage/lwip220/core/init.c **** #endif
+ 175:ThirdPackage/lwip220/core/init.c **** #if ((LWIP_SOCKET || LWIP_NETCONN) && (NO_SYS==1))
+ 176:ThirdPackage/lwip220/core/init.c **** #error "If you want to use Sequential API, you have to define NO_SYS=0 in your lwipopts.h"
+ 177:ThirdPackage/lwip220/core/init.c **** #endif
+ 178:ThirdPackage/lwip220/core/init.c **** #if (LWIP_PPP_API && (NO_SYS==1))
+ 179:ThirdPackage/lwip220/core/init.c **** #error "If you want to use PPP API, you have to define NO_SYS=0 in your lwipopts.h"
+ 180:ThirdPackage/lwip220/core/init.c **** #endif
+ 181:ThirdPackage/lwip220/core/init.c **** #if (LWIP_PPP_API && (PPP_SUPPORT==0))
+ 182:ThirdPackage/lwip220/core/init.c **** #error "If you want to use PPP API, you have to enable PPP_SUPPORT in your lwipopts.h"
+ 183:ThirdPackage/lwip220/core/init.c **** #endif
+ 184:ThirdPackage/lwip220/core/init.c **** #if (((!LWIP_DHCP) || (!LWIP_AUTOIP)) && LWIP_DHCP_AUTOIP_COOP)
+ 185:ThirdPackage/lwip220/core/init.c **** #error "If you want to use DHCP/AUTOIP cooperation mode, you have to define LWIP_DHCP=1 and LWIP_AU
+ 186:ThirdPackage/lwip220/core/init.c **** #endif
+ 187:ThirdPackage/lwip220/core/init.c **** #if (((!LWIP_DHCP) || (!LWIP_ARP) || (!LWIP_ACD)) && LWIP_DHCP_DOES_ACD_CHECK)
+ 188:ThirdPackage/lwip220/core/init.c **** #error "If you want to use DHCP ACD checking, you have to define LWIP_DHCP=1, LWIP_ARP=1 and LWIP_A
+ 189:ThirdPackage/lwip220/core/init.c **** #endif
+ 190:ThirdPackage/lwip220/core/init.c **** #if (!LWIP_ARP && LWIP_AUTOIP)
+ 191:ThirdPackage/lwip220/core/init.c **** #error "If you want to use AUTOIP, you have to define LWIP_ARP=1 in your lwipopts.h"
+ 192:ThirdPackage/lwip220/core/init.c **** #endif
+ 193:ThirdPackage/lwip220/core/init.c **** #if (LWIP_TCP && ((LWIP_EVENT_API && LWIP_CALLBACK_API) || (!LWIP_EVENT_API && !LWIP_CALLBACK_API))
+ 194:ThirdPackage/lwip220/core/init.c **** #error "One and exactly one of LWIP_EVENT_API and LWIP_CALLBACK_API has to be enabled in your lwipo
+ 195:ThirdPackage/lwip220/core/init.c **** #endif
+ 196:ThirdPackage/lwip220/core/init.c **** #if (LWIP_ALTCP && LWIP_EVENT_API)
+ 197:ThirdPackage/lwip220/core/init.c **** #error "The application layered tcp API does not work with LWIP_EVENT_API"
+ 198:ThirdPackage/lwip220/core/init.c **** #endif
+ 199:ThirdPackage/lwip220/core/init.c **** #if (MEM_LIBC_MALLOC && MEM_USE_POOLS)
+ 200:ThirdPackage/lwip220/core/init.c **** #error "MEM_LIBC_MALLOC and MEM_USE_POOLS may not both be simultaneously enabled in your lwipopts.h
+ 201:ThirdPackage/lwip220/core/init.c **** #endif
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccYlPVm7.s 			page 5
+
+
+ 202:ThirdPackage/lwip220/core/init.c **** #if (MEM_USE_POOLS && !MEMP_USE_CUSTOM_POOLS)
+ 203:ThirdPackage/lwip220/core/init.c **** #error "MEM_USE_POOLS requires custom pools (MEMP_USE_CUSTOM_POOLS) to be enabled in your lwipopts.
+ 204:ThirdPackage/lwip220/core/init.c **** #endif
+ 205:ThirdPackage/lwip220/core/init.c **** #if (PBUF_POOL_BUFSIZE <= MEM_ALIGNMENT)
+ 206:ThirdPackage/lwip220/core/init.c **** #error "PBUF_POOL_BUFSIZE must be greater than MEM_ALIGNMENT or the offset may take the full first 
+ 207:ThirdPackage/lwip220/core/init.c **** #endif
+ 208:ThirdPackage/lwip220/core/init.c **** #if (DNS_LOCAL_HOSTLIST && !DNS_LOCAL_HOSTLIST_IS_DYNAMIC && !(defined(DNS_LOCAL_HOSTLIST_INIT)))
+ 209:ThirdPackage/lwip220/core/init.c **** #error "you have to define define DNS_LOCAL_HOSTLIST_INIT {{'host1', 0x123}, {'host2', 0x234}} to i
+ 210:ThirdPackage/lwip220/core/init.c **** #endif
+ 211:ThirdPackage/lwip220/core/init.c **** #if PPP_SUPPORT && !PPPOS_SUPPORT && !PPPOE_SUPPORT && !PPPOL2TP_SUPPORT
+ 212:ThirdPackage/lwip220/core/init.c **** #error "PPP_SUPPORT needs at least one of PPPOS_SUPPORT, PPPOE_SUPPORT or PPPOL2TP_SUPPORT turned o
+ 213:ThirdPackage/lwip220/core/init.c **** #endif
+ 214:ThirdPackage/lwip220/core/init.c **** #if PPP_SUPPORT && !PPP_IPV4_SUPPORT && !PPP_IPV6_SUPPORT
+ 215:ThirdPackage/lwip220/core/init.c **** #error "PPP_SUPPORT needs PPP_IPV4_SUPPORT and/or PPP_IPV6_SUPPORT turned on"
+ 216:ThirdPackage/lwip220/core/init.c **** #endif
+ 217:ThirdPackage/lwip220/core/init.c **** #if PPP_SUPPORT && PPP_IPV4_SUPPORT && !LWIP_IPV4
+ 218:ThirdPackage/lwip220/core/init.c **** #error "PPP_IPV4_SUPPORT needs LWIP_IPV4 turned on"
+ 219:ThirdPackage/lwip220/core/init.c **** #endif
+ 220:ThirdPackage/lwip220/core/init.c **** #if PPP_SUPPORT && PPP_IPV6_SUPPORT && !LWIP_IPV6
+ 221:ThirdPackage/lwip220/core/init.c **** #error "PPP_IPV6_SUPPORT needs LWIP_IPV6 turned on"
+ 222:ThirdPackage/lwip220/core/init.c **** #endif
+ 223:ThirdPackage/lwip220/core/init.c **** #if PPP_SUPPORT && CCP_SUPPORT && !MPPE_SUPPORT
+ 224:ThirdPackage/lwip220/core/init.c **** #error "CCP_SUPPORT needs MPPE_SUPPORT turned on"
+ 225:ThirdPackage/lwip220/core/init.c **** #endif
+ 226:ThirdPackage/lwip220/core/init.c **** #if !LWIP_ETHERNET && (LWIP_ARP || PPPOE_SUPPORT)
+ 227:ThirdPackage/lwip220/core/init.c **** #error "LWIP_ETHERNET needs to be turned on for LWIP_ARP or PPPOE_SUPPORT"
+ 228:ThirdPackage/lwip220/core/init.c **** #endif
+ 229:ThirdPackage/lwip220/core/init.c **** #if LWIP_TCPIP_CORE_LOCKING_INPUT && !LWIP_TCPIP_CORE_LOCKING
+ 230:ThirdPackage/lwip220/core/init.c **** #error "When using LWIP_TCPIP_CORE_LOCKING_INPUT, LWIP_TCPIP_CORE_LOCKING must be enabled, too"
+ 231:ThirdPackage/lwip220/core/init.c **** #endif
+ 232:ThirdPackage/lwip220/core/init.c **** #if LWIP_TCP && LWIP_NETIF_TX_SINGLE_PBUF && !TCP_OVERSIZE
+ 233:ThirdPackage/lwip220/core/init.c **** #error "LWIP_NETIF_TX_SINGLE_PBUF needs TCP_OVERSIZE enabled to create single-pbuf TCP packets"
+ 234:ThirdPackage/lwip220/core/init.c **** #endif
+ 235:ThirdPackage/lwip220/core/init.c **** #if LWIP_NETCONN && LWIP_TCP
+ 236:ThirdPackage/lwip220/core/init.c **** #if NETCONN_COPY != TCP_WRITE_FLAG_COPY
+ 237:ThirdPackage/lwip220/core/init.c **** #error "NETCONN_COPY != TCP_WRITE_FLAG_COPY"
+ 238:ThirdPackage/lwip220/core/init.c **** #endif
+ 239:ThirdPackage/lwip220/core/init.c **** #if NETCONN_MORE != TCP_WRITE_FLAG_MORE
+ 240:ThirdPackage/lwip220/core/init.c **** #error "NETCONN_MORE != TCP_WRITE_FLAG_MORE"
+ 241:ThirdPackage/lwip220/core/init.c **** #endif
+ 242:ThirdPackage/lwip220/core/init.c **** #endif /* LWIP_NETCONN && LWIP_TCP */
+ 243:ThirdPackage/lwip220/core/init.c **** #if LWIP_NETCONN_FULLDUPLEX && !LWIP_NETCONN_SEM_PER_THREAD
+ 244:ThirdPackage/lwip220/core/init.c **** #error "For LWIP_NETCONN_FULLDUPLEX to work, LWIP_NETCONN_SEM_PER_THREAD is required"
+ 245:ThirdPackage/lwip220/core/init.c **** #endif
+ 246:ThirdPackage/lwip220/core/init.c **** 
+ 247:ThirdPackage/lwip220/core/init.c **** 
+ 248:ThirdPackage/lwip220/core/init.c **** /* Compile-time checks for deprecated options.
+ 249:ThirdPackage/lwip220/core/init.c ****  */
+ 250:ThirdPackage/lwip220/core/init.c **** #ifdef MEMP_NUM_TCPIP_MSG
+ 251:ThirdPackage/lwip220/core/init.c **** #error "MEMP_NUM_TCPIP_MSG option is deprecated. Remove it from your lwipopts.h."
+ 252:ThirdPackage/lwip220/core/init.c **** #endif
+ 253:ThirdPackage/lwip220/core/init.c **** #ifdef TCP_REXMIT_DEBUG
+ 254:ThirdPackage/lwip220/core/init.c **** #error "TCP_REXMIT_DEBUG option is deprecated. Remove it from your lwipopts.h."
+ 255:ThirdPackage/lwip220/core/init.c **** #endif
+ 256:ThirdPackage/lwip220/core/init.c **** #ifdef RAW_STATS
+ 257:ThirdPackage/lwip220/core/init.c **** #error "RAW_STATS option is deprecated. Remove it from your lwipopts.h."
+ 258:ThirdPackage/lwip220/core/init.c **** #endif
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccYlPVm7.s 			page 6
+
+
+ 259:ThirdPackage/lwip220/core/init.c **** #ifdef ETHARP_QUEUE_FIRST
+ 260:ThirdPackage/lwip220/core/init.c **** #error "ETHARP_QUEUE_FIRST option is deprecated. Remove it from your lwipopts.h."
+ 261:ThirdPackage/lwip220/core/init.c **** #endif
+ 262:ThirdPackage/lwip220/core/init.c **** #ifdef ETHARP_ALWAYS_INSERT
+ 263:ThirdPackage/lwip220/core/init.c **** #error "ETHARP_ALWAYS_INSERT option is deprecated. Remove it from your lwipopts.h."
+ 264:ThirdPackage/lwip220/core/init.c **** #endif
+ 265:ThirdPackage/lwip220/core/init.c **** #if !NO_SYS && LWIP_TCPIP_CORE_LOCKING && LWIP_COMPAT_MUTEX && !defined(LWIP_COMPAT_MUTEX_ALLOWED)
+ 266:ThirdPackage/lwip220/core/init.c **** #error "LWIP_COMPAT_MUTEX cannot prevent priority inversion. It is recommended to implement priorit
+ 267:ThirdPackage/lwip220/core/init.c **** #endif
+ 268:ThirdPackage/lwip220/core/init.c **** 
+ 269:ThirdPackage/lwip220/core/init.c **** #ifndef LWIP_DISABLE_TCP_SANITY_CHECKS
+ 270:ThirdPackage/lwip220/core/init.c **** #define LWIP_DISABLE_TCP_SANITY_CHECKS  0
+ 271:ThirdPackage/lwip220/core/init.c **** #endif
+ 272:ThirdPackage/lwip220/core/init.c **** #ifndef LWIP_DISABLE_MEMP_SANITY_CHECKS
+ 273:ThirdPackage/lwip220/core/init.c **** #define LWIP_DISABLE_MEMP_SANITY_CHECKS 0
+ 274:ThirdPackage/lwip220/core/init.c **** #endif
+ 275:ThirdPackage/lwip220/core/init.c **** 
+ 276:ThirdPackage/lwip220/core/init.c **** /* MEMP sanity checks */
+ 277:ThirdPackage/lwip220/core/init.c **** #if MEMP_MEM_MALLOC
+ 278:ThirdPackage/lwip220/core/init.c **** #if !LWIP_DISABLE_MEMP_SANITY_CHECKS
+ 279:ThirdPackage/lwip220/core/init.c **** #if LWIP_NETCONN || LWIP_SOCKET
+ 280:ThirdPackage/lwip220/core/init.c **** #if !MEMP_NUM_NETCONN && LWIP_SOCKET
+ 281:ThirdPackage/lwip220/core/init.c **** #error "lwip_sanity_check: WARNING: MEMP_NUM_NETCONN cannot be 0 when using sockets!"
+ 282:ThirdPackage/lwip220/core/init.c **** #endif
+ 283:ThirdPackage/lwip220/core/init.c **** #else /* MEMP_MEM_MALLOC */
+ 284:ThirdPackage/lwip220/core/init.c **** #if MEMP_NUM_NETCONN > (MEMP_NUM_TCP_PCB+MEMP_NUM_TCP_PCB_LISTEN+MEMP_NUM_UDP_PCB+MEMP_NUM_RAW_PCB)
+ 285:ThirdPackage/lwip220/core/init.c **** #error "lwip_sanity_check: WARNING: MEMP_NUM_NETCONN should be less than the sum of MEMP_NUM_{TCP,R
+ 286:ThirdPackage/lwip220/core/init.c **** #endif
+ 287:ThirdPackage/lwip220/core/init.c **** #endif /* LWIP_NETCONN || LWIP_SOCKET */
+ 288:ThirdPackage/lwip220/core/init.c **** #endif /* !LWIP_DISABLE_MEMP_SANITY_CHECKS */
+ 289:ThirdPackage/lwip220/core/init.c **** #if MEM_USE_POOLS
+ 290:ThirdPackage/lwip220/core/init.c **** #error "MEMP_MEM_MALLOC and MEM_USE_POOLS cannot be enabled at the same time"
+ 291:ThirdPackage/lwip220/core/init.c **** #endif
+ 292:ThirdPackage/lwip220/core/init.c **** #ifdef LWIP_HOOK_MEMP_AVAILABLE
+ 293:ThirdPackage/lwip220/core/init.c **** #error "LWIP_HOOK_MEMP_AVAILABLE doesn't make sense with MEMP_MEM_MALLOC"
+ 294:ThirdPackage/lwip220/core/init.c **** #endif
+ 295:ThirdPackage/lwip220/core/init.c **** #endif /* MEMP_MEM_MALLOC */
+ 296:ThirdPackage/lwip220/core/init.c **** 
+ 297:ThirdPackage/lwip220/core/init.c **** /* TCP sanity checks */
+ 298:ThirdPackage/lwip220/core/init.c **** #if !LWIP_DISABLE_TCP_SANITY_CHECKS
+ 299:ThirdPackage/lwip220/core/init.c **** #if LWIP_TCP
+ 300:ThirdPackage/lwip220/core/init.c **** #if !MEMP_MEM_MALLOC && (MEMP_NUM_TCP_SEG < TCP_SND_QUEUELEN)
+ 301:ThirdPackage/lwip220/core/init.c **** #error "lwip_sanity_check: WARNING: MEMP_NUM_TCP_SEG should be at least as big as TCP_SND_QUEUELEN.
+ 302:ThirdPackage/lwip220/core/init.c **** #endif
+ 303:ThirdPackage/lwip220/core/init.c **** #if TCP_SND_BUF < (2 * TCP_MSS)
+ 304:ThirdPackage/lwip220/core/init.c **** #error "lwip_sanity_check: WARNING: TCP_SND_BUF must be at least as much as (2 * TCP_MSS) for thing
+ 305:ThirdPackage/lwip220/core/init.c **** #endif
+ 306:ThirdPackage/lwip220/core/init.c **** #if TCP_SND_QUEUELEN < (2 * (TCP_SND_BUF / TCP_MSS))
+ 307:ThirdPackage/lwip220/core/init.c **** #error "lwip_sanity_check: WARNING: TCP_SND_QUEUELEN must be at least as much as (2 * TCP_SND_BUF/T
+ 308:ThirdPackage/lwip220/core/init.c **** #endif
+ 309:ThirdPackage/lwip220/core/init.c **** #if TCP_SNDLOWAT >= TCP_SND_BUF
+ 310:ThirdPackage/lwip220/core/init.c **** #error "lwip_sanity_check: WARNING: TCP_SNDLOWAT must be less than TCP_SND_BUF. If you know what yo
+ 311:ThirdPackage/lwip220/core/init.c **** #endif
+ 312:ThirdPackage/lwip220/core/init.c **** #if TCP_MSS >= ((16 * 1024) - 1)
+ 313:ThirdPackage/lwip220/core/init.c **** #error "lwip_sanity_check: WARNING: TCP_MSS must be <= 16382 to prevent u16_t underflow in TCP_SNDL
+ 314:ThirdPackage/lwip220/core/init.c **** #endif
+ 315:ThirdPackage/lwip220/core/init.c **** #if TCP_SNDLOWAT >= (0xFFFF - (4 * TCP_MSS))
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccYlPVm7.s 			page 7
+
+
+ 316:ThirdPackage/lwip220/core/init.c **** #error "lwip_sanity_check: WARNING: TCP_SNDLOWAT must at least be 4*MSS below u16_t overflow!"
+ 317:ThirdPackage/lwip220/core/init.c **** #endif
+ 318:ThirdPackage/lwip220/core/init.c **** #if TCP_SNDQUEUELOWAT >= TCP_SND_QUEUELEN
+ 319:ThirdPackage/lwip220/core/init.c **** #error "lwip_sanity_check: WARNING: TCP_SNDQUEUELOWAT must be less than TCP_SND_QUEUELEN. If you kn
+ 320:ThirdPackage/lwip220/core/init.c **** #endif
+ 321:ThirdPackage/lwip220/core/init.c **** #if !MEMP_MEM_MALLOC && PBUF_POOL_SIZE && (PBUF_POOL_BUFSIZE <= (PBUF_LINK_ENCAPSULATION_HLEN + PBU
+ 322:ThirdPackage/lwip220/core/init.c **** #error "lwip_sanity_check: WARNING: PBUF_POOL_BUFSIZE does not provide enough space for protocol he
+ 323:ThirdPackage/lwip220/core/init.c **** #endif
+ 324:ThirdPackage/lwip220/core/init.c **** #if !MEMP_MEM_MALLOC && PBUF_POOL_SIZE && (TCP_WND > (PBUF_POOL_SIZE * (PBUF_POOL_BUFSIZE - (PBUF_L
+ 325:ThirdPackage/lwip220/core/init.c **** #error "lwip_sanity_check: WARNING: TCP_WND is larger than space provided by PBUF_POOL_SIZE * (PBUF
+ 326:ThirdPackage/lwip220/core/init.c **** #endif
+ 327:ThirdPackage/lwip220/core/init.c **** #if TCP_WND < TCP_MSS
+ 328:ThirdPackage/lwip220/core/init.c **** #error "lwip_sanity_check: WARNING: TCP_WND is smaller than MSS. If you know what you are doing, de
+ 329:ThirdPackage/lwip220/core/init.c **** #endif
+ 330:ThirdPackage/lwip220/core/init.c **** #endif /* LWIP_TCP */
+ 331:ThirdPackage/lwip220/core/init.c **** #endif /* !LWIP_DISABLE_TCP_SANITY_CHECKS */
+ 332:ThirdPackage/lwip220/core/init.c **** 
+ 333:ThirdPackage/lwip220/core/init.c **** /**
+ 334:ThirdPackage/lwip220/core/init.c ****  * @ingroup lwip_nosys
+ 335:ThirdPackage/lwip220/core/init.c ****  * Initialize all modules.
+ 336:ThirdPackage/lwip220/core/init.c ****  * Use this in NO_SYS mode. Use tcpip_init() otherwise.
+ 337:ThirdPackage/lwip220/core/init.c ****  */
+ 338:ThirdPackage/lwip220/core/init.c **** void
+ 339:ThirdPackage/lwip220/core/init.c **** lwip_init(void)
+ 340:ThirdPackage/lwip220/core/init.c **** {
+  29              		.loc 1 340 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 08B5     		push	{r3, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 3, -8
+  37              		.cfi_offset 14, -4
+ 341:ThirdPackage/lwip220/core/init.c **** #ifndef LWIP_SKIP_CONST_CHECK
+ 342:ThirdPackage/lwip220/core/init.c ****   int a = 0;
+  38              		.loc 1 342 3 view .LVU1
+  39              	.LVL0:
+ 343:ThirdPackage/lwip220/core/init.c ****   LWIP_UNUSED_ARG(a);
+  40              		.loc 1 343 3 view .LVU2
+ 344:ThirdPackage/lwip220/core/init.c ****   LWIP_ASSERT("LWIP_CONST_CAST not implemented correctly. Check your lwIP port.", LWIP_CONST_CAST(v
+  41              		.loc 1 344 3 view .LVU3
+  42              		.loc 1 344 3 view .LVU4
+  43              		.loc 1 344 3 view .LVU5
+  44              		.loc 1 344 3 view .LVU6
+ 345:ThirdPackage/lwip220/core/init.c **** #endif
+ 346:ThirdPackage/lwip220/core/init.c **** #ifndef LWIP_SKIP_PACKING_CHECK
+ 347:ThirdPackage/lwip220/core/init.c ****   LWIP_ASSERT("Struct packing not implemented correctly. Check your lwIP port.", sizeof(struct pack
+  45              		.loc 1 347 3 view .LVU7
+  46              		.loc 1 347 3 view .LVU8
+  47              		.loc 1 347 3 view .LVU9
+  48              		.loc 1 347 3 view .LVU10
+ 348:ThirdPackage/lwip220/core/init.c **** #endif
+ 349:ThirdPackage/lwip220/core/init.c **** 
+ 350:ThirdPackage/lwip220/core/init.c ****   /* Modules initialization */
+ 351:ThirdPackage/lwip220/core/init.c ****   stats_init();
+  49              		.loc 1 351 15 view .LVU11
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccYlPVm7.s 			page 8
+
+
+ 352:ThirdPackage/lwip220/core/init.c **** #if !NO_SYS
+ 353:ThirdPackage/lwip220/core/init.c ****   sys_init();
+  50              		.loc 1 353 3 view .LVU12
+  51 0002 FFF7FEFF 		bl	sys_init
+  52              	.LVL1:
+ 354:ThirdPackage/lwip220/core/init.c **** #endif /* !NO_SYS */
+ 355:ThirdPackage/lwip220/core/init.c ****   mem_init();
+  53              		.loc 1 355 3 view .LVU13
+  54 0006 FFF7FEFF 		bl	mem_init
+  55              	.LVL2:
+ 356:ThirdPackage/lwip220/core/init.c ****   memp_init();
+  56              		.loc 1 356 3 view .LVU14
+  57 000a FFF7FEFF 		bl	memp_init
+  58              	.LVL3:
+ 357:ThirdPackage/lwip220/core/init.c ****   pbuf_init();
+  59              		.loc 1 357 14 view .LVU15
+ 358:ThirdPackage/lwip220/core/init.c ****   netif_init();
+  60              		.loc 1 358 3 view .LVU16
+  61 000e FFF7FEFF 		bl	netif_init
+  62              	.LVL4:
+ 359:ThirdPackage/lwip220/core/init.c **** #if LWIP_IPV4
+ 360:ThirdPackage/lwip220/core/init.c ****   ip_init();
+  63              		.loc 1 360 12 view .LVU17
+ 361:ThirdPackage/lwip220/core/init.c **** #if LWIP_ARP
+ 362:ThirdPackage/lwip220/core/init.c ****   etharp_init();
+  64              		.loc 1 362 16 view .LVU18
+ 363:ThirdPackage/lwip220/core/init.c **** #endif /* LWIP_ARP */
+ 364:ThirdPackage/lwip220/core/init.c **** #endif /* LWIP_IPV4 */
+ 365:ThirdPackage/lwip220/core/init.c **** #if LWIP_RAW
+ 366:ThirdPackage/lwip220/core/init.c ****   raw_init();
+ 367:ThirdPackage/lwip220/core/init.c **** #endif /* LWIP_RAW */
+ 368:ThirdPackage/lwip220/core/init.c **** #if LWIP_UDP
+ 369:ThirdPackage/lwip220/core/init.c ****   udp_init();
+  65              		.loc 1 369 3 view .LVU19
+  66 0012 FFF7FEFF 		bl	udp_init
+  67              	.LVL5:
+ 370:ThirdPackage/lwip220/core/init.c **** #endif /* LWIP_UDP */
+ 371:ThirdPackage/lwip220/core/init.c **** #if LWIP_TCP
+ 372:ThirdPackage/lwip220/core/init.c ****   tcp_init();
+  68              		.loc 1 372 3 view .LVU20
+  69 0016 FFF7FEFF 		bl	tcp_init
+  70              	.LVL6:
+ 373:ThirdPackage/lwip220/core/init.c **** #endif /* LWIP_TCP */
+ 374:ThirdPackage/lwip220/core/init.c **** #if LWIP_IGMP
+ 375:ThirdPackage/lwip220/core/init.c ****   igmp_init();
+ 376:ThirdPackage/lwip220/core/init.c **** #endif /* LWIP_IGMP */
+ 377:ThirdPackage/lwip220/core/init.c **** #if LWIP_DNS
+ 378:ThirdPackage/lwip220/core/init.c ****   dns_init();
+ 379:ThirdPackage/lwip220/core/init.c **** #endif /* LWIP_DNS */
+ 380:ThirdPackage/lwip220/core/init.c **** #if PPP_SUPPORT
+ 381:ThirdPackage/lwip220/core/init.c ****   ppp_init();
+ 382:ThirdPackage/lwip220/core/init.c **** #endif
+ 383:ThirdPackage/lwip220/core/init.c **** 
+ 384:ThirdPackage/lwip220/core/init.c **** #if LWIP_TIMERS
+ 385:ThirdPackage/lwip220/core/init.c ****   sys_timeouts_init();
+  71              		.loc 1 385 3 view .LVU21
+  72 001a FFF7FEFF 		bl	sys_timeouts_init
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccYlPVm7.s 			page 9
+
+
+  73              	.LVL7:
+ 386:ThirdPackage/lwip220/core/init.c **** #endif /* LWIP_TIMERS */
+ 387:ThirdPackage/lwip220/core/init.c **** }
+  74              		.loc 1 387 1 is_stmt 0 view .LVU22
+  75 001e 08BD     		pop	{r3, pc}
+  76              		.cfi_endproc
+  77              	.LFE160:
+  79              		.text
+  80              	.Letext0:
+  81              		.file 2 "ThirdPackage/lwip220/include/lwip/sys.h"
+  82              		.file 3 "ThirdPackage/lwip220/include/lwip/mem.h"
+  83              		.file 4 "ThirdPackage/lwip220/include/lwip/memp.h"
+  84              		.file 5 "ThirdPackage/lwip220/include/lwip/netif.h"
+  85              		.file 6 "ThirdPackage/lwip220/include/lwip/udp.h"
+  86              		.file 7 "ThirdPackage/lwip220/include/lwip/priv/tcp_priv.h"
+  87              		.file 8 "ThirdPackage/lwip220/include/lwip/timeouts.h"
+  88              		.file 9 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\lib\\gcc\\arm-none-eabi\
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccYlPVm7.s 			page 10
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 init.c
+C:\Users\86188\AppData\Local\Temp\ccYlPVm7.s:20     .text.lwip_init:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccYlPVm7.s:26     .text.lwip_init:00000000 lwip_init
+
+UNDEFINED SYMBOLS
+sys_init
+mem_init
+memp_init
+netif_init
+udp_init
+tcp_init
+sys_timeouts_init

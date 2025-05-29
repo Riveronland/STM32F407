@@ -1,0 +1,1057 @@
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"def.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.lwip_htons,"ax",%progbits
+  20              		.align	1
+  21              		.global	lwip_htons
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	lwip_htons:
+  27              	.LVL0:
+  28              	.LFB160:
+  29              		.file 1 "ThirdPackage/lwip220/core/def.c"
+   1:ThirdPackage/lwip220/core/def.c **** /**
+   2:ThirdPackage/lwip220/core/def.c ****  * @file
+   3:ThirdPackage/lwip220/core/def.c ****  * Common functions used throughout the stack.
+   4:ThirdPackage/lwip220/core/def.c ****  *
+   5:ThirdPackage/lwip220/core/def.c ****  * These are reference implementations of the byte swapping functions.
+   6:ThirdPackage/lwip220/core/def.c ****  * Again with the aim of being simple, correct and fully portable.
+   7:ThirdPackage/lwip220/core/def.c ****  * Byte swapping is the second thing you would want to optimize. You will
+   8:ThirdPackage/lwip220/core/def.c ****  * need to port it to your architecture and in your cc.h:
+   9:ThirdPackage/lwip220/core/def.c ****  *
+  10:ThirdPackage/lwip220/core/def.c ****  * \#define lwip_htons(x) your_htons
+  11:ThirdPackage/lwip220/core/def.c ****  * \#define lwip_htonl(x) your_htonl
+  12:ThirdPackage/lwip220/core/def.c ****  *
+  13:ThirdPackage/lwip220/core/def.c ****  * Note lwip_ntohs() and lwip_ntohl() are merely references to the htonx counterparts.
+  14:ThirdPackage/lwip220/core/def.c ****  *
+  15:ThirdPackage/lwip220/core/def.c ****  * If you \#define them to htons() and htonl(), you should
+  16:ThirdPackage/lwip220/core/def.c ****  * \#define LWIP_DONT_PROVIDE_BYTEORDER_FUNCTIONS to prevent lwIP from
+  17:ThirdPackage/lwip220/core/def.c ****  * defining htonx/ntohx compatibility macros.
+  18:ThirdPackage/lwip220/core/def.c **** 
+  19:ThirdPackage/lwip220/core/def.c ****  * @defgroup sys_nonstandard Non-standard functions
+  20:ThirdPackage/lwip220/core/def.c ****  * @ingroup sys_layer
+  21:ThirdPackage/lwip220/core/def.c ****  * lwIP provides default implementations for non-standard functions.
+  22:ThirdPackage/lwip220/core/def.c ****  * These can be mapped to OS functions to reduce code footprint if desired.
+  23:ThirdPackage/lwip220/core/def.c ****  * All defines related to this section must not be placed in lwipopts.h,
+  24:ThirdPackage/lwip220/core/def.c ****  * but in arch/cc.h!
+  25:ThirdPackage/lwip220/core/def.c ****  * These options cannot be \#defined in lwipopts.h since they are not options
+  26:ThirdPackage/lwip220/core/def.c ****  * of lwIP itself, but options of the lwIP port to your system.
+  27:ThirdPackage/lwip220/core/def.c ****  */
+  28:ThirdPackage/lwip220/core/def.c **** 
+  29:ThirdPackage/lwip220/core/def.c **** /*
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s 			page 2
+
+
+  30:ThirdPackage/lwip220/core/def.c ****  * Copyright (c) 2001-2004 Swedish Institute of Computer Science.
+  31:ThirdPackage/lwip220/core/def.c ****  * All rights reserved.
+  32:ThirdPackage/lwip220/core/def.c ****  *
+  33:ThirdPackage/lwip220/core/def.c ****  * Redistribution and use in source and binary forms, with or without modification,
+  34:ThirdPackage/lwip220/core/def.c ****  * are permitted provided that the following conditions are met:
+  35:ThirdPackage/lwip220/core/def.c ****  *
+  36:ThirdPackage/lwip220/core/def.c ****  * 1. Redistributions of source code must retain the above copyright notice,
+  37:ThirdPackage/lwip220/core/def.c ****  *    this list of conditions and the following disclaimer.
+  38:ThirdPackage/lwip220/core/def.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice,
+  39:ThirdPackage/lwip220/core/def.c ****  *    this list of conditions and the following disclaimer in the documentation
+  40:ThirdPackage/lwip220/core/def.c ****  *    and/or other materials provided with the distribution.
+  41:ThirdPackage/lwip220/core/def.c ****  * 3. The name of the author may not be used to endorse or promote products
+  42:ThirdPackage/lwip220/core/def.c ****  *    derived from this software without specific prior written permission.
+  43:ThirdPackage/lwip220/core/def.c ****  *
+  44:ThirdPackage/lwip220/core/def.c ****  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
+  45:ThirdPackage/lwip220/core/def.c ****  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+  46:ThirdPackage/lwip220/core/def.c ****  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+  47:ThirdPackage/lwip220/core/def.c ****  * SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  48:ThirdPackage/lwip220/core/def.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+  49:ThirdPackage/lwip220/core/def.c ****  * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  50:ThirdPackage/lwip220/core/def.c ****  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  51:ThirdPackage/lwip220/core/def.c ****  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+  52:ThirdPackage/lwip220/core/def.c ****  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+  53:ThirdPackage/lwip220/core/def.c ****  * OF SUCH DAMAGE.
+  54:ThirdPackage/lwip220/core/def.c ****  *
+  55:ThirdPackage/lwip220/core/def.c ****  * This file is part of the lwIP TCP/IP stack.
+  56:ThirdPackage/lwip220/core/def.c ****  *
+  57:ThirdPackage/lwip220/core/def.c ****  * Author: Simon Goldschmidt
+  58:ThirdPackage/lwip220/core/def.c ****  *
+  59:ThirdPackage/lwip220/core/def.c ****  */
+  60:ThirdPackage/lwip220/core/def.c **** 
+  61:ThirdPackage/lwip220/core/def.c **** #include "lwip/opt.h"
+  62:ThirdPackage/lwip220/core/def.c **** #include "lwip/def.h"
+  63:ThirdPackage/lwip220/core/def.c **** 
+  64:ThirdPackage/lwip220/core/def.c **** #include <string.h>
+  65:ThirdPackage/lwip220/core/def.c **** 
+  66:ThirdPackage/lwip220/core/def.c **** #if BYTE_ORDER == LITTLE_ENDIAN
+  67:ThirdPackage/lwip220/core/def.c **** 
+  68:ThirdPackage/lwip220/core/def.c **** #if !defined(lwip_htons)
+  69:ThirdPackage/lwip220/core/def.c **** /**
+  70:ThirdPackage/lwip220/core/def.c ****  * Convert an u16_t from host- to network byte order.
+  71:ThirdPackage/lwip220/core/def.c ****  *
+  72:ThirdPackage/lwip220/core/def.c ****  * @param n u16_t in host byte order
+  73:ThirdPackage/lwip220/core/def.c ****  * @return n in network byte order
+  74:ThirdPackage/lwip220/core/def.c ****  */
+  75:ThirdPackage/lwip220/core/def.c **** u16_t
+  76:ThirdPackage/lwip220/core/def.c **** lwip_htons(u16_t n)
+  77:ThirdPackage/lwip220/core/def.c **** {
+  30              		.loc 1 77 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  78:ThirdPackage/lwip220/core/def.c ****   return PP_HTONS(n);
+  35              		.loc 1 78 3 view .LVU1
+  36              		.loc 1 78 10 is_stmt 0 view .LVU2
+  37 0000 030A     		lsrs	r3, r0, #8
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s 			page 3
+
+
+  38 0002 43EA0020 		orr	r0, r3, r0, lsl #8
+  39              	.LVL1:
+  79:ThirdPackage/lwip220/core/def.c **** }
+  40              		.loc 1 79 1 view .LVU3
+  41 0006 80B2     		uxth	r0, r0
+  42 0008 7047     		bx	lr
+  43              		.cfi_endproc
+  44              	.LFE160:
+  46              		.section	.text.lwip_htonl,"ax",%progbits
+  47              		.align	1
+  48              		.global	lwip_htonl
+  49              		.syntax unified
+  50              		.thumb
+  51              		.thumb_func
+  53              	lwip_htonl:
+  54              	.LVL2:
+  55              	.LFB161:
+  80:ThirdPackage/lwip220/core/def.c **** #endif /* lwip_htons */
+  81:ThirdPackage/lwip220/core/def.c **** 
+  82:ThirdPackage/lwip220/core/def.c **** #if !defined(lwip_htonl)
+  83:ThirdPackage/lwip220/core/def.c **** /**
+  84:ThirdPackage/lwip220/core/def.c ****  * Convert an u32_t from host- to network byte order.
+  85:ThirdPackage/lwip220/core/def.c ****  *
+  86:ThirdPackage/lwip220/core/def.c ****  * @param n u32_t in host byte order
+  87:ThirdPackage/lwip220/core/def.c ****  * @return n in network byte order
+  88:ThirdPackage/lwip220/core/def.c ****  */
+  89:ThirdPackage/lwip220/core/def.c **** u32_t
+  90:ThirdPackage/lwip220/core/def.c **** lwip_htonl(u32_t n)
+  91:ThirdPackage/lwip220/core/def.c **** {
+  56              		.loc 1 91 1 is_stmt 1 view -0
+  57              		.cfi_startproc
+  58              		@ args = 0, pretend = 0, frame = 0
+  59              		@ frame_needed = 0, uses_anonymous_args = 0
+  60              		@ link register save eliminated.
+  92:ThirdPackage/lwip220/core/def.c ****   return PP_HTONL(n);
+  61              		.loc 1 92 3 view .LVU5
+  62              		.loc 1 92 10 is_stmt 0 view .LVU6
+  63 0000 0302     		lsls	r3, r0, #8
+  64 0002 03F47F03 		and	r3, r3, #16711680
+  65 0006 43EA0063 		orr	r3, r3, r0, lsl #24
+  66 000a 020A     		lsrs	r2, r0, #8
+  67 000c 02F47F42 		and	r2, r2, #65280
+  68 0010 1343     		orrs	r3, r3, r2
+  93:ThirdPackage/lwip220/core/def.c **** }
+  69              		.loc 1 93 1 view .LVU7
+  70 0012 43EA1060 		orr	r0, r3, r0, lsr #24
+  71              	.LVL3:
+  72              		.loc 1 93 1 view .LVU8
+  73 0016 7047     		bx	lr
+  74              		.cfi_endproc
+  75              	.LFE161:
+  77              		.section	.text.lwip_strnstr,"ax",%progbits
+  78              		.align	1
+  79              		.global	lwip_strnstr
+  80              		.syntax unified
+  81              		.thumb
+  82              		.thumb_func
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s 			page 4
+
+
+  84              	lwip_strnstr:
+  85              	.LVL4:
+  86              	.LFB162:
+  94:ThirdPackage/lwip220/core/def.c **** #endif /* lwip_htonl */
+  95:ThirdPackage/lwip220/core/def.c **** 
+  96:ThirdPackage/lwip220/core/def.c **** #endif /* BYTE_ORDER == LITTLE_ENDIAN */
+  97:ThirdPackage/lwip220/core/def.c **** 
+  98:ThirdPackage/lwip220/core/def.c **** #ifndef lwip_strnstr
+  99:ThirdPackage/lwip220/core/def.c **** /**
+ 100:ThirdPackage/lwip220/core/def.c ****  * @ingroup sys_nonstandard
+ 101:ThirdPackage/lwip220/core/def.c ****  * lwIP default implementation for strnstr() non-standard function.
+ 102:ThirdPackage/lwip220/core/def.c ****  * This can be \#defined to strnstr() depending on your platform port.
+ 103:ThirdPackage/lwip220/core/def.c ****  */
+ 104:ThirdPackage/lwip220/core/def.c **** char *
+ 105:ThirdPackage/lwip220/core/def.c **** lwip_strnstr(const char *buffer, const char *token, size_t n)
+ 106:ThirdPackage/lwip220/core/def.c **** {
+  87              		.loc 1 106 1 is_stmt 1 view -0
+  88              		.cfi_startproc
+  89              		@ args = 0, pretend = 0, frame = 0
+  90              		@ frame_needed = 0, uses_anonymous_args = 0
+  91              		.loc 1 106 1 is_stmt 0 view .LVU10
+  92 0000 2DE9F843 		push	{r3, r4, r5, r6, r7, r8, r9, lr}
+  93              	.LCFI0:
+  94              		.cfi_def_cfa_offset 32
+  95              		.cfi_offset 3, -32
+  96              		.cfi_offset 4, -28
+  97              		.cfi_offset 5, -24
+  98              		.cfi_offset 6, -20
+  99              		.cfi_offset 7, -16
+ 100              		.cfi_offset 8, -12
+ 101              		.cfi_offset 9, -8
+ 102              		.cfi_offset 14, -4
+ 103 0004 0746     		mov	r7, r0
+ 104 0006 0E46     		mov	r6, r1
+ 105 0008 9146     		mov	r9, r2
+ 107:ThirdPackage/lwip220/core/def.c ****   const char *p;
+ 106              		.loc 1 107 3 is_stmt 1 view .LVU11
+ 108:ThirdPackage/lwip220/core/def.c ****   size_t tokenlen = strlen(token);
+ 107              		.loc 1 108 3 view .LVU12
+ 108              		.loc 1 108 21 is_stmt 0 view .LVU13
+ 109 000a 0846     		mov	r0, r1
+ 110              	.LVL5:
+ 111              		.loc 1 108 21 view .LVU14
+ 112 000c FFF7FEFF 		bl	strlen
+ 113              	.LVL6:
+ 109:ThirdPackage/lwip220/core/def.c ****   if (tokenlen == 0) {
+ 114              		.loc 1 109 3 is_stmt 1 view .LVU15
+ 115              		.loc 1 109 6 is_stmt 0 view .LVU16
+ 116 0010 C0B1     		cbz	r0, .L8
+ 117 0012 8046     		mov	r8, r0
+ 110:ThirdPackage/lwip220/core/def.c ****     return LWIP_CONST_CAST(char *, buffer);
+ 111:ThirdPackage/lwip220/core/def.c ****   }
+ 112:ThirdPackage/lwip220/core/def.c ****   for (p = buffer; *p && (p + tokenlen <= buffer + n); p++) {
+ 118              		.loc 1 112 10 view .LVU17
+ 119 0014 3C46     		mov	r4, r7
+ 120 0016 00E0     		b	.L5
+ 121              	.LVL7:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s 			page 5
+
+
+ 122              	.L6:
+ 123              		.loc 1 112 56 is_stmt 1 discriminator 2 view .LVU18
+ 124              		.loc 1 112 57 is_stmt 0 discriminator 2 view .LVU19
+ 125 0018 0134     		adds	r4, r4, #1
+ 126              	.LVL8:
+ 127              	.L5:
+ 128              		.loc 1 112 20 is_stmt 1 discriminator 1 view .LVU20
+ 129 001a 2578     		ldrb	r5, [r4]	@ zero_extendqisi2
+ 130              		.loc 1 112 3 is_stmt 0 discriminator 1 view .LVU21
+ 131 001c B5B1     		cbz	r5, .L9
+ 132              		.loc 1 112 29 discriminator 3 view .LVU22
+ 133 001e 04EB0803 		add	r3, r4, r8
+ 134              		.loc 1 112 50 discriminator 3 view .LVU23
+ 135 0022 07EB0902 		add	r2, r7, r9
+ 136              		.loc 1 112 23 discriminator 3 view .LVU24
+ 137 0026 9342     		cmp	r3, r2
+ 138 0028 0AD8     		bhi	.L11
+ 113:ThirdPackage/lwip220/core/def.c ****     if ((*p == *token) && (strncmp(p, token, tokenlen) == 0)) {
+ 139              		.loc 1 113 5 is_stmt 1 view .LVU25
+ 140              		.loc 1 113 16 is_stmt 0 view .LVU26
+ 141 002a 3378     		ldrb	r3, [r6]	@ zero_extendqisi2
+ 142              		.loc 1 113 8 view .LVU27
+ 143 002c AB42     		cmp	r3, r5
+ 144 002e F3D1     		bne	.L6
+ 145              		.loc 1 113 28 discriminator 1 view .LVU28
+ 146 0030 4246     		mov	r2, r8
+ 147 0032 3146     		mov	r1, r6
+ 148 0034 2046     		mov	r0, r4
+ 149 0036 FFF7FEFF 		bl	strncmp
+ 150              	.LVL9:
+ 151              		.loc 1 113 24 discriminator 1 view .LVU29
+ 152 003a 0028     		cmp	r0, #0
+ 153 003c ECD1     		bne	.L6
+ 154 003e 02E0     		b	.L3
+ 155              	.L11:
+ 114:ThirdPackage/lwip220/core/def.c ****       return LWIP_CONST_CAST(char *, p);
+ 115:ThirdPackage/lwip220/core/def.c ****     }
+ 116:ThirdPackage/lwip220/core/def.c ****   }
+ 117:ThirdPackage/lwip220/core/def.c ****   return NULL;
+ 156              		.loc 1 117 10 view .LVU30
+ 157 0040 0024     		movs	r4, #0
+ 158              	.LVL10:
+ 159              		.loc 1 117 10 view .LVU31
+ 160 0042 00E0     		b	.L3
+ 161              	.LVL11:
+ 162              	.L8:
+ 110:ThirdPackage/lwip220/core/def.c ****   }
+ 163              		.loc 1 110 12 view .LVU32
+ 164 0044 3C46     		mov	r4, r7
+ 165              	.LVL12:
+ 166              	.L3:
+ 118:ThirdPackage/lwip220/core/def.c **** }
+ 167              		.loc 1 118 1 view .LVU33
+ 168 0046 2046     		mov	r0, r4
+ 169 0048 BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 170              	.LVL13:
+ 171              	.L9:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s 			page 6
+
+
+ 117:ThirdPackage/lwip220/core/def.c **** }
+ 172              		.loc 1 117 10 view .LVU34
+ 173 004c 0024     		movs	r4, #0
+ 174              	.LVL14:
+ 117:ThirdPackage/lwip220/core/def.c **** }
+ 175              		.loc 1 117 10 view .LVU35
+ 176 004e FAE7     		b	.L3
+ 177              		.cfi_endproc
+ 178              	.LFE162:
+ 180              		.section	.text.lwip_stricmp,"ax",%progbits
+ 181              		.align	1
+ 182              		.global	lwip_stricmp
+ 183              		.syntax unified
+ 184              		.thumb
+ 185              		.thumb_func
+ 187              	lwip_stricmp:
+ 188              	.LFB164:
+ 119:ThirdPackage/lwip220/core/def.c **** #endif
+ 120:ThirdPackage/lwip220/core/def.c **** 
+ 121:ThirdPackage/lwip220/core/def.c **** #ifndef lwip_strnistr
+ 122:ThirdPackage/lwip220/core/def.c **** /**
+ 123:ThirdPackage/lwip220/core/def.c ****  * @ingroup sys_nonstandard
+ 124:ThirdPackage/lwip220/core/def.c ****  * lwIP default implementation for strnistr() non-standard function.
+ 125:ThirdPackage/lwip220/core/def.c ****  * This can be \#defined to strnistr() depending on your platform port.
+ 126:ThirdPackage/lwip220/core/def.c ****  */
+ 127:ThirdPackage/lwip220/core/def.c **** char *
+ 128:ThirdPackage/lwip220/core/def.c **** lwip_strnistr(const char *buffer, const char *token, size_t n)
+ 129:ThirdPackage/lwip220/core/def.c **** {
+ 130:ThirdPackage/lwip220/core/def.c ****   const char *p;
+ 131:ThirdPackage/lwip220/core/def.c ****   size_t tokenlen = strlen(token);
+ 132:ThirdPackage/lwip220/core/def.c ****   if (tokenlen == 0) {
+ 133:ThirdPackage/lwip220/core/def.c ****     return LWIP_CONST_CAST(char *, buffer);
+ 134:ThirdPackage/lwip220/core/def.c ****   }
+ 135:ThirdPackage/lwip220/core/def.c ****   for (p = buffer; *p && (p + tokenlen <= buffer + n); p++) {
+ 136:ThirdPackage/lwip220/core/def.c ****     if (lwip_strnicmp(p, token, tokenlen) == 0) {
+ 137:ThirdPackage/lwip220/core/def.c ****       return LWIP_CONST_CAST(char *, p);
+ 138:ThirdPackage/lwip220/core/def.c ****     }
+ 139:ThirdPackage/lwip220/core/def.c ****   }
+ 140:ThirdPackage/lwip220/core/def.c ****   return NULL;
+ 141:ThirdPackage/lwip220/core/def.c **** }
+ 142:ThirdPackage/lwip220/core/def.c **** #endif
+ 143:ThirdPackage/lwip220/core/def.c **** 
+ 144:ThirdPackage/lwip220/core/def.c **** #ifndef lwip_stricmp
+ 145:ThirdPackage/lwip220/core/def.c **** /**
+ 146:ThirdPackage/lwip220/core/def.c ****  * @ingroup sys_nonstandard
+ 147:ThirdPackage/lwip220/core/def.c ****  * lwIP default implementation for stricmp() non-standard function.
+ 148:ThirdPackage/lwip220/core/def.c ****  * This can be \#defined to stricmp() depending on your platform port.
+ 149:ThirdPackage/lwip220/core/def.c ****  */
+ 150:ThirdPackage/lwip220/core/def.c **** int
+ 151:ThirdPackage/lwip220/core/def.c **** lwip_stricmp(const char *str1, const char *str2)
+ 152:ThirdPackage/lwip220/core/def.c **** {
+ 189              		.loc 1 152 1 is_stmt 1 view -0
+ 190              		.cfi_startproc
+ 191              		@ args = 0, pretend = 0, frame = 0
+ 192              		@ frame_needed = 0, uses_anonymous_args = 0
+ 193              	.LVL15:
+ 194              		.loc 1 152 1 is_stmt 0 view .LVU37
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s 			page 7
+
+
+ 195 0000 00B5     		push	{lr}
+ 196              	.LCFI1:
+ 197              		.cfi_def_cfa_offset 4
+ 198              		.cfi_offset 14, -4
+ 199 0002 00E0     		b	.L15
+ 200              	.LVL16:
+ 201              	.L13:
+ 153:ThirdPackage/lwip220/core/def.c ****   char c1, c2;
+ 154:ThirdPackage/lwip220/core/def.c **** 
+ 155:ThirdPackage/lwip220/core/def.c ****   do {
+ 156:ThirdPackage/lwip220/core/def.c ****     c1 = *str1++;
+ 157:ThirdPackage/lwip220/core/def.c ****     c2 = *str2++;
+ 158:ThirdPackage/lwip220/core/def.c ****     if (c1 != c2) {
+ 159:ThirdPackage/lwip220/core/def.c ****       char c1_upc = c1 | 0x20;
+ 160:ThirdPackage/lwip220/core/def.c ****       if ((c1_upc >= 'a') && (c1_upc <= 'z')) {
+ 161:ThirdPackage/lwip220/core/def.c ****         /* characters are not equal an one is in the alphabet range:
+ 162:ThirdPackage/lwip220/core/def.c ****         downcase both chars and check again */
+ 163:ThirdPackage/lwip220/core/def.c ****         char c2_upc = c2 | 0x20;
+ 164:ThirdPackage/lwip220/core/def.c ****         if (c1_upc != c2_upc) {
+ 165:ThirdPackage/lwip220/core/def.c ****           /* still not equal */
+ 166:ThirdPackage/lwip220/core/def.c ****           /* don't care for < or > */
+ 167:ThirdPackage/lwip220/core/def.c ****           return 1;
+ 168:ThirdPackage/lwip220/core/def.c ****         }
+ 169:ThirdPackage/lwip220/core/def.c ****       } else {
+ 170:ThirdPackage/lwip220/core/def.c ****         /* characters are not equal but none is in the alphabet range */
+ 171:ThirdPackage/lwip220/core/def.c ****         return 1;
+ 172:ThirdPackage/lwip220/core/def.c ****       }
+ 173:ThirdPackage/lwip220/core/def.c ****     }
+ 174:ThirdPackage/lwip220/core/def.c ****   } while (c1 != 0);
+ 202              		.loc 1 174 11 is_stmt 1 view .LVU38
+ 203              		.loc 1 174 3 is_stmt 0 view .LVU39
+ 204 0004 A2B1     		cbz	r2, .L19
+ 205              	.LVL17:
+ 206              	.L15:
+ 153:ThirdPackage/lwip220/core/def.c ****   char c1, c2;
+ 207              		.loc 1 153 3 is_stmt 1 view .LVU40
+ 155:ThirdPackage/lwip220/core/def.c ****     c1 = *str1++;
+ 208              		.loc 1 155 3 view .LVU41
+ 156:ThirdPackage/lwip220/core/def.c ****     c2 = *str2++;
+ 209              		.loc 1 156 5 view .LVU42
+ 156:ThirdPackage/lwip220/core/def.c ****     c2 = *str2++;
+ 210              		.loc 1 156 8 is_stmt 0 view .LVU43
+ 211 0006 0278     		ldrb	r2, [r0]	@ zero_extendqisi2
+ 212 0008 0130     		adds	r0, r0, #1
+ 213              	.LVL18:
+ 157:ThirdPackage/lwip220/core/def.c ****     if (c1 != c2) {
+ 214              		.loc 1 157 5 is_stmt 1 view .LVU44
+ 157:ThirdPackage/lwip220/core/def.c ****     if (c1 != c2) {
+ 215              		.loc 1 157 8 is_stmt 0 view .LVU45
+ 216 000a 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+ 217 000c 0131     		adds	r1, r1, #1
+ 218              	.LVL19:
+ 158:ThirdPackage/lwip220/core/def.c ****       char c1_upc = c1 | 0x20;
+ 219              		.loc 1 158 5 is_stmt 1 view .LVU46
+ 158:ThirdPackage/lwip220/core/def.c ****       char c1_upc = c1 | 0x20;
+ 220              		.loc 1 158 8 is_stmt 0 view .LVU47
+ 221 000e 9A42     		cmp	r2, r3
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s 			page 8
+
+
+ 222 0010 F8D0     		beq	.L13
+ 223              	.LBB2:
+ 159:ThirdPackage/lwip220/core/def.c ****       if ((c1_upc >= 'a') && (c1_upc <= 'z')) {
+ 224              		.loc 1 159 7 is_stmt 1 view .LVU48
+ 159:ThirdPackage/lwip220/core/def.c ****       if ((c1_upc >= 'a') && (c1_upc <= 'z')) {
+ 225              		.loc 1 159 12 is_stmt 0 view .LVU49
+ 226 0012 42F0200E 		orr	lr, r2, #32
+ 227              	.LVL20:
+ 160:ThirdPackage/lwip220/core/def.c ****         /* characters are not equal an one is in the alphabet range:
+ 228              		.loc 1 160 7 is_stmt 1 view .LVU50
+ 160:ThirdPackage/lwip220/core/def.c ****         /* characters are not equal an one is in the alphabet range:
+ 229              		.loc 1 160 27 is_stmt 0 view .LVU51
+ 230 0016 AEF1610C 		sub	ip, lr, #97
+ 231 001a 5FFA8CFC 		uxtb	ip, ip
+ 160:ThirdPackage/lwip220/core/def.c ****         /* characters are not equal an one is in the alphabet range:
+ 232              		.loc 1 160 10 view .LVU52
+ 233 001e BCF1190F 		cmp	ip, #25
+ 234 0022 08D8     		bhi	.L16
+ 235              	.LBB3:
+ 163:ThirdPackage/lwip220/core/def.c ****         if (c1_upc != c2_upc) {
+ 236              		.loc 1 163 9 is_stmt 1 view .LVU53
+ 163:ThirdPackage/lwip220/core/def.c ****         if (c1_upc != c2_upc) {
+ 237              		.loc 1 163 14 is_stmt 0 view .LVU54
+ 238 0024 43F02003 		orr	r3, r3, #32
+ 239              	.LVL21:
+ 164:ThirdPackage/lwip220/core/def.c ****           /* still not equal */
+ 240              		.loc 1 164 9 is_stmt 1 view .LVU55
+ 164:ThirdPackage/lwip220/core/def.c ****           /* still not equal */
+ 241              		.loc 1 164 12 is_stmt 0 view .LVU56
+ 242 0028 9E45     		cmp	lr, r3
+ 243 002a EBD0     		beq	.L13
+ 167:ThirdPackage/lwip220/core/def.c ****         }
+ 244              		.loc 1 167 18 view .LVU57
+ 245 002c 0120     		movs	r0, #1
+ 246              	.LVL22:
+ 167:ThirdPackage/lwip220/core/def.c ****         }
+ 247              		.loc 1 167 18 view .LVU58
+ 248 002e 00E0     		b	.L12
+ 249              	.LVL23:
+ 250              	.L19:
+ 167:ThirdPackage/lwip220/core/def.c ****         }
+ 251              		.loc 1 167 18 view .LVU59
+ 252              	.LBE3:
+ 253              	.LBE2:
+ 175:ThirdPackage/lwip220/core/def.c ****   return 0;
+ 254              		.loc 1 175 10 view .LVU60
+ 255 0030 0020     		movs	r0, #0
+ 256              	.LVL24:
+ 257              	.L12:
+ 176:ThirdPackage/lwip220/core/def.c **** }
+ 258              		.loc 1 176 1 view .LVU61
+ 259 0032 5DF804FB 		ldr	pc, [sp], #4
+ 260              	.LVL25:
+ 261              	.L16:
+ 262              	.LBB4:
+ 171:ThirdPackage/lwip220/core/def.c ****       }
+ 263              		.loc 1 171 16 view .LVU62
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s 			page 9
+
+
+ 264 0036 0120     		movs	r0, #1
+ 265              	.LVL26:
+ 171:ThirdPackage/lwip220/core/def.c ****       }
+ 266              		.loc 1 171 16 view .LVU63
+ 267 0038 FBE7     		b	.L12
+ 268              	.LBE4:
+ 269              		.cfi_endproc
+ 270              	.LFE164:
+ 272              		.section	.text.lwip_strnicmp,"ax",%progbits
+ 273              		.align	1
+ 274              		.global	lwip_strnicmp
+ 275              		.syntax unified
+ 276              		.thumb
+ 277              		.thumb_func
+ 279              	lwip_strnicmp:
+ 280              	.LFB165:
+ 177:ThirdPackage/lwip220/core/def.c **** #endif
+ 178:ThirdPackage/lwip220/core/def.c **** 
+ 179:ThirdPackage/lwip220/core/def.c **** #ifndef lwip_strnicmp
+ 180:ThirdPackage/lwip220/core/def.c **** /**
+ 181:ThirdPackage/lwip220/core/def.c ****  * @ingroup sys_nonstandard
+ 182:ThirdPackage/lwip220/core/def.c ****  * lwIP default implementation for strnicmp() non-standard function.
+ 183:ThirdPackage/lwip220/core/def.c ****  * This can be \#defined to strnicmp() depending on your platform port.
+ 184:ThirdPackage/lwip220/core/def.c ****  */
+ 185:ThirdPackage/lwip220/core/def.c **** int
+ 186:ThirdPackage/lwip220/core/def.c **** lwip_strnicmp(const char *str1, const char *str2, size_t len)
+ 187:ThirdPackage/lwip220/core/def.c **** {
+ 281              		.loc 1 187 1 is_stmt 1 view -0
+ 282              		.cfi_startproc
+ 283              		@ args = 0, pretend = 0, frame = 0
+ 284              		@ frame_needed = 0, uses_anonymous_args = 0
+ 285              	.LVL27:
+ 286              		.loc 1 187 1 is_stmt 0 view .LVU65
+ 287 0000 10B5     		push	{r4, lr}
+ 288              	.LCFI2:
+ 289              		.cfi_def_cfa_offset 8
+ 290              		.cfi_offset 4, -8
+ 291              		.cfi_offset 14, -4
+ 292 0002 02E0     		b	.L23
+ 293              	.LVL28:
+ 294              	.L21:
+ 188:ThirdPackage/lwip220/core/def.c ****   char c1, c2;
+ 189:ThirdPackage/lwip220/core/def.c **** 
+ 190:ThirdPackage/lwip220/core/def.c ****   do {
+ 191:ThirdPackage/lwip220/core/def.c ****     c1 = *str1++;
+ 192:ThirdPackage/lwip220/core/def.c ****     c2 = *str2++;
+ 193:ThirdPackage/lwip220/core/def.c ****     if (c1 != c2) {
+ 194:ThirdPackage/lwip220/core/def.c ****       char c1_upc = c1 | 0x20;
+ 195:ThirdPackage/lwip220/core/def.c ****       if ((c1_upc >= 'a') && (c1_upc <= 'z')) {
+ 196:ThirdPackage/lwip220/core/def.c ****         /* characters are not equal an one is in the alphabet range:
+ 197:ThirdPackage/lwip220/core/def.c ****         downcase both chars and check again */
+ 198:ThirdPackage/lwip220/core/def.c ****         char c2_upc = c2 | 0x20;
+ 199:ThirdPackage/lwip220/core/def.c ****         if (c1_upc != c2_upc) {
+ 200:ThirdPackage/lwip220/core/def.c ****           /* still not equal */
+ 201:ThirdPackage/lwip220/core/def.c ****           /* don't care for < or > */
+ 202:ThirdPackage/lwip220/core/def.c ****           return 1;
+ 203:ThirdPackage/lwip220/core/def.c ****         }
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s 			page 10
+
+
+ 204:ThirdPackage/lwip220/core/def.c ****       } else {
+ 205:ThirdPackage/lwip220/core/def.c ****         /* characters are not equal but none is in the alphabet range */
+ 206:ThirdPackage/lwip220/core/def.c ****         return 1;
+ 207:ThirdPackage/lwip220/core/def.c ****       }
+ 208:ThirdPackage/lwip220/core/def.c ****     }
+ 209:ThirdPackage/lwip220/core/def.c ****     len--;
+ 295              		.loc 1 209 5 is_stmt 1 view .LVU66
+ 210:ThirdPackage/lwip220/core/def.c ****   } while ((len != 0) && (c1 != 0));
+ 296              		.loc 1 210 11 view .LVU67
+ 297              		.loc 1 210 3 is_stmt 0 view .LVU68
+ 298 0004 013A     		subs	r2, r2, #1
+ 299              	.LVL29:
+ 300              		.loc 1 210 3 view .LVU69
+ 301 0006 19D0     		beq	.L26
+ 302              		.loc 1 210 23 discriminator 1 view .LVU70
+ 303 0008 A4B1     		cbz	r4, .L28
+ 304              	.LVL30:
+ 305              	.L23:
+ 188:ThirdPackage/lwip220/core/def.c ****   char c1, c2;
+ 306              		.loc 1 188 3 is_stmt 1 view .LVU71
+ 190:ThirdPackage/lwip220/core/def.c ****     c1 = *str1++;
+ 307              		.loc 1 190 3 view .LVU72
+ 191:ThirdPackage/lwip220/core/def.c ****     c2 = *str2++;
+ 308              		.loc 1 191 5 view .LVU73
+ 191:ThirdPackage/lwip220/core/def.c ****     c2 = *str2++;
+ 309              		.loc 1 191 8 is_stmt 0 view .LVU74
+ 310 000a 0478     		ldrb	r4, [r0]	@ zero_extendqisi2
+ 311 000c 0130     		adds	r0, r0, #1
+ 312              	.LVL31:
+ 192:ThirdPackage/lwip220/core/def.c ****     if (c1 != c2) {
+ 313              		.loc 1 192 5 is_stmt 1 view .LVU75
+ 192:ThirdPackage/lwip220/core/def.c ****     if (c1 != c2) {
+ 314              		.loc 1 192 8 is_stmt 0 view .LVU76
+ 315 000e 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+ 316 0010 0131     		adds	r1, r1, #1
+ 317              	.LVL32:
+ 193:ThirdPackage/lwip220/core/def.c ****       char c1_upc = c1 | 0x20;
+ 318              		.loc 1 193 5 is_stmt 1 view .LVU77
+ 193:ThirdPackage/lwip220/core/def.c ****       char c1_upc = c1 | 0x20;
+ 319              		.loc 1 193 8 is_stmt 0 view .LVU78
+ 320 0012 9C42     		cmp	r4, r3
+ 321 0014 F6D0     		beq	.L21
+ 322              	.LBB5:
+ 194:ThirdPackage/lwip220/core/def.c ****       if ((c1_upc >= 'a') && (c1_upc <= 'z')) {
+ 323              		.loc 1 194 7 is_stmt 1 view .LVU79
+ 194:ThirdPackage/lwip220/core/def.c ****       if ((c1_upc >= 'a') && (c1_upc <= 'z')) {
+ 324              		.loc 1 194 12 is_stmt 0 view .LVU80
+ 325 0016 44F0200E 		orr	lr, r4, #32
+ 326              	.LVL33:
+ 195:ThirdPackage/lwip220/core/def.c ****         /* characters are not equal an one is in the alphabet range:
+ 327              		.loc 1 195 7 is_stmt 1 view .LVU81
+ 195:ThirdPackage/lwip220/core/def.c ****         /* characters are not equal an one is in the alphabet range:
+ 328              		.loc 1 195 27 is_stmt 0 view .LVU82
+ 329 001a AEF1610C 		sub	ip, lr, #97
+ 330 001e 5FFA8CFC 		uxtb	ip, ip
+ 195:ThirdPackage/lwip220/core/def.c ****         /* characters are not equal an one is in the alphabet range:
+ 331              		.loc 1 195 10 view .LVU83
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s 			page 11
+
+
+ 332 0022 BCF1190F 		cmp	ip, #25
+ 333 0026 07D8     		bhi	.L24
+ 334              	.LBB6:
+ 198:ThirdPackage/lwip220/core/def.c ****         if (c1_upc != c2_upc) {
+ 335              		.loc 1 198 9 is_stmt 1 view .LVU84
+ 198:ThirdPackage/lwip220/core/def.c ****         if (c1_upc != c2_upc) {
+ 336              		.loc 1 198 14 is_stmt 0 view .LVU85
+ 337 0028 43F02003 		orr	r3, r3, #32
+ 338              	.LVL34:
+ 199:ThirdPackage/lwip220/core/def.c ****           /* still not equal */
+ 339              		.loc 1 199 9 is_stmt 1 view .LVU86
+ 199:ThirdPackage/lwip220/core/def.c ****           /* still not equal */
+ 340              		.loc 1 199 12 is_stmt 0 view .LVU87
+ 341 002c 9E45     		cmp	lr, r3
+ 342 002e E9D0     		beq	.L21
+ 202:ThirdPackage/lwip220/core/def.c ****         }
+ 343              		.loc 1 202 18 view .LVU88
+ 344 0030 0120     		movs	r0, #1
+ 345              	.LVL35:
+ 202:ThirdPackage/lwip220/core/def.c ****         }
+ 346              		.loc 1 202 18 view .LVU89
+ 347 0032 04E0     		b	.L20
+ 348              	.LVL36:
+ 349              	.L28:
+ 202:ThirdPackage/lwip220/core/def.c ****         }
+ 350              		.loc 1 202 18 view .LVU90
+ 351              	.LBE6:
+ 352              	.LBE5:
+ 211:ThirdPackage/lwip220/core/def.c ****   return 0;
+ 353              		.loc 1 211 10 view .LVU91
+ 354 0034 0020     		movs	r0, #0
+ 355              	.LVL37:
+ 356              		.loc 1 211 10 view .LVU92
+ 357 0036 02E0     		b	.L20
+ 358              	.LVL38:
+ 359              	.L24:
+ 360              	.LBB7:
+ 206:ThirdPackage/lwip220/core/def.c ****       }
+ 361              		.loc 1 206 16 view .LVU93
+ 362 0038 0120     		movs	r0, #1
+ 363              	.LVL39:
+ 206:ThirdPackage/lwip220/core/def.c ****       }
+ 364              		.loc 1 206 16 view .LVU94
+ 365 003a 00E0     		b	.L20
+ 366              	.LVL40:
+ 367              	.L26:
+ 206:ThirdPackage/lwip220/core/def.c ****       }
+ 368              		.loc 1 206 16 view .LVU95
+ 369              	.LBE7:
+ 370              		.loc 1 211 10 view .LVU96
+ 371 003c 0020     		movs	r0, #0
+ 372              	.LVL41:
+ 373              	.L20:
+ 212:ThirdPackage/lwip220/core/def.c **** }
+ 374              		.loc 1 212 1 view .LVU97
+ 375 003e 10BD     		pop	{r4, pc}
+ 376              		.loc 1 212 1 view .LVU98
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s 			page 12
+
+
+ 377              		.cfi_endproc
+ 378              	.LFE165:
+ 380              		.section	.text.lwip_strnistr,"ax",%progbits
+ 381              		.align	1
+ 382              		.global	lwip_strnistr
+ 383              		.syntax unified
+ 384              		.thumb
+ 385              		.thumb_func
+ 387              	lwip_strnistr:
+ 388              	.LVL42:
+ 389              	.LFB163:
+ 129:ThirdPackage/lwip220/core/def.c ****   const char *p;
+ 390              		.loc 1 129 1 is_stmt 1 view -0
+ 391              		.cfi_startproc
+ 392              		@ args = 0, pretend = 0, frame = 0
+ 393              		@ frame_needed = 0, uses_anonymous_args = 0
+ 129:ThirdPackage/lwip220/core/def.c ****   const char *p;
+ 394              		.loc 1 129 1 is_stmt 0 view .LVU100
+ 395 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 396              	.LCFI3:
+ 397              		.cfi_def_cfa_offset 24
+ 398              		.cfi_offset 4, -24
+ 399              		.cfi_offset 5, -20
+ 400              		.cfi_offset 6, -16
+ 401              		.cfi_offset 7, -12
+ 402              		.cfi_offset 8, -8
+ 403              		.cfi_offset 14, -4
+ 404 0004 0646     		mov	r6, r0
+ 405 0006 0F46     		mov	r7, r1
+ 406 0008 9046     		mov	r8, r2
+ 130:ThirdPackage/lwip220/core/def.c ****   size_t tokenlen = strlen(token);
+ 407              		.loc 1 130 3 is_stmt 1 view .LVU101
+ 131:ThirdPackage/lwip220/core/def.c ****   if (tokenlen == 0) {
+ 408              		.loc 1 131 3 view .LVU102
+ 131:ThirdPackage/lwip220/core/def.c ****   if (tokenlen == 0) {
+ 409              		.loc 1 131 21 is_stmt 0 view .LVU103
+ 410 000a 0846     		mov	r0, r1
+ 411              	.LVL43:
+ 131:ThirdPackage/lwip220/core/def.c ****   if (tokenlen == 0) {
+ 412              		.loc 1 131 21 view .LVU104
+ 413 000c FFF7FEFF 		bl	strlen
+ 414              	.LVL44:
+ 132:ThirdPackage/lwip220/core/def.c ****     return LWIP_CONST_CAST(char *, buffer);
+ 415              		.loc 1 132 3 is_stmt 1 view .LVU105
+ 132:ThirdPackage/lwip220/core/def.c ****     return LWIP_CONST_CAST(char *, buffer);
+ 416              		.loc 1 132 6 is_stmt 0 view .LVU106
+ 417 0010 A0B1     		cbz	r0, .L33
+ 418 0012 0546     		mov	r5, r0
+ 135:ThirdPackage/lwip220/core/def.c ****     if (lwip_strnicmp(p, token, tokenlen) == 0) {
+ 419              		.loc 1 135 10 view .LVU107
+ 420 0014 3446     		mov	r4, r6
+ 421 0016 00E0     		b	.L31
+ 422              	.LVL45:
+ 423              	.L37:
+ 135:ThirdPackage/lwip220/core/def.c ****     if (lwip_strnicmp(p, token, tokenlen) == 0) {
+ 424              		.loc 1 135 56 is_stmt 1 discriminator 2 view .LVU108
+ 135:ThirdPackage/lwip220/core/def.c ****     if (lwip_strnicmp(p, token, tokenlen) == 0) {
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s 			page 13
+
+
+ 425              		.loc 1 135 57 is_stmt 0 discriminator 2 view .LVU109
+ 426 0018 0134     		adds	r4, r4, #1
+ 427              	.LVL46:
+ 428              	.L31:
+ 135:ThirdPackage/lwip220/core/def.c ****     if (lwip_strnicmp(p, token, tokenlen) == 0) {
+ 429              		.loc 1 135 20 is_stmt 1 discriminator 1 view .LVU110
+ 430 001a 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 135:ThirdPackage/lwip220/core/def.c ****     if (lwip_strnicmp(p, token, tokenlen) == 0) {
+ 431              		.loc 1 135 3 is_stmt 0 discriminator 1 view .LVU111
+ 432 001c 93B1     		cbz	r3, .L34
+ 135:ThirdPackage/lwip220/core/def.c ****     if (lwip_strnicmp(p, token, tokenlen) == 0) {
+ 433              		.loc 1 135 29 discriminator 3 view .LVU112
+ 434 001e 6319     		adds	r3, r4, r5
+ 135:ThirdPackage/lwip220/core/def.c ****     if (lwip_strnicmp(p, token, tokenlen) == 0) {
+ 435              		.loc 1 135 50 discriminator 3 view .LVU113
+ 436 0020 06EB0802 		add	r2, r6, r8
+ 135:ThirdPackage/lwip220/core/def.c ****     if (lwip_strnicmp(p, token, tokenlen) == 0) {
+ 437              		.loc 1 135 23 discriminator 3 view .LVU114
+ 438 0024 9342     		cmp	r3, r2
+ 439 0026 07D8     		bhi	.L36
+ 136:ThirdPackage/lwip220/core/def.c ****       return LWIP_CONST_CAST(char *, p);
+ 440              		.loc 1 136 5 is_stmt 1 view .LVU115
+ 136:ThirdPackage/lwip220/core/def.c ****       return LWIP_CONST_CAST(char *, p);
+ 441              		.loc 1 136 9 is_stmt 0 view .LVU116
+ 442 0028 2A46     		mov	r2, r5
+ 443 002a 3946     		mov	r1, r7
+ 444 002c 2046     		mov	r0, r4
+ 445 002e FFF7FEFF 		bl	lwip_strnicmp
+ 446              	.LVL47:
+ 136:ThirdPackage/lwip220/core/def.c ****       return LWIP_CONST_CAST(char *, p);
+ 447              		.loc 1 136 8 view .LVU117
+ 448 0032 0028     		cmp	r0, #0
+ 449 0034 F0D1     		bne	.L37
+ 450 0036 02E0     		b	.L29
+ 451              	.L36:
+ 140:ThirdPackage/lwip220/core/def.c **** }
+ 452              		.loc 1 140 10 view .LVU118
+ 453 0038 0024     		movs	r4, #0
+ 454              	.LVL48:
+ 140:ThirdPackage/lwip220/core/def.c **** }
+ 455              		.loc 1 140 10 view .LVU119
+ 456 003a 00E0     		b	.L29
+ 457              	.LVL49:
+ 458              	.L33:
+ 133:ThirdPackage/lwip220/core/def.c ****   }
+ 459              		.loc 1 133 12 view .LVU120
+ 460 003c 3446     		mov	r4, r6
+ 461              	.LVL50:
+ 462              	.L29:
+ 141:ThirdPackage/lwip220/core/def.c **** #endif
+ 463              		.loc 1 141 1 view .LVU121
+ 464 003e 2046     		mov	r0, r4
+ 465 0040 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 466              	.LVL51:
+ 467              	.L34:
+ 140:ThirdPackage/lwip220/core/def.c **** }
+ 468              		.loc 1 140 10 view .LVU122
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s 			page 14
+
+
+ 469 0044 0024     		movs	r4, #0
+ 470              	.LVL52:
+ 140:ThirdPackage/lwip220/core/def.c **** }
+ 471              		.loc 1 140 10 view .LVU123
+ 472 0046 FAE7     		b	.L29
+ 473              		.cfi_endproc
+ 474              	.LFE163:
+ 476              		.section	.text.lwip_itoa,"ax",%progbits
+ 477              		.align	1
+ 478              		.global	lwip_itoa
+ 479              		.syntax unified
+ 480              		.thumb
+ 481              		.thumb_func
+ 483              	lwip_itoa:
+ 484              	.LVL53:
+ 485              	.LFB166:
+ 213:ThirdPackage/lwip220/core/def.c **** #endif
+ 214:ThirdPackage/lwip220/core/def.c **** 
+ 215:ThirdPackage/lwip220/core/def.c **** #ifndef lwip_itoa
+ 216:ThirdPackage/lwip220/core/def.c **** /**
+ 217:ThirdPackage/lwip220/core/def.c ****  * @ingroup sys_nonstandard
+ 218:ThirdPackage/lwip220/core/def.c ****  * lwIP default implementation for itoa() non-standard function.
+ 219:ThirdPackage/lwip220/core/def.c ****  * This can be \#defined to itoa() or snprintf(result, bufsize, "%d", number) depending on your pla
+ 220:ThirdPackage/lwip220/core/def.c ****  */
+ 221:ThirdPackage/lwip220/core/def.c **** void
+ 222:ThirdPackage/lwip220/core/def.c **** lwip_itoa(char *result, size_t bufsize, int number)
+ 223:ThirdPackage/lwip220/core/def.c **** {
+ 486              		.loc 1 223 1 is_stmt 1 view -0
+ 487              		.cfi_startproc
+ 488              		@ args = 0, pretend = 0, frame = 0
+ 489              		@ frame_needed = 0, uses_anonymous_args = 0
+ 490              		.loc 1 223 1 is_stmt 0 view .LVU125
+ 491 0000 10B5     		push	{r4, lr}
+ 492              	.LCFI4:
+ 493              		.cfi_def_cfa_offset 8
+ 494              		.cfi_offset 4, -8
+ 495              		.cfi_offset 14, -4
+ 496 0002 8446     		mov	ip, r0
+ 497 0004 8E46     		mov	lr, r1
+ 224:ThirdPackage/lwip220/core/def.c ****   char *res = result;
+ 498              		.loc 1 224 3 is_stmt 1 view .LVU126
+ 499              	.LVL54:
+ 225:ThirdPackage/lwip220/core/def.c ****   char *tmp = result + bufsize - 1;
+ 500              		.loc 1 225 3 view .LVU127
+ 501              		.loc 1 225 32 is_stmt 0 view .LVU128
+ 502 0006 4B1E     		subs	r3, r1, #1
+ 503              		.loc 1 225 9 view .LVU129
+ 504 0008 C118     		adds	r1, r0, r3
+ 505              	.LVL55:
+ 226:ThirdPackage/lwip220/core/def.c ****   int n = (number >= 0) ? number : -number;
+ 506              		.loc 1 226 3 is_stmt 1 view .LVU130
+ 507              		.loc 1 226 7 is_stmt 0 view .LVU131
+ 508 000a 82EAE274 		eor	r4, r2, r2, asr #31
+ 509 000e A4EBE274 		sub	r4, r4, r2, asr #31
+ 510              	.LVL56:
+ 227:ThirdPackage/lwip220/core/def.c **** 
+ 228:ThirdPackage/lwip220/core/def.c ****   /* handle invalid bufsize */
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s 			page 15
+
+
+ 229:ThirdPackage/lwip220/core/def.c ****   if (bufsize < 2) {
+ 511              		.loc 1 229 3 is_stmt 1 view .LVU132
+ 512              		.loc 1 229 6 is_stmt 0 view .LVU133
+ 513 0012 BEF1010F 		cmp	lr, #1
+ 514 0016 05D9     		bls	.L50
+ 230:ThirdPackage/lwip220/core/def.c ****     if (bufsize == 1) {
+ 231:ThirdPackage/lwip220/core/def.c ****       *result = 0;
+ 232:ThirdPackage/lwip220/core/def.c ****     }
+ 233:ThirdPackage/lwip220/core/def.c ****     return;
+ 234:ThirdPackage/lwip220/core/def.c ****   }
+ 235:ThirdPackage/lwip220/core/def.c **** 
+ 236:ThirdPackage/lwip220/core/def.c ****   /* First, add sign */
+ 237:ThirdPackage/lwip220/core/def.c ****   if (number < 0) {
+ 515              		.loc 1 237 3 is_stmt 1 view .LVU134
+ 516              		.loc 1 237 6 is_stmt 0 view .LVU135
+ 517 0018 002A     		cmp	r2, #0
+ 518 001a 07DB     		blt	.L51
+ 519              	.LVL57:
+ 520              	.L42:
+ 238:ThirdPackage/lwip220/core/def.c ****     *res++ = '-';
+ 239:ThirdPackage/lwip220/core/def.c ****   }
+ 240:ThirdPackage/lwip220/core/def.c ****   /* Then create the string from the end and stop if buffer full,
+ 241:ThirdPackage/lwip220/core/def.c ****      and ensure output string is zero terminated */
+ 242:ThirdPackage/lwip220/core/def.c ****   *tmp = 0;
+ 521              		.loc 1 242 3 is_stmt 1 view .LVU136
+ 522              		.loc 1 242 8 is_stmt 0 view .LVU137
+ 523 001c 0022     		movs	r2, #0
+ 524 001e 0CF80320 		strb	r2, [ip, r3]
+ 243:ThirdPackage/lwip220/core/def.c ****   while ((n != 0) && (tmp > res)) {
+ 525              		.loc 1 243 3 is_stmt 1 view .LVU138
+ 526              		.loc 1 243 9 is_stmt 0 view .LVU139
+ 527 0022 17E0     		b	.L43
+ 528              	.LVL58:
+ 529              	.L50:
+ 230:ThirdPackage/lwip220/core/def.c ****     if (bufsize == 1) {
+ 530              		.loc 1 230 5 is_stmt 1 view .LVU140
+ 230:ThirdPackage/lwip220/core/def.c ****     if (bufsize == 1) {
+ 531              		.loc 1 230 8 is_stmt 0 view .LVU141
+ 532 0024 24D1     		bne	.L38
+ 231:ThirdPackage/lwip220/core/def.c ****     }
+ 533              		.loc 1 231 7 is_stmt 1 view .LVU142
+ 231:ThirdPackage/lwip220/core/def.c ****     }
+ 534              		.loc 1 231 15 is_stmt 0 view .LVU143
+ 535 0026 0023     		movs	r3, #0
+ 536 0028 0370     		strb	r3, [r0]
+ 233:ThirdPackage/lwip220/core/def.c ****   }
+ 537              		.loc 1 233 5 is_stmt 1 view .LVU144
+ 538 002a 21E0     		b	.L38
+ 539              	.L51:
+ 238:ThirdPackage/lwip220/core/def.c ****   }
+ 540              		.loc 1 238 5 view .LVU145
+ 541              	.LVL59:
+ 238:ThirdPackage/lwip220/core/def.c ****   }
+ 542              		.loc 1 238 12 is_stmt 0 view .LVU146
+ 543 002c 2D22     		movs	r2, #45
+ 544              	.LVL60:
+ 238:ThirdPackage/lwip220/core/def.c ****   }
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s 			page 16
+
+
+ 545              		.loc 1 238 12 view .LVU147
+ 546 002e 00F8012B 		strb	r2, [r0], #1
+ 547              	.LVL61:
+ 238:ThirdPackage/lwip220/core/def.c ****   }
+ 548              		.loc 1 238 12 view .LVU148
+ 549 0032 F3E7     		b	.L42
+ 550              	.L45:
+ 551              	.LBB8:
+ 244:ThirdPackage/lwip220/core/def.c ****     char val = (char)('0' + (n % 10));
+ 552              		.loc 1 244 5 is_stmt 1 view .LVU149
+ 553              		.loc 1 244 32 is_stmt 0 view .LVU150
+ 554 0034 124A     		ldr	r2, .L53
+ 555 0036 82FB0432 		smull	r3, r2, r2, r4
+ 556 003a E317     		asrs	r3, r4, #31
+ 557 003c C3EBA203 		rsb	r3, r3, r2, asr #2
+ 558 0040 1A46     		mov	r2, r3
+ 559 0042 03EB8303 		add	r3, r3, r3, lsl #2
+ 560 0046 A4EB4303 		sub	r3, r4, r3, lsl #1
+ 561              		.loc 1 244 16 view .LVU151
+ 562 004a DBB2     		uxtb	r3, r3
+ 563              		.loc 1 244 10 view .LVU152
+ 564 004c 3033     		adds	r3, r3, #48
+ 565              	.LVL62:
+ 245:ThirdPackage/lwip220/core/def.c ****     tmp--;
+ 566              		.loc 1 245 5 is_stmt 1 view .LVU153
+ 246:ThirdPackage/lwip220/core/def.c ****     *tmp = val;
+ 567              		.loc 1 246 5 view .LVU154
+ 568              		.loc 1 246 10 is_stmt 0 view .LVU155
+ 569 004e 01F8013D 		strb	r3, [r1, #-1]!
+ 570              	.LVL63:
+ 247:ThirdPackage/lwip220/core/def.c ****     n = n / 10;
+ 571              		.loc 1 247 5 is_stmt 1 view .LVU156
+ 572              		.loc 1 247 7 is_stmt 0 view .LVU157
+ 573 0052 1446     		mov	r4, r2
+ 574              	.LVL64:
+ 575              	.L43:
+ 576              		.loc 1 247 7 view .LVU158
+ 577              	.LBE8:
+ 243:ThirdPackage/lwip220/core/def.c ****     char val = (char)('0' + (n % 10));
+ 578              		.loc 1 243 9 is_stmt 1 view .LVU159
+ 579 0054 0CB1     		cbz	r4, .L44
+ 243:ThirdPackage/lwip220/core/def.c ****     char val = (char)('0' + (n % 10));
+ 580              		.loc 1 243 19 is_stmt 0 discriminator 1 view .LVU160
+ 581 0056 8842     		cmp	r0, r1
+ 582 0058 ECD3     		bcc	.L45
+ 583              	.L44:
+ 248:ThirdPackage/lwip220/core/def.c ****   }
+ 249:ThirdPackage/lwip220/core/def.c ****   if (n) {
+ 584              		.loc 1 249 3 is_stmt 1 view .LVU161
+ 585              		.loc 1 249 6 is_stmt 0 view .LVU162
+ 586 005a 34B9     		cbnz	r4, .L52
+ 250:ThirdPackage/lwip220/core/def.c ****     /* buffer is too small */
+ 251:ThirdPackage/lwip220/core/def.c ****     *result = 0;
+ 252:ThirdPackage/lwip220/core/def.c ****     return;
+ 253:ThirdPackage/lwip220/core/def.c ****   }
+ 254:ThirdPackage/lwip220/core/def.c ****   if (*tmp == 0) {
+ 587              		.loc 1 254 3 is_stmt 1 view .LVU163
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s 			page 17
+
+
+ 588              		.loc 1 254 7 is_stmt 0 view .LVU164
+ 589 005c 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+ 590              		.loc 1 254 6 view .LVU165
+ 591 005e 43B9     		cbnz	r3, .L47
+ 255:ThirdPackage/lwip220/core/def.c ****     /* Nothing added? */
+ 256:ThirdPackage/lwip220/core/def.c ****     *res++ = '0';
+ 592              		.loc 1 256 5 is_stmt 1 view .LVU166
+ 593              	.LVL65:
+ 594              		.loc 1 256 12 is_stmt 0 view .LVU167
+ 595 0060 3023     		movs	r3, #48
+ 596 0062 0370     		strb	r3, [r0]
+ 257:ThirdPackage/lwip220/core/def.c ****     *res++ = 0;
+ 597              		.loc 1 257 5 is_stmt 1 view .LVU168
+ 598              	.LVL66:
+ 599              		.loc 1 257 12 is_stmt 0 view .LVU169
+ 600 0064 0023     		movs	r3, #0
+ 601 0066 4370     		strb	r3, [r0, #1]
+ 258:ThirdPackage/lwip220/core/def.c ****     return;
+ 602              		.loc 1 258 5 is_stmt 1 view .LVU170
+ 603 0068 02E0     		b	.L38
+ 604              	.LVL67:
+ 605              	.L52:
+ 251:ThirdPackage/lwip220/core/def.c ****     return;
+ 606              		.loc 1 251 5 view .LVU171
+ 251:ThirdPackage/lwip220/core/def.c ****     return;
+ 607              		.loc 1 251 13 is_stmt 0 view .LVU172
+ 608 006a 0023     		movs	r3, #0
+ 609 006c 8CF80030 		strb	r3, [ip]
+ 252:ThirdPackage/lwip220/core/def.c ****   }
+ 610              		.loc 1 252 5 is_stmt 1 view .LVU173
+ 611              	.LVL68:
+ 612              	.L38:
+ 259:ThirdPackage/lwip220/core/def.c ****   }
+ 260:ThirdPackage/lwip220/core/def.c ****   /* move from temporary buffer to output buffer (sign is not moved) */
+ 261:ThirdPackage/lwip220/core/def.c ****   memmove(res, tmp, (size_t)((result + bufsize) - tmp));
+ 262:ThirdPackage/lwip220/core/def.c **** }
+ 613              		.loc 1 262 1 is_stmt 0 view .LVU174
+ 614 0070 10BD     		pop	{r4, pc}
+ 615              	.LVL69:
+ 616              	.L47:
+ 261:ThirdPackage/lwip220/core/def.c **** }
+ 617              		.loc 1 261 3 is_stmt 1 view .LVU175
+ 261:ThirdPackage/lwip220/core/def.c **** }
+ 618              		.loc 1 261 38 is_stmt 0 view .LVU176
+ 619 0072 0CEB0E02 		add	r2, ip, lr
+ 261:ThirdPackage/lwip220/core/def.c **** }
+ 620              		.loc 1 261 3 view .LVU177
+ 621 0076 521A     		subs	r2, r2, r1
+ 622 0078 FFF7FEFF 		bl	memmove
+ 623              	.LVL70:
+ 261:ThirdPackage/lwip220/core/def.c **** }
+ 624              		.loc 1 261 3 view .LVU178
+ 625 007c F8E7     		b	.L38
+ 626              	.L54:
+ 627 007e 00BF     		.align	2
+ 628              	.L53:
+ 629 0080 67666666 		.word	1717986919
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s 			page 18
+
+
+ 630              		.cfi_endproc
+ 631              	.LFE166:
+ 633              		.text
+ 634              	.Letext0:
+ 635              		.file 2 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 636              		.file 3 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 637              		.file 4 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\lib\\gcc\\arm-none-eabi\
+ 638              		.file 5 "ThirdPackage/lwip220/include/lwip/arch.h"
+ 639              		.file 6 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ARM GAS  C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s 			page 19
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 def.c
+C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s:20     .text.lwip_htons:00000000 $t
+C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s:26     .text.lwip_htons:00000000 lwip_htons
+C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s:47     .text.lwip_htonl:00000000 $t
+C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s:53     .text.lwip_htonl:00000000 lwip_htonl
+C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s:78     .text.lwip_strnstr:00000000 $t
+C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s:84     .text.lwip_strnstr:00000000 lwip_strnstr
+C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s:181    .text.lwip_stricmp:00000000 $t
+C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s:187    .text.lwip_stricmp:00000000 lwip_stricmp
+C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s:273    .text.lwip_strnicmp:00000000 $t
+C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s:279    .text.lwip_strnicmp:00000000 lwip_strnicmp
+C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s:381    .text.lwip_strnistr:00000000 $t
+C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s:387    .text.lwip_strnistr:00000000 lwip_strnistr
+C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s:477    .text.lwip_itoa:00000000 $t
+C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s:483    .text.lwip_itoa:00000000 lwip_itoa
+C:\Users\86188\AppData\Local\Temp\cclA0Ht9.s:629    .text.lwip_itoa:00000080 $d
+
+UNDEFINED SYMBOLS
+strlen
+strncmp
+memmove

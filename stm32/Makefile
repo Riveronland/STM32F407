@@ -57,7 +57,109 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c \
 Core/Src/system_stm32f4xx.c \
 Core/Src/sysmem.c \
-Core/Src/syscalls.c  
+Core/Src/syscalls.c  \
+ThirdPackage/freertos/croutine.c\
+ThirdPackage/freertos/event_groups.c		\
+ThirdPackage/freertos/heap_4.c				\
+ThirdPackage/freertos/list.c				\
+ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c				\
+ThirdPackage/freertos/queue.c				\
+ThirdPackage/freertos/stream_buffer.c		\
+ThirdPackage/freertos/tasks.c				\
+ThirdPackage/freertos/timers.c				
+# ThirdPackage/lwip220/api/api_lib.c				\
+# ThirdPackage/lwip220/api/api_msg.c				\
+# ThirdPackage/lwip220/api/err.c					\
+# ThirdPackage/lwip220/api/if_api.c				\
+# ThirdPackage/lwip220/api/netbuf.c				\
+# ThirdPackage/lwip220/api/netdb.c				\
+# ThirdPackage/lwip220/api/netifapi.c				\
+# ThirdPackage/lwip220/api/sockets.c				\
+# ThirdPackage/lwip220/api/tcpip.c				\
+# ThirdPackage/lwip220/core/altcp.c				\
+# ThirdPackage/lwip220/core/altcp_alloc.c			\
+# ThirdPackage/lwip220/core/altcp_tcp.c			\
+# ThirdPackage/lwip220/core/def.c					\
+# ThirdPackage/lwip220/core/dns.c					\
+# ThirdPackage/lwip220/core/inet_chksum.c			\
+# ThirdPackage/lwip220/core/init.c				\
+# ThirdPackage/lwip220/core/ip.c					\
+# ThirdPackage/lwip220/core/mem.c					\
+# ThirdPackage/lwip220/core/memp.c				\
+# ThirdPackage/lwip220/core/netif.c				\
+# ThirdPackage/lwip220/core/pbuf.c				\
+# ThirdPackage/lwip220/core/raw.c					\
+# ThirdPackage/lwip220/core/stats.c				\
+# ThirdPackage/lwip220/core/sys.c					\
+# ThirdPackage/lwip220/core/tcp.c					\
+# ThirdPackage/lwip220/core/tcp_in.c				\
+# ThirdPackage/lwip220/core/tcp_out.c				\
+# ThirdPackage/lwip220/core/timeouts.c			\
+# ThirdPackage/lwip220/core/udp.c					\
+# ThirdPackage/lwip220/core/ipv4/acd.c				\
+# ThirdPackage/lwip220/core/ipv4/autoip.c				\
+# ThirdPackage/lwip220/core/ipv4/dhcp.c				\
+# ThirdPackage/lwip220/core/ipv4/etharp.c				\
+# ThirdPackage/lwip220/core/ipv4/icmp.c				\
+# ThirdPackage/lwip220/core/ipv4/igmp.c				\
+# ThirdPackage/lwip220/core/ipv4/ip4.c				\
+# ThirdPackage/lwip220/core/ipv4/ip4_addr.c			\
+# ThirdPackage/lwip220/core/ipv4/ip4_frag.c			\
+# ThirdPackage/lwip220/core/ipv6/dhcp6.c				\
+# ThirdPackage/lwip220/core/ipv6/ethip6.c				\
+# ThirdPackage/lwip220/core/ipv6/icmp6.c				\
+# ThirdPackage/lwip220/core/ipv6/inet6.c				\
+# ThirdPackage/lwip220/core/ipv6/ip6.c				\
+# ThirdPackage/lwip220/core/ipv6/ip6_addr.c			\
+# ThirdPackage/lwip220/core/ipv6/ip6_frag.c			\
+# ThirdPackage/lwip220/core/ipv6/mld6.c				\
+# ThirdPackage/lwip220/core/ipv6/nd6.c				\
+# ThirdPackage/lwip220/netif/bridgeif.c				\
+# ThirdPackage/lwip220/netif/bridgeif_fdb.c			\
+# ThirdPackage/lwip220/netif/ethernet.c				\
+# ThirdPackage/lwip220/netif/lowpan6.c				\
+# ThirdPackage/lwip220/netif/lowpan6_ble.c			\
+# ThirdPackage/lwip220/netif/lowpan6_common.c			\
+# ThirdPackage/lwip220/netif/slipif.c					\
+# ThirdPackage/lwip220/netif/zepif.c					\
+# ThirdPackage/lwip220/netif/ppp/auth.c				\
+# ThirdPackage/lwip220/netif/ppp/ccp.c				\
+# ThirdPackage/lwip220/netif/ppp/chap_ms.c			\
+# ThirdPackage/lwip220/netif/ppp/chap-md5.c			\
+# ThirdPackage/lwip220/netif/ppp/chap-new.c			\
+# ThirdPackage/lwip220/netif/ppp/demand.c				\
+# ThirdPackage/lwip220/netif/ppp/eap.c				\
+# ThirdPackage/lwip220/netif/ppp/ecp.c				\
+# ThirdPackage/lwip220/netif/ppp/eui64.c				\
+# ThirdPackage/lwip220/netif/ppp/fsm.c				\
+# ThirdPackage/lwip220/netif/ppp/ipcp.c				\
+# ThirdPackage/lwip220/netif/ppp/ipv6cp.c				\
+# ThirdPackage/lwip220/netif/ppp/lcp.c				\
+# ThirdPackage/lwip220/netif/ppp/magic.c				\
+# ThirdPackage/lwip220/netif/ppp/mppe.c				\
+# ThirdPackage/lwip220/netif/ppp/multilink.c			\
+# ThirdPackage/lwip220/netif/ppp/ppp.c				\
+# ThirdPackage/lwip220/netif/ppp/pppapi.c				\
+# ThirdPackage/lwip220/netif/ppp/pppcrypt.c			\
+# ThirdPackage/lwip220/netif/ppp/pppoe.c				\
+# ThirdPackage/lwip220/netif/ppp/pppol2tp.c			\
+# ThirdPackage/lwip220/netif/ppp/pppos.c				\
+# ThirdPackage/lwip220/netif/ppp/upap.c				\
+# ThirdPackage/lwip220/netif/ppp/utils.c				\
+# ThirdPackage/lwip220/netif/ppp/vj.c					\
+# ThirdPackage/lwip220/netif/ppp/polarssl/arc4.c		\
+# ThirdPackage/lwip220/netif/ppp/polarssl/des.c		\
+# ThirdPackage/lwip220/netif/ppp/polarssl/md4.c		\
+# ThirdPackage/lwip220/netif/ppp/polarssl/md5.c		\
+# ThirdPackage/lwip220/netif/ppp/polarssl/sha1.c		\
+# ThirdPackage/lwip_app/dp83848.c						\
+# ThirdPackage/lwip_app/ethernetif.c					\
+# ThirdPackage/lwip_app/lwip.c						\
+# ThirdPackage/lwip_app/sys_arch.c					\
+# ThirdPackage/lwip_app/dp83848.c						\
+# ThirdPackage/lwip_app/ethernetif.c					\
+# ThirdPackage/lwip_app/lwip.c						\
+# ThirdPackage/lwip_app/sys_arch.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -121,7 +223,11 @@ C_INCLUDES =  \
 -IDrivers/STM32F4xx_HAL_Driver/Inc \
 -IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy \
 -IDrivers/CMSIS/Device/ST/STM32F4xx/Include \
--IDrivers/CMSIS/Include
+-IDrivers/CMSIS/Include						\
+-IThirdPackage/freertos/include				\
+-IThirdPackage/freertos/portable/GCC/ARM_CM4F	\
+-IThirdPackage/lwip220/include					\
+-IThirdPackage/lwip_app
 
 
 # compile gcc flags

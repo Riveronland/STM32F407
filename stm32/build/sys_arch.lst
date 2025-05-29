@@ -1,0 +1,1690 @@
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"sys_arch.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.sys_mbox_new,"ax",%progbits
+  20              		.align	1
+  21              		.global	sys_mbox_new
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	sys_mbox_new:
+  27              	.LVL0:
+  28              	.LFB160:
+  29              		.file 1 "ThirdPackage/lwip_app/sys_arch.c"
+   1:ThirdPackage/lwip_app/sys_arch.c **** /*
+   2:ThirdPackage/lwip_app/sys_arch.c ****  * Copyright (c) 2001-2003 Swedish Institute of Computer Science.
+   3:ThirdPackage/lwip_app/sys_arch.c ****  * All rights reserved.
+   4:ThirdPackage/lwip_app/sys_arch.c ****  *
+   5:ThirdPackage/lwip_app/sys_arch.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   6:ThirdPackage/lwip_app/sys_arch.c ****  * are permitted provided that the following conditions are met:
+   7:ThirdPackage/lwip_app/sys_arch.c ****  *
+   8:ThirdPackage/lwip_app/sys_arch.c ****  * 1. Redistributions of source code must retain the above copyright notice,
+   9:ThirdPackage/lwip_app/sys_arch.c ****  *    this list of conditions and the following disclaimer.
+  10:ThirdPackage/lwip_app/sys_arch.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice,
+  11:ThirdPackage/lwip_app/sys_arch.c ****  *    this list of conditions and the following disclaimer in the documentation
+  12:ThirdPackage/lwip_app/sys_arch.c ****  *    and/or other materials provided with the distribution.
+  13:ThirdPackage/lwip_app/sys_arch.c ****  * 3. The name of the author may not be used to endorse or promote products
+  14:ThirdPackage/lwip_app/sys_arch.c ****  *    derived from this software without specific prior written permission.
+  15:ThirdPackage/lwip_app/sys_arch.c ****  *
+  16:ThirdPackage/lwip_app/sys_arch.c ****  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
+  17:ThirdPackage/lwip_app/sys_arch.c ****  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+  18:ThirdPackage/lwip_app/sys_arch.c ****  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+  19:ThirdPackage/lwip_app/sys_arch.c ****  * SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  20:ThirdPackage/lwip_app/sys_arch.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+  21:ThirdPackage/lwip_app/sys_arch.c ****  * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  22:ThirdPackage/lwip_app/sys_arch.c ****  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  23:ThirdPackage/lwip_app/sys_arch.c ****  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+  24:ThirdPackage/lwip_app/sys_arch.c ****  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+  25:ThirdPackage/lwip_app/sys_arch.c ****  * OF SUCH DAMAGE.
+  26:ThirdPackage/lwip_app/sys_arch.c ****  *
+  27:ThirdPackage/lwip_app/sys_arch.c ****  * This file is part of the lwIP TCP/IP stack.
+  28:ThirdPackage/lwip_app/sys_arch.c ****  *
+  29:ThirdPackage/lwip_app/sys_arch.c ****  * Author: Adam Dunkels <adam@sics.se>
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 2
+
+
+  30:ThirdPackage/lwip_app/sys_arch.c ****  *
+  31:ThirdPackage/lwip_app/sys_arch.c ****  */
+  32:ThirdPackage/lwip_app/sys_arch.c **** 
+  33:ThirdPackage/lwip_app/sys_arch.c **** /* lwIP includes. */
+  34:ThirdPackage/lwip_app/sys_arch.c **** #include "lwip/debug.h"
+  35:ThirdPackage/lwip_app/sys_arch.c **** #include "lwip/def.h"
+  36:ThirdPackage/lwip_app/sys_arch.c **** #include "lwip/sys.h"
+  37:ThirdPackage/lwip_app/sys_arch.c **** #include "lwip/mem.h"
+  38:ThirdPackage/lwip_app/sys_arch.c **** #include "lwip/stats.h"
+  39:ThirdPackage/lwip_app/sys_arch.c **** 
+  40:ThirdPackage/lwip_app/sys_arch.c **** #if !NO_SYS
+  41:ThirdPackage/lwip_app/sys_arch.c **** 
+  42:ThirdPackage/lwip_app/sys_arch.c **** //#include "cmsis_os.h"
+  43:ThirdPackage/lwip_app/sys_arch.c **** #include "FreeRTOS.h" 
+  44:ThirdPackage/lwip_app/sys_arch.c **** 
+  45:ThirdPackage/lwip_app/sys_arch.c **** #if defined(LWIP_PROVIDE_ERRNO)
+  46:ThirdPackage/lwip_app/sys_arch.c **** int errno;
+  47:ThirdPackage/lwip_app/sys_arch.c **** #endif
+  48:ThirdPackage/lwip_app/sys_arch.c **** 
+  49:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+  50:ThirdPackage/lwip_app/sys_arch.c **** //  Creates an empty mailbox.
+  51:ThirdPackage/lwip_app/sys_arch.c **** err_t sys_mbox_new(sys_mbox_t *mbox, int size)
+  52:ThirdPackage/lwip_app/sys_arch.c **** {
+  30              		.loc 1 52 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		.loc 1 52 1 is_stmt 0 view .LVU1
+  35 0000 10B5     		push	{r4, lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 8
+  38              		.cfi_offset 4, -8
+  39              		.cfi_offset 14, -4
+  40 0002 0446     		mov	r4, r0
+  41 0004 0846     		mov	r0, r1
+  42              	.LVL1:
+  53:ThirdPackage/lwip_app/sys_arch.c ****   //osMessageQDef(QUEUE, size, void *);
+  54:ThirdPackage/lwip_app/sys_arch.c ****   //*mbox = osMessageCreate(osMessageQ(QUEUE), NULL);
+  55:ThirdPackage/lwip_app/sys_arch.c ****   // 创建一个大小为 size，消息项为 uint32_t 的消息队列
+  56:ThirdPackage/lwip_app/sys_arch.c ****     *mbox = xQueueCreate(size, sizeof(uint32_t));
+  43              		.loc 1 56 5 is_stmt 1 view .LVU2
+  44              		.loc 1 56 13 is_stmt 0 view .LVU3
+  45 0006 0022     		movs	r2, #0
+  46 0008 0421     		movs	r1, #4
+  47              	.LVL2:
+  48              		.loc 1 56 13 view .LVU4
+  49 000a FFF7FEFF 		bl	xQueueGenericCreate
+  50              	.LVL3:
+  51              		.loc 1 56 11 view .LVU5
+  52 000e 2060     		str	r0, [r4]
+  57:ThirdPackage/lwip_app/sys_arch.c **** #if SYS_STATS
+  58:ThirdPackage/lwip_app/sys_arch.c ****   ++lwip_stats.sys.mbox.used;
+  59:ThirdPackage/lwip_app/sys_arch.c ****   if(lwip_stats.sys.mbox.max < lwip_stats.sys.mbox.used)
+  60:ThirdPackage/lwip_app/sys_arch.c ****   {
+  61:ThirdPackage/lwip_app/sys_arch.c ****     lwip_stats.sys.mbox.max = lwip_stats.sys.mbox.used;
+  62:ThirdPackage/lwip_app/sys_arch.c ****   }
+  63:ThirdPackage/lwip_app/sys_arch.c **** #endif /* SYS_STATS */
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 3
+
+
+  64:ThirdPackage/lwip_app/sys_arch.c ****   if(*mbox == NULL)
+  53              		.loc 1 64 3 is_stmt 1 view .LVU6
+  54              		.loc 1 64 5 is_stmt 0 view .LVU7
+  55 0010 08B1     		cbz	r0, .L3
+  65:ThirdPackage/lwip_app/sys_arch.c ****     return ERR_MEM;
+  66:ThirdPackage/lwip_app/sys_arch.c **** 
+  67:ThirdPackage/lwip_app/sys_arch.c ****   return ERR_OK;
+  56              		.loc 1 67 10 view .LVU8
+  57 0012 0020     		movs	r0, #0
+  58              	.L2:
+  68:ThirdPackage/lwip_app/sys_arch.c **** }
+  59              		.loc 1 68 1 view .LVU9
+  60 0014 10BD     		pop	{r4, pc}
+  61              	.LVL4:
+  62              	.L3:
+  65:ThirdPackage/lwip_app/sys_arch.c ****     return ERR_MEM;
+  63              		.loc 1 65 12 view .LVU10
+  64 0016 4FF0FF30 		mov	r0, #-1
+  65 001a FBE7     		b	.L2
+  66              		.cfi_endproc
+  67              	.LFE160:
+  69              		.section	.text.sys_mbox_free,"ax",%progbits
+  70              		.align	1
+  71              		.global	sys_mbox_free
+  72              		.syntax unified
+  73              		.thumb
+  74              		.thumb_func
+  76              	sys_mbox_free:
+  77              	.LVL5:
+  78              	.LFB161:
+  69:ThirdPackage/lwip_app/sys_arch.c **** 
+  70:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+  71:ThirdPackage/lwip_app/sys_arch.c **** /*
+  72:ThirdPackage/lwip_app/sys_arch.c ****   Deallocates a mailbox. If there are messages still present in the
+  73:ThirdPackage/lwip_app/sys_arch.c ****   mailbox when the mailbox is deallocated, it is an indication of a
+  74:ThirdPackage/lwip_app/sys_arch.c ****   programming error in lwIP and the developer should be notified.
+  75:ThirdPackage/lwip_app/sys_arch.c **** */
+  76:ThirdPackage/lwip_app/sys_arch.c **** void sys_mbox_free(sys_mbox_t *mbox)
+  77:ThirdPackage/lwip_app/sys_arch.c **** {
+  79              		.loc 1 77 1 is_stmt 1 view -0
+  80              		.cfi_startproc
+  81              		@ args = 0, pretend = 0, frame = 0
+  82              		@ frame_needed = 0, uses_anonymous_args = 0
+  83              		.loc 1 77 1 is_stmt 0 view .LVU12
+  84 0000 10B5     		push	{r4, lr}
+  85              	.LCFI1:
+  86              		.cfi_def_cfa_offset 8
+  87              		.cfi_offset 4, -8
+  88              		.cfi_offset 14, -4
+  89 0002 0446     		mov	r4, r0
+  78:ThirdPackage/lwip_app/sys_arch.c ****   if(uxQueueMessagesWaiting(*mbox))
+  90              		.loc 1 78 3 is_stmt 1 view .LVU13
+  91              		.loc 1 78 6 is_stmt 0 view .LVU14
+  92 0004 0068     		ldr	r0, [r0]
+  93              	.LVL6:
+  94              		.loc 1 78 6 view .LVU15
+  95 0006 FFF7FEFF 		bl	uxQueueMessagesWaiting
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 4
+
+
+  96              	.LVL7:
+  79:ThirdPackage/lwip_app/sys_arch.c ****   {
+  80:ThirdPackage/lwip_app/sys_arch.c ****     /* Line for breakpoint.  Should never break here! */
+  81:ThirdPackage/lwip_app/sys_arch.c ****     portNOP();
+  97              		.loc 1 81 14 is_stmt 1 view .LVU16
+  82:ThirdPackage/lwip_app/sys_arch.c **** #if SYS_STATS
+  83:ThirdPackage/lwip_app/sys_arch.c ****     lwip_stats.sys.mbox.err++;
+  84:ThirdPackage/lwip_app/sys_arch.c **** #endif /* SYS_STATS */
+  85:ThirdPackage/lwip_app/sys_arch.c **** 
+  86:ThirdPackage/lwip_app/sys_arch.c ****   }
+  87:ThirdPackage/lwip_app/sys_arch.c **** 
+  88:ThirdPackage/lwip_app/sys_arch.c ****   vQueueDelete(*mbox);
+  98              		.loc 1 88 3 view .LVU17
+  99 000a 2068     		ldr	r0, [r4]
+ 100 000c FFF7FEFF 		bl	vQueueDelete
+ 101              	.LVL8:
+  89:ThirdPackage/lwip_app/sys_arch.c **** 
+  90:ThirdPackage/lwip_app/sys_arch.c **** #if SYS_STATS
+  91:ThirdPackage/lwip_app/sys_arch.c ****   --lwip_stats.sys.mbox.used;
+  92:ThirdPackage/lwip_app/sys_arch.c **** #endif /* SYS_STATS */
+  93:ThirdPackage/lwip_app/sys_arch.c **** }
+ 102              		.loc 1 93 1 is_stmt 0 view .LVU18
+ 103 0010 10BD     		pop	{r4, pc}
+ 104              		.loc 1 93 1 view .LVU19
+ 105              		.cfi_endproc
+ 106              	.LFE161:
+ 108              		.section	.text.sys_mbox_post,"ax",%progbits
+ 109              		.align	1
+ 110              		.global	sys_mbox_post
+ 111              		.syntax unified
+ 112              		.thumb
+ 113              		.thumb_func
+ 115              	sys_mbox_post:
+ 116              	.LVL9:
+ 117              	.LFB162:
+  94:ThirdPackage/lwip_app/sys_arch.c **** 
+  95:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+  96:ThirdPackage/lwip_app/sys_arch.c **** //   Posts the "msg" to the mailbox.
+  97:ThirdPackage/lwip_app/sys_arch.c **** void sys_mbox_post(sys_mbox_t *mbox, void *data)
+  98:ThirdPackage/lwip_app/sys_arch.c **** {
+ 118              		.loc 1 98 1 is_stmt 1 view -0
+ 119              		.cfi_startproc
+ 120              		@ args = 0, pretend = 0, frame = 8
+ 121              		@ frame_needed = 0, uses_anonymous_args = 0
+ 122              		.loc 1 98 1 is_stmt 0 view .LVU21
+ 123 0000 10B5     		push	{r4, lr}
+ 124              	.LCFI2:
+ 125              		.cfi_def_cfa_offset 8
+ 126              		.cfi_offset 4, -8
+ 127              		.cfi_offset 14, -4
+ 128 0002 82B0     		sub	sp, sp, #8
+ 129              	.LCFI3:
+ 130              		.cfi_def_cfa_offset 16
+ 131 0004 0446     		mov	r4, r0
+ 132 0006 0191     		str	r1, [sp, #4]
+  99:ThirdPackage/lwip_app/sys_arch.c ****     while(xQueueSend(*mbox, &data, portMAX_DELAY) != pdPASS);
+ 133              		.loc 1 99 5 is_stmt 1 view .LVU22
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 5
+
+
+ 134              	.LVL10:
+ 135              	.L8:
+ 136              		.loc 1 99 61 discriminator 1 view .LVU23
+ 137              		.loc 1 99 10 discriminator 1 view .LVU24
+ 138              		.loc 1 99 11 is_stmt 0 discriminator 1 view .LVU25
+ 139 0008 0023     		movs	r3, #0
+ 140 000a 4FF0FF32 		mov	r2, #-1
+ 141 000e 01A9     		add	r1, sp, #4
+ 142 0010 2068     		ldr	r0, [r4]
+ 143 0012 FFF7FEFF 		bl	xQueueGenericSend
+ 144              	.LVL11:
+ 145              		.loc 1 99 10 discriminator 1 view .LVU26
+ 146 0016 0128     		cmp	r0, #1
+ 147 0018 F6D1     		bne	.L8
+ 100:ThirdPackage/lwip_app/sys_arch.c **** }
+ 148              		.loc 1 100 1 view .LVU27
+ 149 001a 02B0     		add	sp, sp, #8
+ 150              	.LCFI4:
+ 151              		.cfi_def_cfa_offset 8
+ 152              		@ sp needed
+ 153 001c 10BD     		pop	{r4, pc}
+ 154              		.loc 1 100 1 view .LVU28
+ 155              		.cfi_endproc
+ 156              	.LFE162:
+ 158              		.section	.text.sys_mbox_trypost,"ax",%progbits
+ 159              		.align	1
+ 160              		.global	sys_mbox_trypost
+ 161              		.syntax unified
+ 162              		.thumb
+ 163              		.thumb_func
+ 165              	sys_mbox_trypost:
+ 166              	.LVL12:
+ 167              	.LFB163:
+ 101:ThirdPackage/lwip_app/sys_arch.c **** 
+ 102:ThirdPackage/lwip_app/sys_arch.c **** 
+ 103:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 104:ThirdPackage/lwip_app/sys_arch.c **** //   Try to post the "msg" to the mailbox.
+ 105:ThirdPackage/lwip_app/sys_arch.c **** err_t sys_mbox_trypost(sys_mbox_t *mbox, void *msg)
+ 106:ThirdPackage/lwip_app/sys_arch.c **** {
+ 168              		.loc 1 106 1 is_stmt 1 view -0
+ 169              		.cfi_startproc
+ 170              		@ args = 0, pretend = 0, frame = 8
+ 171              		@ frame_needed = 0, uses_anonymous_args = 0
+ 172              		.loc 1 106 1 is_stmt 0 view .LVU30
+ 173 0000 00B5     		push	{lr}
+ 174              	.LCFI5:
+ 175              		.cfi_def_cfa_offset 4
+ 176              		.cfi_offset 14, -4
+ 177 0002 83B0     		sub	sp, sp, #12
+ 178              	.LCFI6:
+ 179              		.cfi_def_cfa_offset 16
+ 180 0004 0191     		str	r1, [sp, #4]
+ 107:ThirdPackage/lwip_app/sys_arch.c ****   err_t result;
+ 181              		.loc 1 107 3 is_stmt 1 view .LVU31
+ 108:ThirdPackage/lwip_app/sys_arch.c **** 
+ 109:ThirdPackage/lwip_app/sys_arch.c ****   if(xQueueSend(*mbox, &msg, 0) == pdPASS)
+ 182              		.loc 1 109 3 view .LVU32
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 6
+
+
+ 183              		.loc 1 109 6 is_stmt 0 view .LVU33
+ 184 0006 0023     		movs	r3, #0
+ 185 0008 1A46     		mov	r2, r3
+ 186 000a 01A9     		add	r1, sp, #4
+ 187              	.LVL13:
+ 188              		.loc 1 109 6 view .LVU34
+ 189 000c 0068     		ldr	r0, [r0]
+ 190              	.LVL14:
+ 191              		.loc 1 109 6 view .LVU35
+ 192 000e FFF7FEFF 		bl	xQueueGenericSend
+ 193              	.LVL15:
+ 194              		.loc 1 109 5 view .LVU36
+ 195 0012 0128     		cmp	r0, #1
+ 196 0014 03D1     		bne	.L12
+ 110:ThirdPackage/lwip_app/sys_arch.c ****   {
+ 111:ThirdPackage/lwip_app/sys_arch.c ****     result = ERR_OK;
+ 197              		.loc 1 111 12 view .LVU37
+ 198 0016 0020     		movs	r0, #0
+ 199              	.L11:
+ 200              	.LVL16:
+ 112:ThirdPackage/lwip_app/sys_arch.c ****   }
+ 113:ThirdPackage/lwip_app/sys_arch.c ****   else
+ 114:ThirdPackage/lwip_app/sys_arch.c ****   {
+ 115:ThirdPackage/lwip_app/sys_arch.c ****     // could not post, queue must be full
+ 116:ThirdPackage/lwip_app/sys_arch.c ****     result = ERR_MEM;
+ 117:ThirdPackage/lwip_app/sys_arch.c **** 
+ 118:ThirdPackage/lwip_app/sys_arch.c **** #if SYS_STATS
+ 119:ThirdPackage/lwip_app/sys_arch.c ****     lwip_stats.sys.mbox.err++;
+ 120:ThirdPackage/lwip_app/sys_arch.c **** #endif /* SYS_STATS */
+ 121:ThirdPackage/lwip_app/sys_arch.c ****   }
+ 122:ThirdPackage/lwip_app/sys_arch.c **** 
+ 123:ThirdPackage/lwip_app/sys_arch.c ****   return result;
+ 201              		.loc 1 123 3 is_stmt 1 view .LVU38
+ 124:ThirdPackage/lwip_app/sys_arch.c **** }
+ 202              		.loc 1 124 1 is_stmt 0 view .LVU39
+ 203 0018 03B0     		add	sp, sp, #12
+ 204              	.LCFI7:
+ 205              		.cfi_remember_state
+ 206              		.cfi_def_cfa_offset 4
+ 207              		@ sp needed
+ 208 001a 5DF804FB 		ldr	pc, [sp], #4
+ 209              	.LVL17:
+ 210              	.L12:
+ 211              	.LCFI8:
+ 212              		.cfi_restore_state
+ 116:ThirdPackage/lwip_app/sys_arch.c **** 
+ 213              		.loc 1 116 12 view .LVU40
+ 214 001e 4FF0FF30 		mov	r0, #-1
+ 215 0022 F9E7     		b	.L11
+ 216              		.cfi_endproc
+ 217              	.LFE163:
+ 219              		.section	.text.sys_mbox_trypost_fromisr,"ax",%progbits
+ 220              		.align	1
+ 221              		.global	sys_mbox_trypost_fromisr
+ 222              		.syntax unified
+ 223              		.thumb
+ 224              		.thumb_func
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 7
+
+
+ 226              	sys_mbox_trypost_fromisr:
+ 227              	.LVL18:
+ 228              	.LFB164:
+ 125:ThirdPackage/lwip_app/sys_arch.c **** 
+ 126:ThirdPackage/lwip_app/sys_arch.c **** 
+ 127:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 128:ThirdPackage/lwip_app/sys_arch.c **** //   Try to post the "msg" to the mailbox.
+ 129:ThirdPackage/lwip_app/sys_arch.c **** err_t sys_mbox_trypost_fromisr(sys_mbox_t *mbox, void *msg)
+ 130:ThirdPackage/lwip_app/sys_arch.c **** {
+ 229              		.loc 1 130 1 is_stmt 1 view -0
+ 230              		.cfi_startproc
+ 231              		@ args = 0, pretend = 0, frame = 0
+ 232              		@ frame_needed = 0, uses_anonymous_args = 0
+ 233              		.loc 1 130 1 is_stmt 0 view .LVU42
+ 234 0000 08B5     		push	{r3, lr}
+ 235              	.LCFI9:
+ 236              		.cfi_def_cfa_offset 8
+ 237              		.cfi_offset 3, -8
+ 238              		.cfi_offset 14, -4
+ 131:ThirdPackage/lwip_app/sys_arch.c ****   return sys_mbox_trypost(mbox, msg);
+ 239              		.loc 1 131 3 is_stmt 1 view .LVU43
+ 240              		.loc 1 131 10 is_stmt 0 view .LVU44
+ 241 0002 FFF7FEFF 		bl	sys_mbox_trypost
+ 242              	.LVL19:
+ 132:ThirdPackage/lwip_app/sys_arch.c **** }
+ 243              		.loc 1 132 1 view .LVU45
+ 244 0006 08BD     		pop	{r3, pc}
+ 245              		.cfi_endproc
+ 246              	.LFE164:
+ 248              		.global	__aeabi_uldivmod
+ 249              		.section	.text.sys_arch_mbox_fetch,"ax",%progbits
+ 250              		.align	1
+ 251              		.global	sys_arch_mbox_fetch
+ 252              		.syntax unified
+ 253              		.thumb
+ 254              		.thumb_func
+ 256              	sys_arch_mbox_fetch:
+ 257              	.LVL20:
+ 258              	.LFB165:
+ 133:ThirdPackage/lwip_app/sys_arch.c **** 
+ 134:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 135:ThirdPackage/lwip_app/sys_arch.c **** /*
+ 136:ThirdPackage/lwip_app/sys_arch.c ****   Blocks the thread until a message arrives in the mailbox, but does
+ 137:ThirdPackage/lwip_app/sys_arch.c ****   not block the thread longer than "timeout" milliseconds (similar to
+ 138:ThirdPackage/lwip_app/sys_arch.c ****   the sys_arch_sem_wait() function). The "msg" argument is a result
+ 139:ThirdPackage/lwip_app/sys_arch.c ****   parameter that is set by the function (i.e., by doing "*msg =
+ 140:ThirdPackage/lwip_app/sys_arch.c ****   ptr"). The "msg" parameter maybe NULL to indicate that the message
+ 141:ThirdPackage/lwip_app/sys_arch.c ****   should be dropped.
+ 142:ThirdPackage/lwip_app/sys_arch.c **** 
+ 143:ThirdPackage/lwip_app/sys_arch.c ****   The return values are the same as for the sys_arch_sem_wait() function:
+ 144:ThirdPackage/lwip_app/sys_arch.c ****   Number of milliseconds spent waiting or SYS_ARCH_TIMEOUT if there was a
+ 145:ThirdPackage/lwip_app/sys_arch.c ****   timeout.
+ 146:ThirdPackage/lwip_app/sys_arch.c **** 
+ 147:ThirdPackage/lwip_app/sys_arch.c ****   Note that a function with a similar name, sys_mbox_fetch(), is
+ 148:ThirdPackage/lwip_app/sys_arch.c ****   implemented by lwIP.
+ 149:ThirdPackage/lwip_app/sys_arch.c **** */
+ 150:ThirdPackage/lwip_app/sys_arch.c **** u32_t sys_arch_mbox_fetch(sys_mbox_t *mbox, void **msg, u32_t timeout)
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 8
+
+
+ 151:ThirdPackage/lwip_app/sys_arch.c **** {
+ 259              		.loc 1 151 1 is_stmt 1 view -0
+ 260              		.cfi_startproc
+ 261              		@ args = 0, pretend = 0, frame = 8
+ 262              		@ frame_needed = 0, uses_anonymous_args = 0
+ 263              		.loc 1 151 1 is_stmt 0 view .LVU47
+ 264 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 265              	.LCFI10:
+ 266              		.cfi_def_cfa_offset 20
+ 267              		.cfi_offset 4, -20
+ 268              		.cfi_offset 5, -16
+ 269              		.cfi_offset 6, -12
+ 270              		.cfi_offset 7, -8
+ 271              		.cfi_offset 14, -4
+ 272 0002 83B0     		sub	sp, sp, #12
+ 273              	.LCFI11:
+ 274              		.cfi_def_cfa_offset 32
+ 275 0004 0546     		mov	r5, r0
+ 276 0006 0E46     		mov	r6, r1
+ 152:ThirdPackage/lwip_app/sys_arch.c ****     TickType_t ticksToWait;
+ 277              		.loc 1 152 5 is_stmt 1 view .LVU48
+ 153:ThirdPackage/lwip_app/sys_arch.c ****     void *tempMsg;
+ 278              		.loc 1 153 5 view .LVU49
+ 154:ThirdPackage/lwip_app/sys_arch.c ****     u32_t startTime, endTime, elapsedTime;
+ 279              		.loc 1 154 5 view .LVU50
+ 155:ThirdPackage/lwip_app/sys_arch.c ****     
+ 156:ThirdPackage/lwip_app/sys_arch.c ****   // 将超时从毫秒转换为系统节拍数
+ 157:ThirdPackage/lwip_app/sys_arch.c ****     if (timeout == 0) {
+ 280              		.loc 1 157 5 view .LVU51
+ 281              		.loc 1 157 8 is_stmt 0 view .LVU52
+ 282 0008 1446     		mov	r4, r2
+ 283 000a B2B1     		cbz	r2, .L17
+ 158:ThirdPackage/lwip_app/sys_arch.c ****         // 无等待超时，立即返回
+ 159:ThirdPackage/lwip_app/sys_arch.c ****         ticksToWait = 0;
+ 160:ThirdPackage/lwip_app/sys_arch.c ****     } else {
+ 161:ThirdPackage/lwip_app/sys_arch.c ****         // 转换为 FreeRTOS 中的节拍数
+ 162:ThirdPackage/lwip_app/sys_arch.c ****         ticksToWait = pdMS_TO_TICKS(timeout);
+ 284              		.loc 1 162 9 is_stmt 1 view .LVU53
+ 285              		.loc 1 162 23 is_stmt 0 view .LVU54
+ 286 000c 0022     		movs	r2, #0
+ 287              	.LVL21:
+ 288              		.loc 1 162 23 view .LVU55
+ 289 000e 2319     		adds	r3, r4, r4
+ 290 0010 5241     		adcs	r2, r2, r2
+ 291 0012 1B19     		adds	r3, r3, r4
+ 292 0014 42F10002 		adc	r2, r2, #0
+ 293 0018 5101     		lsls	r1, r2, #5
+ 294              	.LVL22:
+ 295              		.loc 1 162 23 view .LVU56
+ 296 001a 41EAD361 		orr	r1, r1, r3, lsr #27
+ 297 001e 5801     		lsls	r0, r3, #5
+ 298              	.LVL23:
+ 299              		.loc 1 162 23 view .LVU57
+ 300 0020 1B18     		adds	r3, r3, r0
+ 301 0022 42EB0101 		adc	r1, r2, r1
+ 302 0026 1819     		adds	r0, r3, r4
+ 303 0028 4FF47A72 		mov	r2, #1000
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 9
+
+
+ 304 002c 4FF00003 		mov	r3, #0
+ 305 0030 41F10001 		adc	r1, r1, #0
+ 306 0034 FFF7FEFF 		bl	__aeabi_uldivmod
+ 307              	.LVL24:
+ 308              		.loc 1 162 21 view .LVU58
+ 309 0038 0446     		mov	r4, r0
+ 310              	.LVL25:
+ 311              	.L17:
+ 163:ThirdPackage/lwip_app/sys_arch.c ****     }
+ 164:ThirdPackage/lwip_app/sys_arch.c **** 
+ 165:ThirdPackage/lwip_app/sys_arch.c ****     // 获取当前时间（滴答计数）
+ 166:ThirdPackage/lwip_app/sys_arch.c ****     startTime = xTaskGetTickCount();
+ 312              		.loc 1 166 5 is_stmt 1 view .LVU59
+ 313              		.loc 1 166 17 is_stmt 0 view .LVU60
+ 314 003a FFF7FEFF 		bl	xTaskGetTickCount
+ 315              	.LVL26:
+ 316 003e 0746     		mov	r7, r0
+ 317              	.LVL27:
+ 167:ThirdPackage/lwip_app/sys_arch.c **** 
+ 168:ThirdPackage/lwip_app/sys_arch.c ****     // 从消息队列接收消息
+ 169:ThirdPackage/lwip_app/sys_arch.c ****     if (xQueueReceive(*mbox, &tempMsg, ticksToWait) == pdTRUE) 
+ 318              		.loc 1 169 5 is_stmt 1 view .LVU61
+ 319              		.loc 1 169 9 is_stmt 0 view .LVU62
+ 320 0040 2246     		mov	r2, r4
+ 321 0042 01A9     		add	r1, sp, #4
+ 322 0044 2868     		ldr	r0, [r5]
+ 323              	.LVL28:
+ 324              		.loc 1 169 9 view .LVU63
+ 325 0046 FFF7FEFF 		bl	xQueueReceive
+ 326              	.LVL29:
+ 327              		.loc 1 169 8 view .LVU64
+ 328 004a 0128     		cmp	r0, #1
+ 329 004c 03D0     		beq	.L22
+ 170:ThirdPackage/lwip_app/sys_arch.c ****     {
+ 171:ThirdPackage/lwip_app/sys_arch.c ****         // 成功接收到消息
+ 172:ThirdPackage/lwip_app/sys_arch.c ****         if (msg != NULL) {
+ 173:ThirdPackage/lwip_app/sys_arch.c ****             *msg = tempMsg; // 将接收到的消息传递给 msg 指针
+ 174:ThirdPackage/lwip_app/sys_arch.c ****         }
+ 175:ThirdPackage/lwip_app/sys_arch.c ****         
+ 176:ThirdPackage/lwip_app/sys_arch.c ****         // 计算经过的时间
+ 177:ThirdPackage/lwip_app/sys_arch.c ****         endTime = xTaskGetTickCount();
+ 178:ThirdPackage/lwip_app/sys_arch.c ****         elapsedTime = endTime - startTime;
+ 179:ThirdPackage/lwip_app/sys_arch.c ****         
+ 180:ThirdPackage/lwip_app/sys_arch.c ****         // 返回等待的时间（单位是系统节拍）
+ 181:ThirdPackage/lwip_app/sys_arch.c ****         return elapsedTime;
+ 182:ThirdPackage/lwip_app/sys_arch.c ****     } else {
+ 183:ThirdPackage/lwip_app/sys_arch.c ****         // 超时或没有消息
+ 184:ThirdPackage/lwip_app/sys_arch.c ****         return SYS_ARCH_TIMEOUT;
+ 330              		.loc 1 184 16 view .LVU65
+ 331 004e 4FF0FF30 		mov	r0, #-1
+ 332              	.L16:
+ 185:ThirdPackage/lwip_app/sys_arch.c ****     }
+ 186:ThirdPackage/lwip_app/sys_arch.c **** }
+ 333              		.loc 1 186 1 view .LVU66
+ 334 0052 03B0     		add	sp, sp, #12
+ 335              	.LCFI12:
+ 336              		.cfi_remember_state
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 10
+
+
+ 337              		.cfi_def_cfa_offset 20
+ 338              		@ sp needed
+ 339 0054 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 340              	.LVL30:
+ 341              	.L22:
+ 342              	.LCFI13:
+ 343              		.cfi_restore_state
+ 172:ThirdPackage/lwip_app/sys_arch.c ****             *msg = tempMsg; // 将接收到的消息传递给 msg 指针
+ 344              		.loc 1 172 9 is_stmt 1 view .LVU67
+ 172:ThirdPackage/lwip_app/sys_arch.c ****             *msg = tempMsg; // 将接收到的消息传递给 msg 指针
+ 345              		.loc 1 172 12 is_stmt 0 view .LVU68
+ 346 0056 0EB1     		cbz	r6, .L19
+ 173:ThirdPackage/lwip_app/sys_arch.c ****         }
+ 347              		.loc 1 173 13 is_stmt 1 view .LVU69
+ 173:ThirdPackage/lwip_app/sys_arch.c ****         }
+ 348              		.loc 1 173 18 is_stmt 0 view .LVU70
+ 349 0058 019B     		ldr	r3, [sp, #4]
+ 350 005a 3360     		str	r3, [r6]
+ 351              	.L19:
+ 177:ThirdPackage/lwip_app/sys_arch.c ****         elapsedTime = endTime - startTime;
+ 352              		.loc 1 177 9 is_stmt 1 view .LVU71
+ 177:ThirdPackage/lwip_app/sys_arch.c ****         elapsedTime = endTime - startTime;
+ 353              		.loc 1 177 19 is_stmt 0 view .LVU72
+ 354 005c FFF7FEFF 		bl	xTaskGetTickCount
+ 355              	.LVL31:
+ 178:ThirdPackage/lwip_app/sys_arch.c ****         
+ 356              		.loc 1 178 9 is_stmt 1 view .LVU73
+ 178:ThirdPackage/lwip_app/sys_arch.c ****         
+ 357              		.loc 1 178 21 is_stmt 0 view .LVU74
+ 358 0060 C01B     		subs	r0, r0, r7
+ 359              	.LVL32:
+ 181:ThirdPackage/lwip_app/sys_arch.c ****     } else {
+ 360              		.loc 1 181 9 is_stmt 1 view .LVU75
+ 181:ThirdPackage/lwip_app/sys_arch.c ****     } else {
+ 361              		.loc 1 181 16 is_stmt 0 view .LVU76
+ 362 0062 F6E7     		b	.L16
+ 363              		.cfi_endproc
+ 364              	.LFE165:
+ 366              		.section	.text.sys_arch_mbox_tryfetch,"ax",%progbits
+ 367              		.align	1
+ 368              		.global	sys_arch_mbox_tryfetch
+ 369              		.syntax unified
+ 370              		.thumb
+ 371              		.thumb_func
+ 373              	sys_arch_mbox_tryfetch:
+ 374              	.LVL33:
+ 375              	.LFB166:
+ 187:ThirdPackage/lwip_app/sys_arch.c **** 
+ 188:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 189:ThirdPackage/lwip_app/sys_arch.c **** /*
+ 190:ThirdPackage/lwip_app/sys_arch.c ****   Similar to sys_arch_mbox_fetch, but if message is not ready immediately, we'll
+ 191:ThirdPackage/lwip_app/sys_arch.c ****   return with SYS_MBOX_EMPTY.  On success, 0 is returned.
+ 192:ThirdPackage/lwip_app/sys_arch.c **** */
+ 193:ThirdPackage/lwip_app/sys_arch.c **** u32_t sys_arch_mbox_tryfetch(sys_mbox_t *mbox, void **msg)
+ 194:ThirdPackage/lwip_app/sys_arch.c **** {
+ 376              		.loc 1 194 1 is_stmt 1 view -0
+ 377              		.cfi_startproc
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 11
+
+
+ 378              		@ args = 0, pretend = 0, frame = 8
+ 379              		@ frame_needed = 0, uses_anonymous_args = 0
+ 380              		.loc 1 194 1 is_stmt 0 view .LVU78
+ 381 0000 10B5     		push	{r4, lr}
+ 382              	.LCFI14:
+ 383              		.cfi_def_cfa_offset 8
+ 384              		.cfi_offset 4, -8
+ 385              		.cfi_offset 14, -4
+ 386 0002 82B0     		sub	sp, sp, #8
+ 387              	.LCFI15:
+ 388              		.cfi_def_cfa_offset 16
+ 389 0004 0C46     		mov	r4, r1
+ 195:ThirdPackage/lwip_app/sys_arch.c ****     void *tempMsg;
+ 390              		.loc 1 195 5 is_stmt 1 view .LVU79
+ 196:ThirdPackage/lwip_app/sys_arch.c ****     if (xQueueReceive(*mbox, &tempMsg, 0) == pdTRUE) 
+ 391              		.loc 1 196 5 view .LVU80
+ 392              		.loc 1 196 9 is_stmt 0 view .LVU81
+ 393 0006 0022     		movs	r2, #0
+ 394 0008 01A9     		add	r1, sp, #4
+ 395              	.LVL34:
+ 396              		.loc 1 196 9 view .LVU82
+ 397 000a 0068     		ldr	r0, [r0]
+ 398              	.LVL35:
+ 399              		.loc 1 196 9 view .LVU83
+ 400 000c FFF7FEFF 		bl	xQueueReceive
+ 401              	.LVL36:
+ 402              		.loc 1 196 8 view .LVU84
+ 403 0010 0128     		cmp	r0, #1
+ 404 0012 03D0     		beq	.L27
+ 197:ThirdPackage/lwip_app/sys_arch.c ****     {
+ 198:ThirdPackage/lwip_app/sys_arch.c ****         *msg = tempMsg;
+ 199:ThirdPackage/lwip_app/sys_arch.c ****         return ERR_OK;
+ 200:ThirdPackage/lwip_app/sys_arch.c ****     }
+ 201:ThirdPackage/lwip_app/sys_arch.c ****     else
+ 202:ThirdPackage/lwip_app/sys_arch.c ****     {
+ 203:ThirdPackage/lwip_app/sys_arch.c ****         return SYS_MBOX_EMPTY;
+ 405              		.loc 1 203 16 view .LVU85
+ 406 0014 4FF0FF30 		mov	r0, #-1
+ 407              	.L23:
+ 204:ThirdPackage/lwip_app/sys_arch.c ****     }
+ 205:ThirdPackage/lwip_app/sys_arch.c **** }
+ 408              		.loc 1 205 1 view .LVU86
+ 409 0018 02B0     		add	sp, sp, #8
+ 410              	.LCFI16:
+ 411              		.cfi_remember_state
+ 412              		.cfi_def_cfa_offset 8
+ 413              		@ sp needed
+ 414 001a 10BD     		pop	{r4, pc}
+ 415              	.LVL37:
+ 416              	.L27:
+ 417              	.LCFI17:
+ 418              		.cfi_restore_state
+ 198:ThirdPackage/lwip_app/sys_arch.c ****         return ERR_OK;
+ 419              		.loc 1 198 9 is_stmt 1 view .LVU87
+ 198:ThirdPackage/lwip_app/sys_arch.c ****         return ERR_OK;
+ 420              		.loc 1 198 14 is_stmt 0 view .LVU88
+ 421 001c 019B     		ldr	r3, [sp, #4]
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 12
+
+
+ 422 001e 2360     		str	r3, [r4]
+ 199:ThirdPackage/lwip_app/sys_arch.c ****     }
+ 423              		.loc 1 199 9 is_stmt 1 view .LVU89
+ 199:ThirdPackage/lwip_app/sys_arch.c ****     }
+ 424              		.loc 1 199 16 is_stmt 0 view .LVU90
+ 425 0020 0020     		movs	r0, #0
+ 426 0022 F9E7     		b	.L23
+ 427              		.cfi_endproc
+ 428              	.LFE166:
+ 430              		.section	.text.sys_mbox_valid,"ax",%progbits
+ 431              		.align	1
+ 432              		.global	sys_mbox_valid
+ 433              		.syntax unified
+ 434              		.thumb
+ 435              		.thumb_func
+ 437              	sys_mbox_valid:
+ 438              	.LVL38:
+ 439              	.LFB167:
+ 206:ThirdPackage/lwip_app/sys_arch.c **** /*----------------------------------------------------------------------------------*/
+ 207:ThirdPackage/lwip_app/sys_arch.c **** int sys_mbox_valid(sys_mbox_t *mbox)
+ 208:ThirdPackage/lwip_app/sys_arch.c **** {
+ 440              		.loc 1 208 1 is_stmt 1 view -0
+ 441              		.cfi_startproc
+ 442              		@ args = 0, pretend = 0, frame = 0
+ 443              		@ frame_needed = 0, uses_anonymous_args = 0
+ 444              		@ link register save eliminated.
+ 209:ThirdPackage/lwip_app/sys_arch.c ****   if (*mbox == SYS_MBOX_NULL)
+ 445              		.loc 1 209 3 view .LVU92
+ 446              		.loc 1 209 7 is_stmt 0 view .LVU93
+ 447 0000 0368     		ldr	r3, [r0]
+ 448              		.loc 1 209 6 view .LVU94
+ 449 0002 0BB1     		cbz	r3, .L31
+ 210:ThirdPackage/lwip_app/sys_arch.c ****     return 0;
+ 211:ThirdPackage/lwip_app/sys_arch.c ****   else
+ 212:ThirdPackage/lwip_app/sys_arch.c ****     return 1;
+ 450              		.loc 1 212 12 view .LVU95
+ 451 0004 0120     		movs	r0, #1
+ 452              	.LVL39:
+ 213:ThirdPackage/lwip_app/sys_arch.c **** }
+ 453              		.loc 1 213 1 view .LVU96
+ 454 0006 7047     		bx	lr
+ 455              	.LVL40:
+ 456              	.L31:
+ 210:ThirdPackage/lwip_app/sys_arch.c ****     return 0;
+ 457              		.loc 1 210 12 view .LVU97
+ 458 0008 0020     		movs	r0, #0
+ 459              	.LVL41:
+ 210:ThirdPackage/lwip_app/sys_arch.c ****     return 0;
+ 460              		.loc 1 210 12 view .LVU98
+ 461 000a 7047     		bx	lr
+ 462              		.cfi_endproc
+ 463              	.LFE167:
+ 465              		.section	.text.sys_mbox_set_invalid,"ax",%progbits
+ 466              		.align	1
+ 467              		.global	sys_mbox_set_invalid
+ 468              		.syntax unified
+ 469              		.thumb
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 13
+
+
+ 470              		.thumb_func
+ 472              	sys_mbox_set_invalid:
+ 473              	.LVL42:
+ 474              	.LFB168:
+ 214:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 215:ThirdPackage/lwip_app/sys_arch.c **** void sys_mbox_set_invalid(sys_mbox_t *mbox)
+ 216:ThirdPackage/lwip_app/sys_arch.c **** {
+ 475              		.loc 1 216 1 is_stmt 1 view -0
+ 476              		.cfi_startproc
+ 477              		@ args = 0, pretend = 0, frame = 0
+ 478              		@ frame_needed = 0, uses_anonymous_args = 0
+ 479              		@ link register save eliminated.
+ 217:ThirdPackage/lwip_app/sys_arch.c ****   *mbox = SYS_MBOX_NULL;
+ 480              		.loc 1 217 3 view .LVU100
+ 481              		.loc 1 217 9 is_stmt 0 view .LVU101
+ 482 0000 0023     		movs	r3, #0
+ 483 0002 0360     		str	r3, [r0]
+ 218:ThirdPackage/lwip_app/sys_arch.c **** }
+ 484              		.loc 1 218 1 view .LVU102
+ 485 0004 7047     		bx	lr
+ 486              		.cfi_endproc
+ 487              	.LFE168:
+ 489              		.section	.text.sys_sem_new,"ax",%progbits
+ 490              		.align	1
+ 491              		.global	sys_sem_new
+ 492              		.syntax unified
+ 493              		.thumb
+ 494              		.thumb_func
+ 496              	sys_sem_new:
+ 497              	.LVL43:
+ 498              	.LFB169:
+ 219:ThirdPackage/lwip_app/sys_arch.c **** 
+ 220:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 221:ThirdPackage/lwip_app/sys_arch.c **** //  Creates a new semaphore. The "count" argument specifies
+ 222:ThirdPackage/lwip_app/sys_arch.c **** //  the initial state of the semaphore.
+ 223:ThirdPackage/lwip_app/sys_arch.c **** err_t sys_sem_new(sys_sem_t *sem, u8_t count)
+ 224:ThirdPackage/lwip_app/sys_arch.c **** {
+ 499              		.loc 1 224 1 is_stmt 1 view -0
+ 500              		.cfi_startproc
+ 501              		@ args = 0, pretend = 0, frame = 0
+ 502              		@ frame_needed = 0, uses_anonymous_args = 0
+ 503              		.loc 1 224 1 is_stmt 0 view .LVU104
+ 504 0000 38B5     		push	{r3, r4, r5, lr}
+ 505              	.LCFI18:
+ 506              		.cfi_def_cfa_offset 16
+ 507              		.cfi_offset 3, -16
+ 508              		.cfi_offset 4, -12
+ 509              		.cfi_offset 5, -8
+ 510              		.cfi_offset 14, -4
+ 511 0002 0446     		mov	r4, r0
+ 512 0004 0D46     		mov	r5, r1
+ 225:ThirdPackage/lwip_app/sys_arch.c **** 
+ 226:ThirdPackage/lwip_app/sys_arch.c ****   *sem = xSemaphoreCreateBinary();
+ 513              		.loc 1 226 3 is_stmt 1 view .LVU105
+ 514              		.loc 1 226 10 is_stmt 0 view .LVU106
+ 515 0006 0322     		movs	r2, #3
+ 516 0008 0021     		movs	r1, #0
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 14
+
+
+ 517              	.LVL44:
+ 518              		.loc 1 226 10 view .LVU107
+ 519 000a 0120     		movs	r0, #1
+ 520              	.LVL45:
+ 521              		.loc 1 226 10 view .LVU108
+ 522 000c FFF7FEFF 		bl	xQueueGenericCreate
+ 523              	.LVL46:
+ 524              		.loc 1 226 8 view .LVU109
+ 525 0010 2060     		str	r0, [r4]
+ 227:ThirdPackage/lwip_app/sys_arch.c ****   
+ 228:ThirdPackage/lwip_app/sys_arch.c ****   if(*sem == NULL)
+ 526              		.loc 1 228 3 is_stmt 1 view .LVU110
+ 527              		.loc 1 228 5 is_stmt 0 view .LVU111
+ 528 0012 48B1     		cbz	r0, .L35
+ 229:ThirdPackage/lwip_app/sys_arch.c ****   {
+ 230:ThirdPackage/lwip_app/sys_arch.c **** #if SYS_STATS
+ 231:ThirdPackage/lwip_app/sys_arch.c ****     ++lwip_stats.sys.sem.err;
+ 232:ThirdPackage/lwip_app/sys_arch.c **** #endif /* SYS_STATS */
+ 233:ThirdPackage/lwip_app/sys_arch.c ****     return ERR_MEM;
+ 234:ThirdPackage/lwip_app/sys_arch.c ****   }
+ 235:ThirdPackage/lwip_app/sys_arch.c ****   if(count > 0)
+ 529              		.loc 1 235 3 is_stmt 1 view .LVU112
+ 530              		.loc 1 235 5 is_stmt 0 view .LVU113
+ 531 0014 0DB9     		cbnz	r5, .L38
+ 236:ThirdPackage/lwip_app/sys_arch.c ****   {
+ 237:ThirdPackage/lwip_app/sys_arch.c ****     xSemaphoreGive(*sem);
+ 238:ThirdPackage/lwip_app/sys_arch.c ****   }
+ 239:ThirdPackage/lwip_app/sys_arch.c **** 
+ 240:ThirdPackage/lwip_app/sys_arch.c ****   // if(count == 0)	// Means it can't be taken
+ 241:ThirdPackage/lwip_app/sys_arch.c ****   // {
+ 242:ThirdPackage/lwip_app/sys_arch.c ****   //   xSemaphoreTake(*sem, 0);
+ 243:ThirdPackage/lwip_app/sys_arch.c ****   // }
+ 244:ThirdPackage/lwip_app/sys_arch.c **** 
+ 245:ThirdPackage/lwip_app/sys_arch.c **** #if SYS_STATS
+ 246:ThirdPackage/lwip_app/sys_arch.c ****   ++lwip_stats.sys.sem.used;
+ 247:ThirdPackage/lwip_app/sys_arch.c ****   if (lwip_stats.sys.sem.max < lwip_stats.sys.sem.used) {
+ 248:ThirdPackage/lwip_app/sys_arch.c ****     lwip_stats.sys.sem.max = lwip_stats.sys.sem.used;
+ 249:ThirdPackage/lwip_app/sys_arch.c ****   }
+ 250:ThirdPackage/lwip_app/sys_arch.c **** #endif /* SYS_STATS */
+ 251:ThirdPackage/lwip_app/sys_arch.c **** 
+ 252:ThirdPackage/lwip_app/sys_arch.c ****   return ERR_OK;
+ 532              		.loc 1 252 10 view .LVU114
+ 533 0016 0020     		movs	r0, #0
+ 534              	.L34:
+ 253:ThirdPackage/lwip_app/sys_arch.c **** }
+ 535              		.loc 1 253 1 view .LVU115
+ 536 0018 38BD     		pop	{r3, r4, r5, pc}
+ 537              	.LVL47:
+ 538              	.L38:
+ 237:ThirdPackage/lwip_app/sys_arch.c ****   }
+ 539              		.loc 1 237 5 is_stmt 1 view .LVU116
+ 540 001a 0023     		movs	r3, #0
+ 541 001c 1A46     		mov	r2, r3
+ 542 001e 1946     		mov	r1, r3
+ 543 0020 FFF7FEFF 		bl	xQueueGenericSend
+ 544              	.LVL48:
+ 252:ThirdPackage/lwip_app/sys_arch.c **** }
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 15
+
+
+ 545              		.loc 1 252 10 is_stmt 0 view .LVU117
+ 546 0024 0020     		movs	r0, #0
+ 547 0026 F7E7     		b	.L34
+ 548              	.L35:
+ 233:ThirdPackage/lwip_app/sys_arch.c ****   }
+ 549              		.loc 1 233 12 view .LVU118
+ 550 0028 4FF0FF30 		mov	r0, #-1
+ 551 002c F4E7     		b	.L34
+ 552              		.cfi_endproc
+ 553              	.LFE169:
+ 555              		.section	.text.sys_arch_sem_wait,"ax",%progbits
+ 556              		.align	1
+ 557              		.global	sys_arch_sem_wait
+ 558              		.syntax unified
+ 559              		.thumb
+ 560              		.thumb_func
+ 562              	sys_arch_sem_wait:
+ 563              	.LVL49:
+ 564              	.LFB170:
+ 254:ThirdPackage/lwip_app/sys_arch.c **** 
+ 255:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 256:ThirdPackage/lwip_app/sys_arch.c **** /*
+ 257:ThirdPackage/lwip_app/sys_arch.c ****   Blocks the thread while waiting for the semaphore to be
+ 258:ThirdPackage/lwip_app/sys_arch.c ****   signaled. If the "timeout" argument is non-zero, the thread should
+ 259:ThirdPackage/lwip_app/sys_arch.c ****   only be blocked for the specified time (measured in
+ 260:ThirdPackage/lwip_app/sys_arch.c ****   milliseconds).
+ 261:ThirdPackage/lwip_app/sys_arch.c **** 
+ 262:ThirdPackage/lwip_app/sys_arch.c ****   If the timeout argument is non-zero, the return value is the number of
+ 263:ThirdPackage/lwip_app/sys_arch.c ****   milliseconds spent waiting for the semaphore to be signaled. If the
+ 264:ThirdPackage/lwip_app/sys_arch.c ****   semaphore wasn't signaled within the specified time, the return value is
+ 265:ThirdPackage/lwip_app/sys_arch.c ****   SYS_ARCH_TIMEOUT. If the thread didn't have to wait for the semaphore
+ 266:ThirdPackage/lwip_app/sys_arch.c ****   (i.e., it was already signaled), the function may return zero.
+ 267:ThirdPackage/lwip_app/sys_arch.c **** 
+ 268:ThirdPackage/lwip_app/sys_arch.c ****   Notice that lwIP implements a function with a similar name,
+ 269:ThirdPackage/lwip_app/sys_arch.c ****   sys_sem_wait(), that uses the sys_arch_sem_wait() function.
+ 270:ThirdPackage/lwip_app/sys_arch.c **** */
+ 271:ThirdPackage/lwip_app/sys_arch.c **** u32_t sys_arch_sem_wait(sys_sem_t *sem, u32_t timeout)
+ 272:ThirdPackage/lwip_app/sys_arch.c **** {
+ 565              		.loc 1 272 1 is_stmt 1 view -0
+ 566              		.cfi_startproc
+ 567              		@ args = 0, pretend = 0, frame = 0
+ 568              		@ frame_needed = 0, uses_anonymous_args = 0
+ 569              		.loc 1 272 1 is_stmt 0 view .LVU120
+ 570 0000 70B5     		push	{r4, r5, r6, lr}
+ 571              	.LCFI19:
+ 572              		.cfi_def_cfa_offset 16
+ 573              		.cfi_offset 4, -16
+ 574              		.cfi_offset 5, -12
+ 575              		.cfi_offset 6, -8
+ 576              		.cfi_offset 14, -4
+ 577 0002 0546     		mov	r5, r0
+ 273:ThirdPackage/lwip_app/sys_arch.c ****     TickType_t ticksToWait;
+ 578              		.loc 1 273 5 is_stmt 1 view .LVU121
+ 274:ThirdPackage/lwip_app/sys_arch.c ****     u32_t startTime, endTime, elapsedTime;
+ 579              		.loc 1 274 5 view .LVU122
+ 275:ThirdPackage/lwip_app/sys_arch.c ****     
+ 276:ThirdPackage/lwip_app/sys_arch.c ****   // 将超时从毫秒转换为系统节拍数
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 16
+
+
+ 277:ThirdPackage/lwip_app/sys_arch.c ****     if (timeout == 0) {
+ 580              		.loc 1 277 5 view .LVU123
+ 581              		.loc 1 277 8 is_stmt 0 view .LVU124
+ 582 0004 0C46     		mov	r4, r1
+ 583 0006 B1B1     		cbz	r1, .L40
+ 278:ThirdPackage/lwip_app/sys_arch.c ****         // 无等待超时，立即返回
+ 279:ThirdPackage/lwip_app/sys_arch.c ****         ticksToWait = 0;
+ 280:ThirdPackage/lwip_app/sys_arch.c ****     } else {
+ 281:ThirdPackage/lwip_app/sys_arch.c ****         // 转换为 FreeRTOS 中的节拍数
+ 282:ThirdPackage/lwip_app/sys_arch.c ****         ticksToWait = pdMS_TO_TICKS(timeout);
+ 584              		.loc 1 282 9 is_stmt 1 view .LVU125
+ 585              		.loc 1 282 23 is_stmt 0 view .LVU126
+ 586 0008 0021     		movs	r1, #0
+ 587              	.LVL50:
+ 588              		.loc 1 282 23 view .LVU127
+ 589 000a 2319     		adds	r3, r4, r4
+ 590 000c 4941     		adcs	r1, r1, r1
+ 591 000e 1B19     		adds	r3, r3, r4
+ 592 0010 41F10001 		adc	r1, r1, #0
+ 593 0014 4A01     		lsls	r2, r1, #5
+ 594 0016 42EAD362 		orr	r2, r2, r3, lsr #27
+ 595 001a 5801     		lsls	r0, r3, #5
+ 596              	.LVL51:
+ 597              		.loc 1 282 23 view .LVU128
+ 598 001c 1B18     		adds	r3, r3, r0
+ 599 001e 41EB0201 		adc	r1, r1, r2
+ 600 0022 1819     		adds	r0, r3, r4
+ 601 0024 4FF47A72 		mov	r2, #1000
+ 602 0028 4FF00003 		mov	r3, #0
+ 603 002c 41F10001 		adc	r1, r1, #0
+ 604 0030 FFF7FEFF 		bl	__aeabi_uldivmod
+ 605              	.LVL52:
+ 606              		.loc 1 282 21 view .LVU129
+ 607 0034 0446     		mov	r4, r0
+ 608              	.LVL53:
+ 609              	.L40:
+ 283:ThirdPackage/lwip_app/sys_arch.c ****     }
+ 284:ThirdPackage/lwip_app/sys_arch.c **** 
+ 285:ThirdPackage/lwip_app/sys_arch.c ****     // 获取当前时间（滴答计数）
+ 286:ThirdPackage/lwip_app/sys_arch.c ****     startTime = xTaskGetTickCount();
+ 610              		.loc 1 286 5 is_stmt 1 view .LVU130
+ 611              		.loc 1 286 17 is_stmt 0 view .LVU131
+ 612 0036 FFF7FEFF 		bl	xTaskGetTickCount
+ 613              	.LVL54:
+ 614 003a 0646     		mov	r6, r0
+ 615              	.LVL55:
+ 287:ThirdPackage/lwip_app/sys_arch.c **** 
+ 288:ThirdPackage/lwip_app/sys_arch.c ****     // 从消息队列接收消息
+ 289:ThirdPackage/lwip_app/sys_arch.c ****     if (xSemaphoreTake(*sem,ticksToWait) == pdTRUE) 
+ 616              		.loc 1 289 5 is_stmt 1 view .LVU132
+ 617              		.loc 1 289 9 is_stmt 0 view .LVU133
+ 618 003c 2146     		mov	r1, r4
+ 619 003e 2868     		ldr	r0, [r5]
+ 620              	.LVL56:
+ 621              		.loc 1 289 9 view .LVU134
+ 622 0040 FFF7FEFF 		bl	xQueueSemaphoreTake
+ 623              	.LVL57:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 17
+
+
+ 624              		.loc 1 289 8 view .LVU135
+ 625 0044 0128     		cmp	r0, #1
+ 626 0046 02D0     		beq	.L44
+ 290:ThirdPackage/lwip_app/sys_arch.c ****     {
+ 291:ThirdPackage/lwip_app/sys_arch.c ****         // 计算经过的时间
+ 292:ThirdPackage/lwip_app/sys_arch.c ****         endTime = xTaskGetTickCount();
+ 293:ThirdPackage/lwip_app/sys_arch.c ****         elapsedTime = endTime - startTime;
+ 294:ThirdPackage/lwip_app/sys_arch.c ****         
+ 295:ThirdPackage/lwip_app/sys_arch.c ****         // 返回等待的时间（单位是系统节拍）
+ 296:ThirdPackage/lwip_app/sys_arch.c ****         return elapsedTime;
+ 297:ThirdPackage/lwip_app/sys_arch.c ****     } else {
+ 298:ThirdPackage/lwip_app/sys_arch.c ****         // 超时或没有消息
+ 299:ThirdPackage/lwip_app/sys_arch.c ****         return SYS_ARCH_TIMEOUT;
+ 627              		.loc 1 299 16 view .LVU136
+ 628 0048 4FF0FF30 		mov	r0, #-1
+ 629              	.L39:
+ 300:ThirdPackage/lwip_app/sys_arch.c ****     }
+ 301:ThirdPackage/lwip_app/sys_arch.c **** }
+ 630              		.loc 1 301 1 view .LVU137
+ 631 004c 70BD     		pop	{r4, r5, r6, pc}
+ 632              	.LVL58:
+ 633              	.L44:
+ 292:ThirdPackage/lwip_app/sys_arch.c ****         elapsedTime = endTime - startTime;
+ 634              		.loc 1 292 9 is_stmt 1 view .LVU138
+ 292:ThirdPackage/lwip_app/sys_arch.c ****         elapsedTime = endTime - startTime;
+ 635              		.loc 1 292 19 is_stmt 0 view .LVU139
+ 636 004e FFF7FEFF 		bl	xTaskGetTickCount
+ 637              	.LVL59:
+ 293:ThirdPackage/lwip_app/sys_arch.c ****         
+ 638              		.loc 1 293 9 is_stmt 1 view .LVU140
+ 293:ThirdPackage/lwip_app/sys_arch.c ****         
+ 639              		.loc 1 293 21 is_stmt 0 view .LVU141
+ 640 0052 801B     		subs	r0, r0, r6
+ 641              	.LVL60:
+ 296:ThirdPackage/lwip_app/sys_arch.c ****     } else {
+ 642              		.loc 1 296 9 is_stmt 1 view .LVU142
+ 296:ThirdPackage/lwip_app/sys_arch.c ****     } else {
+ 643              		.loc 1 296 16 is_stmt 0 view .LVU143
+ 644 0054 FAE7     		b	.L39
+ 645              		.cfi_endproc
+ 646              	.LFE170:
+ 648              		.section	.text.sys_sem_signal,"ax",%progbits
+ 649              		.align	1
+ 650              		.global	sys_sem_signal
+ 651              		.syntax unified
+ 652              		.thumb
+ 653              		.thumb_func
+ 655              	sys_sem_signal:
+ 656              	.LVL61:
+ 657              	.LFB171:
+ 302:ThirdPackage/lwip_app/sys_arch.c **** 
+ 303:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 304:ThirdPackage/lwip_app/sys_arch.c **** // Signals a semaphore
+ 305:ThirdPackage/lwip_app/sys_arch.c **** void sys_sem_signal(sys_sem_t *sem)
+ 306:ThirdPackage/lwip_app/sys_arch.c **** {
+ 658              		.loc 1 306 1 is_stmt 1 view -0
+ 659              		.cfi_startproc
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 18
+
+
+ 660              		@ args = 0, pretend = 0, frame = 0
+ 661              		@ frame_needed = 0, uses_anonymous_args = 0
+ 662              		.loc 1 306 1 is_stmt 0 view .LVU145
+ 663 0000 08B5     		push	{r3, lr}
+ 664              	.LCFI20:
+ 665              		.cfi_def_cfa_offset 8
+ 666              		.cfi_offset 3, -8
+ 667              		.cfi_offset 14, -4
+ 307:ThirdPackage/lwip_app/sys_arch.c ****   xSemaphoreGive(*sem);
+ 668              		.loc 1 307 3 is_stmt 1 view .LVU146
+ 669 0002 0023     		movs	r3, #0
+ 670 0004 1A46     		mov	r2, r3
+ 671 0006 1946     		mov	r1, r3
+ 672 0008 0068     		ldr	r0, [r0]
+ 673              	.LVL62:
+ 674              		.loc 1 307 3 is_stmt 0 view .LVU147
+ 675 000a FFF7FEFF 		bl	xQueueGenericSend
+ 676              	.LVL63:
+ 308:ThirdPackage/lwip_app/sys_arch.c **** }
+ 677              		.loc 1 308 1 view .LVU148
+ 678 000e 08BD     		pop	{r3, pc}
+ 679              		.cfi_endproc
+ 680              	.LFE171:
+ 682              		.section	.text.sys_sem_free,"ax",%progbits
+ 683              		.align	1
+ 684              		.global	sys_sem_free
+ 685              		.syntax unified
+ 686              		.thumb
+ 687              		.thumb_func
+ 689              	sys_sem_free:
+ 690              	.LVL64:
+ 691              	.LFB172:
+ 309:ThirdPackage/lwip_app/sys_arch.c **** 
+ 310:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 311:ThirdPackage/lwip_app/sys_arch.c **** // Deallocates a semaphore
+ 312:ThirdPackage/lwip_app/sys_arch.c **** void sys_sem_free(sys_sem_t *sem)
+ 313:ThirdPackage/lwip_app/sys_arch.c **** {
+ 692              		.loc 1 313 1 is_stmt 1 view -0
+ 693              		.cfi_startproc
+ 694              		@ args = 0, pretend = 0, frame = 0
+ 695              		@ frame_needed = 0, uses_anonymous_args = 0
+ 696              		.loc 1 313 1 is_stmt 0 view .LVU150
+ 697 0000 08B5     		push	{r3, lr}
+ 698              	.LCFI21:
+ 699              		.cfi_def_cfa_offset 8
+ 700              		.cfi_offset 3, -8
+ 701              		.cfi_offset 14, -4
+ 314:ThirdPackage/lwip_app/sys_arch.c **** #if SYS_STATS
+ 315:ThirdPackage/lwip_app/sys_arch.c ****   --lwip_stats.sys.sem.used;
+ 316:ThirdPackage/lwip_app/sys_arch.c **** #endif /* SYS_STATS */
+ 317:ThirdPackage/lwip_app/sys_arch.c **** 
+ 318:ThirdPackage/lwip_app/sys_arch.c ****   vSemaphoreDelete(*sem);
+ 702              		.loc 1 318 3 is_stmt 1 view .LVU151
+ 703 0002 0068     		ldr	r0, [r0]
+ 704              	.LVL65:
+ 705              		.loc 1 318 3 is_stmt 0 view .LVU152
+ 706 0004 FFF7FEFF 		bl	vQueueDelete
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 19
+
+
+ 707              	.LVL66:
+ 319:ThirdPackage/lwip_app/sys_arch.c **** }
+ 708              		.loc 1 319 1 view .LVU153
+ 709 0008 08BD     		pop	{r3, pc}
+ 710              		.cfi_endproc
+ 711              	.LFE172:
+ 713              		.section	.text.sys_sem_valid,"ax",%progbits
+ 714              		.align	1
+ 715              		.global	sys_sem_valid
+ 716              		.syntax unified
+ 717              		.thumb
+ 718              		.thumb_func
+ 720              	sys_sem_valid:
+ 721              	.LVL67:
+ 722              	.LFB173:
+ 320:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 321:ThirdPackage/lwip_app/sys_arch.c **** int sys_sem_valid(sys_sem_t *sem)
+ 322:ThirdPackage/lwip_app/sys_arch.c **** {
+ 723              		.loc 1 322 1 is_stmt 1 view -0
+ 724              		.cfi_startproc
+ 725              		@ args = 0, pretend = 0, frame = 0
+ 726              		@ frame_needed = 0, uses_anonymous_args = 0
+ 727              		@ link register save eliminated.
+ 323:ThirdPackage/lwip_app/sys_arch.c ****   if (*sem == SYS_SEM_NULL)
+ 728              		.loc 1 323 3 view .LVU155
+ 729              		.loc 1 323 7 is_stmt 0 view .LVU156
+ 730 0000 0368     		ldr	r3, [r0]
+ 731              		.loc 1 323 6 view .LVU157
+ 732 0002 0BB1     		cbz	r3, .L52
+ 324:ThirdPackage/lwip_app/sys_arch.c ****     return 0;
+ 325:ThirdPackage/lwip_app/sys_arch.c ****   else
+ 326:ThirdPackage/lwip_app/sys_arch.c ****     return 1;
+ 733              		.loc 1 326 12 view .LVU158
+ 734 0004 0120     		movs	r0, #1
+ 735              	.LVL68:
+ 327:ThirdPackage/lwip_app/sys_arch.c **** }
+ 736              		.loc 1 327 1 view .LVU159
+ 737 0006 7047     		bx	lr
+ 738              	.LVL69:
+ 739              	.L52:
+ 324:ThirdPackage/lwip_app/sys_arch.c ****     return 0;
+ 740              		.loc 1 324 12 view .LVU160
+ 741 0008 0020     		movs	r0, #0
+ 742              	.LVL70:
+ 324:ThirdPackage/lwip_app/sys_arch.c ****     return 0;
+ 743              		.loc 1 324 12 view .LVU161
+ 744 000a 7047     		bx	lr
+ 745              		.cfi_endproc
+ 746              	.LFE173:
+ 748              		.section	.text.sys_sem_set_invalid,"ax",%progbits
+ 749              		.align	1
+ 750              		.global	sys_sem_set_invalid
+ 751              		.syntax unified
+ 752              		.thumb
+ 753              		.thumb_func
+ 755              	sys_sem_set_invalid:
+ 756              	.LVL71:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 20
+
+
+ 757              	.LFB174:
+ 328:ThirdPackage/lwip_app/sys_arch.c **** 
+ 329:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 330:ThirdPackage/lwip_app/sys_arch.c **** void sys_sem_set_invalid(sys_sem_t *sem)
+ 331:ThirdPackage/lwip_app/sys_arch.c **** {
+ 758              		.loc 1 331 1 is_stmt 1 view -0
+ 759              		.cfi_startproc
+ 760              		@ args = 0, pretend = 0, frame = 0
+ 761              		@ frame_needed = 0, uses_anonymous_args = 0
+ 762              		@ link register save eliminated.
+ 332:ThirdPackage/lwip_app/sys_arch.c ****   *sem = SYS_SEM_NULL;
+ 763              		.loc 1 332 3 view .LVU163
+ 764              		.loc 1 332 8 is_stmt 0 view .LVU164
+ 765 0000 0023     		movs	r3, #0
+ 766 0002 0360     		str	r3, [r0]
+ 333:ThirdPackage/lwip_app/sys_arch.c **** }
+ 767              		.loc 1 333 1 view .LVU165
+ 768 0004 7047     		bx	lr
+ 769              		.cfi_endproc
+ 770              	.LFE174:
+ 772              		.section	.text.sys_init,"ax",%progbits
+ 773              		.align	1
+ 774              		.global	sys_init
+ 775              		.syntax unified
+ 776              		.thumb
+ 777              		.thumb_func
+ 779              	sys_init:
+ 780              	.LFB175:
+ 334:ThirdPackage/lwip_app/sys_arch.c **** 
+ 335:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 336:ThirdPackage/lwip_app/sys_arch.c **** 
+ 337:ThirdPackage/lwip_app/sys_arch.c **** SemaphoreHandle_t  lwip_sys_mutex;
+ 338:ThirdPackage/lwip_app/sys_arch.c **** 
+ 339:ThirdPackage/lwip_app/sys_arch.c **** // Initialize sys arch
+ 340:ThirdPackage/lwip_app/sys_arch.c **** void sys_init(void)
+ 341:ThirdPackage/lwip_app/sys_arch.c **** {
+ 781              		.loc 1 341 1 is_stmt 1 view -0
+ 782              		.cfi_startproc
+ 783              		@ args = 0, pretend = 0, frame = 0
+ 784              		@ frame_needed = 0, uses_anonymous_args = 0
+ 785 0000 08B5     		push	{r3, lr}
+ 786              	.LCFI22:
+ 787              		.cfi_def_cfa_offset 8
+ 788              		.cfi_offset 3, -8
+ 789              		.cfi_offset 14, -4
+ 342:ThirdPackage/lwip_app/sys_arch.c ****   lwip_sys_mutex = xSemaphoreCreateMutex();
+ 790              		.loc 1 342 3 view .LVU167
+ 791              		.loc 1 342 20 is_stmt 0 view .LVU168
+ 792 0002 0120     		movs	r0, #1
+ 793 0004 FFF7FEFF 		bl	xQueueCreateMutex
+ 794              	.LVL72:
+ 795              		.loc 1 342 18 view .LVU169
+ 796 0008 014B     		ldr	r3, .L56
+ 797 000a 1860     		str	r0, [r3]
+ 343:ThirdPackage/lwip_app/sys_arch.c **** }
+ 798              		.loc 1 343 1 view .LVU170
+ 799 000c 08BD     		pop	{r3, pc}
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 21
+
+
+ 800              	.L57:
+ 801 000e 00BF     		.align	2
+ 802              	.L56:
+ 803 0010 00000000 		.word	.LANCHOR0
+ 804              		.cfi_endproc
+ 805              	.LFE175:
+ 807              		.section	.text.sys_mutex_new,"ax",%progbits
+ 808              		.align	1
+ 809              		.global	sys_mutex_new
+ 810              		.syntax unified
+ 811              		.thumb
+ 812              		.thumb_func
+ 814              	sys_mutex_new:
+ 815              	.LVL73:
+ 816              	.LFB176:
+ 344:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 345:ThirdPackage/lwip_app/sys_arch.c ****                                       /* Mutexes*/
+ 346:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 347:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 348:ThirdPackage/lwip_app/sys_arch.c **** #if LWIP_COMPAT_MUTEX == 0
+ 349:ThirdPackage/lwip_app/sys_arch.c **** /* Create a new mutex*/
+ 350:ThirdPackage/lwip_app/sys_arch.c **** err_t sys_mutex_new(sys_mutex_t *mutex) {
+ 817              		.loc 1 350 41 is_stmt 1 view -0
+ 818              		.cfi_startproc
+ 819              		@ args = 0, pretend = 0, frame = 0
+ 820              		@ frame_needed = 0, uses_anonymous_args = 0
+ 821              		.loc 1 350 41 is_stmt 0 view .LVU172
+ 822 0000 10B5     		push	{r4, lr}
+ 823              	.LCFI23:
+ 824              		.cfi_def_cfa_offset 8
+ 825              		.cfi_offset 4, -8
+ 826              		.cfi_offset 14, -4
+ 827 0002 0446     		mov	r4, r0
+ 351:ThirdPackage/lwip_app/sys_arch.c **** 
+ 352:ThirdPackage/lwip_app/sys_arch.c ****   *mutex = xSemaphoreCreateMutex();
+ 828              		.loc 1 352 3 is_stmt 1 view .LVU173
+ 829              		.loc 1 352 12 is_stmt 0 view .LVU174
+ 830 0004 0120     		movs	r0, #1
+ 831              	.LVL74:
+ 832              		.loc 1 352 12 view .LVU175
+ 833 0006 FFF7FEFF 		bl	xQueueCreateMutex
+ 834              	.LVL75:
+ 835              		.loc 1 352 10 view .LVU176
+ 836 000a 2060     		str	r0, [r4]
+ 353:ThirdPackage/lwip_app/sys_arch.c **** 
+ 354:ThirdPackage/lwip_app/sys_arch.c ****   if(*mutex == NULL)
+ 837              		.loc 1 354 3 is_stmt 1 view .LVU177
+ 838              		.loc 1 354 5 is_stmt 0 view .LVU178
+ 839 000c 08B1     		cbz	r0, .L60
+ 355:ThirdPackage/lwip_app/sys_arch.c ****   {
+ 356:ThirdPackage/lwip_app/sys_arch.c **** #if SYS_STATS
+ 357:ThirdPackage/lwip_app/sys_arch.c ****     ++lwip_stats.sys.mutex.err;
+ 358:ThirdPackage/lwip_app/sys_arch.c **** #endif /* SYS_STATS */
+ 359:ThirdPackage/lwip_app/sys_arch.c ****     return ERR_MEM;
+ 360:ThirdPackage/lwip_app/sys_arch.c ****   }
+ 361:ThirdPackage/lwip_app/sys_arch.c **** 
+ 362:ThirdPackage/lwip_app/sys_arch.c **** #if SYS_STATS
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 22
+
+
+ 363:ThirdPackage/lwip_app/sys_arch.c ****   ++lwip_stats.sys.mutex.used;
+ 364:ThirdPackage/lwip_app/sys_arch.c ****   if (lwip_stats.sys.mutex.max < lwip_stats.sys.mutex.used) {
+ 365:ThirdPackage/lwip_app/sys_arch.c ****     lwip_stats.sys.mutex.max = lwip_stats.sys.mutex.used;
+ 366:ThirdPackage/lwip_app/sys_arch.c ****   }
+ 367:ThirdPackage/lwip_app/sys_arch.c **** #endif /* SYS_STATS */
+ 368:ThirdPackage/lwip_app/sys_arch.c ****   return ERR_OK;
+ 840              		.loc 1 368 10 view .LVU179
+ 841 000e 0020     		movs	r0, #0
+ 842              	.L59:
+ 369:ThirdPackage/lwip_app/sys_arch.c **** }
+ 843              		.loc 1 369 1 view .LVU180
+ 844 0010 10BD     		pop	{r4, pc}
+ 845              	.LVL76:
+ 846              	.L60:
+ 359:ThirdPackage/lwip_app/sys_arch.c ****   }
+ 847              		.loc 1 359 12 view .LVU181
+ 848 0012 4FF0FF30 		mov	r0, #-1
+ 849 0016 FBE7     		b	.L59
+ 850              		.cfi_endproc
+ 851              	.LFE176:
+ 853              		.section	.text.sys_mutex_free,"ax",%progbits
+ 854              		.align	1
+ 855              		.global	sys_mutex_free
+ 856              		.syntax unified
+ 857              		.thumb
+ 858              		.thumb_func
+ 860              	sys_mutex_free:
+ 861              	.LVL77:
+ 862              	.LFB177:
+ 370:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 371:ThirdPackage/lwip_app/sys_arch.c **** /* Deallocate a mutex*/
+ 372:ThirdPackage/lwip_app/sys_arch.c **** void sys_mutex_free(sys_mutex_t *mutex)
+ 373:ThirdPackage/lwip_app/sys_arch.c **** {
+ 863              		.loc 1 373 1 is_stmt 1 view -0
+ 864              		.cfi_startproc
+ 865              		@ args = 0, pretend = 0, frame = 0
+ 866              		@ frame_needed = 0, uses_anonymous_args = 0
+ 867              		.loc 1 373 1 is_stmt 0 view .LVU183
+ 868 0000 08B5     		push	{r3, lr}
+ 869              	.LCFI24:
+ 870              		.cfi_def_cfa_offset 8
+ 871              		.cfi_offset 3, -8
+ 872              		.cfi_offset 14, -4
+ 374:ThirdPackage/lwip_app/sys_arch.c **** #if SYS_STATS
+ 375:ThirdPackage/lwip_app/sys_arch.c ****       --lwip_stats.sys.mutex.used;
+ 376:ThirdPackage/lwip_app/sys_arch.c **** #endif /* SYS_STATS */
+ 377:ThirdPackage/lwip_app/sys_arch.c **** 
+ 378:ThirdPackage/lwip_app/sys_arch.c ****   vSemaphoreDelete(*mutex);
+ 873              		.loc 1 378 3 is_stmt 1 view .LVU184
+ 874 0002 0068     		ldr	r0, [r0]
+ 875              	.LVL78:
+ 876              		.loc 1 378 3 is_stmt 0 view .LVU185
+ 877 0004 FFF7FEFF 		bl	vQueueDelete
+ 878              	.LVL79:
+ 379:ThirdPackage/lwip_app/sys_arch.c **** }
+ 879              		.loc 1 379 1 view .LVU186
+ 880 0008 08BD     		pop	{r3, pc}
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 23
+
+
+ 881              		.cfi_endproc
+ 882              	.LFE177:
+ 884              		.section	.text.sys_mutex_lock,"ax",%progbits
+ 885              		.align	1
+ 886              		.global	sys_mutex_lock
+ 887              		.syntax unified
+ 888              		.thumb
+ 889              		.thumb_func
+ 891              	sys_mutex_lock:
+ 892              	.LVL80:
+ 893              	.LFB178:
+ 380:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 381:ThirdPackage/lwip_app/sys_arch.c **** /* Lock a mutex*/
+ 382:ThirdPackage/lwip_app/sys_arch.c **** void sys_mutex_lock(sys_mutex_t *mutex)
+ 383:ThirdPackage/lwip_app/sys_arch.c **** {
+ 894              		.loc 1 383 1 is_stmt 1 view -0
+ 895              		.cfi_startproc
+ 896              		@ args = 0, pretend = 0, frame = 0
+ 897              		@ frame_needed = 0, uses_anonymous_args = 0
+ 898              		.loc 1 383 1 is_stmt 0 view .LVU188
+ 899 0000 08B5     		push	{r3, lr}
+ 900              	.LCFI25:
+ 901              		.cfi_def_cfa_offset 8
+ 902              		.cfi_offset 3, -8
+ 903              		.cfi_offset 14, -4
+ 384:ThirdPackage/lwip_app/sys_arch.c ****   xSemaphoreTake(*mutex, portMAX_DELAY);
+ 904              		.loc 1 384 3 is_stmt 1 view .LVU189
+ 905 0002 4FF0FF31 		mov	r1, #-1
+ 906 0006 0068     		ldr	r0, [r0]
+ 907              	.LVL81:
+ 908              		.loc 1 384 3 is_stmt 0 view .LVU190
+ 909 0008 FFF7FEFF 		bl	xQueueSemaphoreTake
+ 910              	.LVL82:
+ 385:ThirdPackage/lwip_app/sys_arch.c **** }
+ 911              		.loc 1 385 1 view .LVU191
+ 912 000c 08BD     		pop	{r3, pc}
+ 913              		.cfi_endproc
+ 914              	.LFE178:
+ 916              		.section	.text.sys_mutex_unlock,"ax",%progbits
+ 917              		.align	1
+ 918              		.global	sys_mutex_unlock
+ 919              		.syntax unified
+ 920              		.thumb
+ 921              		.thumb_func
+ 923              	sys_mutex_unlock:
+ 924              	.LVL83:
+ 925              	.LFB179:
+ 386:ThirdPackage/lwip_app/sys_arch.c **** 
+ 387:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 388:ThirdPackage/lwip_app/sys_arch.c **** /* Unlock a mutex*/
+ 389:ThirdPackage/lwip_app/sys_arch.c **** void sys_mutex_unlock(sys_mutex_t *mutex)
+ 390:ThirdPackage/lwip_app/sys_arch.c **** {
+ 926              		.loc 1 390 1 is_stmt 1 view -0
+ 927              		.cfi_startproc
+ 928              		@ args = 0, pretend = 0, frame = 0
+ 929              		@ frame_needed = 0, uses_anonymous_args = 0
+ 930              		.loc 1 390 1 is_stmt 0 view .LVU193
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 24
+
+
+ 931 0000 08B5     		push	{r3, lr}
+ 932              	.LCFI26:
+ 933              		.cfi_def_cfa_offset 8
+ 934              		.cfi_offset 3, -8
+ 935              		.cfi_offset 14, -4
+ 391:ThirdPackage/lwip_app/sys_arch.c ****   xSemaphoreGive(*mutex);
+ 936              		.loc 1 391 3 is_stmt 1 view .LVU194
+ 937 0002 0023     		movs	r3, #0
+ 938 0004 1A46     		mov	r2, r3
+ 939 0006 1946     		mov	r1, r3
+ 940 0008 0068     		ldr	r0, [r0]
+ 941              	.LVL84:
+ 942              		.loc 1 391 3 is_stmt 0 view .LVU195
+ 943 000a FFF7FEFF 		bl	xQueueGenericSend
+ 944              	.LVL85:
+ 392:ThirdPackage/lwip_app/sys_arch.c **** }
+ 945              		.loc 1 392 1 view .LVU196
+ 946 000e 08BD     		pop	{r3, pc}
+ 947              		.cfi_endproc
+ 948              	.LFE179:
+ 950              		.section	.text.sys_thread_new,"ax",%progbits
+ 951              		.align	1
+ 952              		.global	sys_thread_new
+ 953              		.syntax unified
+ 954              		.thumb
+ 955              		.thumb_func
+ 957              	sys_thread_new:
+ 958              	.LVL86:
+ 959              	.LFB180:
+ 393:ThirdPackage/lwip_app/sys_arch.c **** #endif /*LWIP_COMPAT_MUTEX*/
+ 394:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 395:ThirdPackage/lwip_app/sys_arch.c **** // TODO
+ 396:ThirdPackage/lwip_app/sys_arch.c **** /*-----------------------------------------------------------------------------------*/
+ 397:ThirdPackage/lwip_app/sys_arch.c **** /*
+ 398:ThirdPackage/lwip_app/sys_arch.c ****   Starts a new thread with priority "prio" that will begin its execution in the
+ 399:ThirdPackage/lwip_app/sys_arch.c ****   function "thread()". The "arg" argument will be passed as an argument to the
+ 400:ThirdPackage/lwip_app/sys_arch.c ****   thread() function. The id of the new thread is returned. Both the id and
+ 401:ThirdPackage/lwip_app/sys_arch.c ****   the priority are system dependent.
+ 402:ThirdPackage/lwip_app/sys_arch.c **** */
+ 403:ThirdPackage/lwip_app/sys_arch.c **** sys_thread_t sys_thread_new(const char *name, lwip_thread_fn thread , void *arg, int stacksize, int
+ 404:ThirdPackage/lwip_app/sys_arch.c **** {
+ 960              		.loc 1 404 1 is_stmt 1 view -0
+ 961              		.cfi_startproc
+ 962              		@ args = 4, pretend = 0, frame = 8
+ 963              		@ frame_needed = 0, uses_anonymous_args = 0
+ 964              		.loc 1 404 1 is_stmt 0 view .LVU198
+ 965 0000 00B5     		push	{lr}
+ 966              	.LCFI27:
+ 967              		.cfi_def_cfa_offset 4
+ 968              		.cfi_offset 14, -4
+ 969 0002 85B0     		sub	sp, sp, #20
+ 970              	.LCFI28:
+ 971              		.cfi_def_cfa_offset 24
+ 972 0004 8446     		mov	ip, r0
+ 973 0006 0846     		mov	r0, r1
+ 974              	.LVL87:
+ 975              		.loc 1 404 1 view .LVU199
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 25
+
+
+ 976 0008 1146     		mov	r1, r2
+ 977              	.LVL88:
+ 978              		.loc 1 404 1 view .LVU200
+ 979 000a 1A46     		mov	r2, r3
+ 980              	.LVL89:
+ 405:ThirdPackage/lwip_app/sys_arch.c ****     TaskHandle_t sys_thread_new_handle;
+ 981              		.loc 1 405 5 is_stmt 1 view .LVU201
+ 406:ThirdPackage/lwip_app/sys_arch.c ****     xTaskCreate( thread,(char *)name, stacksize,arg,prio,&sys_thread_new_handle);
+ 982              		.loc 1 406 5 view .LVU202
+ 983 000c 03AB     		add	r3, sp, #12
+ 984              	.LVL90:
+ 985              		.loc 1 406 5 is_stmt 0 view .LVU203
+ 986 000e 0193     		str	r3, [sp, #4]
+ 987 0010 069B     		ldr	r3, [sp, #24]
+ 988 0012 0093     		str	r3, [sp]
+ 989 0014 0B46     		mov	r3, r1
+ 990 0016 6146     		mov	r1, ip
+ 991              	.LVL91:
+ 992              		.loc 1 406 5 view .LVU204
+ 993 0018 FFF7FEFF 		bl	xTaskCreate
+ 994              	.LVL92:
+ 407:ThirdPackage/lwip_app/sys_arch.c ****     return sys_thread_new_handle;
+ 995              		.loc 1 407 5 is_stmt 1 view .LVU205
+ 408:ThirdPackage/lwip_app/sys_arch.c **** }
+ 996              		.loc 1 408 1 is_stmt 0 view .LVU206
+ 997 001c 0398     		ldr	r0, [sp, #12]
+ 998 001e 05B0     		add	sp, sp, #20
+ 999              	.LCFI29:
+ 1000              		.cfi_def_cfa_offset 4
+ 1001              		@ sp needed
+ 1002 0020 5DF804FB 		ldr	pc, [sp], #4
+ 1003              		.loc 1 408 1 view .LVU207
+ 1004              		.cfi_endproc
+ 1005              	.LFE180:
+ 1007              		.section	.text.sys_arch_protect,"ax",%progbits
+ 1008              		.align	1
+ 1009              		.global	sys_arch_protect
+ 1010              		.syntax unified
+ 1011              		.thumb
+ 1012              		.thumb_func
+ 1014              	sys_arch_protect:
+ 1015              	.LFB181:
+ 409:ThirdPackage/lwip_app/sys_arch.c **** 
+ 410:ThirdPackage/lwip_app/sys_arch.c **** /*
+ 411:ThirdPackage/lwip_app/sys_arch.c ****   This optional function does a "fast" critical region protection and returns
+ 412:ThirdPackage/lwip_app/sys_arch.c ****   the previous protection level. This function is only called during very short
+ 413:ThirdPackage/lwip_app/sys_arch.c ****   critical regions. An embedded system which supports ISR-based drivers might
+ 414:ThirdPackage/lwip_app/sys_arch.c ****   want to implement this function by disabling interrupts. Task-based systems
+ 415:ThirdPackage/lwip_app/sys_arch.c ****   might want to implement this by using a mutex or disabling tasking. This
+ 416:ThirdPackage/lwip_app/sys_arch.c ****   function should support recursive calls from the same task or interrupt. In
+ 417:ThirdPackage/lwip_app/sys_arch.c ****   other words, sys_arch_protect() could be called while already protected. In
+ 418:ThirdPackage/lwip_app/sys_arch.c ****   that case the return value indicates that it is already protected.
+ 419:ThirdPackage/lwip_app/sys_arch.c **** 
+ 420:ThirdPackage/lwip_app/sys_arch.c ****   sys_arch_protect() is only required if your port is supporting an operating
+ 421:ThirdPackage/lwip_app/sys_arch.c ****   system.
+ 422:ThirdPackage/lwip_app/sys_arch.c **** 
+ 423:ThirdPackage/lwip_app/sys_arch.c ****   Note: This function is based on FreeRTOS API, because no equivalent CMSIS-RTOS
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 26
+
+
+ 424:ThirdPackage/lwip_app/sys_arch.c ****         API is available
+ 425:ThirdPackage/lwip_app/sys_arch.c **** */
+ 426:ThirdPackage/lwip_app/sys_arch.c **** sys_prot_t sys_arch_protect(void)
+ 427:ThirdPackage/lwip_app/sys_arch.c **** {
+ 1016              		.loc 1 427 1 is_stmt 1 view -0
+ 1017              		.cfi_startproc
+ 1018              		@ args = 0, pretend = 0, frame = 0
+ 1019              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1020 0000 08B5     		push	{r3, lr}
+ 1021              	.LCFI30:
+ 1022              		.cfi_def_cfa_offset 8
+ 1023              		.cfi_offset 3, -8
+ 1024              		.cfi_offset 14, -4
+ 428:ThirdPackage/lwip_app/sys_arch.c ****     xSemaphoreTake(lwip_sys_mutex,portMAX_DELAY);
+ 1025              		.loc 1 428 5 view .LVU209
+ 1026 0002 4FF0FF31 		mov	r1, #-1
+ 1027 0006 034B     		ldr	r3, .L72
+ 1028 0008 1868     		ldr	r0, [r3]
+ 1029 000a FFF7FEFF 		bl	xQueueSemaphoreTake
+ 1030              	.LVL93:
+ 429:ThirdPackage/lwip_app/sys_arch.c ****     return (sys_prot_t)1;
+ 1031              		.loc 1 429 5 view .LVU210
+ 430:ThirdPackage/lwip_app/sys_arch.c **** }
+ 1032              		.loc 1 430 1 is_stmt 0 view .LVU211
+ 1033 000e 0120     		movs	r0, #1
+ 1034 0010 08BD     		pop	{r3, pc}
+ 1035              	.L73:
+ 1036 0012 00BF     		.align	2
+ 1037              	.L72:
+ 1038 0014 00000000 		.word	.LANCHOR0
+ 1039              		.cfi_endproc
+ 1040              	.LFE181:
+ 1042              		.section	.text.sys_arch_unprotect,"ax",%progbits
+ 1043              		.align	1
+ 1044              		.global	sys_arch_unprotect
+ 1045              		.syntax unified
+ 1046              		.thumb
+ 1047              		.thumb_func
+ 1049              	sys_arch_unprotect:
+ 1050              	.LVL94:
+ 1051              	.LFB182:
+ 431:ThirdPackage/lwip_app/sys_arch.c **** 
+ 432:ThirdPackage/lwip_app/sys_arch.c **** 
+ 433:ThirdPackage/lwip_app/sys_arch.c **** /*
+ 434:ThirdPackage/lwip_app/sys_arch.c ****   This optional function does a "fast" set of critical region protection to the
+ 435:ThirdPackage/lwip_app/sys_arch.c ****   value specified by pval. See the documentation for sys_arch_protect() for
+ 436:ThirdPackage/lwip_app/sys_arch.c ****   more information. This function is only required if your port is supporting
+ 437:ThirdPackage/lwip_app/sys_arch.c ****   an operating system.
+ 438:ThirdPackage/lwip_app/sys_arch.c **** 
+ 439:ThirdPackage/lwip_app/sys_arch.c ****   Note: This function is based on FreeRTOS API, because no equivalent CMSIS-RTOS
+ 440:ThirdPackage/lwip_app/sys_arch.c ****         API is available
+ 441:ThirdPackage/lwip_app/sys_arch.c **** */
+ 442:ThirdPackage/lwip_app/sys_arch.c **** void sys_arch_unprotect(sys_prot_t pval)
+ 443:ThirdPackage/lwip_app/sys_arch.c **** {
+ 1052              		.loc 1 443 1 is_stmt 1 view -0
+ 1053              		.cfi_startproc
+ 1054              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 27
+
+
+ 1055              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1056              		.loc 1 443 1 is_stmt 0 view .LVU213
+ 1057 0000 08B5     		push	{r3, lr}
+ 1058              	.LCFI31:
+ 1059              		.cfi_def_cfa_offset 8
+ 1060              		.cfi_offset 3, -8
+ 1061              		.cfi_offset 14, -4
+ 444:ThirdPackage/lwip_app/sys_arch.c ****   ( void ) pval;
+ 1062              		.loc 1 444 3 is_stmt 1 view .LVU214
+ 445:ThirdPackage/lwip_app/sys_arch.c ****   xSemaphoreGive(lwip_sys_mutex);
+ 1063              		.loc 1 445 3 view .LVU215
+ 1064 0002 0023     		movs	r3, #0
+ 1065 0004 1A46     		mov	r2, r3
+ 1066 0006 1946     		mov	r1, r3
+ 1067 0008 0248     		ldr	r0, .L76
+ 1068              	.LVL95:
+ 1069              		.loc 1 445 3 is_stmt 0 view .LVU216
+ 1070 000a 0068     		ldr	r0, [r0]
+ 1071 000c FFF7FEFF 		bl	xQueueGenericSend
+ 1072              	.LVL96:
+ 446:ThirdPackage/lwip_app/sys_arch.c **** }
+ 1073              		.loc 1 446 1 view .LVU217
+ 1074 0010 08BD     		pop	{r3, pc}
+ 1075              	.L77:
+ 1076 0012 00BF     		.align	2
+ 1077              	.L76:
+ 1078 0014 00000000 		.word	.LANCHOR0
+ 1079              		.cfi_endproc
+ 1080              	.LFE182:
+ 1082              		.global	lwip_sys_mutex
+ 1083              		.global	errno
+ 1084              		.section	.bss.errno,"aw",%nobits
+ 1085              		.align	2
+ 1088              	errno:
+ 1089 0000 00000000 		.space	4
+ 1090              		.section	.bss.lwip_sys_mutex,"aw",%nobits
+ 1091              		.align	2
+ 1092              		.set	.LANCHOR0,. + 0
+ 1095              	lwip_sys_mutex:
+ 1096 0000 00000000 		.space	4
+ 1097              		.text
+ 1098              	.Letext0:
+ 1099              		.file 2 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 1100              		.file 3 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 1101              		.file 4 "ThirdPackage/lwip220/include/arch/cc.h"
+ 1102              		.file 5 "ThirdPackage/lwip220/include/lwip/arch.h"
+ 1103              		.file 6 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h"
+ 1104              		.file 7 "ThirdPackage/freertos/include/task.h"
+ 1105              		.file 8 "ThirdPackage/freertos/include/queue.h"
+ 1106              		.file 9 "ThirdPackage/lwip220/include/lwip/err.h"
+ 1107              		.file 10 "ThirdPackage/freertos/include/semphr.h"
+ 1108              		.file 11 "ThirdPackage/lwip220/include/arch/sys_arch.h"
+ 1109              		.file 12 "ThirdPackage/lwip220/include/lwip/sys.h"
+ 1110              		.file 13 "ThirdPackage/lwip220/include/lwip/memp.h"
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 28
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 sys_arch.c
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:20     .text.sys_mbox_new:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:26     .text.sys_mbox_new:00000000 sys_mbox_new
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:70     .text.sys_mbox_free:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:76     .text.sys_mbox_free:00000000 sys_mbox_free
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:109    .text.sys_mbox_post:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:115    .text.sys_mbox_post:00000000 sys_mbox_post
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:159    .text.sys_mbox_trypost:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:165    .text.sys_mbox_trypost:00000000 sys_mbox_trypost
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:220    .text.sys_mbox_trypost_fromisr:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:226    .text.sys_mbox_trypost_fromisr:00000000 sys_mbox_trypost_fromisr
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:250    .text.sys_arch_mbox_fetch:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:256    .text.sys_arch_mbox_fetch:00000000 sys_arch_mbox_fetch
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:367    .text.sys_arch_mbox_tryfetch:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:373    .text.sys_arch_mbox_tryfetch:00000000 sys_arch_mbox_tryfetch
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:431    .text.sys_mbox_valid:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:437    .text.sys_mbox_valid:00000000 sys_mbox_valid
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:466    .text.sys_mbox_set_invalid:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:472    .text.sys_mbox_set_invalid:00000000 sys_mbox_set_invalid
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:490    .text.sys_sem_new:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:496    .text.sys_sem_new:00000000 sys_sem_new
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:556    .text.sys_arch_sem_wait:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:562    .text.sys_arch_sem_wait:00000000 sys_arch_sem_wait
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:649    .text.sys_sem_signal:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:655    .text.sys_sem_signal:00000000 sys_sem_signal
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:683    .text.sys_sem_free:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:689    .text.sys_sem_free:00000000 sys_sem_free
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:714    .text.sys_sem_valid:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:720    .text.sys_sem_valid:00000000 sys_sem_valid
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:749    .text.sys_sem_set_invalid:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:755    .text.sys_sem_set_invalid:00000000 sys_sem_set_invalid
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:773    .text.sys_init:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:779    .text.sys_init:00000000 sys_init
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:803    .text.sys_init:00000010 $d
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:808    .text.sys_mutex_new:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:814    .text.sys_mutex_new:00000000 sys_mutex_new
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:854    .text.sys_mutex_free:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:860    .text.sys_mutex_free:00000000 sys_mutex_free
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:885    .text.sys_mutex_lock:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:891    .text.sys_mutex_lock:00000000 sys_mutex_lock
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:917    .text.sys_mutex_unlock:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:923    .text.sys_mutex_unlock:00000000 sys_mutex_unlock
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:951    .text.sys_thread_new:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:957    .text.sys_thread_new:00000000 sys_thread_new
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:1008   .text.sys_arch_protect:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:1014   .text.sys_arch_protect:00000000 sys_arch_protect
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:1038   .text.sys_arch_protect:00000014 $d
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:1043   .text.sys_arch_unprotect:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:1049   .text.sys_arch_unprotect:00000000 sys_arch_unprotect
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:1078   .text.sys_arch_unprotect:00000014 $d
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:1095   .bss.lwip_sys_mutex:00000000 lwip_sys_mutex
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:1088   .bss.errno:00000000 errno
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:1085   .bss.errno:00000000 $d
+C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s:1091   .bss.lwip_sys_mutex:00000000 $d
+
+UNDEFINED SYMBOLS
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccPAgGvc.s 			page 29
+
+
+xQueueGenericCreate
+uxQueueMessagesWaiting
+vQueueDelete
+xQueueGenericSend
+__aeabi_uldivmod
+xTaskGetTickCount
+xQueueReceive
+xQueueSemaphoreTake
+xQueueCreateMutex
+xTaskCreate
