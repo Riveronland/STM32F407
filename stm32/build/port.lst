@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
   29:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------
   30:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** * Implementation of functions defined in portable.h for the ARM CM4F port.
   31:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** *----------------------------------------------------------*/
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 2
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 2
 
 
   32:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
   86:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
   87:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /* Constants required to manipulate the VFP. */
   88:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** #define portFPCCR                             ( ( volatile uint32_t * ) 0xe000ef34 ) /* Floating po
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 3
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 3
 
 
   89:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** #define portASPEN_AND_LSPEN_BITS              ( 0x3UL << 30UL )
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  143:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****  * Start first task is a separate function so it can be tested in isolation.
  144:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****  */
  145:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** static void prvPortStartFirstTask( void ) __attribute__( ( naked ) );
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 4
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 4
 
 
  146:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  200:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****  * See header file for description.
  201:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****  */
  202:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** StackType_t * pxPortInitialiseStack( StackType_t * pxTopOfStack,
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 5
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 5
 
 
  203:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                                      TaskFunction_t pxCode,
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
   40              		.loc 1 244 5 is_stmt 1 view .LVU3
   41 0006 0D4B     		ldr	r3, .L6
   42 0008 1B68     		ldr	r3, [r3]
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 6
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 6
 
 
   43 000a B3F1FF3F 		cmp	r3, #-1
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
   49:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /* Type definitions. */
   50:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portCHAR          char
   51:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portFLOAT         float
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 7
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 7
 
 
   52:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portDOUBLE        double
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  106:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****             traceISR_EXIT_TO_SCHEDULER();        \
  107:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****             portYIELD();                         \
  108:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****         }                                        \
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 8
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 8
 
 
  109:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****         else                                     \
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  163:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
  164:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
  165:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /* Store/clear the ready priorities in a bit map. */
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 9
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 9
 
 
  166:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     #define portRECORD_READY_PRIORITY( uxPriority, uxReadyPriorities )    ( uxReadyPriorities ) |= 
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  217:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     __asm volatile
   52              		.loc 2 217 5 view .LVU7
   53              		.syntax unified
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 10
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 10
 
 
   54              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  255:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * after it. */
  256:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
   96              		.loc 1 256 5 is_stmt 1 discriminator 1 view .LVU18
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 11
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 11
 
 
  247:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     {
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  144 0020 00000000 	pxCurrentTCBConst2: .word pxCurrentTCB             
  145              	
  146              	@ 0 "" 2
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 12
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 12
 
 
  263:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         "   ldr r3, pxCurrentTCBConst2      \n" /* Restore the context. */
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  180 0020 00BF     	 nop                   
  181 0022 000008ED 	 .ltorg                
  181      00E0
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 13
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 13
 
 
  182              	
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  325:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****      * is 1, should be preferred when possible. */
  326:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     #if ( configCHECK_HANDLER_INSTALLATION == 1 )
  327:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     {
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 14
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 14
 
 
  328:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         const portISR_t * const pxVectorTable = portSCB_VTOR_REG;
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  382:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * configMAX_SYSCALL_INTERRUPT_PRIORITY. */
  383:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         configASSERT( ( configMAX_SYSCALL_INTERRUPT_PRIORITY & ( ~ucMaxPriorityValue ) ) == 0U );
  384:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 15
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 15
 
 
  385:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         /* Calculate the maximum acceptable priority group value for the number
@@ -898,7 +898,7 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  439:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****      * here already. */
  440:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     vPortSetupTimerInterrupt();
  441:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 16
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 16
 
 
  442:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     /* Initialise the critical nesting count ready for the first task. */
@@ -958,7 +958,7 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  496:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     uxCriticalNesting--;
  497:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
  498:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     if( uxCriticalNesting == 0 )
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 17
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 17
 
 
  499:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     {
@@ -1018,7 +1018,7 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  242              	                                       
  243 0058 7047     	   bx r14                              
  244              	                                       
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 18
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 18
 
 
  245 005a 00BFAFF3 	   .align 4                            
@@ -1078,7 +1078,7 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  559:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** }
  249              		.loc 1 559 1 is_stmt 0 view .LVU31
  250              		.thumb
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 19
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 19
 
 
  251              		.syntax unified
@@ -1092,307 +1092,308 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  261              	vPortEnableVFP:
  262              	.LFB15:
  560:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
- 561:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 561:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** extern void HAL_IncTick(void);
  562:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** void xPortSysTickHandler( void )
  563:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** {
  564:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     /* The SysTick runs at the lowest interrupt priority, so when this interrupt
  565:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****      * executes all interrupts must be unmasked.  There is therefore no need to
  566:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****      * save and then restore the interrupt mask value as its value is already
  567:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****      * known. */
- 568:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portDISABLE_INTERRUPTS();
- 569:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     traceISR_ENTER();
- 570:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     {
- 571:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         /* Increment the RTOS tick. */
- 572:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         if( xTaskIncrementTick() != pdFALSE )
- 573:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
- 574:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             traceISR_EXIT_TO_SCHEDULER();
- 575:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 576:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* A context switch is required.  Context switching is performed in
- 577:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * the PendSV interrupt.  Pend the PendSV interrupt. */
- 578:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             portNVIC_INT_CTRL_REG = portNVIC_PENDSVSET_BIT;
- 579:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
- 580:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         else
- 581:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
- 582:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             traceISR_EXIT();
- 583:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
- 584:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
- 585:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portENABLE_INTERRUPTS();
- 586:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** }
- 587:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
- 588:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 589:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** #if ( configUSE_TICKLESS_IDLE == 1 )
- 590:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 591:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     __attribute__( ( weak ) ) void vPortSuppressTicksAndSleep( TickType_t xExpectedIdleTime )
- 592:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     {
- 593:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         uint32_t ulReloadValue, ulCompleteTickPeriods, ulCompletedSysTickDecrements, ulSysTickDecre
- 594:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         TickType_t xModifiableIdleTime;
- 595:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 596:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         /* Make sure the SysTick reload value does not overflow the counter. */
- 597:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         if( xExpectedIdleTime > xMaximumPossibleSuppressedTicks )
- 598:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
- 599:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             xExpectedIdleTime = xMaximumPossibleSuppressedTicks;
- 600:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
- 601:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 602:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         /* Enter a critical section but don't use the taskENTER_CRITICAL()
- 603:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * method as that will mask interrupts that should exit sleep mode. */
- 604:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         __asm volatile ( "cpsid i" ::: "memory" );
- 605:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         __asm volatile ( "dsb" );
- 606:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         __asm volatile ( "isb" );
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 20
+ 568:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     HAL_IncTick();
+ 569:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portDISABLE_INTERRUPTS();
+ 570:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     traceISR_ENTER();
+ 571:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     {
+ 572:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         /* Increment the RTOS tick. */
+ 573:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         if( xTaskIncrementTick() != pdFALSE )
+ 574:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
+ 575:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             traceISR_EXIT_TO_SCHEDULER();
+ 576:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 577:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* A context switch is required.  Context switching is performed in
+ 578:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * the PendSV interrupt.  Pend the PendSV interrupt. */
+ 579:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             portNVIC_INT_CTRL_REG = portNVIC_PENDSVSET_BIT;
+ 580:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
+ 581:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         else
+ 582:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
+ 583:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             traceISR_EXIT();
+ 584:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
+ 585:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
+ 586:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portENABLE_INTERRUPTS();
+ 587:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** }
+ 588:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 589:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 590:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** #if ( configUSE_TICKLESS_IDLE == 1 )
+ 591:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 592:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     __attribute__( ( weak ) ) void vPortSuppressTicksAndSleep( TickType_t xExpectedIdleTime )
+ 593:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     {
+ 594:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         uint32_t ulReloadValue, ulCompleteTickPeriods, ulCompletedSysTickDecrements, ulSysTickDecre
+ 595:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         TickType_t xModifiableIdleTime;
+ 596:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 597:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         /* Make sure the SysTick reload value does not overflow the counter. */
+ 598:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         if( xExpectedIdleTime > xMaximumPossibleSuppressedTicks )
+ 599:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
+ 600:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             xExpectedIdleTime = xMaximumPossibleSuppressedTicks;
+ 601:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
+ 602:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 603:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         /* Enter a critical section but don't use the taskENTER_CRITICAL()
+ 604:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * method as that will mask interrupts that should exit sleep mode. */
+ 605:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         __asm volatile ( "cpsid i" ::: "memory" );
+ 606:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         __asm volatile ( "dsb" );
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 20
 
 
- 607:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 608:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         /* If a context switch is pending or a task is waiting for the scheduler
- 609:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * to be unsuspended then abandon the low power entry. */
- 610:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         if( eTaskConfirmSleepModeStatus() == eAbortSleep )
- 611:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
- 612:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Re-enable interrupts - see comments above the cpsid instruction
- 613:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * above. */
- 614:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "cpsie i" ::: "memory" );
- 615:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
- 616:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         else
- 617:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
- 618:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Stop the SysTick momentarily.  The time the SysTick is stopped for
- 619:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * is accounted for as best it can be, but using the tickless mode will
- 620:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * inevitably result in some tiny drift of the time maintained by the
- 621:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * kernel with respect to calendar time. */
- 622:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_CTRL_REG = ( portNVIC_SYSTICK_CLK_BIT_CONFIG | portNVIC_SYSTICK_INT_BI
- 623:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 624:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Use the SysTick current-value register to determine the number of
- 625:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * SysTick decrements remaining until the next tick interrupt.  If the
- 626:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * current-value register is zero, then there are actually
- 627:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * ulTimerCountsForOneTick decrements remaining, not zero, because the
- 628:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * SysTick requests the interrupt when decrementing from 1 to 0. */
- 629:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             ulSysTickDecrementsLeft = portNVIC_SYSTICK_CURRENT_VALUE_REG;
- 630:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 631:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             if( ulSysTickDecrementsLeft == 0 )
- 632:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             {
- 633:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 ulSysTickDecrementsLeft = ulTimerCountsForOneTick;
- 634:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             }
- 635:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 636:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Calculate the reload value required to wait xExpectedIdleTime
- 637:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * tick periods.  -1 is used because this code normally executes part
- 638:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * way through the first tick period.  But if the SysTick IRQ is now
- 639:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * pending, then clear the IRQ, suppressing the first tick, and correct
- 640:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * the reload value to reflect that the second tick period is already
- 641:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * underway.  The expected idle time is always at least two ticks. */
- 642:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             ulReloadValue = ulSysTickDecrementsLeft + ( ulTimerCountsForOneTick * ( xExpectedIdleTi
- 643:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 644:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             if( ( portNVIC_INT_CTRL_REG & portNVIC_PEND_SYSTICK_SET_BIT ) != 0 )
- 645:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             {
- 646:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 portNVIC_INT_CTRL_REG = portNVIC_PEND_SYSTICK_CLEAR_BIT;
- 647:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 ulReloadValue -= ulTimerCountsForOneTick;
- 648:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             }
- 649:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 650:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             if( ulReloadValue > ulStoppedTimerCompensation )
- 651:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             {
- 652:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 ulReloadValue -= ulStoppedTimerCompensation;
- 653:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             }
- 654:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 655:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Set the new reload value. */
- 656:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_LOAD_REG = ulReloadValue;
- 657:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 658:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Clear the SysTick count flag and set the count value back to
- 659:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * zero. */
- 660:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_CURRENT_VALUE_REG = 0UL;
- 661:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 662:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Restart SysTick. */
- 663:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_CTRL_REG |= portNVIC_SYSTICK_ENABLE_BIT;
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 21
+ 607:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         __asm volatile ( "isb" );
+ 608:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 609:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         /* If a context switch is pending or a task is waiting for the scheduler
+ 610:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * to be unsuspended then abandon the low power entry. */
+ 611:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         if( eTaskConfirmSleepModeStatus() == eAbortSleep )
+ 612:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
+ 613:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Re-enable interrupts - see comments above the cpsid instruction
+ 614:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * above. */
+ 615:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "cpsie i" ::: "memory" );
+ 616:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
+ 617:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         else
+ 618:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
+ 619:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Stop the SysTick momentarily.  The time the SysTick is stopped for
+ 620:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * is accounted for as best it can be, but using the tickless mode will
+ 621:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * inevitably result in some tiny drift of the time maintained by the
+ 622:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * kernel with respect to calendar time. */
+ 623:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_CTRL_REG = ( portNVIC_SYSTICK_CLK_BIT_CONFIG | portNVIC_SYSTICK_INT_BI
+ 624:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 625:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Use the SysTick current-value register to determine the number of
+ 626:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * SysTick decrements remaining until the next tick interrupt.  If the
+ 627:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * current-value register is zero, then there are actually
+ 628:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * ulTimerCountsForOneTick decrements remaining, not zero, because the
+ 629:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * SysTick requests the interrupt when decrementing from 1 to 0. */
+ 630:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             ulSysTickDecrementsLeft = portNVIC_SYSTICK_CURRENT_VALUE_REG;
+ 631:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 632:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             if( ulSysTickDecrementsLeft == 0 )
+ 633:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             {
+ 634:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 ulSysTickDecrementsLeft = ulTimerCountsForOneTick;
+ 635:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             }
+ 636:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 637:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Calculate the reload value required to wait xExpectedIdleTime
+ 638:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * tick periods.  -1 is used because this code normally executes part
+ 639:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * way through the first tick period.  But if the SysTick IRQ is now
+ 640:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * pending, then clear the IRQ, suppressing the first tick, and correct
+ 641:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * the reload value to reflect that the second tick period is already
+ 642:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * underway.  The expected idle time is always at least two ticks. */
+ 643:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             ulReloadValue = ulSysTickDecrementsLeft + ( ulTimerCountsForOneTick * ( xExpectedIdleTi
+ 644:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 645:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             if( ( portNVIC_INT_CTRL_REG & portNVIC_PEND_SYSTICK_SET_BIT ) != 0 )
+ 646:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             {
+ 647:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 portNVIC_INT_CTRL_REG = portNVIC_PEND_SYSTICK_CLEAR_BIT;
+ 648:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 ulReloadValue -= ulTimerCountsForOneTick;
+ 649:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             }
+ 650:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 651:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             if( ulReloadValue > ulStoppedTimerCompensation )
+ 652:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             {
+ 653:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 ulReloadValue -= ulStoppedTimerCompensation;
+ 654:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             }
+ 655:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 656:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Set the new reload value. */
+ 657:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_LOAD_REG = ulReloadValue;
+ 658:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 659:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Clear the SysTick count flag and set the count value back to
+ 660:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * zero. */
+ 661:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_CURRENT_VALUE_REG = 0UL;
+ 662:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 663:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Restart SysTick. */
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 21
 
 
- 664:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 665:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Sleep until something happens.  configPRE_SLEEP_PROCESSING() can
- 666:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * set its parameter to 0 to indicate that its implementation contains
- 667:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * its own wait for interrupt or wait for event instruction, and so wfi
- 668:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * should not be executed again.  However, the original expected idle
- 669:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * time variable must remain unmodified, so a copy is taken. */
- 670:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             xModifiableIdleTime = xExpectedIdleTime;
- 671:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             configPRE_SLEEP_PROCESSING( xModifiableIdleTime );
- 672:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 673:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             if( xModifiableIdleTime > 0 )
- 674:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             {
- 675:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 __asm volatile ( "dsb" ::: "memory" );
- 676:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 __asm volatile ( "wfi" );
- 677:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 __asm volatile ( "isb" );
- 678:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             }
- 679:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 680:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             configPOST_SLEEP_PROCESSING( xExpectedIdleTime );
- 681:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 682:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Re-enable interrupts to allow the interrupt that brought the MCU
- 683:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * out of sleep mode to execute immediately.  See comments above
- 684:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * the cpsid instruction above. */
- 685:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "cpsie i" ::: "memory" );
- 686:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "dsb" );
- 687:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "isb" );
- 688:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 689:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Disable interrupts again because the clock is about to be stopped
- 690:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * and interrupts that execute while the clock is stopped will increase
- 691:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * any slippage between the time maintained by the RTOS and calendar
- 692:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * time. */
- 693:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "cpsid i" ::: "memory" );
- 694:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "dsb" );
- 695:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "isb" );
- 696:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 697:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Disable the SysTick clock without reading the
- 698:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * portNVIC_SYSTICK_CTRL_REG register to ensure the
- 699:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * portNVIC_SYSTICK_COUNT_FLAG_BIT is not cleared if it is set.  Again,
- 700:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * the time the SysTick is stopped for is accounted for as best it can
- 701:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * be, but using the tickless mode will inevitably result in some tiny
- 702:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * drift of the time maintained by the kernel with respect to calendar
- 703:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * time*/
- 704:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_CTRL_REG = ( portNVIC_SYSTICK_CLK_BIT_CONFIG | portNVIC_SYSTICK_INT_BI
- 705:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 706:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Determine whether the SysTick has already counted to zero. */
- 707:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             if( ( portNVIC_SYSTICK_CTRL_REG & portNVIC_SYSTICK_COUNT_FLAG_BIT ) != 0 )
- 708:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             {
- 709:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 uint32_t ulCalculatedLoadValue;
- 710:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 711:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 /* The tick interrupt ended the sleep (or is now pending), and
- 712:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * a new tick period has started.  Reset portNVIC_SYSTICK_LOAD_REG
- 713:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * with whatever remains of the new tick period. */
- 714:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 ulCalculatedLoadValue = ( ulTimerCountsForOneTick - 1UL ) - ( ulReloadValue - portN
- 715:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 716:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 /* Don't allow a tiny value, or values that have somehow
- 717:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * underflowed because the post sleep hook did something
- 718:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * that took too long or because the SysTick current-value register
- 719:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * is zero. */
- 720:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 if( ( ulCalculatedLoadValue <= ulStoppedTimerCompensation ) || ( ulCalculatedLoadVa
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 22
+ 664:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_CTRL_REG |= portNVIC_SYSTICK_ENABLE_BIT;
+ 665:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 666:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Sleep until something happens.  configPRE_SLEEP_PROCESSING() can
+ 667:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * set its parameter to 0 to indicate that its implementation contains
+ 668:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * its own wait for interrupt or wait for event instruction, and so wfi
+ 669:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * should not be executed again.  However, the original expected idle
+ 670:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * time variable must remain unmodified, so a copy is taken. */
+ 671:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             xModifiableIdleTime = xExpectedIdleTime;
+ 672:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             configPRE_SLEEP_PROCESSING( xModifiableIdleTime );
+ 673:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 674:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             if( xModifiableIdleTime > 0 )
+ 675:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             {
+ 676:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 __asm volatile ( "dsb" ::: "memory" );
+ 677:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 __asm volatile ( "wfi" );
+ 678:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 __asm volatile ( "isb" );
+ 679:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             }
+ 680:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 681:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             configPOST_SLEEP_PROCESSING( xExpectedIdleTime );
+ 682:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 683:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Re-enable interrupts to allow the interrupt that brought the MCU
+ 684:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * out of sleep mode to execute immediately.  See comments above
+ 685:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * the cpsid instruction above. */
+ 686:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "cpsie i" ::: "memory" );
+ 687:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "dsb" );
+ 688:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "isb" );
+ 689:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 690:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Disable interrupts again because the clock is about to be stopped
+ 691:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * and interrupts that execute while the clock is stopped will increase
+ 692:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * any slippage between the time maintained by the RTOS and calendar
+ 693:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * time. */
+ 694:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "cpsid i" ::: "memory" );
+ 695:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "dsb" );
+ 696:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "isb" );
+ 697:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 698:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Disable the SysTick clock without reading the
+ 699:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * portNVIC_SYSTICK_CTRL_REG register to ensure the
+ 700:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * portNVIC_SYSTICK_COUNT_FLAG_BIT is not cleared if it is set.  Again,
+ 701:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * the time the SysTick is stopped for is accounted for as best it can
+ 702:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * be, but using the tickless mode will inevitably result in some tiny
+ 703:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * drift of the time maintained by the kernel with respect to calendar
+ 704:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * time*/
+ 705:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_CTRL_REG = ( portNVIC_SYSTICK_CLK_BIT_CONFIG | portNVIC_SYSTICK_INT_BI
+ 706:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 707:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Determine whether the SysTick has already counted to zero. */
+ 708:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             if( ( portNVIC_SYSTICK_CTRL_REG & portNVIC_SYSTICK_COUNT_FLAG_BIT ) != 0 )
+ 709:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             {
+ 710:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 uint32_t ulCalculatedLoadValue;
+ 711:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 712:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 /* The tick interrupt ended the sleep (or is now pending), and
+ 713:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * a new tick period has started.  Reset portNVIC_SYSTICK_LOAD_REG
+ 714:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * with whatever remains of the new tick period. */
+ 715:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 ulCalculatedLoadValue = ( ulTimerCountsForOneTick - 1UL ) - ( ulReloadValue - portN
+ 716:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 717:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 /* Don't allow a tiny value, or values that have somehow
+ 718:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * underflowed because the post sleep hook did something
+ 719:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * that took too long or because the SysTick current-value register
+ 720:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * is zero. */
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 22
 
 
- 721:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 {
- 722:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                     ulCalculatedLoadValue = ( ulTimerCountsForOneTick - 1UL );
- 723:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 }
- 724:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 725:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 portNVIC_SYSTICK_LOAD_REG = ulCalculatedLoadValue;
- 726:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 727:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 /* As the pending tick will be processed as soon as this
- 728:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * function exits, the tick value maintained by the tick is stepped
- 729:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * forward by one less than the time spent waiting. */
- 730:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 ulCompleteTickPeriods = xExpectedIdleTime - 1UL;
- 731:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             }
- 732:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             else
- 733:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             {
- 734:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 /* Something other than the tick interrupt ended the sleep. */
- 735:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 736:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 /* Use the SysTick current-value register to determine the
- 737:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * number of SysTick decrements remaining until the expected idle
- 738:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * time would have ended. */
- 739:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 ulSysTickDecrementsLeft = portNVIC_SYSTICK_CURRENT_VALUE_REG;
- 740:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 #if ( portNVIC_SYSTICK_CLK_BIT_CONFIG != portNVIC_SYSTICK_CLK_BIT )
- 741:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 {
- 742:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                     /* If the SysTick is not using the core clock, the current-
- 743:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                      * value register might still be zero here.  In that case, the
- 744:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                      * SysTick didn't load from the reload register, and there are
- 745:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                      * ulReloadValue decrements remaining in the expected idle
- 746:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                      * time, not zero. */
- 747:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                     if( ulSysTickDecrementsLeft == 0 )
- 748:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                     {
- 749:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                         ulSysTickDecrementsLeft = ulReloadValue;
- 750:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                     }
- 751:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 }
- 752:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 #endif /* portNVIC_SYSTICK_CLK_BIT_CONFIG */
- 753:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 754:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 /* Work out how long the sleep lasted rounded to complete tick
- 755:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * periods (not the ulReload value which accounted for part
- 756:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * ticks). */
- 757:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 ulCompletedSysTickDecrements = ( xExpectedIdleTime * ulTimerCountsForOneTick ) - ul
- 758:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 759:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 /* How many complete tick periods passed while the processor
- 760:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * was waiting? */
- 761:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 ulCompleteTickPeriods = ulCompletedSysTickDecrements / ulTimerCountsForOneTick;
- 762:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 763:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 /* The reload value is set to whatever fraction of a single tick
- 764:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * period remains. */
- 765:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 portNVIC_SYSTICK_LOAD_REG = ( ( ulCompleteTickPeriods + 1UL ) * ulTimerCountsForOne
- 766:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             }
- 767:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 768:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Restart SysTick so it runs from portNVIC_SYSTICK_LOAD_REG again,
- 769:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * then set portNVIC_SYSTICK_LOAD_REG back to its standard value.  If
- 770:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * the SysTick is not using the core clock, temporarily configure it to
- 771:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * use the core clock.  This configuration forces the SysTick to load
- 772:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * from portNVIC_SYSTICK_LOAD_REG immediately instead of at the next
- 773:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * cycle of the other clock.  Then portNVIC_SYSTICK_LOAD_REG is ready
- 774:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * to receive the standard value immediately. */
- 775:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_CURRENT_VALUE_REG = 0UL;
- 776:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_CTRL_REG = portNVIC_SYSTICK_CLK_BIT | portNVIC_SYSTICK_INT_BIT | portN
- 777:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             #if ( portNVIC_SYSTICK_CLK_BIT_CONFIG == portNVIC_SYSTICK_CLK_BIT )
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 23
+ 721:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 if( ( ulCalculatedLoadValue <= ulStoppedTimerCompensation ) || ( ulCalculatedLoadVa
+ 722:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 {
+ 723:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                     ulCalculatedLoadValue = ( ulTimerCountsForOneTick - 1UL );
+ 724:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 }
+ 725:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 726:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 portNVIC_SYSTICK_LOAD_REG = ulCalculatedLoadValue;
+ 727:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 728:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 /* As the pending tick will be processed as soon as this
+ 729:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * function exits, the tick value maintained by the tick is stepped
+ 730:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * forward by one less than the time spent waiting. */
+ 731:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 ulCompleteTickPeriods = xExpectedIdleTime - 1UL;
+ 732:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             }
+ 733:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             else
+ 734:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             {
+ 735:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 /* Something other than the tick interrupt ended the sleep. */
+ 736:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 737:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 /* Use the SysTick current-value register to determine the
+ 738:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * number of SysTick decrements remaining until the expected idle
+ 739:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * time would have ended. */
+ 740:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 ulSysTickDecrementsLeft = portNVIC_SYSTICK_CURRENT_VALUE_REG;
+ 741:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 #if ( portNVIC_SYSTICK_CLK_BIT_CONFIG != portNVIC_SYSTICK_CLK_BIT )
+ 742:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 {
+ 743:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                     /* If the SysTick is not using the core clock, the current-
+ 744:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                      * value register might still be zero here.  In that case, the
+ 745:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                      * SysTick didn't load from the reload register, and there are
+ 746:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                      * ulReloadValue decrements remaining in the expected idle
+ 747:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                      * time, not zero. */
+ 748:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                     if( ulSysTickDecrementsLeft == 0 )
+ 749:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                     {
+ 750:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                         ulSysTickDecrementsLeft = ulReloadValue;
+ 751:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                     }
+ 752:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 }
+ 753:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 #endif /* portNVIC_SYSTICK_CLK_BIT_CONFIG */
+ 754:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 755:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 /* Work out how long the sleep lasted rounded to complete tick
+ 756:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * periods (not the ulReload value which accounted for part
+ 757:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * ticks). */
+ 758:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 ulCompletedSysTickDecrements = ( xExpectedIdleTime * ulTimerCountsForOneTick ) - ul
+ 759:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 760:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 /* How many complete tick periods passed while the processor
+ 761:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * was waiting? */
+ 762:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 ulCompleteTickPeriods = ulCompletedSysTickDecrements / ulTimerCountsForOneTick;
+ 763:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 764:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 /* The reload value is set to whatever fraction of a single tick
+ 765:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * period remains. */
+ 766:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 portNVIC_SYSTICK_LOAD_REG = ( ( ulCompleteTickPeriods + 1UL ) * ulTimerCountsForOne
+ 767:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             }
+ 768:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 769:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Restart SysTick so it runs from portNVIC_SYSTICK_LOAD_REG again,
+ 770:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * then set portNVIC_SYSTICK_LOAD_REG back to its standard value.  If
+ 771:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * the SysTick is not using the core clock, temporarily configure it to
+ 772:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * use the core clock.  This configuration forces the SysTick to load
+ 773:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * from portNVIC_SYSTICK_LOAD_REG immediately instead of at the next
+ 774:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * cycle of the other clock.  Then portNVIC_SYSTICK_LOAD_REG is ready
+ 775:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * to receive the standard value immediately. */
+ 776:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_CURRENT_VALUE_REG = 0UL;
+ 777:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             portNVIC_SYSTICK_CTRL_REG = portNVIC_SYSTICK_CLK_BIT | portNVIC_SYSTICK_INT_BIT | portN
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 23
 
 
- 778:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             {
- 779:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 portNVIC_SYSTICK_LOAD_REG = ulTimerCountsForOneTick - 1UL;
- 780:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             }
- 781:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             #else
- 782:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             {
- 783:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 /* The temporary usage of the core clock has served its purpose,
- 784:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * as described above.  Resume usage of the other clock. */
- 785:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 portNVIC_SYSTICK_CTRL_REG = portNVIC_SYSTICK_CLK_BIT | portNVIC_SYSTICK_INT_BIT;
- 786:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 787:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 if( ( portNVIC_SYSTICK_CTRL_REG & portNVIC_SYSTICK_COUNT_FLAG_BIT ) != 0 )
- 788:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 {
- 789:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                     /* The partial tick period already ended.  Be sure the SysTick
- 790:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                      * counts it only once. */
- 791:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                     portNVIC_SYSTICK_CURRENT_VALUE_REG = 0;
- 792:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 }
- 793:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 794:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 portNVIC_SYSTICK_LOAD_REG = ulTimerCountsForOneTick - 1UL;
- 795:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 portNVIC_SYSTICK_CTRL_REG = portNVIC_SYSTICK_CLK_BIT_CONFIG | portNVIC_SYSTICK_INT_
- 796:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             }
- 797:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             #endif /* portNVIC_SYSTICK_CLK_BIT_CONFIG */
- 798:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 799:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Step the tick to account for any tick periods that elapsed. */
- 800:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             vTaskStepTick( ulCompleteTickPeriods );
- 801:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 802:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Exit with interrupts enabled. */
- 803:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "cpsie i" ::: "memory" );
- 804:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
- 805:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
- 806:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 807:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** #endif /* #if configUSE_TICKLESS_IDLE */
- 808:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
- 809:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 810:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /*
- 811:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****  * Setup the systick timer to generate the tick interrupts at the required
- 812:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****  * frequency.
- 813:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****  */
- 814:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** __attribute__( ( weak ) ) void vPortSetupTimerInterrupt( void )
- 815:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** {
- 816:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     /* Calculate the constants required to configure the tick interrupt. */
- 817:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     #if ( configUSE_TICKLESS_IDLE == 1 )
- 818:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     {
- 819:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         ulTimerCountsForOneTick = ( configSYSTICK_CLOCK_HZ / configTICK_RATE_HZ );
- 820:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         xMaximumPossibleSuppressedTicks = portMAX_24_BIT_NUMBER / ulTimerCountsForOneTick;
- 821:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         ulStoppedTimerCompensation = portMISSED_COUNTS_FACTOR / ( configCPU_CLOCK_HZ / configSYSTIC
- 822:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
- 823:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     #endif /* configUSE_TICKLESS_IDLE */
- 824:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 825:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     /* Stop and clear the SysTick. */
- 826:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_CTRL_REG = 0UL;
- 827:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_CURRENT_VALUE_REG = 0UL;
- 828:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 829:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     /* Configure SysTick to interrupt at the requested rate. */
- 830:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_LOAD_REG = ( configSYSTICK_CLOCK_HZ / configTICK_RATE_HZ ) - 1UL;
- 831:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_CTRL_REG = ( portNVIC_SYSTICK_CLK_BIT_CONFIG | portNVIC_SYSTICK_INT_BIT | port
- 832:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** }
- 833:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
- 834:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 24
+ 778:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             #if ( portNVIC_SYSTICK_CLK_BIT_CONFIG == portNVIC_SYSTICK_CLK_BIT )
+ 779:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             {
+ 780:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 portNVIC_SYSTICK_LOAD_REG = ulTimerCountsForOneTick - 1UL;
+ 781:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             }
+ 782:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             #else
+ 783:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             {
+ 784:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 /* The temporary usage of the core clock has served its purpose,
+ 785:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                  * as described above.  Resume usage of the other clock. */
+ 786:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 portNVIC_SYSTICK_CTRL_REG = portNVIC_SYSTICK_CLK_BIT | portNVIC_SYSTICK_INT_BIT;
+ 787:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 788:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 if( ( portNVIC_SYSTICK_CTRL_REG & portNVIC_SYSTICK_COUNT_FLAG_BIT ) != 0 )
+ 789:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 {
+ 790:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                     /* The partial tick period already ended.  Be sure the SysTick
+ 791:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                      * counts it only once. */
+ 792:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                     portNVIC_SYSTICK_CURRENT_VALUE_REG = 0;
+ 793:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 }
+ 794:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 795:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 portNVIC_SYSTICK_LOAD_REG = ulTimerCountsForOneTick - 1UL;
+ 796:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****                 portNVIC_SYSTICK_CTRL_REG = portNVIC_SYSTICK_CLK_BIT_CONFIG | portNVIC_SYSTICK_INT_
+ 797:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             }
+ 798:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             #endif /* portNVIC_SYSTICK_CLK_BIT_CONFIG */
+ 799:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 800:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Step the tick to account for any tick periods that elapsed. */
+ 801:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             vTaskStepTick( ulCompleteTickPeriods );
+ 802:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 803:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Exit with interrupts enabled. */
+ 804:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             __asm volatile ( "cpsie i" ::: "memory" );
+ 805:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
+ 806:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
+ 807:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 808:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** #endif /* #if configUSE_TICKLESS_IDLE */
+ 809:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 810:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 811:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /*
+ 812:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****  * Setup the systick timer to generate the tick interrupts at the required
+ 813:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****  * frequency.
+ 814:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****  */
+ 815:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** __attribute__( ( weak ) ) void vPortSetupTimerInterrupt( void )
+ 816:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** {
+ 817:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     /* Calculate the constants required to configure the tick interrupt. */
+ 818:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     #if ( configUSE_TICKLESS_IDLE == 1 )
+ 819:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     {
+ 820:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         ulTimerCountsForOneTick = ( configSYSTICK_CLOCK_HZ / configTICK_RATE_HZ );
+ 821:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         xMaximumPossibleSuppressedTicks = portMAX_24_BIT_NUMBER / ulTimerCountsForOneTick;
+ 822:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         ulStoppedTimerCompensation = portMISSED_COUNTS_FACTOR / ( configCPU_CLOCK_HZ / configSYSTIC
+ 823:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
+ 824:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     #endif /* configUSE_TICKLESS_IDLE */
+ 825:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 826:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     /* Stop and clear the SysTick. */
+ 827:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_CTRL_REG = 0UL;
+ 828:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_CURRENT_VALUE_REG = 0UL;
+ 829:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 830:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     /* Configure SysTick to interrupt at the requested rate. */
+ 831:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_LOAD_REG = ( configSYSTICK_CLOCK_HZ / configTICK_RATE_HZ ) - 1UL;
+ 832:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_CTRL_REG = ( portNVIC_SYSTICK_CLK_BIT_CONFIG | portNVIC_SYSTICK_INT_BIT | port
+ 833:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** }
+ 834:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 24
 
 
- 835:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /* This is a naked function. */
- 836:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** static void vPortEnableVFP( void )
- 837:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** {
- 263              		.loc 1 837 1 is_stmt 1 view -0
+ 835:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 836:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /* This is a naked function. */
+ 837:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** static void vPortEnableVFP( void )
+ 838:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** {
+ 263              		.loc 1 838 1 is_stmt 1 view -0
  264              		.cfi_startproc
  265              		@ Naked Function: prologue and epilogue provided by programmer.
  266              		@ args = 0, pretend = 0, frame = 0
  267              		@ frame_needed = 0, uses_anonymous_args = 0
- 838:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     __asm volatile
- 268              		.loc 1 838 5 view .LVU33
+ 839:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     __asm volatile
+ 268              		.loc 1 839 5 view .LVU33
  269              		.syntax unified
- 270              	@ 838 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c" 1
+ 270              	@ 839 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c" 1
  271 0000 DFF80C00 		   ldr.w r0, =0xE000ED88       
  272 0004 0168     	   ldr r1, [r0]                
  273              	                               
@@ -1403,17 +1404,17 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  277      00E0
  278              	
  279              	@ 0 "" 2
- 839:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     (
- 840:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         "   ldr.w r0, =0xE000ED88       \n" /* The FPU enable bits are in the CPACR. */
- 841:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         "   ldr r1, [r0]                \n"
- 842:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         "                               \n"
- 843:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         "   orr r1, r1, #( 0xf << 20 )  \n" /* Enable CP10 and CP11 coprocessors, then save back. *
- 844:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         "   str r1, [r0]                \n"
- 845:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         "   bx r14                      \n"
- 846:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         "   .ltorg                      \n"
- 847:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     );
- 848:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** }
- 280              		.loc 1 848 1 is_stmt 0 view .LVU34
+ 840:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     (
+ 841:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         "   ldr.w r0, =0xE000ED88       \n" /* The FPU enable bits are in the CPACR. */
+ 842:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         "   ldr r1, [r0]                \n"
+ 843:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         "                               \n"
+ 844:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         "   orr r1, r1, #( 0xf << 20 )  \n" /* Enable CP10 and CP11 coprocessors, then save back. *
+ 845:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         "   str r1, [r0]                \n"
+ 846:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         "   bx r14                      \n"
+ 847:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         "   .ltorg                      \n"
+ 848:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     );
+ 849:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** }
+ 280              		.loc 1 849 1 is_stmt 0 view .LVU34
  281              		.thumb
  282              		.syntax unified
  283              		.cfi_endproc
@@ -1437,10 +1438,10 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  301              		.loc 1 211 5 view .LVU36
  213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     pxTopOfStack--;
  302              		.loc 1 213 5 view .LVU37
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 25
+
+
  213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     pxTopOfStack--;
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 25
-
-
  303              		.loc 1 213 19 is_stmt 0 view .LVU38
  304 0000 4FF08073 		mov	r3, #16777216
  305 0004 40F8043C 		str	r3, [r0, #-4]
@@ -1497,10 +1498,10 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  338              		.loc 1 231 1 view .LVU56
  339 0024 7047     		bx	lr
  340              	.L14:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 26
+
+
  341 0026 00BF     		.align	2
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 26
-
-
  342              	.L13:
  343 0028 00000000 		.word	prvTaskExitError
  344              		.cfi_endproc
@@ -1557,10 +1558,10 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  472:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** }
  390              		.loc 1 472 5 discriminator 1 view .LVU66
  391 001a FEE7     		b	.L17
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 27
+
+
  392              	.L15:
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 27
-
-
  473:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
  393              		.loc 1 473 1 is_stmt 0 view .LVU67
  394 001c 7047     		bx	lr
@@ -1617,10 +1618,10 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  486:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     {
  441              		.loc 1 486 5 is_stmt 1 view .LVU75
  486:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     {
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 28
+
+
  442              		.loc 1 486 7 is_stmt 0 view .LVU76
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 28
-
-
  443 0018 012B     		cmp	r3, #1
  444 001a 00D0     		beq	.L23
  445              	.L20:
@@ -1677,10 +1678,10 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  489              		.global	vPortExitCritical
  490              		.syntax unified
  491              		.thumb
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 29
+
+
  492              		.thumb_func
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 29
-
-
  494              	vPortExitCritical:
  495              	.LFB11:
  494:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     configASSERT( uxCriticalNesting );
@@ -1737,10 +1738,10 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  536 001a 034A     		ldr	r2, .L30
  537 001c 1360     		str	r3, [r2]
  498:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     {
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 30
+
+
  538              		.loc 1 498 5 is_stmt 1 discriminator 2 view .LVU100
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 30
-
-
  498:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     {
  539              		.loc 1 498 7 is_stmt 0 discriminator 2 view .LVU101
  540 001e 0BB9     		cbnz	r3, .L26
@@ -1797,10 +1798,10 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  556              		.loc 2 251 5 is_stmt 0 view .LVU105
  557              	.LBE51:
  558              	.LBE50:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 31
+
+
  502:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 31
-
-
  559              		.loc 1 502 1 view .LVU106
  560 0024 7047     		bx	lr
  561              	.L31:
@@ -1827,937 +1828,942 @@ ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 1
  583              		.cfi_def_cfa_offset 8
  584              		.cfi_offset 3, -8
  585              		.cfi_offset 14, -4
- 568:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     traceISR_ENTER();
+ 568:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portDISABLE_INTERRUPTS();
  586              		.loc 1 568 5 view .LVU108
- 587              	.LBB52:
- 588              	.LBI52:
+ 587 0002 FFF7FEFF 		bl	HAL_IncTick
+ 588              	.LVL15:
+ 569:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     traceISR_ENTER();
+ 589              		.loc 1 569 5 view .LVU109
+ 590              	.LBB52:
+ 591              	.LBI52:
  213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
- 589              		.loc 2 213 30 view .LVU109
- 590              	.LBB53:
+ 592              		.loc 2 213 30 view .LVU110
+ 593              	.LBB53:
  215:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
- 591              		.loc 2 215 5 view .LVU110
+ 594              		.loc 2 215 5 view .LVU111
  217:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     (
- 592              		.loc 2 217 5 view .LVU111
- 593              		.syntax unified
- 594              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
- 595 0002 4FF0F003 		   mov r3, #240                                              
- 596 0006 83F31188 	   msr basepri, r3                                         
- 597 000a BFF36F8F 	   isb                                                     
- 598 000e BFF34F8F 	   dsb                                                     
- 599              	
- 600              	@ 0 "" 2
- 601              		.thumb
- 602              		.syntax unified
- 603              	.LBE53:
- 604              	.LBE52:
- 569:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     {
- 605              		.loc 1 569 21 view .LVU112
- 572:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
- 606              		.loc 1 572 9 view .LVU113
- 572:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
- 607              		.loc 1 572 13 is_stmt 0 view .LVU114
- 608 0012 FFF7FEFF 		bl	xTaskIncrementTick
- 609              	.LVL15:
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 32
+ 595              		.loc 2 217 5 view .LVU112
+ 596              		.syntax unified
+ 597              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 598 0006 4FF0F003 		   mov r3, #240                                              
+ 599 000a 83F31188 	   msr basepri, r3                                         
+ 600 000e BFF36F8F 	   isb                                                     
+ 601 0012 BFF34F8F 	   dsb                                                     
+ 602              	
+ 603              	@ 0 "" 2
+ 604              		.thumb
+ 605              		.syntax unified
+ 606              	.LBE53:
+ 607              	.LBE52:
+ 570:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     {
+ 608              		.loc 1 570 21 view .LVU113
+ 573:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 32
 
 
- 572:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
- 610              		.loc 1 572 11 view .LVU115
- 611 0016 28B1     		cbz	r0, .L33
- 574:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 612              		.loc 1 574 41 is_stmt 1 view .LVU116
- 578:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
- 613              		.loc 1 578 13 view .LVU117
- 578:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
- 614              		.loc 1 578 35 is_stmt 0 view .LVU118
- 615 0018 4FF0E023 		mov	r3, #-536813568
- 616 001c 4FF08052 		mov	r2, #268435456
- 617 0020 C3F8042D 		str	r2, [r3, #3332]
- 618              	.L33:
- 582:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
- 619              		.loc 1 582 28 is_stmt 1 view .LVU119
- 585:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** }
- 620              		.loc 1 585 5 view .LVU120
- 621              	.LVL16:
- 622              	.LBB54:
- 623              	.LBI54:
+ 609              		.loc 1 573 9 view .LVU114
+ 573:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
+ 610              		.loc 1 573 13 is_stmt 0 view .LVU115
+ 611 0016 FFF7FEFF 		bl	xTaskIncrementTick
+ 612              	.LVL16:
+ 573:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
+ 613              		.loc 1 573 11 view .LVU116
+ 614 001a 28B1     		cbz	r0, .L33
+ 575:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 615              		.loc 1 575 41 is_stmt 1 view .LVU117
+ 579:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
+ 616              		.loc 1 579 13 view .LVU118
+ 579:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
+ 617              		.loc 1 579 35 is_stmt 0 view .LVU119
+ 618 001c 4FF0E023 		mov	r3, #-536813568
+ 619 0020 4FF08052 		mov	r2, #268435456
+ 620 0024 C3F8042D 		str	r2, [r3, #3332]
+ 621              	.L33:
+ 583:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
+ 622              		.loc 1 583 28 is_stmt 1 view .LVU120
+ 586:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** }
+ 623              		.loc 1 586 5 view .LVU121
+ 624              	.LVL17:
+ 625              	.LBB54:
+ 626              	.LBI54:
  249:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
- 624              		.loc 2 249 30 view .LVU121
- 625              	.LBB55:
- 626              		.loc 2 251 5 view .LVU122
- 627 0024 0023     		movs	r3, #0
- 628              		.syntax unified
- 629              	@ 251 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
- 630 0026 83F31188 		   msr basepri, r3 
- 631              	@ 0 "" 2
- 632              	.LVL17:
- 633              		.loc 2 251 5 is_stmt 0 view .LVU123
- 634              		.thumb
- 635              		.syntax unified
- 636              	.LBE55:
- 637              	.LBE54:
- 586:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
- 638              		.loc 1 586 1 view .LVU124
- 639 002a 08BD     		pop	{r3, pc}
- 640              		.cfi_endproc
- 641              	.LFE13:
- 643              		.section	.text.vPortSetupTimerInterrupt,"ax",%progbits
- 644              		.align	1
- 645              		.weak	vPortSetupTimerInterrupt
- 646              		.syntax unified
- 647              		.thumb
- 648              		.thumb_func
- 650              	vPortSetupTimerInterrupt:
- 651              	.LFB14:
- 815:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     /* Calculate the constants required to configure the tick interrupt. */
- 652              		.loc 1 815 1 is_stmt 1 view -0
- 653              		.cfi_startproc
- 654              		@ args = 0, pretend = 0, frame = 0
- 655              		@ frame_needed = 0, uses_anonymous_args = 0
- 656              		@ link register save eliminated.
- 826:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_CURRENT_VALUE_REG = 0UL;
- 657              		.loc 1 826 5 view .LVU126
- 826:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_CURRENT_VALUE_REG = 0UL;
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 33
+ 627              		.loc 2 249 30 view .LVU122
+ 628              	.LBB55:
+ 629              		.loc 2 251 5 view .LVU123
+ 630 0028 0023     		movs	r3, #0
+ 631              		.syntax unified
+ 632              	@ 251 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 633 002a 83F31188 		   msr basepri, r3 
+ 634              	@ 0 "" 2
+ 635              	.LVL18:
+ 636              		.loc 2 251 5 is_stmt 0 view .LVU124
+ 637              		.thumb
+ 638              		.syntax unified
+ 639              	.LBE55:
+ 640              	.LBE54:
+ 587:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 641              		.loc 1 587 1 view .LVU125
+ 642 002e 08BD     		pop	{r3, pc}
+ 643              		.cfi_endproc
+ 644              	.LFE13:
+ 646              		.section	.text.vPortSetupTimerInterrupt,"ax",%progbits
+ 647              		.align	1
+ 648              		.weak	vPortSetupTimerInterrupt
+ 649              		.syntax unified
+ 650              		.thumb
+ 651              		.thumb_func
+ 653              	vPortSetupTimerInterrupt:
+ 654              	.LFB14:
+ 816:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     /* Calculate the constants required to configure the tick interrupt. */
+ 655              		.loc 1 816 1 is_stmt 1 view -0
+ 656              		.cfi_startproc
+ 657              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 33
 
 
- 658              		.loc 1 826 31 is_stmt 0 view .LVU127
- 659 0000 4FF0E023 		mov	r3, #-536813568
- 660 0004 0022     		movs	r2, #0
- 661 0006 1A61     		str	r2, [r3, #16]
- 827:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 662              		.loc 1 827 5 is_stmt 1 view .LVU128
- 827:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 663              		.loc 1 827 40 is_stmt 0 view .LVU129
- 664 0008 9A61     		str	r2, [r3, #24]
- 830:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_CTRL_REG = ( portNVIC_SYSTICK_CLK_BIT_CONFIG | portNVIC_SYSTICK_INT_BIT | port
- 665              		.loc 1 830 5 is_stmt 1 view .LVU130
- 830:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_CTRL_REG = ( portNVIC_SYSTICK_CLK_BIT_CONFIG | portNVIC_SYSTICK_INT_BIT | port
- 666              		.loc 1 830 31 is_stmt 0 view .LVU131
- 667 000a 024A     		ldr	r2, .L36
- 668 000c 5A61     		str	r2, [r3, #20]
- 831:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** }
- 669              		.loc 1 831 5 is_stmt 1 view .LVU132
- 831:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** }
- 670              		.loc 1 831 31 is_stmt 0 view .LVU133
- 671 000e 0722     		movs	r2, #7
- 672 0010 1A61     		str	r2, [r3, #16]
- 832:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
- 673              		.loc 1 832 1 view .LVU134
- 674 0012 7047     		bx	lr
- 675              	.L37:
- 676              		.align	2
- 677              	.L36:
- 678 0014 FF700200 		.word	159999
- 679              		.cfi_endproc
- 680              	.LFE14:
- 682              		.section	.text.xPortStartScheduler,"ax",%progbits
- 683              		.align	1
- 684              		.global	xPortStartScheduler
- 685              		.syntax unified
- 686              		.thumb
- 687              		.thumb_func
- 689              	xPortStartScheduler:
- 690              	.LFB8:
+ 658              		@ frame_needed = 0, uses_anonymous_args = 0
+ 659              		@ link register save eliminated.
+ 827:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_CURRENT_VALUE_REG = 0UL;
+ 660              		.loc 1 827 5 view .LVU127
+ 827:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_CURRENT_VALUE_REG = 0UL;
+ 661              		.loc 1 827 31 is_stmt 0 view .LVU128
+ 662 0000 4FF0E023 		mov	r3, #-536813568
+ 663 0004 0022     		movs	r2, #0
+ 664 0006 1A61     		str	r2, [r3, #16]
+ 828:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 665              		.loc 1 828 5 is_stmt 1 view .LVU129
+ 828:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 666              		.loc 1 828 40 is_stmt 0 view .LVU130
+ 667 0008 9A61     		str	r2, [r3, #24]
+ 831:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_CTRL_REG = ( portNVIC_SYSTICK_CLK_BIT_CONFIG | portNVIC_SYSTICK_INT_BIT | port
+ 668              		.loc 1 831 5 is_stmt 1 view .LVU131
+ 831:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SYSTICK_CTRL_REG = ( portNVIC_SYSTICK_CLK_BIT_CONFIG | portNVIC_SYSTICK_INT_BIT | port
+ 669              		.loc 1 831 31 is_stmt 0 view .LVU132
+ 670 000a 024A     		ldr	r2, .L36
+ 671 000c 5A61     		str	r2, [r3, #20]
+ 832:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** }
+ 672              		.loc 1 832 5 is_stmt 1 view .LVU133
+ 832:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** }
+ 673              		.loc 1 832 31 is_stmt 0 view .LVU134
+ 674 000e 0722     		movs	r2, #7
+ 675 0010 1A61     		str	r2, [r3, #16]
+ 833:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 676              		.loc 1 833 1 view .LVU135
+ 677 0012 7047     		bx	lr
+ 678              	.L37:
+ 679              		.align	2
+ 680              	.L36:
+ 681 0014 FF700200 		.word	159999
+ 682              		.cfi_endproc
+ 683              	.LFE14:
+ 685              		.section	.text.xPortStartScheduler,"ax",%progbits
+ 686              		.align	1
+ 687              		.global	xPortStartScheduler
+ 688              		.syntax unified
+ 689              		.thumb
+ 690              		.thumb_func
+ 692              	xPortStartScheduler:
+ 693              	.LFB8:
  307:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     /* This port can be used on all revisions of the Cortex-M7 core other than
- 691              		.loc 1 307 1 is_stmt 1 view -0
- 692              		.cfi_startproc
- 693              		@ args = 0, pretend = 0, frame = 8
- 694              		@ frame_needed = 0, uses_anonymous_args = 0
+ 694              		.loc 1 307 1 is_stmt 1 view -0
+ 695              		.cfi_startproc
+ 696              		@ args = 0, pretend = 0, frame = 8
+ 697              		@ frame_needed = 0, uses_anonymous_args = 0
  311:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     configASSERT( portCPUID != portCORTEX_M7_r0p0_ID );
- 695              		.loc 1 311 5 view .LVU136
- 696 0000 4FF0E023 		mov	r3, #-536813568
- 697 0004 D3F8002D 		ldr	r2, [r3, #3328]
- 698 0008 5A4B     		ldr	r3, .L60
- 699 000a 9A42     		cmp	r2, r3
- 700 000c 17D0     		beq	.L56
+ 698              		.loc 1 311 5 view .LVU137
+ 699 0000 4FF0E023 		mov	r3, #-536813568
+ 700 0004 D3F8002D 		ldr	r2, [r3, #3328]
+ 701 0008 5A4B     		ldr	r3, .L60
+ 702 000a 9A42     		cmp	r2, r3
+ 703 000c 17D0     		beq	.L56
  311:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     configASSERT( portCPUID != portCORTEX_M7_r0p0_ID );
- 701              		.loc 1 311 55 discriminator 2 view .LVU137
- 312:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 702              		.loc 1 312 5 discriminator 2 view .LVU138
- 703 000e 4FF0E023 		mov	r3, #-536813568
- 704 0012 D3F8002D 		ldr	r2, [r3, #3328]
- 705 0016 584B     		ldr	r3, .L60+4
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 34
+ 704              		.loc 1 311 55 discriminator 2 view .LVU138
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 34
 
 
- 706 0018 9A42     		cmp	r2, r3
- 707 001a 19D0     		beq	.L57
  312:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 708              		.loc 1 312 55 discriminator 2 view .LVU139
- 709              	.LBB56:
+ 705              		.loc 1 312 5 discriminator 2 view .LVU139
+ 706 000e 4FF0E023 		mov	r3, #-536813568
+ 707 0012 D3F8002D 		ldr	r2, [r3, #3328]
+ 708 0016 584B     		ldr	r3, .L60+4
+ 709 0018 9A42     		cmp	r2, r3
+ 710 001a 19D0     		beq	.L57
+ 312:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 711              		.loc 1 312 55 discriminator 2 view .LVU140
+ 712              	.LBB56:
  328:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 710              		.loc 1 328 9 discriminator 2 view .LVU140
+ 713              		.loc 1 328 9 discriminator 2 view .LVU141
  328:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 711              		.loc 1 328 33 is_stmt 0 discriminator 2 view .LVU141
- 712 001c 4FF0E023 		mov	r3, #-536813568
- 713 0020 D3F8083D 		ldr	r3, [r3, #3336]
- 714              	.LVL18:
+ 714              		.loc 1 328 33 is_stmt 0 discriminator 2 view .LVU142
+ 715 001c 4FF0E023 		mov	r3, #-536813568
+ 716 0020 D3F8083D 		ldr	r3, [r3, #3336]
+ 717              	.LVL19:
  343:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         configASSERT( pxVectorTable[ portVECTOR_INDEX_PENDSV ] == xPortPendSVHandler );
- 715              		.loc 1 343 9 is_stmt 1 discriminator 2 view .LVU142
- 716 0024 D96A     		ldr	r1, [r3, #44]
- 717 0026 554A     		ldr	r2, .L60+8
- 718 0028 9142     		cmp	r1, r2
- 719 002a 1AD0     		beq	.L43
+ 718              		.loc 1 343 9 is_stmt 1 discriminator 2 view .LVU143
+ 719 0024 D96A     		ldr	r1, [r3, #44]
+ 720 0026 554A     		ldr	r2, .L60+8
+ 721 0028 9142     		cmp	r1, r2
+ 722 002a 1AD0     		beq	.L43
  343:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         configASSERT( pxVectorTable[ portVECTOR_INDEX_PENDSV ] == xPortPendSVHandler );
- 720              		.loc 1 343 9 view .LVU143
- 721              	.LBB57:
- 722              	.LBI57:
+ 723              		.loc 1 343 9 view .LVU144
+ 724              	.LBB57:
+ 725              	.LBI57:
  213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
- 723              		.loc 2 213 30 view .LVU144
- 724              	.LBB58:
+ 726              		.loc 2 213 30 view .LVU145
+ 727              	.LBB58:
  215:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
- 725              		.loc 2 215 5 view .LVU145
+ 728              		.loc 2 215 5 view .LVU146
  217:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     (
- 726              		.loc 2 217 5 view .LVU146
- 727              		.syntax unified
- 728              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
- 729 002c 4FF0F003 		   mov r3, #240                                              
- 730 0030 83F31188 	   msr basepri, r3                                         
- 731 0034 BFF36F8F 	   isb                                                     
- 732 0038 BFF34F8F 	   dsb                                                     
- 733              	
- 734              	@ 0 "" 2
- 735              	.LVL19:
- 736              		.thumb
- 737              		.syntax unified
- 738              	.L44:
+ 729              		.loc 2 217 5 view .LVU147
+ 730              		.syntax unified
+ 731              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 732 002c 4FF0F003 		   mov r3, #240                                              
+ 733 0030 83F31188 	   msr basepri, r3                                         
+ 734 0034 BFF36F8F 	   isb                                                     
+ 735 0038 BFF34F8F 	   dsb                                                     
+ 736              	
+ 737              	@ 0 "" 2
+ 738              	.LVL20:
+ 739              		.thumb
+ 740              		.syntax unified
+ 741              	.L44:
  217:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     (
- 739              		.loc 2 217 5 is_stmt 0 view .LVU147
- 740              	.LBE58:
- 741              	.LBE57:
+ 742              		.loc 2 217 5 is_stmt 0 view .LVU148
+ 743              	.LBE58:
+ 744              	.LBE57:
  343:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         configASSERT( pxVectorTable[ portVECTOR_INDEX_PENDSV ] == xPortPendSVHandler );
- 742              		.loc 1 343 9 is_stmt 1 discriminator 3 view .LVU148
+ 745              		.loc 1 343 9 is_stmt 1 discriminator 3 view .LVU149
  343:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         configASSERT( pxVectorTable[ portVECTOR_INDEX_PENDSV ] == xPortPendSVHandler );
- 743              		.loc 1 343 9 discriminator 3 view .LVU149
+ 746              		.loc 1 343 9 discriminator 3 view .LVU150
  343:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         configASSERT( pxVectorTable[ portVECTOR_INDEX_PENDSV ] == xPortPendSVHandler );
- 744              		.loc 1 343 9 discriminator 3 view .LVU150
- 745 003c FEE7     		b	.L44
- 746              	.LVL20:
- 747              	.L56:
- 343:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         configASSERT( pxVectorTable[ portVECTOR_INDEX_PENDSV ] == xPortPendSVHandler );
- 748              		.loc 1 343 9 is_stmt 0 discriminator 3 view .LVU151
- 749              	.LBE56:
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 35
+ 747              		.loc 1 343 9 discriminator 3 view .LVU151
+ 748 003c FEE7     		b	.L44
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 35
 
 
+ 749              	.LVL21:
+ 750              	.L56:
+ 343:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         configASSERT( pxVectorTable[ portVECTOR_INDEX_PENDSV ] == xPortPendSVHandler );
+ 751              		.loc 1 343 9 is_stmt 0 discriminator 3 view .LVU152
+ 752              	.LBE56:
  311:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     configASSERT( portCPUID != portCORTEX_M7_r0p0_ID );
- 750              		.loc 1 311 5 is_stmt 1 view .LVU152
- 751              	.LBB61:
- 752              	.LBI61:
+ 753              		.loc 1 311 5 is_stmt 1 view .LVU153
+ 754              	.LBB61:
+ 755              	.LBI61:
  213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
- 753              		.loc 2 213 30 view .LVU153
- 754              	.LBB62:
+ 756              		.loc 2 213 30 view .LVU154
+ 757              	.LBB62:
  215:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
- 755              		.loc 2 215 5 view .LVU154
+ 758              		.loc 2 215 5 view .LVU155
  217:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     (
- 756              		.loc 2 217 5 view .LVU155
- 757              		.syntax unified
- 758              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
- 759 003e 4FF0F003 		   mov r3, #240                                              
- 760 0042 83F31188 	   msr basepri, r3                                         
- 761 0046 BFF36F8F 	   isb                                                     
- 762 004a BFF34F8F 	   dsb                                                     
- 763              	
- 764              	@ 0 "" 2
- 765              	.LVL21:
- 766              		.thumb
- 767              		.syntax unified
- 768              	.L40:
+ 759              		.loc 2 217 5 view .LVU156
+ 760              		.syntax unified
+ 761              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 762 003e 4FF0F003 		   mov r3, #240                                              
+ 763 0042 83F31188 	   msr basepri, r3                                         
+ 764 0046 BFF36F8F 	   isb                                                     
+ 765 004a BFF34F8F 	   dsb                                                     
+ 766              	
+ 767              	@ 0 "" 2
+ 768              	.LVL22:
+ 769              		.thumb
+ 770              		.syntax unified
+ 771              	.L40:
  217:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     (
- 769              		.loc 2 217 5 is_stmt 0 view .LVU156
- 770              	.LBE62:
- 771              	.LBE61:
+ 772              		.loc 2 217 5 is_stmt 0 view .LVU157
+ 773              	.LBE62:
+ 774              	.LBE61:
  311:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     configASSERT( portCPUID != portCORTEX_M7_r0p0_ID );
- 772              		.loc 1 311 5 is_stmt 1 discriminator 1 view .LVU157
+ 775              		.loc 1 311 5 is_stmt 1 discriminator 1 view .LVU158
  311:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     configASSERT( portCPUID != portCORTEX_M7_r0p0_ID );
- 773              		.loc 1 311 5 discriminator 1 view .LVU158
+ 776              		.loc 1 311 5 discriminator 1 view .LVU159
  311:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     configASSERT( portCPUID != portCORTEX_M7_r0p0_ID );
- 774              		.loc 1 311 5 discriminator 1 view .LVU159
- 775 004e FEE7     		b	.L40
- 776              	.L57:
+ 777              		.loc 1 311 5 discriminator 1 view .LVU160
+ 778 004e FEE7     		b	.L40
+ 779              	.L57:
  312:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 777              		.loc 1 312 5 view .LVU160
- 778              	.LBB63:
- 779              	.LBI63:
+ 780              		.loc 1 312 5 view .LVU161
+ 781              	.LBB63:
+ 782              	.LBI63:
  213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
- 780              		.loc 2 213 30 view .LVU161
- 781              	.LBB64:
+ 783              		.loc 2 213 30 view .LVU162
+ 784              	.LBB64:
  215:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
- 782              		.loc 2 215 5 view .LVU162
+ 785              		.loc 2 215 5 view .LVU163
  217:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     (
- 783              		.loc 2 217 5 view .LVU163
- 784              		.syntax unified
- 785              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
- 786 0050 4FF0F003 		   mov r3, #240                                              
- 787 0054 83F31188 	   msr basepri, r3                                         
- 788 0058 BFF36F8F 	   isb                                                     
- 789 005c BFF34F8F 	   dsb                                                     
- 790              	
- 791              	@ 0 "" 2
- 792              	.LVL22:
- 793              		.thumb
- 794              		.syntax unified
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 36
+ 786              		.loc 2 217 5 view .LVU164
+ 787              		.syntax unified
+ 788              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 789 0050 4FF0F003 		   mov r3, #240                                              
+ 790 0054 83F31188 	   msr basepri, r3                                         
+ 791 0058 BFF36F8F 	   isb                                                     
+ 792 005c BFF34F8F 	   dsb                                                     
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 36
 
 
- 795              	.L42:
+ 793              	
+ 794              	@ 0 "" 2
+ 795              	.LVL23:
+ 796              		.thumb
+ 797              		.syntax unified
+ 798              	.L42:
  217:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     (
- 796              		.loc 2 217 5 is_stmt 0 view .LVU164
- 797              	.LBE64:
- 798              	.LBE63:
+ 799              		.loc 2 217 5 is_stmt 0 view .LVU165
+ 800              	.LBE64:
+ 801              	.LBE63:
  312:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 799              		.loc 1 312 5 is_stmt 1 discriminator 2 view .LVU165
+ 802              		.loc 1 312 5 is_stmt 1 discriminator 2 view .LVU166
  312:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 800              		.loc 1 312 5 discriminator 2 view .LVU166
+ 803              		.loc 1 312 5 discriminator 2 view .LVU167
  312:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 801              		.loc 1 312 5 discriminator 2 view .LVU167
- 802 0060 FEE7     		b	.L42
- 803              	.LVL23:
- 804              	.L43:
- 805              	.LBB65:
+ 804              		.loc 1 312 5 discriminator 2 view .LVU168
+ 805 0060 FEE7     		b	.L42
+ 806              	.LVL24:
+ 807              	.L43:
+ 808              	.LBB65:
  343:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         configASSERT( pxVectorTable[ portVECTOR_INDEX_PENDSV ] == xPortPendSVHandler );
- 806              		.loc 1 343 81 discriminator 2 view .LVU168
+ 809              		.loc 1 343 81 discriminator 2 view .LVU169
  344:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
- 807              		.loc 1 344 9 discriminator 2 view .LVU169
- 808 0062 9A6B     		ldr	r2, [r3, #56]
- 809 0064 464B     		ldr	r3, .L60+12
- 810              	.LVL24:
+ 810              		.loc 1 344 9 discriminator 2 view .LVU170
+ 811 0062 9A6B     		ldr	r2, [r3, #56]
+ 812 0064 464B     		ldr	r3, .L60+12
+ 813              	.LVL25:
  344:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
- 811              		.loc 1 344 9 is_stmt 0 discriminator 2 view .LVU170
- 812 0066 9A42     		cmp	r2, r3
- 813 0068 08D0     		beq	.L45
+ 814              		.loc 1 344 9 is_stmt 0 discriminator 2 view .LVU171
+ 815 0066 9A42     		cmp	r2, r3
+ 816 0068 08D0     		beq	.L45
  344:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
- 814              		.loc 1 344 9 is_stmt 1 view .LVU171
- 815              	.LBB59:
- 816              	.LBI59:
+ 817              		.loc 1 344 9 is_stmt 1 view .LVU172
+ 818              	.LBB59:
+ 819              	.LBI59:
  213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
- 817              		.loc 2 213 30 view .LVU172
- 818              	.LBB60:
+ 820              		.loc 2 213 30 view .LVU173
+ 821              	.LBB60:
  215:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
- 819              		.loc 2 215 5 view .LVU173
+ 822              		.loc 2 215 5 view .LVU174
  217:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     (
- 820              		.loc 2 217 5 view .LVU174
- 821              		.syntax unified
- 822              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
- 823 006a 4FF0F003 		   mov r3, #240                                              
- 824 006e 83F31188 	   msr basepri, r3                                         
- 825 0072 BFF36F8F 	   isb                                                     
- 826 0076 BFF34F8F 	   dsb                                                     
- 827              	
- 828              	@ 0 "" 2
- 829              	.LVL25:
- 830              		.thumb
- 831              		.syntax unified
- 832              	.L46:
+ 823              		.loc 2 217 5 view .LVU175
+ 824              		.syntax unified
+ 825              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 826 006a 4FF0F003 		   mov r3, #240                                              
+ 827 006e 83F31188 	   msr basepri, r3                                         
+ 828 0072 BFF36F8F 	   isb                                                     
+ 829 0076 BFF34F8F 	   dsb                                                     
+ 830              	
+ 831              	@ 0 "" 2
+ 832              	.LVL26:
+ 833              		.thumb
+ 834              		.syntax unified
+ 835              	.L46:
  217:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     (
- 833              		.loc 2 217 5 is_stmt 0 view .LVU175
- 834              	.LBE60:
- 835              	.LBE59:
- 344:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
- 836              		.loc 1 344 9 is_stmt 1 discriminator 4 view .LVU176
- 344:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
- 837              		.loc 1 344 9 discriminator 4 view .LVU177
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 37
+ 836              		.loc 2 217 5 is_stmt 0 view .LVU176
+ 837              	.LBE60:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 37
 
 
+ 838              	.LBE59:
  344:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
- 838              		.loc 1 344 9 discriminator 4 view .LVU178
- 839 007a FEE7     		b	.L46
- 840              	.L45:
- 841              	.LBE65:
+ 839              		.loc 1 344 9 is_stmt 1 discriminator 4 view .LVU177
+ 344:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
+ 840              		.loc 1 344 9 discriminator 4 view .LVU178
+ 344:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
+ 841              		.loc 1 344 9 discriminator 4 view .LVU179
+ 842 007a FEE7     		b	.L46
+ 843              	.L45:
+ 844              	.LBE65:
  307:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     /* This port can be used on all revisions of the Cortex-M7 core other than
- 842              		.loc 1 307 1 is_stmt 0 discriminator 2 view .LVU179
- 843 007c 30B5     		push	{r4, r5, lr}
- 844              	.LCFI3:
- 845              		.cfi_def_cfa_offset 12
- 846              		.cfi_offset 4, -12
- 847              		.cfi_offset 5, -8
- 848              		.cfi_offset 14, -4
- 849 007e 83B0     		sub	sp, sp, #12
- 850              	.LCFI4:
- 851              		.cfi_def_cfa_offset 24
- 852              	.LBB66:
+ 845              		.loc 1 307 1 is_stmt 0 discriminator 2 view .LVU180
+ 846 007c 30B5     		push	{r4, r5, lr}
+ 847              	.LCFI3:
+ 848              		.cfi_def_cfa_offset 12
+ 849              		.cfi_offset 4, -12
+ 850              		.cfi_offset 5, -8
+ 851              		.cfi_offset 14, -4
+ 852 007e 83B0     		sub	sp, sp, #12
+ 853              	.LCFI4:
+ 854              		.cfi_def_cfa_offset 24
+ 855              	.LBB66:
  344:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
- 853              		.loc 1 344 87 is_stmt 1 discriminator 2 view .LVU180
- 854              	.LBE66:
- 855              	.LBB67:
+ 856              		.loc 1 344 87 is_stmt 1 discriminator 2 view .LVU181
+ 857              	.LBE66:
+ 858              	.LBB67:
  350:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         volatile uint32_t ulImplementedPrioBits = 0;
- 856              		.loc 1 350 9 discriminator 2 view .LVU181
+ 859              		.loc 1 350 9 discriminator 2 view .LVU182
  351:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         volatile uint8_t * const pucFirstUserPriorityRegister = ( volatile uint8_t * const ) ( port
- 857              		.loc 1 351 9 discriminator 2 view .LVU182
+ 860              		.loc 1 351 9 discriminator 2 view .LVU183
  351:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         volatile uint8_t * const pucFirstUserPriorityRegister = ( volatile uint8_t * const ) ( port
- 858              		.loc 1 351 27 is_stmt 0 discriminator 2 view .LVU183
- 859 0080 0023     		movs	r3, #0
- 860 0082 0193     		str	r3, [sp, #4]
- 861              	.LVL26:
+ 861              		.loc 1 351 27 is_stmt 0 discriminator 2 view .LVU184
+ 862 0080 0023     		movs	r3, #0
+ 863 0082 0193     		str	r3, [sp, #4]
+ 864              	.LVL27:
  352:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         volatile uint8_t ucMaxPriorityValue;
- 862              		.loc 1 352 9 is_stmt 1 discriminator 2 view .LVU184
+ 865              		.loc 1 352 9 is_stmt 1 discriminator 2 view .LVU185
  353:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 863              		.loc 1 353 9 discriminator 2 view .LVU185
+ 866              		.loc 1 353 9 discriminator 2 view .LVU186
  361:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 864              		.loc 1 361 9 discriminator 2 view .LVU186
+ 867              		.loc 1 361 9 discriminator 2 view .LVU187
  361:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 865              		.loc 1 361 30 is_stmt 0 discriminator 2 view .LVU187
- 866 0084 3F4B     		ldr	r3, .L60+16
- 867 0086 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
- 868 0088 D2B2     		uxtb	r2, r2
+ 868              		.loc 1 361 30 is_stmt 0 discriminator 2 view .LVU188
+ 869 0084 3F4B     		ldr	r3, .L60+16
+ 870 0086 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 871 0088 D2B2     		uxtb	r2, r2
  361:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 869              		.loc 1 361 28 discriminator 2 view .LVU188
- 870 008a 8DF80220 		strb	r2, [sp, #2]
+ 872              		.loc 1 361 28 discriminator 2 view .LVU189
+ 873 008a 8DF80220 		strb	r2, [sp, #2]
  365:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 871              		.loc 1 365 9 is_stmt 1 discriminator 2 view .LVU189
+ 874              		.loc 1 365 9 is_stmt 1 discriminator 2 view .LVU190
  365:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 872              		.loc 1 365 39 is_stmt 0 discriminator 2 view .LVU190
- 873 008e FF22     		movs	r2, #255
- 874 0090 1A70     		strb	r2, [r3]
+ 875              		.loc 1 365 39 is_stmt 0 discriminator 2 view .LVU191
+ 876 008e FF22     		movs	r2, #255
+ 877 0090 1A70     		strb	r2, [r3]
  368:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 875              		.loc 1 368 9 is_stmt 1 discriminator 2 view .LVU191
- 368:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 876              		.loc 1 368 30 is_stmt 0 discriminator 2 view .LVU192
- 877 0092 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
- 878 0094 DBB2     		uxtb	r3, r3
- 368:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 38
+ 878              		.loc 1 368 9 is_stmt 1 discriminator 2 view .LVU192
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 38
 
 
- 879              		.loc 1 368 28 discriminator 2 view .LVU193
- 880 0096 8DF80330 		strb	r3, [sp, #3]
+ 368:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 879              		.loc 1 368 30 is_stmt 0 discriminator 2 view .LVU193
+ 880 0092 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 881 0094 DBB2     		uxtb	r3, r3
+ 368:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 882              		.loc 1 368 28 discriminator 2 view .LVU194
+ 883 0096 8DF80330 		strb	r3, [sp, #3]
  371:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 881              		.loc 1 371 9 is_stmt 1 discriminator 2 view .LVU194
+ 884              		.loc 1 371 9 is_stmt 1 discriminator 2 view .LVU195
  371:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 882              		.loc 1 371 69 is_stmt 0 discriminator 2 view .LVU195
- 883 009a 9DF80330 		ldrb	r3, [sp, #3]	@ zero_extendqisi2
- 884 009e 03F0F003 		and	r3, r3, #240
+ 885              		.loc 1 371 69 is_stmt 0 discriminator 2 view .LVU196
+ 886 009a 9DF80330 		ldrb	r3, [sp, #3]	@ zero_extendqisi2
+ 887 009e 03F0F003 		and	r3, r3, #240
  371:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 885              		.loc 1 371 30 discriminator 2 view .LVU196
- 886 00a2 394A     		ldr	r2, .L60+20
- 887 00a4 1370     		strb	r3, [r2]
+ 888              		.loc 1 371 30 discriminator 2 view .LVU197
+ 889 00a2 394A     		ldr	r2, .L60+20
+ 890 00a4 1370     		strb	r3, [r2]
  379:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 888              		.loc 1 379 9 is_stmt 1 discriminator 2 view .LVU197
- 889 00a6 43B9     		cbnz	r3, .L47
+ 891              		.loc 1 379 9 is_stmt 1 discriminator 2 view .LVU198
+ 892 00a6 43B9     		cbnz	r3, .L47
  379:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 890              		.loc 1 379 9 view .LVU198
- 891              	.LBB68:
- 892              	.LBI68:
+ 893              		.loc 1 379 9 view .LVU199
+ 894              	.LBB68:
+ 895              	.LBI68:
  213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
- 893              		.loc 2 213 30 view .LVU199
- 894              	.LBB69:
+ 896              		.loc 2 213 30 view .LVU200
+ 897              	.LBB69:
  215:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
- 895              		.loc 2 215 5 view .LVU200
+ 898              		.loc 2 215 5 view .LVU201
  217:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     (
- 896              		.loc 2 217 5 view .LVU201
- 897              		.syntax unified
- 898              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
- 899 00a8 4FF0F003 		   mov r3, #240                                              
- 900 00ac 83F31188 	   msr basepri, r3                                         
- 901 00b0 BFF36F8F 	   isb                                                     
- 902 00b4 BFF34F8F 	   dsb                                                     
- 903              	
- 904              	@ 0 "" 2
- 905              	.LVL27:
- 906              		.thumb
- 907              		.syntax unified
- 908              	.L48:
+ 899              		.loc 2 217 5 view .LVU202
+ 900              		.syntax unified
+ 901              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 902 00a8 4FF0F003 		   mov r3, #240                                              
+ 903 00ac 83F31188 	   msr basepri, r3                                         
+ 904 00b0 BFF36F8F 	   isb                                                     
+ 905 00b4 BFF34F8F 	   dsb                                                     
+ 906              	
+ 907              	@ 0 "" 2
+ 908              	.LVL28:
+ 909              		.thumb
+ 910              		.syntax unified
+ 911              	.L48:
  217:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     (
- 909              		.loc 2 217 5 is_stmt 0 view .LVU202
- 910              	.LBE69:
- 911              	.LBE68:
+ 912              		.loc 2 217 5 is_stmt 0 view .LVU203
+ 913              	.LBE69:
+ 914              	.LBE68:
  379:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 912              		.loc 1 379 9 is_stmt 1 discriminator 5 view .LVU203
+ 915              		.loc 1 379 9 is_stmt 1 discriminator 5 view .LVU204
  379:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 913              		.loc 1 379 9 discriminator 5 view .LVU204
+ 916              		.loc 1 379 9 discriminator 5 view .LVU205
  379:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 914              		.loc 1 379 9 discriminator 5 view .LVU205
- 915 00b8 FEE7     		b	.L48
- 916              	.L47:
+ 917              		.loc 1 379 9 discriminator 5 view .LVU206
+ 918 00b8 FEE7     		b	.L48
+ 919              	.L47:
  379:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 917              		.loc 1 379 45 discriminator 2 view .LVU206
- 383:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 918              		.loc 1 383 9 discriminator 2 view .LVU207
- 919 00ba 9DF80330 		ldrb	r3, [sp, #3]	@ zero_extendqisi2
- 920 00be DB43     		mvns	r3, r3
- 921 00c0 13F0F00F 		tst	r3, #240
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 39
+ 920              		.loc 1 379 45 discriminator 2 view .LVU207
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 39
 
 
- 922 00c4 08D0     		beq	.L49
  383:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 923              		.loc 1 383 9 view .LVU208
- 924              	.LBB70:
- 925              	.LBI70:
+ 921              		.loc 1 383 9 discriminator 2 view .LVU208
+ 922 00ba 9DF80330 		ldrb	r3, [sp, #3]	@ zero_extendqisi2
+ 923 00be DB43     		mvns	r3, r3
+ 924 00c0 13F0F00F 		tst	r3, #240
+ 925 00c4 08D0     		beq	.L49
+ 383:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 926              		.loc 1 383 9 view .LVU209
+ 927              	.LBB70:
+ 928              	.LBI70:
  213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
- 926              		.loc 2 213 30 view .LVU209
- 927              	.LBB71:
+ 929              		.loc 2 213 30 view .LVU210
+ 930              	.LBB71:
  215:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
- 928              		.loc 2 215 5 view .LVU210
+ 931              		.loc 2 215 5 view .LVU211
  217:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     (
- 929              		.loc 2 217 5 view .LVU211
- 930              		.syntax unified
- 931              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
- 932 00c6 4FF0F003 		   mov r3, #240                                              
- 933 00ca 83F31188 	   msr basepri, r3                                         
- 934 00ce BFF36F8F 	   isb                                                     
- 935 00d2 BFF34F8F 	   dsb                                                     
- 936              	
- 937              	@ 0 "" 2
- 938              	.LVL28:
- 939              		.thumb
- 940              		.syntax unified
- 941              	.L50:
+ 932              		.loc 2 217 5 view .LVU212
+ 933              		.syntax unified
+ 934              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 935 00c6 4FF0F003 		   mov r3, #240                                              
+ 936 00ca 83F31188 	   msr basepri, r3                                         
+ 937 00ce BFF36F8F 	   isb                                                     
+ 938 00d2 BFF34F8F 	   dsb                                                     
+ 939              	
+ 940              	@ 0 "" 2
+ 941              	.LVL29:
+ 942              		.thumb
+ 943              		.syntax unified
+ 944              	.L50:
  217:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     (
- 942              		.loc 2 217 5 is_stmt 0 view .LVU212
- 943              	.LBE71:
- 944              	.LBE70:
+ 945              		.loc 2 217 5 is_stmt 0 view .LVU213
+ 946              	.LBE71:
+ 947              	.LBE70:
  383:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 945              		.loc 1 383 9 is_stmt 1 discriminator 6 view .LVU213
+ 948              		.loc 1 383 9 is_stmt 1 discriminator 6 view .LVU214
  383:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 946              		.loc 1 383 9 discriminator 6 view .LVU214
+ 949              		.loc 1 383 9 discriminator 6 view .LVU215
  383:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 947              		.loc 1 383 9 discriminator 6 view .LVU215
- 948 00d6 FEE7     		b	.L50
- 949              	.L49:
+ 950              		.loc 1 383 9 discriminator 6 view .LVU216
+ 951 00d6 FEE7     		b	.L50
+ 952              	.L49:
  388:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
- 950              		.loc 1 388 14 view .LVU216
+ 953              		.loc 1 388 14 view .LVU217
  388:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
- 951              		.loc 1 388 37 is_stmt 0 view .LVU217
- 952 00d8 9DF80330 		ldrb	r3, [sp, #3]	@ zero_extendqisi2
+ 954              		.loc 1 388 37 is_stmt 0 view .LVU218
+ 955 00d8 9DF80330 		ldrb	r3, [sp, #3]	@ zero_extendqisi2
  388:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
- 953              		.loc 1 388 14 view .LVU218
- 954 00dc 13F0800F 		tst	r3, #128
- 955 00e0 09D0     		beq	.L58
+ 956              		.loc 1 388 14 view .LVU219
+ 957 00dc 13F0800F 		tst	r3, #128
+ 958 00e0 09D0     		beq	.L58
  390:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             ucMaxPriorityValue <<= ( uint8_t ) 0x01;
- 956              		.loc 1 390 13 is_stmt 1 view .LVU219
+ 959              		.loc 1 390 13 is_stmt 1 view .LVU220
  390:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             ucMaxPriorityValue <<= ( uint8_t ) 0x01;
- 957              		.loc 1 390 34 is_stmt 0 view .LVU220
- 958 00e2 019B     		ldr	r3, [sp, #4]
- 959 00e4 0133     		adds	r3, r3, #1
- 960 00e6 0193     		str	r3, [sp, #4]
+ 960              		.loc 1 390 34 is_stmt 0 view .LVU221
+ 961 00e2 019B     		ldr	r3, [sp, #4]
+ 962 00e4 0133     		adds	r3, r3, #1
+ 963 00e6 0193     		str	r3, [sp, #4]
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 40
+
+
  391:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
- 961              		.loc 1 391 13 is_stmt 1 view .LVU221
+ 964              		.loc 1 391 13 is_stmt 1 view .LVU222
  391:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
- 962              		.loc 1 391 32 is_stmt 0 view .LVU222
- 963 00e8 9DF80330 		ldrb	r3, [sp, #3]	@ zero_extendqisi2
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 40
-
-
- 964 00ec 5B00     		lsls	r3, r3, #1
- 965 00ee DBB2     		uxtb	r3, r3
- 966 00f0 8DF80330 		strb	r3, [sp, #3]
- 967 00f4 F0E7     		b	.L49
- 968              	.L58:
+ 965              		.loc 1 391 32 is_stmt 0 view .LVU223
+ 966 00e8 9DF80330 		ldrb	r3, [sp, #3]	@ zero_extendqisi2
+ 967 00ec 5B00     		lsls	r3, r3, #1
+ 968 00ee DBB2     		uxtb	r3, r3
+ 969 00f0 8DF80330 		strb	r3, [sp, #3]
+ 970 00f4 F0E7     		b	.L49
+ 971              	.L58:
  394:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
- 969              		.loc 1 394 9 is_stmt 1 view .LVU223
+ 972              		.loc 1 394 9 is_stmt 1 view .LVU224
  394:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
- 970              		.loc 1 394 35 is_stmt 0 view .LVU224
- 971 00f6 019B     		ldr	r3, [sp, #4]
+ 973              		.loc 1 394 35 is_stmt 0 view .LVU225
+ 974 00f6 019B     		ldr	r3, [sp, #4]
  394:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
- 972              		.loc 1 394 11 view .LVU225
- 973 00f8 082B     		cmp	r3, #8
- 974 00fa 36D0     		beq	.L59
+ 975              		.loc 1 394 11 view .LVU226
+ 976 00f8 082B     		cmp	r3, #8
+ 977 00fa 36D0     		beq	.L59
  418:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
- 975              		.loc 1 418 13 is_stmt 1 view .LVU226
+ 978              		.loc 1 418 13 is_stmt 1 view .LVU227
  418:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
- 976              		.loc 1 418 56 is_stmt 0 view .LVU227
- 977 00fc 019B     		ldr	r3, [sp, #4]
- 978 00fe C3F10703 		rsb	r3, r3, #7
+ 979              		.loc 1 418 56 is_stmt 0 view .LVU228
+ 980 00fc 019B     		ldr	r3, [sp, #4]
+ 981 00fe C3F10703 		rsb	r3, r3, #7
  418:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
- 979              		.loc 1 418 32 view .LVU228
- 980 0102 224A     		ldr	r2, .L60+24
- 981 0104 1360     		str	r3, [r2]
- 982              	.L53:
+ 982              		.loc 1 418 32 view .LVU229
+ 983 0102 224A     		ldr	r2, .L60+24
+ 984 0104 1360     		str	r3, [r2]
+ 985              	.L53:
  423:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         ulMaxPRIGROUPValue &= portPRIORITY_GROUP_MASK;
- 983              		.loc 1 423 9 is_stmt 1 view .LVU229
+ 986              		.loc 1 423 9 is_stmt 1 view .LVU230
  423:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         ulMaxPRIGROUPValue &= portPRIORITY_GROUP_MASK;
- 984              		.loc 1 423 28 is_stmt 0 view .LVU230
- 985 0106 214A     		ldr	r2, .L60+24
- 986 0108 1368     		ldr	r3, [r2]
- 987 010a 1B02     		lsls	r3, r3, #8
- 988 010c 1360     		str	r3, [r2]
+ 987              		.loc 1 423 28 is_stmt 0 view .LVU231
+ 988 0106 214A     		ldr	r2, .L60+24
+ 989 0108 1368     		ldr	r3, [r2]
+ 990 010a 1B02     		lsls	r3, r3, #8
+ 991 010c 1360     		str	r3, [r2]
  424:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 989              		.loc 1 424 9 is_stmt 1 view .LVU231
+ 992              		.loc 1 424 9 is_stmt 1 view .LVU232
  424:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 990              		.loc 1 424 28 is_stmt 0 view .LVU232
- 991 010e 03F4E063 		and	r3, r3, #1792
- 992 0112 1360     		str	r3, [r2]
+ 993              		.loc 1 424 28 is_stmt 0 view .LVU233
+ 994 010e 03F4E063 		and	r3, r3, #1792
+ 995 0112 1360     		str	r3, [r2]
  428:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
- 993              		.loc 1 428 9 is_stmt 1 view .LVU233
+ 996              		.loc 1 428 9 is_stmt 1 view .LVU234
  428:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
- 994              		.loc 1 428 39 is_stmt 0 view .LVU234
- 995 0114 9DF80230 		ldrb	r3, [sp, #2]	@ zero_extendqisi2
- 996 0118 DBB2     		uxtb	r3, r3
- 997 011a 1A4A     		ldr	r2, .L60+16
- 998 011c 1370     		strb	r3, [r2]
- 999              	.LBE67:
+ 997              		.loc 1 428 39 is_stmt 0 view .LVU235
+ 998 0114 9DF80230 		ldrb	r3, [sp, #2]	@ zero_extendqisi2
+ 999 0118 DBB2     		uxtb	r3, r3
+ 1000 011a 1A4A     		ldr	r2, .L60+16
+ 1001 011c 1370     		strb	r3, [r2]
+ 1002              	.LBE67:
  434:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SHPR3_REG |= portNVIC_SYSTICK_PRI;
- 1000              		.loc 1 434 5 is_stmt 1 view .LVU235
+ 1003              		.loc 1 434 5 is_stmt 1 view .LVU236
  434:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SHPR3_REG |= portNVIC_SYSTICK_PRI;
- 1001              		.loc 1 434 24 is_stmt 0 view .LVU236
- 1002 011e 4FF0E024 		mov	r4, #-536813568
- 1003 0122 D4F8203D 		ldr	r3, [r4, #3360]
- 1004 0126 43F47F03 		orr	r3, r3, #16711680
- 1005 012a C4F8203D 		str	r3, [r4, #3360]
- 435:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SHPR2_REG = 0;
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 41
+ 1004              		.loc 1 434 24 is_stmt 0 view .LVU237
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 41
 
 
- 1006              		.loc 1 435 5 is_stmt 1 view .LVU237
+ 1005 011e 4FF0E024 		mov	r4, #-536813568
+ 1006 0122 D4F8203D 		ldr	r3, [r4, #3360]
+ 1007 0126 43F47F03 		orr	r3, r3, #16711680
+ 1008 012a C4F8203D 		str	r3, [r4, #3360]
  435:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SHPR2_REG = 0;
- 1007              		.loc 1 435 24 is_stmt 0 view .LVU238
- 1008 012e D4F8203D 		ldr	r3, [r4, #3360]
- 1009 0132 43F07F43 		orr	r3, r3, #-16777216
- 1010 0136 C4F8203D 		str	r3, [r4, #3360]
+ 1009              		.loc 1 435 5 is_stmt 1 view .LVU238
+ 435:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     portNVIC_SHPR2_REG = 0;
+ 1010              		.loc 1 435 24 is_stmt 0 view .LVU239
+ 1011 012e D4F8203D 		ldr	r3, [r4, #3360]
+ 1012 0132 43F07F43 		orr	r3, r3, #-16777216
+ 1013 0136 C4F8203D 		str	r3, [r4, #3360]
  436:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 1011              		.loc 1 436 5 is_stmt 1 view .LVU239
+ 1014              		.loc 1 436 5 is_stmt 1 view .LVU240
  436:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 1012              		.loc 1 436 24 is_stmt 0 view .LVU240
- 1013 013a 0025     		movs	r5, #0
- 1014 013c C4F81C5D 		str	r5, [r4, #3356]
+ 1015              		.loc 1 436 24 is_stmt 0 view .LVU241
+ 1016 013a 0025     		movs	r5, #0
+ 1017 013c C4F81C5D 		str	r5, [r4, #3356]
  440:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 1015              		.loc 1 440 5 is_stmt 1 view .LVU241
- 1016 0140 FFF7FEFF 		bl	vPortSetupTimerInterrupt
- 1017              	.LVL29:
+ 1018              		.loc 1 440 5 is_stmt 1 view .LVU242
+ 1019 0140 FFF7FEFF 		bl	vPortSetupTimerInterrupt
+ 1020              	.LVL30:
  443:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 1018              		.loc 1 443 5 view .LVU242
+ 1021              		.loc 1 443 5 view .LVU243
  443:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 1019              		.loc 1 443 23 is_stmt 0 view .LVU243
- 1020 0144 124B     		ldr	r3, .L60+28
- 1021 0146 1D60     		str	r5, [r3]
+ 1022              		.loc 1 443 23 is_stmt 0 view .LVU244
+ 1023 0144 124B     		ldr	r3, .L60+28
+ 1024 0146 1D60     		str	r5, [r3]
  446:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 1022              		.loc 1 446 5 is_stmt 1 view .LVU244
- 1023 0148 FFF7FEFF 		bl	vPortEnableVFP
- 1024              	.LVL30:
+ 1025              		.loc 1 446 5 is_stmt 1 view .LVU245
+ 1026 0148 FFF7FEFF 		bl	vPortEnableVFP
+ 1027              	.LVL31:
  449:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 1025              		.loc 1 449 5 view .LVU245
+ 1028              		.loc 1 449 5 view .LVU246
  449:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 1026              		.loc 1 449 20 is_stmt 0 view .LVU246
- 1027 014c D4F8343F 		ldr	r3, [r4, #3892]
- 1028 0150 43F04043 		orr	r3, r3, #-1073741824
- 1029 0154 C4F8343F 		str	r3, [r4, #3892]
+ 1029              		.loc 1 449 20 is_stmt 0 view .LVU247
+ 1030 014c D4F8343F 		ldr	r3, [r4, #3892]
+ 1031 0150 43F04043 		orr	r3, r3, #-1073741824
+ 1032 0154 C4F8343F 		str	r3, [r4, #3892]
  452:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 1030              		.loc 1 452 5 is_stmt 1 view .LVU247
- 1031 0158 FFF7FEFF 		bl	prvPortStartFirstTask
- 1032              	.LVL31:
- 460:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     prvTaskExitError();
- 1033              		.loc 1 460 5 view .LVU248
- 1034 015c FFF7FEFF 		bl	vTaskSwitchContext
+ 1033              		.loc 1 452 5 is_stmt 1 view .LVU248
+ 1034 0158 FFF7FEFF 		bl	prvPortStartFirstTask
  1035              	.LVL32:
- 461:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 1036              		.loc 1 461 5 view .LVU249
- 1037 0160 FFF7FEFF 		bl	prvTaskExitError
+ 460:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     prvTaskExitError();
+ 1036              		.loc 1 460 5 view .LVU249
+ 1037 015c FFF7FEFF 		bl	vTaskSwitchContext
  1038              	.LVL33:
+ 461:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 1039              		.loc 1 461 5 view .LVU250
+ 1040 0160 FFF7FEFF 		bl	prvTaskExitError
+ 1041              	.LVL34:
  464:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** }
- 1039              		.loc 1 464 5 view .LVU250
+ 1042              		.loc 1 464 5 view .LVU251
  465:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
- 1040              		.loc 1 465 1 is_stmt 0 view .LVU251
- 1041 0164 2846     		mov	r0, r5
- 1042 0166 03B0     		add	sp, sp, #12
- 1043              	.LCFI5:
- 1044              		.cfi_remember_state
- 1045              		.cfi_def_cfa_offset 12
- 1046              		@ sp needed
- 1047 0168 30BD     		pop	{r4, r5, pc}
- 1048              	.L59:
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 42
+ 1043              		.loc 1 465 1 is_stmt 0 view .LVU252
+ 1044 0164 2846     		mov	r0, r5
+ 1045 0166 03B0     		add	sp, sp, #12
+ 1046              	.LCFI5:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 42
 
 
- 1049              	.LCFI6:
- 1050              		.cfi_restore_state
- 1051              	.LBB72:
+ 1047              		.cfi_remember_state
+ 1048              		.cfi_def_cfa_offset 12
+ 1049              		@ sp needed
+ 1050 0168 30BD     		pop	{r4, r5, pc}
+ 1051              	.L59:
+ 1052              	.LCFI6:
+ 1053              		.cfi_restore_state
+ 1054              	.LBB72:
  413:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             ulMaxPRIGROUPValue = 0;
- 1052              		.loc 1 413 13 is_stmt 1 discriminator 2 view .LVU252
+ 1055              		.loc 1 413 13 is_stmt 1 discriminator 2 view .LVU253
  413:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             ulMaxPRIGROUPValue = 0;
- 1053              		.loc 1 413 82 discriminator 2 view .LVU253
+ 1056              		.loc 1 413 82 discriminator 2 view .LVU254
  414:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
- 1054              		.loc 1 414 13 discriminator 2 view .LVU254
+ 1057              		.loc 1 414 13 discriminator 2 view .LVU255
  414:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
- 1055              		.loc 1 414 32 is_stmt 0 discriminator 2 view .LVU255
- 1056 016a 084B     		ldr	r3, .L60+24
- 1057 016c 0022     		movs	r2, #0
- 1058 016e 1A60     		str	r2, [r3]
- 1059 0170 C9E7     		b	.L53
- 1060              	.L61:
- 1061 0172 00BF     		.align	2
- 1062              	.L60:
- 1063 0174 71C20F41 		.word	1091551857
- 1064 0178 70C20F41 		.word	1091551856
- 1065 017c 00000000 		.word	SVC_Handler
- 1066 0180 00000000 		.word	PendSV_Handler
- 1067 0184 00E400E0 		.word	-536812544
- 1068 0188 00000000 		.word	.LANCHOR1
- 1069 018c 00000000 		.word	.LANCHOR2
- 1070 0190 00000000 		.word	.LANCHOR0
- 1071              	.LBE72:
- 1072              		.cfi_endproc
- 1073              	.LFE8:
- 1075              		.section	.text.vPortValidateInterruptPriority,"ax",%progbits
- 1076              		.align	1
- 1077              		.global	vPortValidateInterruptPriority
- 1078              		.syntax unified
- 1079              		.thumb
- 1080              		.thumb_func
- 1082              	vPortValidateInterruptPriority:
- 1083              	.LFB16:
- 849:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
- 850:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 851:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** #if ( configASSERT_DEFINED == 1 )
- 852:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 853:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     void vPortValidateInterruptPriority( void )
- 854:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     {
- 1084              		.loc 1 854 5 is_stmt 1 view -0
- 1085              		.cfi_startproc
- 1086              		@ args = 0, pretend = 0, frame = 0
- 1087              		@ frame_needed = 0, uses_anonymous_args = 0
- 1088              		@ link register save eliminated.
- 855:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         uint32_t ulCurrentInterrupt;
- 1089              		.loc 1 855 9 view .LVU257
- 856:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         uint8_t ucCurrentPriority;
- 1090              		.loc 1 856 9 view .LVU258
- 857:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 858:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         /* Obtain the number of the currently executing interrupt. */
- 859:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         __asm volatile ( "mrs %0, ipsr" : "=r" ( ulCurrentInterrupt )::"memory" );
- 1091              		.loc 1 859 9 view .LVU259
- 1092              		.syntax unified
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 43
+ 1058              		.loc 1 414 32 is_stmt 0 discriminator 2 view .LVU256
+ 1059 016a 084B     		ldr	r3, .L60+24
+ 1060 016c 0022     		movs	r2, #0
+ 1061 016e 1A60     		str	r2, [r3]
+ 1062 0170 C9E7     		b	.L53
+ 1063              	.L61:
+ 1064 0172 00BF     		.align	2
+ 1065              	.L60:
+ 1066 0174 71C20F41 		.word	1091551857
+ 1067 0178 70C20F41 		.word	1091551856
+ 1068 017c 00000000 		.word	SVC_Handler
+ 1069 0180 00000000 		.word	PendSV_Handler
+ 1070 0184 00E400E0 		.word	-536812544
+ 1071 0188 00000000 		.word	.LANCHOR1
+ 1072 018c 00000000 		.word	.LANCHOR2
+ 1073 0190 00000000 		.word	.LANCHOR0
+ 1074              	.LBE72:
+ 1075              		.cfi_endproc
+ 1076              	.LFE8:
+ 1078              		.section	.text.vPortValidateInterruptPriority,"ax",%progbits
+ 1079              		.align	1
+ 1080              		.global	vPortValidateInterruptPriority
+ 1081              		.syntax unified
+ 1082              		.thumb
+ 1083              		.thumb_func
+ 1085              	vPortValidateInterruptPriority:
+ 1086              	.LFB16:
+ 850:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
+ 851:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 852:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** #if ( configASSERT_DEFINED == 1 )
+ 853:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 854:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     void vPortValidateInterruptPriority( void )
+ 855:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     {
+ 1087              		.loc 1 855 5 is_stmt 1 view -0
+ 1088              		.cfi_startproc
+ 1089              		@ args = 0, pretend = 0, frame = 0
+ 1090              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1091              		@ link register save eliminated.
+ 856:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         uint32_t ulCurrentInterrupt;
+ 1092              		.loc 1 856 9 view .LVU258
+ 857:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         uint8_t ucCurrentPriority;
+ 1093              		.loc 1 857 9 view .LVU259
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 43
 
 
- 1093              	@ 859 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c" 1
- 1094 0000 EFF30583 		mrs r3, ipsr
- 1095              	@ 0 "" 2
- 1096              	.LVL34:
- 860:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 861:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         /* Is the interrupt number a user defined interrupt? */
- 862:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         if( ulCurrentInterrupt >= portFIRST_USER_INTERRUPT_NUMBER )
- 1097              		.loc 1 862 9 view .LVU260
- 1098              		.loc 1 862 11 is_stmt 0 view .LVU261
- 1099              		.thumb
- 1100              		.syntax unified
- 1101 0004 0F2B     		cmp	r3, #15
- 1102 0006 0FD9     		bls	.L63
- 863:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
- 864:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Look up the interrupt's priority. */
- 865:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             ucCurrentPriority = pcInterruptPriorityRegisters[ ulCurrentInterrupt ];
- 1103              		.loc 1 865 13 is_stmt 1 view .LVU262
- 1104              		.loc 1 865 61 is_stmt 0 view .LVU263
- 1105 0008 114A     		ldr	r2, .L67
- 1106              		.loc 1 865 31 view .LVU264
- 1107 000a 9B5C     		ldrb	r3, [r3, r2]	@ zero_extendqisi2
- 1108              	.LVL35:
- 1109              		.loc 1 865 31 view .LVU265
- 1110 000c DBB2     		uxtb	r3, r3
+ 858:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 859:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         /* Obtain the number of the currently executing interrupt. */
+ 860:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         __asm volatile ( "mrs %0, ipsr" : "=r" ( ulCurrentInterrupt )::"memory" );
+ 1094              		.loc 1 860 9 view .LVU260
+ 1095              		.syntax unified
+ 1096              	@ 860 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c" 1
+ 1097 0000 EFF30583 		mrs r3, ipsr
+ 1098              	@ 0 "" 2
+ 1099              	.LVL35:
+ 861:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 862:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         /* Is the interrupt number a user defined interrupt? */
+ 863:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         if( ulCurrentInterrupt >= portFIRST_USER_INTERRUPT_NUMBER )
+ 1100              		.loc 1 863 9 view .LVU261
+ 1101              		.loc 1 863 11 is_stmt 0 view .LVU262
+ 1102              		.thumb
+ 1103              		.syntax unified
+ 1104 0004 0F2B     		cmp	r3, #15
+ 1105 0006 0FD9     		bls	.L63
+ 864:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         {
+ 865:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* Look up the interrupt's priority. */
+ 866:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             ucCurrentPriority = pcInterruptPriorityRegisters[ ulCurrentInterrupt ];
+ 1106              		.loc 1 866 13 is_stmt 1 view .LVU263
+ 1107              		.loc 1 866 61 is_stmt 0 view .LVU264
+ 1108 0008 114A     		ldr	r2, .L67
+ 1109              		.loc 1 866 31 view .LVU265
+ 1110 000a 9B5C     		ldrb	r3, [r3, r2]	@ zero_extendqisi2
  1111              	.LVL36:
- 866:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 867:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* The following assertion will fail if a service routine (ISR) for
- 868:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * an interrupt that has been assigned a priority above
- 869:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * configMAX_SYSCALL_INTERRUPT_PRIORITY calls an ISR safe FreeRTOS API
- 870:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * function.  ISR safe FreeRTOS API functions must *only* be called
- 871:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * from interrupts that have been assigned a priority at or below
- 872:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * configMAX_SYSCALL_INTERRUPT_PRIORITY.
- 873:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              *
- 874:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * Numerically low interrupt priority numbers represent logically high
- 875:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * interrupt priorities, therefore the priority of the interrupt must
- 876:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * be set to a value equal to or numerically *higher* than
- 877:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * configMAX_SYSCALL_INTERRUPT_PRIORITY.
- 878:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              *
- 879:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * Interrupts that  use the FreeRTOS API must not be left at their
- 880:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * default priority of  zero as that is the highest possible priority,
- 881:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * which is guaranteed to be above configMAX_SYSCALL_INTERRUPT_PRIORITY,
- 882:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * and  therefore also guaranteed to be invalid.
- 883:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              *
- 884:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * FreeRTOS maintains separate thread and ISR API functions to ensure
- 885:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * interrupt entry is as fast and simple as possible.
- 886:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              *
- 887:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * The following links provide detailed information:
- 888:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * https://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html
- 889:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * https://www.FreeRTOS.org/FAQHelp.html */
- 890:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             configASSERT( ucCurrentPriority >= ucMaxSysCallPriority );
- 1112              		.loc 1 890 13 is_stmt 1 view .LVU266
- 1113 000e 114A     		ldr	r2, .L67+4
- 1114 0010 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
- 1115 0012 9A42     		cmp	r2, r3
- 1116 0014 08D9     		bls	.L63
- 1117              		.loc 1 890 13 view .LVU267
- 1118              	.LBB73:
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 44
+ 1112              		.loc 1 866 31 view .LVU266
+ 1113 000c DBB2     		uxtb	r3, r3
+ 1114              	.LVL37:
+ 867:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 868:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             /* The following assertion will fail if a service routine (ISR) for
+ 869:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * an interrupt that has been assigned a priority above
+ 870:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * configMAX_SYSCALL_INTERRUPT_PRIORITY calls an ISR safe FreeRTOS API
+ 871:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * function.  ISR safe FreeRTOS API functions must *only* be called
+ 872:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * from interrupts that have been assigned a priority at or below
+ 873:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * configMAX_SYSCALL_INTERRUPT_PRIORITY.
+ 874:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              *
+ 875:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * Numerically low interrupt priority numbers represent logically high
+ 876:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * interrupt priorities, therefore the priority of the interrupt must
+ 877:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * be set to a value equal to or numerically *higher* than
+ 878:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * configMAX_SYSCALL_INTERRUPT_PRIORITY.
+ 879:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              *
+ 880:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * Interrupts that  use the FreeRTOS API must not be left at their
+ 881:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * default priority of  zero as that is the highest possible priority,
+ 882:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * which is guaranteed to be above configMAX_SYSCALL_INTERRUPT_PRIORITY,
+ 883:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * and  therefore also guaranteed to be invalid.
+ 884:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              *
+ 885:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * FreeRTOS maintains separate thread and ISR API functions to ensure
+ 886:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * interrupt entry is as fast and simple as possible.
+ 887:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              *
+ 888:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * The following links provide detailed information:
+ 889:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * https://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html
+ 890:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****              * https://www.FreeRTOS.org/FAQHelp.html */
+ 891:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****             configASSERT( ucCurrentPriority >= ucMaxSysCallPriority );
+ 1115              		.loc 1 891 13 is_stmt 1 view .LVU267
+ 1116 000e 114A     		ldr	r2, .L67+4
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 44
 
 
- 1119              	.LBI73:
+ 1117 0010 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+ 1118 0012 9A42     		cmp	r2, r3
+ 1119 0014 08D9     		bls	.L63
+ 1120              		.loc 1 891 13 view .LVU268
+ 1121              	.LBB73:
+ 1122              	.LBI73:
  213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
- 1120              		.loc 2 213 30 view .LVU268
- 1121              	.LBB74:
+ 1123              		.loc 2 213 30 view .LVU269
+ 1124              	.LBB74:
  215:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
- 1122              		.loc 2 215 5 view .LVU269
+ 1125              		.loc 2 215 5 view .LVU270
  217:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     (
- 1123              		.loc 2 217 5 view .LVU270
- 1124              		.syntax unified
- 1125              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
- 1126 0016 4FF0F003 		   mov r3, #240                                              
- 1127 001a 83F31188 	   msr basepri, r3                                         
- 1128 001e BFF36F8F 	   isb                                                     
- 1129 0022 BFF34F8F 	   dsb                                                     
- 1130              	
- 1131              	@ 0 "" 2
- 1132              	.LVL37:
- 1133              		.thumb
- 1134              		.syntax unified
- 1135              	.L64:
+ 1126              		.loc 2 217 5 view .LVU271
+ 1127              		.syntax unified
+ 1128              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 1129 0016 4FF0F003 		   mov r3, #240                                              
+ 1130 001a 83F31188 	   msr basepri, r3                                         
+ 1131 001e BFF36F8F 	   isb                                                     
+ 1132 0022 BFF34F8F 	   dsb                                                     
+ 1133              	
+ 1134              	@ 0 "" 2
+ 1135              	.LVL38:
+ 1136              		.thumb
+ 1137              		.syntax unified
+ 1138              	.L64:
  217:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     (
- 1136              		.loc 2 217 5 is_stmt 0 view .LVU271
- 1137              	.LBE74:
- 1138              	.LBE73:
- 1139              		.loc 1 890 13 is_stmt 1 discriminator 1 view .LVU272
- 1140              		.loc 1 890 13 discriminator 1 view .LVU273
- 1141              		.loc 1 890 13 discriminator 1 view .LVU274
- 1142 0026 FEE7     		b	.L64
- 1143              	.L63:
- 1144              		.loc 1 890 70 discriminator 2 view .LVU275
- 891:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
- 892:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
- 893:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         /* Priority grouping:  The interrupt controller (NVIC) allows the bits
- 894:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * that define each interrupt's priority to be split between bits that
- 895:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * define the interrupt's pre-emption priority bits and bits that define
- 896:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * the interrupt's sub-priority.  For simplicity all bits must be defined
- 897:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * to be pre-emption priority bits.  The following assertion will fail if
- 898:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * this is not the case (if some bits represent a sub-priority).
- 899:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          *
- 900:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * If the application only uses CMSIS libraries for interrupt
- 901:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * configuration then the correct setting can be achieved on all Cortex-M
- 902:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * devices by calling NVIC_SetPriorityGrouping( 0 ); before starting the
- 903:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * scheduler.  Note however that some vendor specific peripheral libraries
- 904:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * assume a non-zero priority group setting, in which cases using a value
- 905:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * of zero will result in unpredictable behaviour. */
- 906:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         configASSERT( ( portAIRCR_REG & portPRIORITY_GROUP_MASK ) <= ulMaxPRIGROUPValue );
- 1145              		.loc 1 906 9 discriminator 2 view .LVU276
- 1146 0028 4FF0E023 		mov	r3, #-536813568
- 1147 002c D3F80C3D 		ldr	r3, [r3, #3340]
- 1148 0030 03F4E063 		and	r3, r3, #1792
- 1149 0034 084A     		ldr	r2, .L67+8
- 1150 0036 1268     		ldr	r2, [r2]
- 1151 0038 9342     		cmp	r3, r2
- 1152 003a 08D9     		bls	.L62
- 1153              		.loc 1 906 9 view .LVU277
- 1154              	.LBB75:
- 1155              	.LBI75:
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 45
+ 1139              		.loc 2 217 5 is_stmt 0 view .LVU272
+ 1140              	.LBE74:
+ 1141              	.LBE73:
+ 1142              		.loc 1 891 13 is_stmt 1 discriminator 1 view .LVU273
+ 1143              		.loc 1 891 13 discriminator 1 view .LVU274
+ 1144              		.loc 1 891 13 discriminator 1 view .LVU275
+ 1145 0026 FEE7     		b	.L64
+ 1146              	.L63:
+ 1147              		.loc 1 891 70 discriminator 2 view .LVU276
+ 892:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         }
+ 893:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c **** 
+ 894:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         /* Priority grouping:  The interrupt controller (NVIC) allows the bits
+ 895:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * that define each interrupt's priority to be split between bits that
+ 896:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * define the interrupt's pre-emption priority bits and bits that define
+ 897:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * the interrupt's sub-priority.  For simplicity all bits must be defined
+ 898:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * to be pre-emption priority bits.  The following assertion will fail if
+ 899:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * this is not the case (if some bits represent a sub-priority).
+ 900:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          *
+ 901:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * If the application only uses CMSIS libraries for interrupt
+ 902:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * configuration then the correct setting can be achieved on all Cortex-M
+ 903:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * devices by calling NVIC_SetPriorityGrouping( 0 ); before starting the
+ 904:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * scheduler.  Note however that some vendor specific peripheral libraries
+ 905:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * assume a non-zero priority group setting, in which cases using a value
+ 906:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****          * of zero will result in unpredictable behaviour. */
+ 907:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****         configASSERT( ( portAIRCR_REG & portPRIORITY_GROUP_MASK ) <= ulMaxPRIGROUPValue );
+ 1148              		.loc 1 907 9 discriminator 2 view .LVU277
+ 1149 0028 4FF0E023 		mov	r3, #-536813568
+ 1150 002c D3F80C3D 		ldr	r3, [r3, #3340]
+ 1151 0030 03F4E063 		and	r3, r3, #1792
+ 1152 0034 084A     		ldr	r2, .L67+8
+ 1153 0036 1268     		ldr	r2, [r2]
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 45
 
 
+ 1154 0038 9342     		cmp	r3, r2
+ 1155 003a 08D9     		bls	.L62
+ 1156              		.loc 1 907 9 view .LVU278
+ 1157              	.LBB75:
+ 1158              	.LBI75:
  213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
- 1156              		.loc 2 213 30 view .LVU278
- 1157              	.LBB76:
+ 1159              		.loc 2 213 30 view .LVU279
+ 1160              	.LBB76:
  215:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
- 1158              		.loc 2 215 5 view .LVU279
+ 1161              		.loc 2 215 5 view .LVU280
  217:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     (
- 1159              		.loc 2 217 5 view .LVU280
- 1160              		.syntax unified
- 1161              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
- 1162 003c 4FF0F003 		   mov r3, #240                                              
- 1163 0040 83F31188 	   msr basepri, r3                                         
- 1164 0044 BFF36F8F 	   isb                                                     
- 1165 0048 BFF34F8F 	   dsb                                                     
- 1166              	
- 1167              	@ 0 "" 2
- 1168              	.LVL38:
- 1169              		.thumb
- 1170              		.syntax unified
- 1171              	.L66:
+ 1162              		.loc 2 217 5 view .LVU281
+ 1163              		.syntax unified
+ 1164              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 1165 003c 4FF0F003 		   mov r3, #240                                              
+ 1166 0040 83F31188 	   msr basepri, r3                                         
+ 1167 0044 BFF36F8F 	   isb                                                     
+ 1168 0048 BFF34F8F 	   dsb                                                     
+ 1169              	
+ 1170              	@ 0 "" 2
+ 1171              	.LVL39:
+ 1172              		.thumb
+ 1173              		.syntax unified
+ 1174              	.L66:
  217:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     (
- 1172              		.loc 2 217 5 is_stmt 0 view .LVU281
- 1173              	.LBE76:
- 1174              	.LBE75:
- 1175              		.loc 1 906 9 is_stmt 1 discriminator 2 view .LVU282
- 1176              		.loc 1 906 9 discriminator 2 view .LVU283
- 1177              		.loc 1 906 9 discriminator 2 view .LVU284
- 1178 004c FEE7     		b	.L66
- 1179              	.L62:
- 907:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
- 1180              		.loc 1 907 5 is_stmt 0 view .LVU285
- 1181 004e 7047     		bx	lr
- 1182              	.L68:
- 1183              		.align	2
- 1184              	.L67:
- 1185 0050 F0E300E0 		.word	-536812560
- 1186 0054 00000000 		.word	.LANCHOR1
- 1187 0058 00000000 		.word	.LANCHOR2
- 1188              		.cfi_endproc
- 1189              	.LFE16:
- 1191              		.section	.bss.ucMaxSysCallPriority,"aw",%nobits
- 1192              		.set	.LANCHOR1,. + 0
- 1195              	ucMaxSysCallPriority:
- 1196 0000 00       		.space	1
- 1197              		.section	.bss.ulMaxPRIGROUPValue,"aw",%nobits
- 1198              		.align	2
- 1199              		.set	.LANCHOR2,. + 0
- 1202              	ulMaxPRIGROUPValue:
- 1203 0000 00000000 		.space	4
- 1204              		.section	.data.uxCriticalNesting,"aw"
- 1205              		.align	2
- 1206              		.set	.LANCHOR0,. + 0
- 1209              	uxCriticalNesting:
- 1210 0000 AAAAAAAA 		.word	-1431655766
- 1211              		.text
- 1212              	.Letext0:
- 1213              		.file 3 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
- 1214              		.file 4 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 46
+ 1175              		.loc 2 217 5 is_stmt 0 view .LVU282
+ 1176              	.LBE76:
+ 1177              	.LBE75:
+ 1178              		.loc 1 907 9 is_stmt 1 discriminator 2 view .LVU283
+ 1179              		.loc 1 907 9 discriminator 2 view .LVU284
+ 1180              		.loc 1 907 9 discriminator 2 view .LVU285
+ 1181 004c FEE7     		b	.L66
+ 1182              	.L62:
+ 908:ThirdPackage/freertos/portable/GCC/ARM_CM4F/port.c ****     }
+ 1183              		.loc 1 908 5 is_stmt 0 view .LVU286
+ 1184 004e 7047     		bx	lr
+ 1185              	.L68:
+ 1186              		.align	2
+ 1187              	.L67:
+ 1188 0050 F0E300E0 		.word	-536812560
+ 1189 0054 00000000 		.word	.LANCHOR1
+ 1190 0058 00000000 		.word	.LANCHOR2
+ 1191              		.cfi_endproc
+ 1192              	.LFE16:
+ 1194              		.section	.bss.ucMaxSysCallPriority,"aw",%nobits
+ 1195              		.set	.LANCHOR1,. + 0
+ 1198              	ucMaxSysCallPriority:
+ 1199 0000 00       		.space	1
+ 1200              		.section	.bss.ulMaxPRIGROUPValue,"aw",%nobits
+ 1201              		.align	2
+ 1202              		.set	.LANCHOR2,. + 0
+ 1205              	ulMaxPRIGROUPValue:
+ 1206 0000 00000000 		.space	4
+ 1207              		.section	.data.uxCriticalNesting,"aw"
+ 1208              		.align	2
+ 1209              		.set	.LANCHOR0,. + 0
+ 1212              	uxCriticalNesting:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 46
 
 
- 1215              		.file 5 "ThirdPackage/freertos/include/projdefs.h"
- 1216              		.file 6 "ThirdPackage/freertos/include/task.h"
-ARM GAS  C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s 			page 47
+ 1213 0000 AAAAAAAA 		.word	-1431655766
+ 1214              		.text
+ 1215              	.Letext0:
+ 1216              		.file 3 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 1217              		.file 4 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 1218              		.file 5 "ThirdPackage/freertos/include/projdefs.h"
+ 1219              		.file 6 "ThirdPackage/freertos/include/task.h"
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s 			page 47
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 port.c
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:20     .text.prvTaskExitError:00000000 $t
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:25     .text.prvTaskExitError:00000000 prvTaskExitError
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:112    .text.prvTaskExitError:0000003c $d
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:117    .text.SVC_Handler:00000000 $t
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:123    .text.SVC_Handler:00000000 SVC_Handler
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:144    .text.SVC_Handler:00000020 pxCurrentTCBConst2
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:144    .text.SVC_Handler:00000020 $d
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:154    .text.prvPortStartFirstTask:00000000 $t
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:159    .text.prvPortStartFirstTask:00000000 prvPortStartFirstTask
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:181    .text.prvPortStartFirstTask:00000022 $d
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:181    .text.prvPortStartFirstTask:00000024 $d
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:191    .text.PendSV_Handler:00000000 $t
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:197    .text.PendSV_Handler:00000000 PendSV_Handler
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:246    .text.PendSV_Handler:00000060 pxCurrentTCBConst
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:246    .text.PendSV_Handler:00000060 $d
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:256    .text.vPortEnableVFP:00000000 $t
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:261    .text.vPortEnableVFP:00000000 vPortEnableVFP
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:277    .text.vPortEnableVFP:0000000e $d
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:277    .text.vPortEnableVFP:00000010 $d
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:287    .text.pxPortInitialiseStack:00000000 $t
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:293    .text.pxPortInitialiseStack:00000000 pxPortInitialiseStack
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:343    .text.pxPortInitialiseStack:00000028 $d
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:348    .text.vPortEndScheduler:00000000 $t
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:354    .text.vPortEndScheduler:00000000 vPortEndScheduler
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:398    .text.vPortEndScheduler:00000020 $d
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:403    .text.vPortEnterCritical:00000000 $t
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:409    .text.vPortEnterCritical:00000000 vPortEnterCritical
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:483    .text.vPortEnterCritical:00000040 $d
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:488    .text.vPortExitCritical:00000000 $t
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:494    .text.vPortExitCritical:00000000 vPortExitCritical
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:564    .text.vPortExitCritical:00000028 $d
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:569    .text.SysTick_Handler:00000000 $t
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:575    .text.SysTick_Handler:00000000 SysTick_Handler
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:644    .text.vPortSetupTimerInterrupt:00000000 $t
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:650    .text.vPortSetupTimerInterrupt:00000000 vPortSetupTimerInterrupt
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:678    .text.vPortSetupTimerInterrupt:00000014 $d
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:683    .text.xPortStartScheduler:00000000 $t
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:689    .text.xPortStartScheduler:00000000 xPortStartScheduler
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:1063   .text.xPortStartScheduler:00000174 $d
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:1076   .text.vPortValidateInterruptPriority:00000000 $t
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:1082   .text.vPortValidateInterruptPriority:00000000 vPortValidateInterruptPriority
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:1185   .text.vPortValidateInterruptPriority:00000050 $d
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:1195   .bss.ucMaxSysCallPriority:00000000 ucMaxSysCallPriority
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:1196   .bss.ucMaxSysCallPriority:00000000 $d
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:1198   .bss.ulMaxPRIGROUPValue:00000000 $d
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:1202   .bss.ulMaxPRIGROUPValue:00000000 ulMaxPRIGROUPValue
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:1205   .data.uxCriticalNesting:00000000 $d
-C:\Users\86188\AppData\Local\Temp\ccXaI4Wv.s:1209   .data.uxCriticalNesting:00000000 uxCriticalNesting
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:20     .text.prvTaskExitError:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:25     .text.prvTaskExitError:00000000 prvTaskExitError
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:112    .text.prvTaskExitError:0000003c $d
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:117    .text.SVC_Handler:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:123    .text.SVC_Handler:00000000 SVC_Handler
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:144    .text.SVC_Handler:00000020 pxCurrentTCBConst2
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:144    .text.SVC_Handler:00000020 $d
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:154    .text.prvPortStartFirstTask:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:159    .text.prvPortStartFirstTask:00000000 prvPortStartFirstTask
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:181    .text.prvPortStartFirstTask:00000022 $d
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:181    .text.prvPortStartFirstTask:00000024 $d
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:191    .text.PendSV_Handler:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:197    .text.PendSV_Handler:00000000 PendSV_Handler
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:246    .text.PendSV_Handler:00000060 pxCurrentTCBConst
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:246    .text.PendSV_Handler:00000060 $d
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:256    .text.vPortEnableVFP:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:261    .text.vPortEnableVFP:00000000 vPortEnableVFP
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:277    .text.vPortEnableVFP:0000000e $d
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:277    .text.vPortEnableVFP:00000010 $d
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:287    .text.pxPortInitialiseStack:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:293    .text.pxPortInitialiseStack:00000000 pxPortInitialiseStack
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:343    .text.pxPortInitialiseStack:00000028 $d
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:348    .text.vPortEndScheduler:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:354    .text.vPortEndScheduler:00000000 vPortEndScheduler
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:398    .text.vPortEndScheduler:00000020 $d
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:403    .text.vPortEnterCritical:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:409    .text.vPortEnterCritical:00000000 vPortEnterCritical
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:483    .text.vPortEnterCritical:00000040 $d
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:488    .text.vPortExitCritical:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:494    .text.vPortExitCritical:00000000 vPortExitCritical
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:564    .text.vPortExitCritical:00000028 $d
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:569    .text.SysTick_Handler:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:575    .text.SysTick_Handler:00000000 SysTick_Handler
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:647    .text.vPortSetupTimerInterrupt:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:653    .text.vPortSetupTimerInterrupt:00000000 vPortSetupTimerInterrupt
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:681    .text.vPortSetupTimerInterrupt:00000014 $d
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:686    .text.xPortStartScheduler:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:692    .text.xPortStartScheduler:00000000 xPortStartScheduler
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:1066   .text.xPortStartScheduler:00000174 $d
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:1079   .text.vPortValidateInterruptPriority:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:1085   .text.vPortValidateInterruptPriority:00000000 vPortValidateInterruptPriority
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:1188   .text.vPortValidateInterruptPriority:00000050 $d
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:1198   .bss.ucMaxSysCallPriority:00000000 ucMaxSysCallPriority
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:1199   .bss.ucMaxSysCallPriority:00000000 $d
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:1201   .bss.ulMaxPRIGROUPValue:00000000 $d
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:1205   .bss.ulMaxPRIGROUPValue:00000000 ulMaxPRIGROUPValue
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:1208   .data.uxCriticalNesting:00000000 $d
+C:\Users\86188\AppData\Local\Temp\ccd0kRDg.s:1212   .data.uxCriticalNesting:00000000 uxCriticalNesting
 
 UNDEFINED SYMBOLS
 pxCurrentTCB
 vTaskSwitchContext
+HAL_IncTick
 xTaskIncrementTick
