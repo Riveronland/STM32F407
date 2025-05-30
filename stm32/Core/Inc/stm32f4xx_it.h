@@ -54,6 +54,13 @@ void UsageFault_Handler(void);
 void DebugMon_Handler(void);
 void ETH_IRQHandler(void);
 void ETH_WKUP_IRQHandler(void);
+
+void EXTI9_5_IRQHandler(void);
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
+void CAN1_RX0_IRQHandler(void);
+void USART1_IRQHandler(void);
+void USART3_IRQHandler(void);
+
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */
