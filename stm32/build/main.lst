@@ -1,0 +1,333 @@
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccTwITRO.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.rodata.main_task.str1.4,"aMS",%progbits,1
+  20              		.align	2
+  21              	.LC0:
+  22 0000 6D656120 		.ascii	"mea is : %ld\015\012\000"
+  22      6973203A 
+  22      20256C64 
+  22      0D0A00
+  23              		.section	.text.main_task,"ax",%progbits
+  24              		.align	1
+  25              		.global	main_task
+  26              		.syntax unified
+  27              		.thumb
+  28              		.thumb_func
+  30              	main_task:
+  31              	.LVL0:
+  32              	.LFB137:
+  33              		.file 1 "Core/Src/main.c"
+   1:Core/Src/main.c **** #include "main.h"
+   2:Core/Src/main.c **** 
+   3:Core/Src/main.c **** 
+   4:Core/Src/main.c **** 
+   5:Core/Src/main.c **** TaskHandle_t handle_main_task;
+   6:Core/Src/main.c **** static int cnt_main_task = 0;
+   7:Core/Src/main.c **** 
+   8:Core/Src/main.c **** uint8_t info[64];
+   9:Core/Src/main.c **** 
+  10:Core/Src/main.c **** void main_task(void *param)
+  11:Core/Src/main.c **** {
+  34              		.loc 1 11 1 view -0
+  35              		.cfi_startproc
+  36              		@ Volatile: function does not return.
+  37              		@ args = 0, pretend = 0, frame = 0
+  38              		@ frame_needed = 0, uses_anonymous_args = 0
+  39              		.loc 1 11 1 is_stmt 0 view .LVU1
+  40 0000 08B5     		push	{r3, lr}
+  41              	.LCFI0:
+  42              		.cfi_def_cfa_offset 8
+  43              		.cfi_offset 3, -8
+  44              		.cfi_offset 14, -4
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccTwITRO.s 			page 2
+
+
+  12:Core/Src/main.c ****     MX_GPIO_Init();
+  45              		.loc 1 12 5 is_stmt 1 view .LVU2
+  46 0002 FFF7FEFF 		bl	MX_GPIO_Init
+  47              	.LVL1:
+  13:Core/Src/main.c ****     MX_CAN1_Init();
+  48              		.loc 1 13 5 view .LVU3
+  49 0006 FFF7FEFF 		bl	MX_CAN1_Init
+  50              	.LVL2:
+  14:Core/Src/main.c ****     MX_USART1_UART_Init();
+  51              		.loc 1 14 5 view .LVU4
+  52 000a FFF7FEFF 		bl	MX_USART1_UART_Init
+  53              	.LVL3:
+  15:Core/Src/main.c ****     MX_USART3_UART_Init();
+  54              		.loc 1 15 5 view .LVU5
+  55 000e FFF7FEFF 		bl	MX_USART3_UART_Init
+  56              	.LVL4:
+  16:Core/Src/main.c **** 
+  17:Core/Src/main.c ****     HAL_CAN_MspInit(&hcan1);
+  57              		.loc 1 17 5 view .LVU6
+  58 0012 1748     		ldr	r0, .L4
+  59 0014 FFF7FEFF 		bl	HAL_CAN_MspInit
+  60              	.LVL5:
+  18:Core/Src/main.c ****     HAL_UART_MspInit(&huart1);
+  61              		.loc 1 18 5 view .LVU7
+  62 0018 1648     		ldr	r0, .L4+4
+  63 001a FFF7FEFF 		bl	HAL_UART_MspInit
+  64              	.LVL6:
+  19:Core/Src/main.c ****     HAL_UART_MspInit(&huart3);
+  65              		.loc 1 19 5 view .LVU8
+  66 001e 1648     		ldr	r0, .L4+8
+  67 0020 FFF7FEFF 		bl	HAL_UART_MspInit
+  68              	.LVL7:
+  69              	.L2:
+  20:Core/Src/main.c **** 
+  21:Core/Src/main.c ****     while(1)
+  70              		.loc 1 21 5 discriminator 1 view .LVU9
+  22:Core/Src/main.c ****     {
+  23:Core/Src/main.c ****         HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+  71              		.loc 1 23 9 discriminator 1 view .LVU10
+  72 0024 154C     		ldr	r4, .L4+12
+  73 0026 0122     		movs	r2, #1
+  74 0028 2021     		movs	r1, #32
+  75 002a 2046     		mov	r0, r4
+  76 002c FFF7FEFF 		bl	HAL_GPIO_WritePin
+  77              	.LVL8:
+  24:Core/Src/main.c ****         HAL_Delay(1);
+  78              		.loc 1 24 9 discriminator 1 view .LVU11
+  79 0030 0120     		movs	r0, #1
+  80 0032 FFF7FEFF 		bl	HAL_Delay
+  81              	.LVL9:
+  25:Core/Src/main.c ****         HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+  82              		.loc 1 25 9 discriminator 1 view .LVU12
+  83 0036 0022     		movs	r2, #0
+  84 0038 2021     		movs	r1, #32
+  85 003a 2046     		mov	r0, r4
+  86 003c FFF7FEFF 		bl	HAL_GPIO_WritePin
+  87              	.LVL10:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccTwITRO.s 			page 3
+
+
+  26:Core/Src/main.c **** 
+  27:Core/Src/main.c **** // int sprintf(char *string, char *format [,argument,...]);
+  28:Core/Src/main.c **** 
+  29:Core/Src/main.c ****         sprintf((char *)info,"mea is : %ld\r\n",(echo_time - trig_time));
+  88              		.loc 1 29 9 discriminator 1 view .LVU13
+  89 0040 0F4B     		ldr	r3, .L4+16
+  90 0042 1A68     		ldr	r2, [r3]
+  91 0044 0F4B     		ldr	r3, .L4+20
+  92 0046 1B68     		ldr	r3, [r3]
+  93 0048 0F4C     		ldr	r4, .L4+24
+  94 004a D21A     		subs	r2, r2, r3
+  95 004c 0F49     		ldr	r1, .L4+28
+  96 004e 2046     		mov	r0, r4
+  97 0050 FFF7FEFF 		bl	sprintf
+  98              	.LVL11:
+  30:Core/Src/main.c **** 
+  31:Core/Src/main.c ****         cnt_main_task ++;
+  99              		.loc 1 31 9 discriminator 1 view .LVU14
+ 100              		.loc 1 31 23 is_stmt 0 discriminator 1 view .LVU15
+ 101 0054 0E4A     		ldr	r2, .L4+32
+ 102 0056 1368     		ldr	r3, [r2]
+ 103 0058 0133     		adds	r3, r3, #1
+ 104 005a 1360     		str	r3, [r2]
+  32:Core/Src/main.c ****         HAL_UART_Transmit(&huart3, info, sizeof(info), 100);
+ 105              		.loc 1 32 9 is_stmt 1 discriminator 1 view .LVU16
+ 106 005c 6423     		movs	r3, #100
+ 107 005e 4022     		movs	r2, #64
+ 108 0060 2146     		mov	r1, r4
+ 109 0062 0548     		ldr	r0, .L4+8
+ 110 0064 FFF7FEFF 		bl	HAL_UART_Transmit
+ 111              	.LVL12:
+  33:Core/Src/main.c ****         vTaskDelay(200);
+ 112              		.loc 1 33 9 discriminator 1 view .LVU17
+ 113 0068 C820     		movs	r0, #200
+ 114 006a FFF7FEFF 		bl	vTaskDelay
+ 115              	.LVL13:
+  21:Core/Src/main.c ****     {
+ 116              		.loc 1 21 10 discriminator 1 view .LVU18
+ 117 006e D9E7     		b	.L2
+ 118              	.L5:
+ 119              		.align	2
+ 120              	.L4:
+ 121 0070 00000000 		.word	hcan1
+ 122 0074 00000000 		.word	huart1
+ 123 0078 00000000 		.word	huart3
+ 124 007c 00000240 		.word	1073872896
+ 125 0080 00000000 		.word	echo_time
+ 126 0084 00000000 		.word	trig_time
+ 127 0088 00000000 		.word	.LANCHOR0
+ 128 008c 00000000 		.word	.LC0
+ 129 0090 00000000 		.word	.LANCHOR1
+ 130              		.cfi_endproc
+ 131              	.LFE137:
+ 133              		.section	.rodata.main.str1.4,"aMS",%progbits,1
+ 134              		.align	2
+ 135              	.LC1:
+ 136 0000 6D61696E 		.ascii	"main_task\000"
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccTwITRO.s 			page 4
+
+
+ 136      5F746173 
+ 136      6B00
+ 137              		.section	.text.main,"ax",%progbits
+ 138              		.align	1
+ 139              		.global	main
+ 140              		.syntax unified
+ 141              		.thumb
+ 142              		.thumb_func
+ 144              	main:
+ 145              	.LFB138:
+  34:Core/Src/main.c ****     }
+  35:Core/Src/main.c **** }
+  36:Core/Src/main.c **** 
+  37:Core/Src/main.c **** int main(void)
+  38:Core/Src/main.c **** {
+ 146              		.loc 1 38 1 view -0
+ 147              		.cfi_startproc
+ 148              		@ args = 0, pretend = 0, frame = 0
+ 149              		@ frame_needed = 0, uses_anonymous_args = 0
+ 150 0000 00B5     		push	{lr}
+ 151              	.LCFI1:
+ 152              		.cfi_def_cfa_offset 4
+ 153              		.cfi_offset 14, -4
+ 154 0002 83B0     		sub	sp, sp, #12
+ 155              	.LCFI2:
+ 156              		.cfi_def_cfa_offset 16
+  39:Core/Src/main.c ****     HAL_Init();
+ 157              		.loc 1 39 5 view .LVU20
+ 158 0004 FFF7FEFF 		bl	HAL_Init
+ 159              	.LVL14:
+  40:Core/Src/main.c ****     SystemClock_Config();
+ 160              		.loc 1 40 5 view .LVU21
+ 161 0008 FFF7FEFF 		bl	SystemClock_Config
+ 162              	.LVL15:
+  41:Core/Src/main.c **** 
+  42:Core/Src/main.c **** 
+  43:Core/Src/main.c **** 
+  44:Core/Src/main.c ****     xTaskCreate( main_task,"main_task",300, 0, 2,&handle_main_task);
+ 163              		.loc 1 44 5 view .LVU22
+ 164 000c 084B     		ldr	r3, .L8
+ 165 000e 0193     		str	r3, [sp, #4]
+ 166 0010 0223     		movs	r3, #2
+ 167 0012 0093     		str	r3, [sp]
+ 168 0014 0023     		movs	r3, #0
+ 169 0016 4FF49672 		mov	r2, #300
+ 170 001a 0649     		ldr	r1, .L8+4
+ 171 001c 0648     		ldr	r0, .L8+8
+ 172 001e FFF7FEFF 		bl	xTaskCreate
+ 173              	.LVL16:
+  45:Core/Src/main.c **** 
+  46:Core/Src/main.c ****     vTaskStartScheduler();
+ 174              		.loc 1 46 5 view .LVU23
+ 175 0022 FFF7FEFF 		bl	vTaskStartScheduler
+ 176              	.LVL17:
+  47:Core/Src/main.c **** }
+ 177              		.loc 1 47 1 is_stmt 0 view .LVU24
+ 178 0026 0020     		movs	r0, #0
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccTwITRO.s 			page 5
+
+
+ 179 0028 03B0     		add	sp, sp, #12
+ 180              	.LCFI3:
+ 181              		.cfi_def_cfa_offset 4
+ 182              		@ sp needed
+ 183 002a 5DF804FB 		ldr	pc, [sp], #4
+ 184              	.L9:
+ 185 002e 00BF     		.align	2
+ 186              	.L8:
+ 187 0030 00000000 		.word	.LANCHOR2
+ 188 0034 00000000 		.word	.LC1
+ 189 0038 00000000 		.word	main_task
+ 190              		.cfi_endproc
+ 191              	.LFE138:
+ 193              		.global	info
+ 194              		.global	handle_main_task
+ 195              		.section	.bss.cnt_main_task,"aw",%nobits
+ 196              		.align	2
+ 197              		.set	.LANCHOR1,. + 0
+ 200              	cnt_main_task:
+ 201 0000 00000000 		.space	4
+ 202              		.section	.bss.handle_main_task,"aw",%nobits
+ 203              		.align	2
+ 204              		.set	.LANCHOR2,. + 0
+ 207              	handle_main_task:
+ 208 0000 00000000 		.space	4
+ 209              		.section	.bss.info,"aw",%nobits
+ 210              		.align	2
+ 211              		.set	.LANCHOR0,. + 0
+ 214              	info:
+ 215 0000 00000000 		.space	64
+ 215      00000000 
+ 215      00000000 
+ 215      00000000 
+ 215      00000000 
+ 216              		.text
+ 217              	.Letext0:
+ 218              		.file 2 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 219              		.file 3 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 220              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 221              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+ 222              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 223              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 224              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 225              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_can.h"
+ 226              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
+ 227              		.file 11 "ThirdPackage/freertos/include/task.h"
+ 228              		.file 12 "Core/Inc/main.h"
+ 229              		.file 13 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 230              		.file 14 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccTwITRO.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\86188\AppData\Local\Temp\ccTwITRO.s:20     .rodata.main_task.str1.4:00000000 $d
+C:\Users\86188\AppData\Local\Temp\ccTwITRO.s:24     .text.main_task:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccTwITRO.s:30     .text.main_task:00000000 main_task
+C:\Users\86188\AppData\Local\Temp\ccTwITRO.s:121    .text.main_task:00000070 $d
+C:\Users\86188\AppData\Local\Temp\ccTwITRO.s:134    .rodata.main.str1.4:00000000 $d
+C:\Users\86188\AppData\Local\Temp\ccTwITRO.s:138    .text.main:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccTwITRO.s:144    .text.main:00000000 main
+C:\Users\86188\AppData\Local\Temp\ccTwITRO.s:187    .text.main:00000030 $d
+C:\Users\86188\AppData\Local\Temp\ccTwITRO.s:214    .bss.info:00000000 info
+C:\Users\86188\AppData\Local\Temp\ccTwITRO.s:207    .bss.handle_main_task:00000000 handle_main_task
+C:\Users\86188\AppData\Local\Temp\ccTwITRO.s:196    .bss.cnt_main_task:00000000 $d
+C:\Users\86188\AppData\Local\Temp\ccTwITRO.s:200    .bss.cnt_main_task:00000000 cnt_main_task
+C:\Users\86188\AppData\Local\Temp\ccTwITRO.s:203    .bss.handle_main_task:00000000 $d
+C:\Users\86188\AppData\Local\Temp\ccTwITRO.s:210    .bss.info:00000000 $d
+
+UNDEFINED SYMBOLS
+MX_GPIO_Init
+MX_CAN1_Init
+MX_USART1_UART_Init
+MX_USART3_UART_Init
+HAL_CAN_MspInit
+HAL_UART_MspInit
+HAL_GPIO_WritePin
+HAL_Delay
+sprintf
+HAL_UART_Transmit
+vTaskDelay
+hcan1
+huart1
+huart3
+echo_time
+trig_time
+HAL_Init
+SystemClock_Config
+xTaskCreate
+vTaskStartScheduler

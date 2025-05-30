@@ -1,0 +1,2661 @@
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"heap_4.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.prvHeapInit,"ax",%progbits
+  20              		.align	1
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	prvHeapInit:
+  26              	.LFB10:
+  27              		.file 1 "ThirdPackage/freertos/heap_4.c"
+   1:ThirdPackage/freertos/heap_4.c **** /*
+   2:ThirdPackage/freertos/heap_4.c ****  * FreeRTOS Kernel V11.1.0
+   3:ThirdPackage/freertos/heap_4.c ****  * Copyright (C) 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+   4:ThirdPackage/freertos/heap_4.c ****  *
+   5:ThirdPackage/freertos/heap_4.c ****  * SPDX-License-Identifier: MIT
+   6:ThirdPackage/freertos/heap_4.c ****  *
+   7:ThirdPackage/freertos/heap_4.c ****  * Permission is hereby granted, free of charge, to any person obtaining a copy of
+   8:ThirdPackage/freertos/heap_4.c ****  * this software and associated documentation files (the "Software"), to deal in
+   9:ThirdPackage/freertos/heap_4.c ****  * the Software without restriction, including without limitation the rights to
+  10:ThirdPackage/freertos/heap_4.c ****  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+  11:ThirdPackage/freertos/heap_4.c ****  * the Software, and to permit persons to whom the Software is furnished to do so,
+  12:ThirdPackage/freertos/heap_4.c ****  * subject to the following conditions:
+  13:ThirdPackage/freertos/heap_4.c ****  *
+  14:ThirdPackage/freertos/heap_4.c ****  * The above copyright notice and this permission notice shall be included in all
+  15:ThirdPackage/freertos/heap_4.c ****  * copies or substantial portions of the Software.
+  16:ThirdPackage/freertos/heap_4.c ****  *
+  17:ThirdPackage/freertos/heap_4.c ****  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  18:ThirdPackage/freertos/heap_4.c ****  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+  19:ThirdPackage/freertos/heap_4.c ****  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+  20:ThirdPackage/freertos/heap_4.c ****  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+  21:ThirdPackage/freertos/heap_4.c ****  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  22:ThirdPackage/freertos/heap_4.c ****  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  23:ThirdPackage/freertos/heap_4.c ****  *
+  24:ThirdPackage/freertos/heap_4.c ****  * https://www.FreeRTOS.org
+  25:ThirdPackage/freertos/heap_4.c ****  * https://github.com/FreeRTOS
+  26:ThirdPackage/freertos/heap_4.c ****  *
+  27:ThirdPackage/freertos/heap_4.c ****  */
+  28:ThirdPackage/freertos/heap_4.c **** 
+  29:ThirdPackage/freertos/heap_4.c **** /*
+  30:ThirdPackage/freertos/heap_4.c ****  * A sample implementation of pvPortMalloc() and vPortFree() that combines
+  31:ThirdPackage/freertos/heap_4.c ****  * (coalescences) adjacent memory blocks as they are freed, and in so doing
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 2
+
+
+  32:ThirdPackage/freertos/heap_4.c ****  * limits memory fragmentation.
+  33:ThirdPackage/freertos/heap_4.c ****  *
+  34:ThirdPackage/freertos/heap_4.c ****  * See heap_1.c, heap_2.c and heap_3.c for alternative implementations, and the
+  35:ThirdPackage/freertos/heap_4.c ****  * memory management pages of https://www.FreeRTOS.org for more information.
+  36:ThirdPackage/freertos/heap_4.c ****  */
+  37:ThirdPackage/freertos/heap_4.c **** #include <stdlib.h>
+  38:ThirdPackage/freertos/heap_4.c **** #include <string.h>
+  39:ThirdPackage/freertos/heap_4.c **** 
+  40:ThirdPackage/freertos/heap_4.c **** /* Defining MPU_WRAPPERS_INCLUDED_FROM_API_FILE prevents task.h from redefining
+  41:ThirdPackage/freertos/heap_4.c ****  * all the API functions to use the MPU wrappers.  That should only be done when
+  42:ThirdPackage/freertos/heap_4.c ****  * task.h is included from an application file. */
+  43:ThirdPackage/freertos/heap_4.c **** #define MPU_WRAPPERS_INCLUDED_FROM_API_FILE
+  44:ThirdPackage/freertos/heap_4.c **** 
+  45:ThirdPackage/freertos/heap_4.c **** #include "FreeRTOS.h"
+  46:ThirdPackage/freertos/heap_4.c **** #include "task.h"
+  47:ThirdPackage/freertos/heap_4.c **** 
+  48:ThirdPackage/freertos/heap_4.c **** #undef MPU_WRAPPERS_INCLUDED_FROM_API_FILE
+  49:ThirdPackage/freertos/heap_4.c **** 
+  50:ThirdPackage/freertos/heap_4.c **** #if ( configSUPPORT_DYNAMIC_ALLOCATION == 0 )
+  51:ThirdPackage/freertos/heap_4.c ****     #error This file must not be used if configSUPPORT_DYNAMIC_ALLOCATION is 0
+  52:ThirdPackage/freertos/heap_4.c **** #endif
+  53:ThirdPackage/freertos/heap_4.c **** 
+  54:ThirdPackage/freertos/heap_4.c **** #ifndef configHEAP_CLEAR_MEMORY_ON_FREE
+  55:ThirdPackage/freertos/heap_4.c ****     #define configHEAP_CLEAR_MEMORY_ON_FREE    0
+  56:ThirdPackage/freertos/heap_4.c **** #endif
+  57:ThirdPackage/freertos/heap_4.c **** 
+  58:ThirdPackage/freertos/heap_4.c **** /* Block sizes must not get too small. */
+  59:ThirdPackage/freertos/heap_4.c **** #define heapMINIMUM_BLOCK_SIZE    ( ( size_t ) ( xHeapStructSize << 1 ) )
+  60:ThirdPackage/freertos/heap_4.c **** 
+  61:ThirdPackage/freertos/heap_4.c **** /* Assumes 8bit bytes! */
+  62:ThirdPackage/freertos/heap_4.c **** #define heapBITS_PER_BYTE         ( ( size_t ) 8 )
+  63:ThirdPackage/freertos/heap_4.c **** 
+  64:ThirdPackage/freertos/heap_4.c **** /* Max value that fits in a size_t type. */
+  65:ThirdPackage/freertos/heap_4.c **** #define heapSIZE_MAX              ( ~( ( size_t ) 0 ) )
+  66:ThirdPackage/freertos/heap_4.c **** 
+  67:ThirdPackage/freertos/heap_4.c **** /* Check if multiplying a and b will result in overflow. */
+  68:ThirdPackage/freertos/heap_4.c **** #define heapMULTIPLY_WILL_OVERFLOW( a, b )     ( ( ( a ) > 0 ) && ( ( b ) > ( heapSIZE_MAX / ( a ) 
+  69:ThirdPackage/freertos/heap_4.c **** 
+  70:ThirdPackage/freertos/heap_4.c **** /* Check if adding a and b will result in overflow. */
+  71:ThirdPackage/freertos/heap_4.c **** #define heapADD_WILL_OVERFLOW( a, b )          ( ( a ) > ( heapSIZE_MAX - ( b ) ) )
+  72:ThirdPackage/freertos/heap_4.c **** 
+  73:ThirdPackage/freertos/heap_4.c **** /* Check if the subtraction operation ( a - b ) will result in underflow. */
+  74:ThirdPackage/freertos/heap_4.c **** #define heapSUBTRACT_WILL_UNDERFLOW( a, b )    ( ( a ) < ( b ) )
+  75:ThirdPackage/freertos/heap_4.c **** 
+  76:ThirdPackage/freertos/heap_4.c **** /* MSB of the xBlockSize member of an BlockLink_t structure is used to track
+  77:ThirdPackage/freertos/heap_4.c ****  * the allocation status of a block.  When MSB of the xBlockSize member of
+  78:ThirdPackage/freertos/heap_4.c ****  * an BlockLink_t structure is set then the block belongs to the application.
+  79:ThirdPackage/freertos/heap_4.c ****  * When the bit is free the block is still part of the free heap space. */
+  80:ThirdPackage/freertos/heap_4.c **** #define heapBLOCK_ALLOCATED_BITMASK    ( ( ( size_t ) 1 ) << ( ( sizeof( size_t ) * heapBITS_PER_BY
+  81:ThirdPackage/freertos/heap_4.c **** #define heapBLOCK_SIZE_IS_VALID( xBlockSize )    ( ( ( xBlockSize ) & heapBLOCK_ALLOCATED_BITMASK )
+  82:ThirdPackage/freertos/heap_4.c **** #define heapBLOCK_IS_ALLOCATED( pxBlock )        ( ( ( pxBlock->xBlockSize ) & heapBLOCK_ALLOCATED_
+  83:ThirdPackage/freertos/heap_4.c **** #define heapALLOCATE_BLOCK( pxBlock )            ( ( pxBlock->xBlockSize ) |= heapBLOCK_ALLOCATED_B
+  84:ThirdPackage/freertos/heap_4.c **** #define heapFREE_BLOCK( pxBlock )                ( ( pxBlock->xBlockSize ) &= ~heapBLOCK_ALLOCATED_
+  85:ThirdPackage/freertos/heap_4.c **** 
+  86:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+  87:ThirdPackage/freertos/heap_4.c **** 
+  88:ThirdPackage/freertos/heap_4.c **** /* Allocate the memory for the heap. */
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 3
+
+
+  89:ThirdPackage/freertos/heap_4.c **** #if ( configAPPLICATION_ALLOCATED_HEAP == 1 )
+  90:ThirdPackage/freertos/heap_4.c **** 
+  91:ThirdPackage/freertos/heap_4.c **** /* The application writer has already defined the array used for the RTOS
+  92:ThirdPackage/freertos/heap_4.c **** * heap - probably so it can be placed in a special segment or address. */
+  93:ThirdPackage/freertos/heap_4.c ****     extern uint8_t ucHeap[ configTOTAL_HEAP_SIZE ];
+  94:ThirdPackage/freertos/heap_4.c **** #else
+  95:ThirdPackage/freertos/heap_4.c ****     PRIVILEGED_DATA static uint8_t ucHeap[ configTOTAL_HEAP_SIZE ];
+  96:ThirdPackage/freertos/heap_4.c **** #endif /* configAPPLICATION_ALLOCATED_HEAP */
+  97:ThirdPackage/freertos/heap_4.c **** 
+  98:ThirdPackage/freertos/heap_4.c **** /* Define the linked list structure.  This is used to link free blocks in order
+  99:ThirdPackage/freertos/heap_4.c ****  * of their memory address. */
+ 100:ThirdPackage/freertos/heap_4.c **** typedef struct A_BLOCK_LINK
+ 101:ThirdPackage/freertos/heap_4.c **** {
+ 102:ThirdPackage/freertos/heap_4.c ****     struct A_BLOCK_LINK * pxNextFreeBlock; /**< The next free block in the list. */
+ 103:ThirdPackage/freertos/heap_4.c ****     size_t xBlockSize;                     /**< The size of the free block. */
+ 104:ThirdPackage/freertos/heap_4.c **** } BlockLink_t;
+ 105:ThirdPackage/freertos/heap_4.c **** 
+ 106:ThirdPackage/freertos/heap_4.c **** /* Setting configENABLE_HEAP_PROTECTOR to 1 enables heap block pointers
+ 107:ThirdPackage/freertos/heap_4.c ****  * protection using an application supplied canary value to catch heap
+ 108:ThirdPackage/freertos/heap_4.c ****  * corruption should a heap buffer overflow occur.
+ 109:ThirdPackage/freertos/heap_4.c ****  */
+ 110:ThirdPackage/freertos/heap_4.c **** #if ( configENABLE_HEAP_PROTECTOR == 1 )
+ 111:ThirdPackage/freertos/heap_4.c **** 
+ 112:ThirdPackage/freertos/heap_4.c **** /**
+ 113:ThirdPackage/freertos/heap_4.c ****  * @brief Application provided function to get a random value to be used as canary.
+ 114:ThirdPackage/freertos/heap_4.c ****  *
+ 115:ThirdPackage/freertos/heap_4.c ****  * @param pxHeapCanary [out] Output parameter to return the canary value.
+ 116:ThirdPackage/freertos/heap_4.c ****  */
+ 117:ThirdPackage/freertos/heap_4.c ****     extern void vApplicationGetRandomHeapCanary( portPOINTER_SIZE_TYPE * pxHeapCanary );
+ 118:ThirdPackage/freertos/heap_4.c **** 
+ 119:ThirdPackage/freertos/heap_4.c **** /* Canary value for protecting internal heap pointers. */
+ 120:ThirdPackage/freertos/heap_4.c ****     PRIVILEGED_DATA static portPOINTER_SIZE_TYPE xHeapCanary;
+ 121:ThirdPackage/freertos/heap_4.c **** 
+ 122:ThirdPackage/freertos/heap_4.c **** /* Macro to load/store BlockLink_t pointers to memory. By XORing the
+ 123:ThirdPackage/freertos/heap_4.c ****  * pointers with a random canary value, heap overflows will result
+ 124:ThirdPackage/freertos/heap_4.c ****  * in randomly unpredictable pointer values which will be caught by
+ 125:ThirdPackage/freertos/heap_4.c ****  * heapVALIDATE_BLOCK_POINTER assert. */
+ 126:ThirdPackage/freertos/heap_4.c ****     #define heapPROTECT_BLOCK_POINTER( pxBlock )    ( ( BlockLink_t * ) ( ( ( portPOINTER_SIZE_TYPE
+ 127:ThirdPackage/freertos/heap_4.c **** #else
+ 128:ThirdPackage/freertos/heap_4.c **** 
+ 129:ThirdPackage/freertos/heap_4.c ****     #define heapPROTECT_BLOCK_POINTER( pxBlock )    ( pxBlock )
+ 130:ThirdPackage/freertos/heap_4.c **** 
+ 131:ThirdPackage/freertos/heap_4.c **** #endif /* configENABLE_HEAP_PROTECTOR */
+ 132:ThirdPackage/freertos/heap_4.c **** 
+ 133:ThirdPackage/freertos/heap_4.c **** /* Assert that a heap block pointer is within the heap bounds. */
+ 134:ThirdPackage/freertos/heap_4.c **** #define heapVALIDATE_BLOCK_POINTER( pxBlock )                          \
+ 135:ThirdPackage/freertos/heap_4.c ****     configASSERT( ( ( uint8_t * ) ( pxBlock ) >= &( ucHeap[ 0 ] ) ) && \
+ 136:ThirdPackage/freertos/heap_4.c ****                   ( ( uint8_t * ) ( pxBlock ) <= &( ucHeap[ configTOTAL_HEAP_SIZE - 1 ] ) ) )
+ 137:ThirdPackage/freertos/heap_4.c **** 
+ 138:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ 139:ThirdPackage/freertos/heap_4.c **** 
+ 140:ThirdPackage/freertos/heap_4.c **** /*
+ 141:ThirdPackage/freertos/heap_4.c ****  * Inserts a block of memory that is being freed into the correct position in
+ 142:ThirdPackage/freertos/heap_4.c ****  * the list of free memory blocks.  The block being freed will be merged with
+ 143:ThirdPackage/freertos/heap_4.c ****  * the block in front it and/or the block behind it if the memory blocks are
+ 144:ThirdPackage/freertos/heap_4.c ****  * adjacent to each other.
+ 145:ThirdPackage/freertos/heap_4.c ****  */
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 4
+
+
+ 146:ThirdPackage/freertos/heap_4.c **** static void prvInsertBlockIntoFreeList( BlockLink_t * pxBlockToInsert ) PRIVILEGED_FUNCTION;
+ 147:ThirdPackage/freertos/heap_4.c **** 
+ 148:ThirdPackage/freertos/heap_4.c **** /*
+ 149:ThirdPackage/freertos/heap_4.c ****  * Called automatically to setup the required heap structures the first time
+ 150:ThirdPackage/freertos/heap_4.c ****  * pvPortMalloc() is called.
+ 151:ThirdPackage/freertos/heap_4.c ****  */
+ 152:ThirdPackage/freertos/heap_4.c **** static void prvHeapInit( void ) PRIVILEGED_FUNCTION;
+ 153:ThirdPackage/freertos/heap_4.c **** 
+ 154:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ 155:ThirdPackage/freertos/heap_4.c **** 
+ 156:ThirdPackage/freertos/heap_4.c **** /* The size of the structure placed at the beginning of each allocated memory
+ 157:ThirdPackage/freertos/heap_4.c ****  * block must by correctly byte aligned. */
+ 158:ThirdPackage/freertos/heap_4.c **** static const size_t xHeapStructSize = ( sizeof( BlockLink_t ) + ( ( size_t ) ( portBYTE_ALIGNMENT -
+ 159:ThirdPackage/freertos/heap_4.c **** 
+ 160:ThirdPackage/freertos/heap_4.c **** /* Create a couple of list links to mark the start and end of the list. */
+ 161:ThirdPackage/freertos/heap_4.c **** PRIVILEGED_DATA static BlockLink_t xStart;
+ 162:ThirdPackage/freertos/heap_4.c **** PRIVILEGED_DATA static BlockLink_t * pxEnd = NULL;
+ 163:ThirdPackage/freertos/heap_4.c **** 
+ 164:ThirdPackage/freertos/heap_4.c **** /* Keeps track of the number of calls to allocate and free memory as well as the
+ 165:ThirdPackage/freertos/heap_4.c ****  * number of free bytes remaining, but says nothing about fragmentation. */
+ 166:ThirdPackage/freertos/heap_4.c **** PRIVILEGED_DATA static size_t xFreeBytesRemaining = ( size_t ) 0U;
+ 167:ThirdPackage/freertos/heap_4.c **** PRIVILEGED_DATA static size_t xMinimumEverFreeBytesRemaining = ( size_t ) 0U;
+ 168:ThirdPackage/freertos/heap_4.c **** PRIVILEGED_DATA static size_t xNumberOfSuccessfulAllocations = ( size_t ) 0U;
+ 169:ThirdPackage/freertos/heap_4.c **** PRIVILEGED_DATA static size_t xNumberOfSuccessfulFrees = ( size_t ) 0U;
+ 170:ThirdPackage/freertos/heap_4.c **** 
+ 171:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ 172:ThirdPackage/freertos/heap_4.c **** 
+ 173:ThirdPackage/freertos/heap_4.c **** void * pvPortMalloc( size_t xWantedSize )
+ 174:ThirdPackage/freertos/heap_4.c **** {
+ 175:ThirdPackage/freertos/heap_4.c ****     BlockLink_t * pxBlock;
+ 176:ThirdPackage/freertos/heap_4.c ****     BlockLink_t * pxPreviousBlock;
+ 177:ThirdPackage/freertos/heap_4.c ****     BlockLink_t * pxNewBlockLink;
+ 178:ThirdPackage/freertos/heap_4.c ****     void * pvReturn = NULL;
+ 179:ThirdPackage/freertos/heap_4.c ****     size_t xAdditionalRequiredSize;
+ 180:ThirdPackage/freertos/heap_4.c **** 
+ 181:ThirdPackage/freertos/heap_4.c ****     if( xWantedSize > 0 )
+ 182:ThirdPackage/freertos/heap_4.c ****     {
+ 183:ThirdPackage/freertos/heap_4.c ****         /* The wanted size must be increased so it can contain a BlockLink_t
+ 184:ThirdPackage/freertos/heap_4.c ****          * structure in addition to the requested amount of bytes. */
+ 185:ThirdPackage/freertos/heap_4.c ****         if( heapADD_WILL_OVERFLOW( xWantedSize, xHeapStructSize ) == 0 )
+ 186:ThirdPackage/freertos/heap_4.c ****         {
+ 187:ThirdPackage/freertos/heap_4.c ****             xWantedSize += xHeapStructSize;
+ 188:ThirdPackage/freertos/heap_4.c **** 
+ 189:ThirdPackage/freertos/heap_4.c ****             /* Ensure that blocks are always aligned to the required number
+ 190:ThirdPackage/freertos/heap_4.c ****              * of bytes. */
+ 191:ThirdPackage/freertos/heap_4.c ****             if( ( xWantedSize & portBYTE_ALIGNMENT_MASK ) != 0x00 )
+ 192:ThirdPackage/freertos/heap_4.c ****             {
+ 193:ThirdPackage/freertos/heap_4.c ****                 /* Byte alignment required. */
+ 194:ThirdPackage/freertos/heap_4.c ****                 xAdditionalRequiredSize = portBYTE_ALIGNMENT - ( xWantedSize & portBYTE_ALIGNMENT_M
+ 195:ThirdPackage/freertos/heap_4.c **** 
+ 196:ThirdPackage/freertos/heap_4.c ****                 if( heapADD_WILL_OVERFLOW( xWantedSize, xAdditionalRequiredSize ) == 0 )
+ 197:ThirdPackage/freertos/heap_4.c ****                 {
+ 198:ThirdPackage/freertos/heap_4.c ****                     xWantedSize += xAdditionalRequiredSize;
+ 199:ThirdPackage/freertos/heap_4.c ****                 }
+ 200:ThirdPackage/freertos/heap_4.c ****                 else
+ 201:ThirdPackage/freertos/heap_4.c ****                 {
+ 202:ThirdPackage/freertos/heap_4.c ****                     xWantedSize = 0;
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 5
+
+
+ 203:ThirdPackage/freertos/heap_4.c ****                 }
+ 204:ThirdPackage/freertos/heap_4.c ****             }
+ 205:ThirdPackage/freertos/heap_4.c ****             else
+ 206:ThirdPackage/freertos/heap_4.c ****             {
+ 207:ThirdPackage/freertos/heap_4.c ****                 mtCOVERAGE_TEST_MARKER();
+ 208:ThirdPackage/freertos/heap_4.c ****             }
+ 209:ThirdPackage/freertos/heap_4.c ****         }
+ 210:ThirdPackage/freertos/heap_4.c ****         else
+ 211:ThirdPackage/freertos/heap_4.c ****         {
+ 212:ThirdPackage/freertos/heap_4.c ****             xWantedSize = 0;
+ 213:ThirdPackage/freertos/heap_4.c ****         }
+ 214:ThirdPackage/freertos/heap_4.c ****     }
+ 215:ThirdPackage/freertos/heap_4.c ****     else
+ 216:ThirdPackage/freertos/heap_4.c ****     {
+ 217:ThirdPackage/freertos/heap_4.c ****         mtCOVERAGE_TEST_MARKER();
+ 218:ThirdPackage/freertos/heap_4.c ****     }
+ 219:ThirdPackage/freertos/heap_4.c **** 
+ 220:ThirdPackage/freertos/heap_4.c ****     vTaskSuspendAll();
+ 221:ThirdPackage/freertos/heap_4.c ****     {
+ 222:ThirdPackage/freertos/heap_4.c ****         /* If this is the first call to malloc then the heap will require
+ 223:ThirdPackage/freertos/heap_4.c ****          * initialisation to setup the list of free blocks. */
+ 224:ThirdPackage/freertos/heap_4.c ****         if( pxEnd == NULL )
+ 225:ThirdPackage/freertos/heap_4.c ****         {
+ 226:ThirdPackage/freertos/heap_4.c ****             prvHeapInit();
+ 227:ThirdPackage/freertos/heap_4.c ****         }
+ 228:ThirdPackage/freertos/heap_4.c ****         else
+ 229:ThirdPackage/freertos/heap_4.c ****         {
+ 230:ThirdPackage/freertos/heap_4.c ****             mtCOVERAGE_TEST_MARKER();
+ 231:ThirdPackage/freertos/heap_4.c ****         }
+ 232:ThirdPackage/freertos/heap_4.c **** 
+ 233:ThirdPackage/freertos/heap_4.c ****         /* Check the block size we are trying to allocate is not so large that the
+ 234:ThirdPackage/freertos/heap_4.c ****          * top bit is set.  The top bit of the block size member of the BlockLink_t
+ 235:ThirdPackage/freertos/heap_4.c ****          * structure is used to determine who owns the block - the application or
+ 236:ThirdPackage/freertos/heap_4.c ****          * the kernel, so it must be free. */
+ 237:ThirdPackage/freertos/heap_4.c ****         if( heapBLOCK_SIZE_IS_VALID( xWantedSize ) != 0 )
+ 238:ThirdPackage/freertos/heap_4.c ****         {
+ 239:ThirdPackage/freertos/heap_4.c ****             if( ( xWantedSize > 0 ) && ( xWantedSize <= xFreeBytesRemaining ) )
+ 240:ThirdPackage/freertos/heap_4.c ****             {
+ 241:ThirdPackage/freertos/heap_4.c ****                 /* Traverse the list from the start (lowest address) block until
+ 242:ThirdPackage/freertos/heap_4.c ****                  * one of adequate size is found. */
+ 243:ThirdPackage/freertos/heap_4.c ****                 pxPreviousBlock = &xStart;
+ 244:ThirdPackage/freertos/heap_4.c ****                 pxBlock = heapPROTECT_BLOCK_POINTER( xStart.pxNextFreeBlock );
+ 245:ThirdPackage/freertos/heap_4.c ****                 heapVALIDATE_BLOCK_POINTER( pxBlock );
+ 246:ThirdPackage/freertos/heap_4.c **** 
+ 247:ThirdPackage/freertos/heap_4.c ****                 while( ( pxBlock->xBlockSize < xWantedSize ) && ( pxBlock->pxNextFreeBlock != heapP
+ 248:ThirdPackage/freertos/heap_4.c ****                 {
+ 249:ThirdPackage/freertos/heap_4.c ****                     pxPreviousBlock = pxBlock;
+ 250:ThirdPackage/freertos/heap_4.c ****                     pxBlock = heapPROTECT_BLOCK_POINTER( pxBlock->pxNextFreeBlock );
+ 251:ThirdPackage/freertos/heap_4.c ****                     heapVALIDATE_BLOCK_POINTER( pxBlock );
+ 252:ThirdPackage/freertos/heap_4.c ****                 }
+ 253:ThirdPackage/freertos/heap_4.c **** 
+ 254:ThirdPackage/freertos/heap_4.c ****                 /* If the end marker was reached then a block of adequate size
+ 255:ThirdPackage/freertos/heap_4.c ****                  * was not found. */
+ 256:ThirdPackage/freertos/heap_4.c ****                 if( pxBlock != pxEnd )
+ 257:ThirdPackage/freertos/heap_4.c ****                 {
+ 258:ThirdPackage/freertos/heap_4.c ****                     /* Return the memory space pointed to - jumping over the
+ 259:ThirdPackage/freertos/heap_4.c ****                      * BlockLink_t structure at its start. */
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 6
+
+
+ 260:ThirdPackage/freertos/heap_4.c ****                     pvReturn = ( void * ) ( ( ( uint8_t * ) heapPROTECT_BLOCK_POINTER( pxPreviousBl
+ 261:ThirdPackage/freertos/heap_4.c ****                     heapVALIDATE_BLOCK_POINTER( pvReturn );
+ 262:ThirdPackage/freertos/heap_4.c **** 
+ 263:ThirdPackage/freertos/heap_4.c ****                     /* This block is being returned for use so must be taken out
+ 264:ThirdPackage/freertos/heap_4.c ****                      * of the list of free blocks. */
+ 265:ThirdPackage/freertos/heap_4.c ****                     pxPreviousBlock->pxNextFreeBlock = pxBlock->pxNextFreeBlock;
+ 266:ThirdPackage/freertos/heap_4.c **** 
+ 267:ThirdPackage/freertos/heap_4.c ****                     /* If the block is larger than required it can be split into
+ 268:ThirdPackage/freertos/heap_4.c ****                      * two. */
+ 269:ThirdPackage/freertos/heap_4.c ****                     configASSERT( heapSUBTRACT_WILL_UNDERFLOW( pxBlock->xBlockSize, xWantedSize ) =
+ 270:ThirdPackage/freertos/heap_4.c **** 
+ 271:ThirdPackage/freertos/heap_4.c ****                     if( ( pxBlock->xBlockSize - xWantedSize ) > heapMINIMUM_BLOCK_SIZE )
+ 272:ThirdPackage/freertos/heap_4.c ****                     {
+ 273:ThirdPackage/freertos/heap_4.c ****                         /* This block is to be split into two.  Create a new
+ 274:ThirdPackage/freertos/heap_4.c ****                          * block following the number of bytes requested. The void
+ 275:ThirdPackage/freertos/heap_4.c ****                          * cast is used to prevent byte alignment warnings from the
+ 276:ThirdPackage/freertos/heap_4.c ****                          * compiler. */
+ 277:ThirdPackage/freertos/heap_4.c ****                         pxNewBlockLink = ( void * ) ( ( ( uint8_t * ) pxBlock ) + xWantedSize );
+ 278:ThirdPackage/freertos/heap_4.c ****                         configASSERT( ( ( ( size_t ) pxNewBlockLink ) & portBYTE_ALIGNMENT_MASK ) =
+ 279:ThirdPackage/freertos/heap_4.c **** 
+ 280:ThirdPackage/freertos/heap_4.c ****                         /* Calculate the sizes of two blocks split from the
+ 281:ThirdPackage/freertos/heap_4.c ****                          * single block. */
+ 282:ThirdPackage/freertos/heap_4.c ****                         pxNewBlockLink->xBlockSize = pxBlock->xBlockSize - xWantedSize;
+ 283:ThirdPackage/freertos/heap_4.c ****                         pxBlock->xBlockSize = xWantedSize;
+ 284:ThirdPackage/freertos/heap_4.c **** 
+ 285:ThirdPackage/freertos/heap_4.c ****                         /* Insert the new block into the list of free blocks. */
+ 286:ThirdPackage/freertos/heap_4.c ****                         pxNewBlockLink->pxNextFreeBlock = pxPreviousBlock->pxNextFreeBlock;
+ 287:ThirdPackage/freertos/heap_4.c ****                         pxPreviousBlock->pxNextFreeBlock = heapPROTECT_BLOCK_POINTER( pxNewBlockLin
+ 288:ThirdPackage/freertos/heap_4.c ****                     }
+ 289:ThirdPackage/freertos/heap_4.c ****                     else
+ 290:ThirdPackage/freertos/heap_4.c ****                     {
+ 291:ThirdPackage/freertos/heap_4.c ****                         mtCOVERAGE_TEST_MARKER();
+ 292:ThirdPackage/freertos/heap_4.c ****                     }
+ 293:ThirdPackage/freertos/heap_4.c **** 
+ 294:ThirdPackage/freertos/heap_4.c ****                     xFreeBytesRemaining -= pxBlock->xBlockSize;
+ 295:ThirdPackage/freertos/heap_4.c **** 
+ 296:ThirdPackage/freertos/heap_4.c ****                     if( xFreeBytesRemaining < xMinimumEverFreeBytesRemaining )
+ 297:ThirdPackage/freertos/heap_4.c ****                     {
+ 298:ThirdPackage/freertos/heap_4.c ****                         xMinimumEverFreeBytesRemaining = xFreeBytesRemaining;
+ 299:ThirdPackage/freertos/heap_4.c ****                     }
+ 300:ThirdPackage/freertos/heap_4.c ****                     else
+ 301:ThirdPackage/freertos/heap_4.c ****                     {
+ 302:ThirdPackage/freertos/heap_4.c ****                         mtCOVERAGE_TEST_MARKER();
+ 303:ThirdPackage/freertos/heap_4.c ****                     }
+ 304:ThirdPackage/freertos/heap_4.c **** 
+ 305:ThirdPackage/freertos/heap_4.c ****                     /* The block is being returned - it is allocated and owned
+ 306:ThirdPackage/freertos/heap_4.c ****                      * by the application and has no "next" block. */
+ 307:ThirdPackage/freertos/heap_4.c ****                     heapALLOCATE_BLOCK( pxBlock );
+ 308:ThirdPackage/freertos/heap_4.c ****                     pxBlock->pxNextFreeBlock = NULL;
+ 309:ThirdPackage/freertos/heap_4.c ****                     xNumberOfSuccessfulAllocations++;
+ 310:ThirdPackage/freertos/heap_4.c ****                 }
+ 311:ThirdPackage/freertos/heap_4.c ****                 else
+ 312:ThirdPackage/freertos/heap_4.c ****                 {
+ 313:ThirdPackage/freertos/heap_4.c ****                     mtCOVERAGE_TEST_MARKER();
+ 314:ThirdPackage/freertos/heap_4.c ****                 }
+ 315:ThirdPackage/freertos/heap_4.c ****             }
+ 316:ThirdPackage/freertos/heap_4.c ****             else
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 7
+
+
+ 317:ThirdPackage/freertos/heap_4.c ****             {
+ 318:ThirdPackage/freertos/heap_4.c ****                 mtCOVERAGE_TEST_MARKER();
+ 319:ThirdPackage/freertos/heap_4.c ****             }
+ 320:ThirdPackage/freertos/heap_4.c ****         }
+ 321:ThirdPackage/freertos/heap_4.c ****         else
+ 322:ThirdPackage/freertos/heap_4.c ****         {
+ 323:ThirdPackage/freertos/heap_4.c ****             mtCOVERAGE_TEST_MARKER();
+ 324:ThirdPackage/freertos/heap_4.c ****         }
+ 325:ThirdPackage/freertos/heap_4.c **** 
+ 326:ThirdPackage/freertos/heap_4.c ****         traceMALLOC( pvReturn, xWantedSize );
+ 327:ThirdPackage/freertos/heap_4.c ****     }
+ 328:ThirdPackage/freertos/heap_4.c ****     ( void ) xTaskResumeAll();
+ 329:ThirdPackage/freertos/heap_4.c **** 
+ 330:ThirdPackage/freertos/heap_4.c ****     #if ( configUSE_MALLOC_FAILED_HOOK == 1 )
+ 331:ThirdPackage/freertos/heap_4.c ****     {
+ 332:ThirdPackage/freertos/heap_4.c ****         if( pvReturn == NULL )
+ 333:ThirdPackage/freertos/heap_4.c ****         {
+ 334:ThirdPackage/freertos/heap_4.c ****             vApplicationMallocFailedHook();
+ 335:ThirdPackage/freertos/heap_4.c ****         }
+ 336:ThirdPackage/freertos/heap_4.c ****         else
+ 337:ThirdPackage/freertos/heap_4.c ****         {
+ 338:ThirdPackage/freertos/heap_4.c ****             mtCOVERAGE_TEST_MARKER();
+ 339:ThirdPackage/freertos/heap_4.c ****         }
+ 340:ThirdPackage/freertos/heap_4.c ****     }
+ 341:ThirdPackage/freertos/heap_4.c ****     #endif /* if ( configUSE_MALLOC_FAILED_HOOK == 1 ) */
+ 342:ThirdPackage/freertos/heap_4.c **** 
+ 343:ThirdPackage/freertos/heap_4.c ****     configASSERT( ( ( ( size_t ) pvReturn ) & ( size_t ) portBYTE_ALIGNMENT_MASK ) == 0 );
+ 344:ThirdPackage/freertos/heap_4.c ****     return pvReturn;
+ 345:ThirdPackage/freertos/heap_4.c **** }
+ 346:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ 347:ThirdPackage/freertos/heap_4.c **** 
+ 348:ThirdPackage/freertos/heap_4.c **** void vPortFree( void * pv )
+ 349:ThirdPackage/freertos/heap_4.c **** {
+ 350:ThirdPackage/freertos/heap_4.c ****     uint8_t * puc = ( uint8_t * ) pv;
+ 351:ThirdPackage/freertos/heap_4.c ****     BlockLink_t * pxLink;
+ 352:ThirdPackage/freertos/heap_4.c **** 
+ 353:ThirdPackage/freertos/heap_4.c ****     if( pv != NULL )
+ 354:ThirdPackage/freertos/heap_4.c ****     {
+ 355:ThirdPackage/freertos/heap_4.c ****         /* The memory being freed will have an BlockLink_t structure immediately
+ 356:ThirdPackage/freertos/heap_4.c ****          * before it. */
+ 357:ThirdPackage/freertos/heap_4.c ****         puc -= xHeapStructSize;
+ 358:ThirdPackage/freertos/heap_4.c **** 
+ 359:ThirdPackage/freertos/heap_4.c ****         /* This casting is to keep the compiler from issuing warnings. */
+ 360:ThirdPackage/freertos/heap_4.c ****         pxLink = ( void * ) puc;
+ 361:ThirdPackage/freertos/heap_4.c **** 
+ 362:ThirdPackage/freertos/heap_4.c ****         heapVALIDATE_BLOCK_POINTER( pxLink );
+ 363:ThirdPackage/freertos/heap_4.c ****         configASSERT( heapBLOCK_IS_ALLOCATED( pxLink ) != 0 );
+ 364:ThirdPackage/freertos/heap_4.c ****         configASSERT( pxLink->pxNextFreeBlock == NULL );
+ 365:ThirdPackage/freertos/heap_4.c **** 
+ 366:ThirdPackage/freertos/heap_4.c ****         if( heapBLOCK_IS_ALLOCATED( pxLink ) != 0 )
+ 367:ThirdPackage/freertos/heap_4.c ****         {
+ 368:ThirdPackage/freertos/heap_4.c ****             if( pxLink->pxNextFreeBlock == NULL )
+ 369:ThirdPackage/freertos/heap_4.c ****             {
+ 370:ThirdPackage/freertos/heap_4.c ****                 /* The block is being returned to the heap - it is no longer
+ 371:ThirdPackage/freertos/heap_4.c ****                  * allocated. */
+ 372:ThirdPackage/freertos/heap_4.c ****                 heapFREE_BLOCK( pxLink );
+ 373:ThirdPackage/freertos/heap_4.c ****                 #if ( configHEAP_CLEAR_MEMORY_ON_FREE == 1 )
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 8
+
+
+ 374:ThirdPackage/freertos/heap_4.c ****                 {
+ 375:ThirdPackage/freertos/heap_4.c ****                     /* Check for underflow as this can occur if xBlockSize is
+ 376:ThirdPackage/freertos/heap_4.c ****                      * overwritten in a heap block. */
+ 377:ThirdPackage/freertos/heap_4.c ****                     if( heapSUBTRACT_WILL_UNDERFLOW( pxLink->xBlockSize, xHeapStructSize ) == 0 )
+ 378:ThirdPackage/freertos/heap_4.c ****                     {
+ 379:ThirdPackage/freertos/heap_4.c ****                         ( void ) memset( puc + xHeapStructSize, 0, pxLink->xBlockSize - xHeapStruct
+ 380:ThirdPackage/freertos/heap_4.c ****                     }
+ 381:ThirdPackage/freertos/heap_4.c ****                 }
+ 382:ThirdPackage/freertos/heap_4.c ****                 #endif
+ 383:ThirdPackage/freertos/heap_4.c **** 
+ 384:ThirdPackage/freertos/heap_4.c ****                 vTaskSuspendAll();
+ 385:ThirdPackage/freertos/heap_4.c ****                 {
+ 386:ThirdPackage/freertos/heap_4.c ****                     /* Add this block to the list of free blocks. */
+ 387:ThirdPackage/freertos/heap_4.c ****                     xFreeBytesRemaining += pxLink->xBlockSize;
+ 388:ThirdPackage/freertos/heap_4.c ****                     traceFREE( pv, pxLink->xBlockSize );
+ 389:ThirdPackage/freertos/heap_4.c ****                     prvInsertBlockIntoFreeList( ( ( BlockLink_t * ) pxLink ) );
+ 390:ThirdPackage/freertos/heap_4.c ****                     xNumberOfSuccessfulFrees++;
+ 391:ThirdPackage/freertos/heap_4.c ****                 }
+ 392:ThirdPackage/freertos/heap_4.c ****                 ( void ) xTaskResumeAll();
+ 393:ThirdPackage/freertos/heap_4.c ****             }
+ 394:ThirdPackage/freertos/heap_4.c ****             else
+ 395:ThirdPackage/freertos/heap_4.c ****             {
+ 396:ThirdPackage/freertos/heap_4.c ****                 mtCOVERAGE_TEST_MARKER();
+ 397:ThirdPackage/freertos/heap_4.c ****             }
+ 398:ThirdPackage/freertos/heap_4.c ****         }
+ 399:ThirdPackage/freertos/heap_4.c ****         else
+ 400:ThirdPackage/freertos/heap_4.c ****         {
+ 401:ThirdPackage/freertos/heap_4.c ****             mtCOVERAGE_TEST_MARKER();
+ 402:ThirdPackage/freertos/heap_4.c ****         }
+ 403:ThirdPackage/freertos/heap_4.c ****     }
+ 404:ThirdPackage/freertos/heap_4.c **** }
+ 405:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ 406:ThirdPackage/freertos/heap_4.c **** 
+ 407:ThirdPackage/freertos/heap_4.c **** size_t xPortGetFreeHeapSize( void )
+ 408:ThirdPackage/freertos/heap_4.c **** {
+ 409:ThirdPackage/freertos/heap_4.c ****     return xFreeBytesRemaining;
+ 410:ThirdPackage/freertos/heap_4.c **** }
+ 411:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ 412:ThirdPackage/freertos/heap_4.c **** 
+ 413:ThirdPackage/freertos/heap_4.c **** size_t xPortGetMinimumEverFreeHeapSize( void )
+ 414:ThirdPackage/freertos/heap_4.c **** {
+ 415:ThirdPackage/freertos/heap_4.c ****     return xMinimumEverFreeBytesRemaining;
+ 416:ThirdPackage/freertos/heap_4.c **** }
+ 417:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ 418:ThirdPackage/freertos/heap_4.c **** 
+ 419:ThirdPackage/freertos/heap_4.c **** void vPortInitialiseBlocks( void )
+ 420:ThirdPackage/freertos/heap_4.c **** {
+ 421:ThirdPackage/freertos/heap_4.c ****     /* This just exists to keep the linker quiet. */
+ 422:ThirdPackage/freertos/heap_4.c **** }
+ 423:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ 424:ThirdPackage/freertos/heap_4.c **** 
+ 425:ThirdPackage/freertos/heap_4.c **** void * pvPortCalloc( size_t xNum,
+ 426:ThirdPackage/freertos/heap_4.c ****                      size_t xSize )
+ 427:ThirdPackage/freertos/heap_4.c **** {
+ 428:ThirdPackage/freertos/heap_4.c ****     void * pv = NULL;
+ 429:ThirdPackage/freertos/heap_4.c **** 
+ 430:ThirdPackage/freertos/heap_4.c ****     if( heapMULTIPLY_WILL_OVERFLOW( xNum, xSize ) == 0 )
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 9
+
+
+ 431:ThirdPackage/freertos/heap_4.c ****     {
+ 432:ThirdPackage/freertos/heap_4.c ****         pv = pvPortMalloc( xNum * xSize );
+ 433:ThirdPackage/freertos/heap_4.c **** 
+ 434:ThirdPackage/freertos/heap_4.c ****         if( pv != NULL )
+ 435:ThirdPackage/freertos/heap_4.c ****         {
+ 436:ThirdPackage/freertos/heap_4.c ****             ( void ) memset( pv, 0, xNum * xSize );
+ 437:ThirdPackage/freertos/heap_4.c ****         }
+ 438:ThirdPackage/freertos/heap_4.c ****     }
+ 439:ThirdPackage/freertos/heap_4.c **** 
+ 440:ThirdPackage/freertos/heap_4.c ****     return pv;
+ 441:ThirdPackage/freertos/heap_4.c **** }
+ 442:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ 443:ThirdPackage/freertos/heap_4.c **** 
+ 444:ThirdPackage/freertos/heap_4.c **** static void prvHeapInit( void ) /* PRIVILEGED_FUNCTION */
+ 445:ThirdPackage/freertos/heap_4.c **** {
+  28              		.loc 1 445 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+ 446:ThirdPackage/freertos/heap_4.c ****     BlockLink_t * pxFirstFreeBlock;
+  33              		.loc 1 446 5 view .LVU1
+ 447:ThirdPackage/freertos/heap_4.c ****     portPOINTER_SIZE_TYPE uxStartAddress, uxEndAddress;
+  34              		.loc 1 447 5 view .LVU2
+ 448:ThirdPackage/freertos/heap_4.c ****     size_t xTotalHeapSize = configTOTAL_HEAP_SIZE;
+  35              		.loc 1 448 5 view .LVU3
+  36              	.LVL0:
+ 449:ThirdPackage/freertos/heap_4.c **** 
+ 450:ThirdPackage/freertos/heap_4.c ****     /* Ensure the heap starts on a correctly aligned boundary. */
+ 451:ThirdPackage/freertos/heap_4.c ****     uxStartAddress = ( portPOINTER_SIZE_TYPE ) ucHeap;
+  37              		.loc 1 451 5 view .LVU4
+  38              		.loc 1 451 20 is_stmt 0 view .LVU5
+  39 0000 104A     		ldr	r2, .L4
+  40              	.LVL1:
+ 452:ThirdPackage/freertos/heap_4.c **** 
+ 453:ThirdPackage/freertos/heap_4.c ****     if( ( uxStartAddress & portBYTE_ALIGNMENT_MASK ) != 0 )
+  41              		.loc 1 453 5 is_stmt 1 view .LVU6
+  42              		.loc 1 453 7 is_stmt 0 view .LVU7
+  43 0002 12F0070F 		tst	r2, #7
+  44 0006 1AD0     		beq	.L3
+ 454:ThirdPackage/freertos/heap_4.c ****     {
+ 455:ThirdPackage/freertos/heap_4.c ****         uxStartAddress += ( portBYTE_ALIGNMENT - 1 );
+  45              		.loc 1 455 9 is_stmt 1 view .LVU8
+  46              		.loc 1 455 24 is_stmt 0 view .LVU9
+  47 0008 D11D     		adds	r1, r2, #7
+  48              	.LVL2:
+ 456:ThirdPackage/freertos/heap_4.c ****         uxStartAddress &= ~( ( portPOINTER_SIZE_TYPE ) portBYTE_ALIGNMENT_MASK );
+  49              		.loc 1 456 9 is_stmt 1 view .LVU10
+  50              		.loc 1 456 24 is_stmt 0 view .LVU11
+  51 000a 21F00701 		bic	r1, r1, #7
+  52              	.LVL3:
+ 457:ThirdPackage/freertos/heap_4.c ****         xTotalHeapSize -= ( size_t ) ( uxStartAddress - ( portPOINTER_SIZE_TYPE ) ucHeap );
+  53              		.loc 1 457 9 is_stmt 1 view .LVU12
+  54              		.loc 1 457 24 is_stmt 0 view .LVU13
+  55 000e C1F58053 		rsb	r3, r1, #4096
+  56 0012 1344     		add	r3, r3, r2
+  57              	.LVL4:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 10
+
+
+ 456:ThirdPackage/freertos/heap_4.c ****         uxStartAddress &= ~( ( portPOINTER_SIZE_TYPE ) portBYTE_ALIGNMENT_MASK );
+  58              		.loc 1 456 24 view .LVU14
+  59 0014 0A46     		mov	r2, r1
+  60              	.LVL5:
+  61              	.L2:
+ 458:ThirdPackage/freertos/heap_4.c ****     }
+ 459:ThirdPackage/freertos/heap_4.c **** 
+ 460:ThirdPackage/freertos/heap_4.c ****     #if ( configENABLE_HEAP_PROTECTOR == 1 )
+ 461:ThirdPackage/freertos/heap_4.c ****     {
+ 462:ThirdPackage/freertos/heap_4.c ****         vApplicationGetRandomHeapCanary( &( xHeapCanary ) );
+ 463:ThirdPackage/freertos/heap_4.c ****     }
+ 464:ThirdPackage/freertos/heap_4.c ****     #endif
+ 465:ThirdPackage/freertos/heap_4.c **** 
+ 466:ThirdPackage/freertos/heap_4.c ****     /* xStart is used to hold a pointer to the first item in the list of free
+ 467:ThirdPackage/freertos/heap_4.c ****      * blocks.  The void cast is used to prevent compiler warnings. */
+ 468:ThirdPackage/freertos/heap_4.c ****     xStart.pxNextFreeBlock = ( void * ) heapPROTECT_BLOCK_POINTER( uxStartAddress );
+  62              		.loc 1 468 5 is_stmt 1 view .LVU15
+  63              		.loc 1 468 28 is_stmt 0 view .LVU16
+  64 0016 0C48     		ldr	r0, .L4+4
+  65 0018 0260     		str	r2, [r0]
+ 469:ThirdPackage/freertos/heap_4.c ****     xStart.xBlockSize = ( size_t ) 0;
+  66              		.loc 1 469 5 is_stmt 1 view .LVU17
+  67              		.loc 1 469 23 is_stmt 0 view .LVU18
+  68 001a 0021     		movs	r1, #0
+  69 001c 4160     		str	r1, [r0, #4]
+ 470:ThirdPackage/freertos/heap_4.c **** 
+ 471:ThirdPackage/freertos/heap_4.c ****     /* pxEnd is used to mark the end of the list of free blocks and is inserted
+ 472:ThirdPackage/freertos/heap_4.c ****      * at the end of the heap space. */
+ 473:ThirdPackage/freertos/heap_4.c ****     uxEndAddress = uxStartAddress + ( portPOINTER_SIZE_TYPE ) xTotalHeapSize;
+  70              		.loc 1 473 5 is_stmt 1 view .LVU19
+  71              		.loc 1 473 18 is_stmt 0 view .LVU20
+  72 001e 1344     		add	r3, r3, r2
+  73              	.LVL6:
+ 474:ThirdPackage/freertos/heap_4.c ****     uxEndAddress -= ( portPOINTER_SIZE_TYPE ) xHeapStructSize;
+  74              		.loc 1 474 5 is_stmt 1 view .LVU21
+  75              		.loc 1 474 18 is_stmt 0 view .LVU22
+  76 0020 083B     		subs	r3, r3, #8
+  77              	.LVL7:
+ 475:ThirdPackage/freertos/heap_4.c ****     uxEndAddress &= ~( ( portPOINTER_SIZE_TYPE ) portBYTE_ALIGNMENT_MASK );
+  78              		.loc 1 475 5 is_stmt 1 view .LVU23
+  79              		.loc 1 475 18 is_stmt 0 view .LVU24
+  80 0022 23F00703 		bic	r3, r3, #7
+  81              	.LVL8:
+ 476:ThirdPackage/freertos/heap_4.c ****     pxEnd = ( BlockLink_t * ) uxEndAddress;
+  82              		.loc 1 476 5 is_stmt 1 view .LVU25
+  83              		.loc 1 476 11 is_stmt 0 view .LVU26
+  84 0026 0948     		ldr	r0, .L4+8
+  85 0028 0360     		str	r3, [r0]
+ 477:ThirdPackage/freertos/heap_4.c ****     pxEnd->xBlockSize = 0;
+  86              		.loc 1 477 5 is_stmt 1 view .LVU27
+  87              		.loc 1 477 23 is_stmt 0 view .LVU28
+  88 002a 5960     		str	r1, [r3, #4]
+ 478:ThirdPackage/freertos/heap_4.c ****     pxEnd->pxNextFreeBlock = heapPROTECT_BLOCK_POINTER( NULL );
+  89              		.loc 1 478 5 is_stmt 1 view .LVU29
+  90              		.loc 1 478 28 is_stmt 0 view .LVU30
+  91 002c 1960     		str	r1, [r3]
+ 479:ThirdPackage/freertos/heap_4.c **** 
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 11
+
+
+ 480:ThirdPackage/freertos/heap_4.c ****     /* To start with there is a single free block that is sized to take up the
+ 481:ThirdPackage/freertos/heap_4.c ****      * entire heap space, minus the space taken by pxEnd. */
+ 482:ThirdPackage/freertos/heap_4.c ****     pxFirstFreeBlock = ( BlockLink_t * ) uxStartAddress;
+  92              		.loc 1 482 5 is_stmt 1 view .LVU31
+  93              	.LVL9:
+ 483:ThirdPackage/freertos/heap_4.c ****     pxFirstFreeBlock->xBlockSize = ( size_t ) ( uxEndAddress - ( portPOINTER_SIZE_TYPE ) pxFirstFre
+  94              		.loc 1 483 5 view .LVU32
+  95              		.loc 1 483 62 is_stmt 0 view .LVU33
+  96 002e 991A     		subs	r1, r3, r2
+  97              		.loc 1 483 34 view .LVU34
+  98 0030 5160     		str	r1, [r2, #4]
+ 484:ThirdPackage/freertos/heap_4.c ****     pxFirstFreeBlock->pxNextFreeBlock = heapPROTECT_BLOCK_POINTER( pxEnd );
+  99              		.loc 1 484 5 is_stmt 1 view .LVU35
+ 100              		.loc 1 484 39 is_stmt 0 view .LVU36
+ 101 0032 1360     		str	r3, [r2]
+ 485:ThirdPackage/freertos/heap_4.c **** 
+ 486:ThirdPackage/freertos/heap_4.c ****     /* Only one block exists - and it covers the entire usable heap space. */
+ 487:ThirdPackage/freertos/heap_4.c ****     xMinimumEverFreeBytesRemaining = pxFirstFreeBlock->xBlockSize;
+ 102              		.loc 1 487 5 is_stmt 1 view .LVU37
+ 103              		.loc 1 487 36 is_stmt 0 view .LVU38
+ 104 0034 064B     		ldr	r3, .L4+12
+ 105              	.LVL10:
+ 106              		.loc 1 487 36 view .LVU39
+ 107 0036 1960     		str	r1, [r3]
+ 488:ThirdPackage/freertos/heap_4.c ****     xFreeBytesRemaining = pxFirstFreeBlock->xBlockSize;
+ 108              		.loc 1 488 5 is_stmt 1 view .LVU40
+ 109              		.loc 1 488 25 is_stmt 0 view .LVU41
+ 110 0038 064B     		ldr	r3, .L4+16
+ 111 003a 1960     		str	r1, [r3]
+ 489:ThirdPackage/freertos/heap_4.c **** }
+ 112              		.loc 1 489 1 view .LVU42
+ 113 003c 7047     		bx	lr
+ 114              	.LVL11:
+ 115              	.L3:
+ 448:ThirdPackage/freertos/heap_4.c **** 
+ 116              		.loc 1 448 12 view .LVU43
+ 117 003e 4FF48053 		mov	r3, #4096
+ 118 0042 E8E7     		b	.L2
+ 119              	.L5:
+ 120              		.align	2
+ 121              	.L4:
+ 122 0044 00000000 		.word	ucHeap
+ 123 0048 00000000 		.word	.LANCHOR0
+ 124 004c 00000000 		.word	.LANCHOR1
+ 125 0050 00000000 		.word	.LANCHOR2
+ 126 0054 00000000 		.word	.LANCHOR3
+ 127              		.cfi_endproc
+ 128              	.LFE10:
+ 130              		.section	.text.prvInsertBlockIntoFreeList,"ax",%progbits
+ 131              		.align	1
+ 132              		.syntax unified
+ 133              		.thumb
+ 134              		.thumb_func
+ 136              	prvInsertBlockIntoFreeList:
+ 137              	.LVL12:
+ 138              	.LFB11:
+ 490:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 12
+
+
+ 491:ThirdPackage/freertos/heap_4.c **** 
+ 492:ThirdPackage/freertos/heap_4.c **** static void prvInsertBlockIntoFreeList( BlockLink_t * pxBlockToInsert ) /* PRIVILEGED_FUNCTION */
+ 493:ThirdPackage/freertos/heap_4.c **** {
+ 139              		.loc 1 493 1 is_stmt 1 view -0
+ 140              		.cfi_startproc
+ 141              		@ args = 0, pretend = 0, frame = 0
+ 142              		@ frame_needed = 0, uses_anonymous_args = 0
+ 143              		@ link register save eliminated.
+ 494:ThirdPackage/freertos/heap_4.c ****     BlockLink_t * pxIterator;
+ 144              		.loc 1 494 5 view .LVU45
+ 495:ThirdPackage/freertos/heap_4.c ****     uint8_t * puc;
+ 145              		.loc 1 495 5 view .LVU46
+ 496:ThirdPackage/freertos/heap_4.c **** 
+ 497:ThirdPackage/freertos/heap_4.c ****     /* Iterate through the list until a block is found that has a higher address
+ 498:ThirdPackage/freertos/heap_4.c ****      * than the block being inserted. */
+ 499:ThirdPackage/freertos/heap_4.c ****     for( pxIterator = &xStart; heapPROTECT_BLOCK_POINTER( pxIterator->pxNextFreeBlock ) < pxBlockTo
+ 146              		.loc 1 499 5 view .LVU47
+ 147              		.loc 1 499 21 is_stmt 0 view .LVU48
+ 148 0000 1F4B     		ldr	r3, .L24
+ 149              	.LVL13:
+ 150              	.L7:
+ 151              		.loc 1 499 32 is_stmt 1 discriminator 1 view .LVU49
+ 152 0002 1946     		mov	r1, r3
+ 153 0004 1B68     		ldr	r3, [r3]
+ 154              	.LVL14:
+ 155              		.loc 1 499 5 is_stmt 0 discriminator 1 view .LVU50
+ 156 0006 8342     		cmp	r3, r0
+ 157 0008 FBD3     		bcc	.L7
+ 500:ThirdPackage/freertos/heap_4.c ****     {
+ 501:ThirdPackage/freertos/heap_4.c ****         /* Nothing to do here, just iterate to the right position. */
+ 502:ThirdPackage/freertos/heap_4.c ****     }
+ 503:ThirdPackage/freertos/heap_4.c **** 
+ 504:ThirdPackage/freertos/heap_4.c ****     if( pxIterator != &xStart )
+ 158              		.loc 1 504 5 is_stmt 1 view .LVU51
+ 159              		.loc 1 504 7 is_stmt 0 view .LVU52
+ 160 000a 1D4A     		ldr	r2, .L24
+ 161 000c 9142     		cmp	r1, r2
+ 162 000e 0FD0     		beq	.L8
+ 505:ThirdPackage/freertos/heap_4.c ****     {
+ 506:ThirdPackage/freertos/heap_4.c ****         heapVALIDATE_BLOCK_POINTER( pxIterator );
+ 163              		.loc 1 506 9 is_stmt 1 view .LVU53
+ 164 0010 1C4A     		ldr	r2, .L24+4
+ 165 0012 9142     		cmp	r1, r2
+ 166 0014 03D3     		bcc	.L9
+ 167              		.loc 1 506 9 is_stmt 0 discriminator 1 view .LVU54
+ 168 0016 02F6FF72 		addw	r2, r2, #4095
+ 169 001a 9142     		cmp	r1, r2
+ 170 001c 08D9     		bls	.L8
+ 171              	.L9:
+ 172              		.loc 1 506 9 is_stmt 1 view .LVU55
+ 173              	.LBB22:
+ 174              	.LBI22:
+ 175              		.file 2 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h"
+   1:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /*
+   2:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * FreeRTOS Kernel V11.1.0
+   3:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * Copyright (C) 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+   4:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  *
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 13
+
+
+   5:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * SPDX-License-Identifier: MIT
+   6:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  *
+   7:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * Permission is hereby granted, free of charge, to any person obtaining a copy of
+   8:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * this software and associated documentation files (the "Software"), to deal in
+   9:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * the Software without restriction, including without limitation the rights to
+  10:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+  11:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * the Software, and to permit persons to whom the Software is furnished to do so,
+  12:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * subject to the following conditions:
+  13:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  14:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * The above copyright notice and this permission notice shall be included in all
+  15:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * copies or substantial portions of the Software.
+  16:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  17:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  18:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+  19:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+  20:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+  21:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  22:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  23:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  24:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * https://www.FreeRTOS.org
+  25:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * https://github.com/FreeRTOS
+  26:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  27:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  */
+  28:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+  29:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+  30:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #ifndef PORTMACRO_H
+  31:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define PORTMACRO_H
+  32:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+  33:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /* *INDENT-OFF* */
+  34:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #ifdef __cplusplus
+  35:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     extern "C" {
+  36:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #endif
+  37:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /* *INDENT-ON* */
+  38:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+  39:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------
+  40:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * Port specific definitions.
+  41:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  42:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * The settings in this file configure FreeRTOS correctly for the
+  43:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * given hardware and compiler.
+  44:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  *
+  45:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * These settings should not be altered.
+  46:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  *-----------------------------------------------------------
+  47:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  */
+  48:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+  49:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /* Type definitions. */
+  50:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portCHAR          char
+  51:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portFLOAT         float
+  52:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portDOUBLE        double
+  53:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portLONG          long
+  54:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portSHORT         short
+  55:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portSTACK_TYPE    uint32_t
+  56:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portBASE_TYPE     long
+  57:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+  58:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** typedef portSTACK_TYPE   StackType_t;
+  59:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** typedef long             BaseType_t;
+  60:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** typedef unsigned long    UBaseType_t;
+  61:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 14
+
+
+  62:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #if ( configTICK_TYPE_WIDTH_IN_BITS == TICK_TYPE_WIDTH_16_BITS )
+  63:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     typedef uint16_t     TickType_t;
+  64:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     #define portMAX_DELAY              ( TickType_t ) 0xffff
+  65:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #elif ( configTICK_TYPE_WIDTH_IN_BITS == TICK_TYPE_WIDTH_32_BITS )
+  66:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     typedef uint32_t     TickType_t;
+  67:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     #define portMAX_DELAY              ( TickType_t ) 0xffffffffUL
+  68:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+  69:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /* 32-bit tick type on a 32-bit architecture, so reads of the tick count do
+  70:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * not need to be guarded with a critical section. */
+  71:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     #define portTICK_TYPE_IS_ATOMIC    1
+  72:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #elif ( configTICK_TYPE_WIDTH_IN_BITS == TICK_TYPE_WIDTH_64_BITS )
+  73:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     typedef uint64_t TickType_t;
+  74:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     #define portMAX_DELAY              ( TickType_t ) 0xffffffffffffffffULL
+  75:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #else /* if ( configTICK_TYPE_WIDTH_IN_BITS == TICK_TYPE_WIDTH_16_BITS ) */
+  76:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     #error configTICK_TYPE_WIDTH_IN_BITS set to unsupported tick type width.
+  77:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #endif /* if ( configTICK_TYPE_WIDTH_IN_BITS == TICK_TYPE_WIDTH_16_BITS ) */
+  78:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+  79:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+  80:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /* Architecture specifics. */
+  81:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portSTACK_GROWTH      ( -1 )
+  82:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portTICK_PERIOD_MS    ( ( TickType_t ) 1000 / configTICK_RATE_HZ )
+  83:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portBYTE_ALIGNMENT    8
+  84:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portDONT_DISCARD      __attribute__( ( used ) )
+  85:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+  86:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+  87:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /* Scheduler utilities. */
+  88:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portYIELD()                                     \
+  89:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     {                                                   \
+  90:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****         /* Set a PendSV to request a context switch. */ \
+  91:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****         portNVIC_INT_CTRL_REG = portNVIC_PENDSVSET_BIT; \
+  92:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****                                                         \
+  93:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****         /* Barriers are normally not required but do ensure the code is completely \
+  94:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****          * within the specified behaviour for the architecture. */ \
+  95:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****         __asm volatile ( "dsb" ::: "memory" );                     \
+  96:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****         __asm volatile ( "isb" );                                  \
+  97:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     }
+  98:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+  99:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portNVIC_INT_CTRL_REG     ( *( ( volatile uint32_t * ) 0xe000ed04 ) )
+ 100:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portNVIC_PENDSVSET_BIT    ( 1UL << 28UL )
+ 101:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portEND_SWITCHING_ISR( xSwitchRequired ) \
+ 102:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     do                                           \
+ 103:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     {                                            \
+ 104:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****         if( xSwitchRequired != pdFALSE )         \
+ 105:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****         {                                        \
+ 106:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****             traceISR_EXIT_TO_SCHEDULER();        \
+ 107:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****             portYIELD();                         \
+ 108:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****         }                                        \
+ 109:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****         else                                     \
+ 110:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****         {                                        \
+ 111:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****             traceISR_EXIT();                     \
+ 112:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****         }                                        \
+ 113:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     } while( 0 )
+ 114:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portYIELD_FROM_ISR( x )    portEND_SWITCHING_ISR( x )
+ 115:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 116:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 117:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /* Critical section management. */
+ 118:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** extern void vPortEnterCritical( void );
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 15
+
+
+ 119:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** extern void vPortExitCritical( void );
+ 120:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portSET_INTERRUPT_MASK_FROM_ISR()         ulPortRaiseBASEPRI()
+ 121:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portCLEAR_INTERRUPT_MASK_FROM_ISR( x )    vPortSetBASEPRI( x )
+ 122:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portDISABLE_INTERRUPTS()                  vPortRaiseBASEPRI()
+ 123:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portENABLE_INTERRUPTS()                   vPortSetBASEPRI( 0 )
+ 124:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portENTER_CRITICAL()                      vPortEnterCritical()
+ 125:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portEXIT_CRITICAL()                       vPortExitCritical()
+ 126:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 127:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 128:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 129:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /* Task function macros as described on the FreeRTOS.org WEB site.  These are
+ 130:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * not necessary for to use this port.  They are defined so the common demo files
+ 131:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****  * (which build with all the ports) will build. */
+ 132:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portTASK_FUNCTION_PROTO( vFunction, pvParameters )    void vFunction( void * pvParameters )
+ 133:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portTASK_FUNCTION( vFunction, pvParameters )          void vFunction( void * pvParameters )
+ 134:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 135:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 136:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /* Tickless idle/low power functionality. */
+ 137:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #ifndef portSUPPRESS_TICKS_AND_SLEEP
+ 138:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     extern void vPortSuppressTicksAndSleep( TickType_t xExpectedIdleTime );
+ 139:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     #define portSUPPRESS_TICKS_AND_SLEEP( xExpectedIdleTime )    vPortSuppressTicksAndSleep( xExpec
+ 140:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #endif
+ 141:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 142:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 143:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /* Architecture specific optimisations. */
+ 144:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #ifndef configUSE_PORT_OPTIMISED_TASK_SELECTION
+ 145:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     #define configUSE_PORT_OPTIMISED_TASK_SELECTION    1
+ 146:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #endif
+ 147:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 148:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #if configUSE_PORT_OPTIMISED_TASK_SELECTION == 1
+ 149:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 150:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /* Generic helper function. */
+ 151:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     __attribute__( ( always_inline ) ) static inline uint8_t ucPortCountLeadingZeros( uint32_t ulBi
+ 152:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     {
+ 153:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****         uint8_t ucReturn;
+ 154:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 155:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****         __asm volatile ( "clz %0, %1" : "=r" ( ucReturn ) : "r" ( ulBitmap ) : "memory" );
+ 156:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 157:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****         return ucReturn;
+ 158:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     }
+ 159:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 160:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /* Check the configuration. */
+ 161:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     #if ( configMAX_PRIORITIES > 32 )
+ 162:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****         #error configUSE_PORT_OPTIMISED_TASK_SELECTION can only be set to 1 when configMAX_PRIORITI
+ 163:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     #endif
+ 164:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 165:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /* Store/clear the ready priorities in a bit map. */
+ 166:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     #define portRECORD_READY_PRIORITY( uxPriority, uxReadyPriorities )    ( uxReadyPriorities ) |= 
+ 167:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     #define portRESET_READY_PRIORITY( uxPriority, uxReadyPriorities )     ( uxReadyPriorities ) &= 
+ 168:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 169:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 170:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 171:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     #define portGET_HIGHEST_PRIORITY( uxTopPriority, uxReadyPriorities )    uxTopPriority = ( 31UL 
+ 172:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 173:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #endif /* configUSE_PORT_OPTIMISED_TASK_SELECTION */
+ 174:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 175:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 16
+
+
+ 176:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 177:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #ifdef configASSERT
+ 178:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     void vPortValidateInterruptPriority( void );
+ 179:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     #define portASSERT_IF_INTERRUPT_PRIORITY_INVALID()    vPortValidateInterruptPriority()
+ 180:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #endif
+ 181:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 182:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /* portNOP() is not required by this port. */
+ 183:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portNOP()
+ 184:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 185:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #define portINLINE              __inline
+ 186:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 187:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #ifndef portFORCE_INLINE
+ 188:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     #define portFORCE_INLINE    inline __attribute__( ( always_inline ) )
+ 189:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** #endif
+ 190:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 191:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** portFORCE_INLINE static BaseType_t xPortIsInsideInterrupt( void )
+ 192:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
+ 193:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     uint32_t ulCurrentInterrupt;
+ 194:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     BaseType_t xReturn;
+ 195:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 196:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     /* Obtain the number of the currently executing interrupt. */
+ 197:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     __asm volatile ( "mrs %0, ipsr" : "=r" ( ulCurrentInterrupt )::"memory" );
+ 198:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 199:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     if( ulCurrentInterrupt == 0 )
+ 200:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     {
+ 201:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****         xReturn = pdFALSE;
+ 202:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     }
+ 203:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     else
+ 204:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     {
+ 205:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****         xReturn = pdTRUE;
+ 206:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     }
+ 207:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 208:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     return xReturn;
+ 209:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** }
+ 210:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 211:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
+ 212:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** portFORCE_INLINE static void vPortRaiseBASEPRI( void )
+ 176              		.loc 2 213 30 view .LVU56
+ 177              	.LBB23:
+ 214:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
+ 215:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     uint32_t ulNewBASEPRI;
+ 178              		.loc 2 215 5 view .LVU57
+ 216:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 217:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h ****     __asm volatile
+ 179              		.loc 2 217 5 view .LVU58
+ 180              		.syntax unified
+ 181              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 182 001e 4FF0F003 		   mov r3, #240                                              
+ 183 0022 83F31188 	   msr basepri, r3                                         
+ 184 0026 BFF36F8F 	   isb                                                     
+ 185 002a BFF34F8F 	   dsb                                                     
+ 186              	
+ 187              	@ 0 "" 2
+ 188              	.LVL15:
+ 189              		.thumb
+ 190              		.syntax unified
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 17
+
+
+ 191              	.L10:
+ 192              		.loc 2 217 5 is_stmt 0 view .LVU59
+ 193              	.LBE23:
+ 194              	.LBE22:
+ 195              		.loc 1 506 9 is_stmt 1 discriminator 1 view .LVU60
+ 196              		.loc 1 506 9 discriminator 1 view .LVU61
+ 197              		.loc 1 506 9 discriminator 1 view .LVU62
+ 198 002e FEE7     		b	.L10
+ 199              	.L8:
+ 200              		.loc 1 506 49 discriminator 8 view .LVU63
+ 507:ThirdPackage/freertos/heap_4.c ****     }
+ 508:ThirdPackage/freertos/heap_4.c **** 
+ 509:ThirdPackage/freertos/heap_4.c ****     /* Do the block being inserted, and the block it is being inserted after
+ 510:ThirdPackage/freertos/heap_4.c ****      * make a contiguous block of memory? */
+ 511:ThirdPackage/freertos/heap_4.c ****     puc = ( uint8_t * ) pxIterator;
+ 201              		.loc 1 511 5 discriminator 8 view .LVU64
+ 202              	.LVL16:
+ 512:ThirdPackage/freertos/heap_4.c **** 
+ 513:ThirdPackage/freertos/heap_4.c ****     if( ( puc + pxIterator->xBlockSize ) == ( uint8_t * ) pxBlockToInsert )
+ 203              		.loc 1 513 5 discriminator 8 view .LVU65
+ 204              		.loc 1 513 27 is_stmt 0 discriminator 8 view .LVU66
+ 205 0030 4A68     		ldr	r2, [r1, #4]
+ 206              		.loc 1 513 15 discriminator 8 view .LVU67
+ 207 0032 01EB020C 		add	ip, r1, r2
+ 208              		.loc 1 513 7 discriminator 8 view .LVU68
+ 209 0036 8445     		cmp	ip, r0
+ 210 0038 09D0     		beq	.L22
+ 211              	.L11:
+ 514:ThirdPackage/freertos/heap_4.c ****     {
+ 515:ThirdPackage/freertos/heap_4.c ****         pxIterator->xBlockSize += pxBlockToInsert->xBlockSize;
+ 516:ThirdPackage/freertos/heap_4.c ****         pxBlockToInsert = pxIterator;
+ 517:ThirdPackage/freertos/heap_4.c ****     }
+ 518:ThirdPackage/freertos/heap_4.c ****     else
+ 519:ThirdPackage/freertos/heap_4.c ****     {
+ 520:ThirdPackage/freertos/heap_4.c ****         mtCOVERAGE_TEST_MARKER();
+ 212              		.loc 1 520 33 is_stmt 1 view .LVU69
+ 521:ThirdPackage/freertos/heap_4.c ****     }
+ 522:ThirdPackage/freertos/heap_4.c **** 
+ 523:ThirdPackage/freertos/heap_4.c ****     /* Do the block being inserted, and the block it is being inserted before
+ 524:ThirdPackage/freertos/heap_4.c ****      * make a contiguous block of memory? */
+ 525:ThirdPackage/freertos/heap_4.c ****     puc = ( uint8_t * ) pxBlockToInsert;
+ 213              		.loc 1 525 5 view .LVU70
+ 214              	.LVL17:
+ 526:ThirdPackage/freertos/heap_4.c **** 
+ 527:ThirdPackage/freertos/heap_4.c ****     if( ( puc + pxBlockToInsert->xBlockSize ) == ( uint8_t * ) heapPROTECT_BLOCK_POINTER( pxIterato
+ 215              		.loc 1 527 5 view .LVU71
+ 216              		.loc 1 527 32 is_stmt 0 view .LVU72
+ 217 003a 4268     		ldr	r2, [r0, #4]
+ 218              		.loc 1 527 15 view .LVU73
+ 219 003c 00EB020C 		add	ip, r0, r2
+ 220              		.loc 1 527 7 view .LVU74
+ 221 0040 6345     		cmp	r3, ip
+ 222 0042 09D0     		beq	.L23
+ 528:ThirdPackage/freertos/heap_4.c ****     {
+ 529:ThirdPackage/freertos/heap_4.c ****         if( heapPROTECT_BLOCK_POINTER( pxIterator->pxNextFreeBlock ) != pxEnd )
+ 530:ThirdPackage/freertos/heap_4.c ****         {
+ 531:ThirdPackage/freertos/heap_4.c ****             /* Form one big block from the two blocks. */
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 18
+
+
+ 532:ThirdPackage/freertos/heap_4.c ****             pxBlockToInsert->xBlockSize += heapPROTECT_BLOCK_POINTER( pxIterator->pxNextFreeBlock )
+ 533:ThirdPackage/freertos/heap_4.c ****             pxBlockToInsert->pxNextFreeBlock = heapPROTECT_BLOCK_POINTER( pxIterator->pxNextFreeBlo
+ 534:ThirdPackage/freertos/heap_4.c ****         }
+ 535:ThirdPackage/freertos/heap_4.c ****         else
+ 536:ThirdPackage/freertos/heap_4.c ****         {
+ 537:ThirdPackage/freertos/heap_4.c ****             pxBlockToInsert->pxNextFreeBlock = heapPROTECT_BLOCK_POINTER( pxEnd );
+ 538:ThirdPackage/freertos/heap_4.c ****         }
+ 539:ThirdPackage/freertos/heap_4.c ****     }
+ 540:ThirdPackage/freertos/heap_4.c ****     else
+ 541:ThirdPackage/freertos/heap_4.c ****     {
+ 542:ThirdPackage/freertos/heap_4.c ****         pxBlockToInsert->pxNextFreeBlock = pxIterator->pxNextFreeBlock;
+ 223              		.loc 1 542 9 is_stmt 1 view .LVU75
+ 224              		.loc 1 542 42 is_stmt 0 view .LVU76
+ 225 0044 0360     		str	r3, [r0]
+ 543:ThirdPackage/freertos/heap_4.c ****     }
+ 544:ThirdPackage/freertos/heap_4.c **** 
+ 545:ThirdPackage/freertos/heap_4.c ****     /* If the block being inserted plugged a gab, so was merged with the block
+ 546:ThirdPackage/freertos/heap_4.c ****      * before and the block after, then it's pxNextFreeBlock pointer will have
+ 547:ThirdPackage/freertos/heap_4.c ****      * already been set, and should not be set here as that would make it point
+ 548:ThirdPackage/freertos/heap_4.c ****      * to itself. */
+ 549:ThirdPackage/freertos/heap_4.c ****     if( pxIterator != pxBlockToInsert )
+ 226              		.loc 1 549 5 is_stmt 1 view .LVU77
+ 227              		.loc 1 549 7 is_stmt 0 view .LVU78
+ 228 0046 8842     		cmp	r0, r1
+ 229 0048 19D0     		beq	.L19
+ 550:ThirdPackage/freertos/heap_4.c ****     {
+ 551:ThirdPackage/freertos/heap_4.c ****         pxIterator->pxNextFreeBlock = heapPROTECT_BLOCK_POINTER( pxBlockToInsert );
+ 230              		.loc 1 551 9 is_stmt 1 view .LVU79
+ 231              		.loc 1 551 37 is_stmt 0 view .LVU80
+ 232 004a 0860     		str	r0, [r1]
+ 552:ThirdPackage/freertos/heap_4.c ****     }
+ 553:ThirdPackage/freertos/heap_4.c ****     else
+ 554:ThirdPackage/freertos/heap_4.c ****     {
+ 555:ThirdPackage/freertos/heap_4.c ****         mtCOVERAGE_TEST_MARKER();
+ 233              		.loc 1 555 33 is_stmt 1 view .LVU81
+ 234 004c 7047     		bx	lr
+ 235              	.LVL18:
+ 236              	.L22:
+ 515:ThirdPackage/freertos/heap_4.c ****         pxBlockToInsert = pxIterator;
+ 237              		.loc 1 515 9 view .LVU82
+ 515:ThirdPackage/freertos/heap_4.c ****         pxBlockToInsert = pxIterator;
+ 238              		.loc 1 515 50 is_stmt 0 view .LVU83
+ 239 004e 4068     		ldr	r0, [r0, #4]
+ 240              	.LVL19:
+ 515:ThirdPackage/freertos/heap_4.c ****         pxBlockToInsert = pxIterator;
+ 241              		.loc 1 515 32 view .LVU84
+ 242 0050 0244     		add	r2, r2, r0
+ 243 0052 4A60     		str	r2, [r1, #4]
+ 516:ThirdPackage/freertos/heap_4.c ****     }
+ 244              		.loc 1 516 9 is_stmt 1 view .LVU85
+ 245              	.LVL20:
+ 516:ThirdPackage/freertos/heap_4.c ****     }
+ 246              		.loc 1 516 25 is_stmt 0 view .LVU86
+ 247 0054 0846     		mov	r0, r1
+ 248 0056 F0E7     		b	.L11
+ 249              	.LVL21:
+ 250              	.L23:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 19
+
+
+ 493:ThirdPackage/freertos/heap_4.c ****     BlockLink_t * pxIterator;
+ 251              		.loc 1 493 1 view .LVU87
+ 252 0058 10B4     		push	{r4}
+ 253              	.LCFI0:
+ 254              		.cfi_def_cfa_offset 4
+ 255              		.cfi_offset 4, -4
+ 529:ThirdPackage/freertos/heap_4.c ****         {
+ 256              		.loc 1 529 9 is_stmt 1 view .LVU88
+ 529:ThirdPackage/freertos/heap_4.c ****         {
+ 257              		.loc 1 529 70 is_stmt 0 view .LVU89
+ 258 005a 0B4C     		ldr	r4, .L24+8
+ 259 005c 2468     		ldr	r4, [r4]
+ 529:ThirdPackage/freertos/heap_4.c ****         {
+ 260              		.loc 1 529 11 view .LVU90
+ 261 005e A342     		cmp	r3, r4
+ 262 0060 0BD0     		beq	.L13
+ 532:ThirdPackage/freertos/heap_4.c ****             pxBlockToInsert->pxNextFreeBlock = heapPROTECT_BLOCK_POINTER( pxIterator->pxNextFreeBlo
+ 263              		.loc 1 532 13 is_stmt 1 view .LVU91
+ 532:ThirdPackage/freertos/heap_4.c ****             pxBlockToInsert->pxNextFreeBlock = heapPROTECT_BLOCK_POINTER( pxIterator->pxNextFreeBlo
+ 264              		.loc 1 532 100 is_stmt 0 view .LVU92
+ 265 0062 5B68     		ldr	r3, [r3, #4]
+ 532:ThirdPackage/freertos/heap_4.c ****             pxBlockToInsert->pxNextFreeBlock = heapPROTECT_BLOCK_POINTER( pxIterator->pxNextFreeBlo
+ 266              		.loc 1 532 41 view .LVU93
+ 267 0064 1A44     		add	r2, r2, r3
+ 268 0066 4260     		str	r2, [r0, #4]
+ 533:ThirdPackage/freertos/heap_4.c ****         }
+ 269              		.loc 1 533 13 is_stmt 1 view .LVU94
+ 533:ThirdPackage/freertos/heap_4.c ****         }
+ 270              		.loc 1 533 48 is_stmt 0 view .LVU95
+ 271 0068 0B68     		ldr	r3, [r1]
+ 533:ThirdPackage/freertos/heap_4.c ****         }
+ 272              		.loc 1 533 104 view .LVU96
+ 273 006a 1B68     		ldr	r3, [r3]
+ 533:ThirdPackage/freertos/heap_4.c ****         }
+ 274              		.loc 1 533 46 view .LVU97
+ 275 006c 0360     		str	r3, [r0]
+ 276              	.L14:
+ 549:ThirdPackage/freertos/heap_4.c ****     {
+ 277              		.loc 1 549 5 is_stmt 1 view .LVU98
+ 549:ThirdPackage/freertos/heap_4.c ****     {
+ 278              		.loc 1 549 7 is_stmt 0 view .LVU99
+ 279 006e 8842     		cmp	r0, r1
+ 280 0070 00D0     		beq	.L6
+ 551:ThirdPackage/freertos/heap_4.c ****     }
+ 281              		.loc 1 551 9 is_stmt 1 view .LVU100
+ 551:ThirdPackage/freertos/heap_4.c ****     }
+ 282              		.loc 1 551 37 is_stmt 0 view .LVU101
+ 283 0072 0860     		str	r0, [r1]
+ 284              		.loc 1 555 33 is_stmt 1 view .LVU102
+ 285              	.L6:
+ 556:ThirdPackage/freertos/heap_4.c ****     }
+ 557:ThirdPackage/freertos/heap_4.c **** }
+ 286              		.loc 1 557 1 is_stmt 0 view .LVU103
+ 287 0074 5DF8044B 		ldr	r4, [sp], #4
+ 288              	.LCFI1:
+ 289              		.cfi_remember_state
+ 290              		.cfi_restore 4
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 20
+
+
+ 291              		.cfi_def_cfa_offset 0
+ 292 0078 7047     		bx	lr
+ 293              	.L13:
+ 294              	.LCFI2:
+ 295              		.cfi_restore_state
+ 537:ThirdPackage/freertos/heap_4.c ****         }
+ 296              		.loc 1 537 13 is_stmt 1 view .LVU104
+ 537:ThirdPackage/freertos/heap_4.c ****         }
+ 297              		.loc 1 537 46 is_stmt 0 view .LVU105
+ 298 007a 0460     		str	r4, [r0]
+ 299 007c F7E7     		b	.L14
+ 300              	.L19:
+ 301              	.LCFI3:
+ 302              		.cfi_def_cfa_offset 0
+ 303              		.cfi_restore 4
+ 537:ThirdPackage/freertos/heap_4.c ****         }
+ 304              		.loc 1 537 46 view .LVU106
+ 305 007e 7047     		bx	lr
+ 306              	.L25:
+ 307              		.align	2
+ 308              	.L24:
+ 309 0080 00000000 		.word	.LANCHOR0
+ 310 0084 00000000 		.word	ucHeap
+ 311 0088 00000000 		.word	.LANCHOR1
+ 312              		.cfi_endproc
+ 313              	.LFE11:
+ 315              		.section	.text.pvPortMalloc,"ax",%progbits
+ 316              		.align	1
+ 317              		.global	pvPortMalloc
+ 318              		.syntax unified
+ 319              		.thumb
+ 320              		.thumb_func
+ 322              	pvPortMalloc:
+ 323              	.LVL22:
+ 324              	.LFB4:
+ 174:ThirdPackage/freertos/heap_4.c ****     BlockLink_t * pxBlock;
+ 325              		.loc 1 174 1 is_stmt 1 view -0
+ 326              		.cfi_startproc
+ 327              		@ args = 0, pretend = 0, frame = 0
+ 328              		@ frame_needed = 0, uses_anonymous_args = 0
+ 174:ThirdPackage/freertos/heap_4.c ****     BlockLink_t * pxBlock;
+ 329              		.loc 1 174 1 is_stmt 0 view .LVU108
+ 330 0000 70B5     		push	{r4, r5, r6, lr}
+ 331              	.LCFI4:
+ 332              		.cfi_def_cfa_offset 16
+ 333              		.cfi_offset 4, -16
+ 334              		.cfi_offset 5, -12
+ 335              		.cfi_offset 6, -8
+ 336              		.cfi_offset 14, -4
+ 175:ThirdPackage/freertos/heap_4.c ****     BlockLink_t * pxPreviousBlock;
+ 337              		.loc 1 175 5 is_stmt 1 view .LVU109
+ 176:ThirdPackage/freertos/heap_4.c ****     BlockLink_t * pxNewBlockLink;
+ 338              		.loc 1 176 5 view .LVU110
+ 177:ThirdPackage/freertos/heap_4.c ****     void * pvReturn = NULL;
+ 339              		.loc 1 177 5 view .LVU111
+ 178:ThirdPackage/freertos/heap_4.c ****     size_t xAdditionalRequiredSize;
+ 340              		.loc 1 178 5 view .LVU112
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 21
+
+
+ 341              	.LVL23:
+ 179:ThirdPackage/freertos/heap_4.c **** 
+ 342              		.loc 1 179 5 view .LVU113
+ 181:ThirdPackage/freertos/heap_4.c ****     {
+ 343              		.loc 1 181 5 view .LVU114
+ 181:ThirdPackage/freertos/heap_4.c ****     {
+ 344              		.loc 1 181 7 is_stmt 0 view .LVU115
+ 345 0002 0446     		mov	r4, r0
+ 346 0004 70B1     		cbz	r0, .L27
+ 185:ThirdPackage/freertos/heap_4.c ****         {
+ 347              		.loc 1 185 9 is_stmt 1 view .LVU116
+ 185:ThirdPackage/freertos/heap_4.c ****         {
+ 348              		.loc 1 185 11 is_stmt 0 view .LVU117
+ 349 0006 10F1090F 		cmn	r0, #9
+ 350 000a 0AD8     		bhi	.L49
+ 187:ThirdPackage/freertos/heap_4.c **** 
+ 351              		.loc 1 187 13 is_stmt 1 view .LVU118
+ 187:ThirdPackage/freertos/heap_4.c **** 
+ 352              		.loc 1 187 25 is_stmt 0 view .LVU119
+ 353 000c 0834     		adds	r4, r4, #8
+ 354              	.LVL24:
+ 191:ThirdPackage/freertos/heap_4.c ****             {
+ 355              		.loc 1 191 13 is_stmt 1 view .LVU120
+ 191:ThirdPackage/freertos/heap_4.c ****             {
+ 356              		.loc 1 191 15 is_stmt 0 view .LVU121
+ 357 000e 14F00703 		ands	r3, r4, #7
+ 358 0012 07D0     		beq	.L27
+ 194:ThirdPackage/freertos/heap_4.c **** 
+ 359              		.loc 1 194 17 is_stmt 1 view .LVU122
+ 194:ThirdPackage/freertos/heap_4.c **** 
+ 360              		.loc 1 194 41 is_stmt 0 view .LVU123
+ 361 0014 C3F10803 		rsb	r3, r3, #8
+ 362              	.LVL25:
+ 196:ThirdPackage/freertos/heap_4.c ****                 {
+ 363              		.loc 1 196 17 is_stmt 1 view .LVU124
+ 196:ThirdPackage/freertos/heap_4.c ****                 {
+ 364              		.loc 1 196 21 is_stmt 0 view .LVU125
+ 365 0018 DA43     		mvns	r2, r3
+ 196:ThirdPackage/freertos/heap_4.c ****                 {
+ 366              		.loc 1 196 19 view .LVU126
+ 367 001a A242     		cmp	r2, r4
+ 368 001c 24D3     		bcc	.L50
+ 198:ThirdPackage/freertos/heap_4.c ****                 }
+ 369              		.loc 1 198 21 is_stmt 1 view .LVU127
+ 198:ThirdPackage/freertos/heap_4.c ****                 }
+ 370              		.loc 1 198 33 is_stmt 0 view .LVU128
+ 371 001e 1C44     		add	r4, r4, r3
+ 372              	.LVL26:
+ 198:ThirdPackage/freertos/heap_4.c ****                 }
+ 373              		.loc 1 198 33 view .LVU129
+ 374 0020 00E0     		b	.L27
+ 375              	.LVL27:
+ 376              	.L49:
+ 212:ThirdPackage/freertos/heap_4.c ****         }
+ 377              		.loc 1 212 25 view .LVU130
+ 378 0022 0024     		movs	r4, #0
+ 379              	.LVL28:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 22
+
+
+ 380              	.L27:
+ 217:ThirdPackage/freertos/heap_4.c ****     }
+ 381              		.loc 1 217 33 is_stmt 1 view .LVU131
+ 220:ThirdPackage/freertos/heap_4.c ****     {
+ 382              		.loc 1 220 5 view .LVU132
+ 383 0024 FFF7FEFF 		bl	vTaskSuspendAll
+ 384              	.LVL29:
+ 224:ThirdPackage/freertos/heap_4.c ****         {
+ 385              		.loc 1 224 9 view .LVU133
+ 224:ThirdPackage/freertos/heap_4.c ****         {
+ 386              		.loc 1 224 19 is_stmt 0 view .LVU134
+ 387 0028 504B     		ldr	r3, .L60
+ 388 002a 1B68     		ldr	r3, [r3]
+ 224:ThirdPackage/freertos/heap_4.c ****         {
+ 389              		.loc 1 224 11 view .LVU135
+ 390 002c F3B1     		cbz	r3, .L59
+ 391              	.L28:
+ 230:ThirdPackage/freertos/heap_4.c ****         }
+ 392              		.loc 1 230 37 is_stmt 1 view .LVU136
+ 237:ThirdPackage/freertos/heap_4.c ****         {
+ 393              		.loc 1 237 9 view .LVU137
+ 237:ThirdPackage/freertos/heap_4.c ****         {
+ 394              		.loc 1 237 11 is_stmt 0 view .LVU138
+ 395 002e 002C     		cmp	r4, #0
+ 396 0030 C0F28480 		blt	.L51
+ 239:ThirdPackage/freertos/heap_4.c ****             {
+ 397              		.loc 1 239 13 is_stmt 1 view .LVU139
+ 239:ThirdPackage/freertos/heap_4.c ****             {
+ 398              		.loc 1 239 15 is_stmt 0 view .LVU140
+ 399 0034 002C     		cmp	r4, #0
+ 400 0036 00F08380 		beq	.L52
+ 239:ThirdPackage/freertos/heap_4.c ****             {
+ 401              		.loc 1 239 54 discriminator 1 view .LVU141
+ 402 003a 4D4B     		ldr	r3, .L60+4
+ 403 003c 1868     		ldr	r0, [r3]
+ 239:ThirdPackage/freertos/heap_4.c ****             {
+ 404              		.loc 1 239 37 discriminator 1 view .LVU142
+ 405 003e A042     		cmp	r0, r4
+ 406 0040 C0F08D80 		bcc	.L53
+ 243:ThirdPackage/freertos/heap_4.c ****                 pxBlock = heapPROTECT_BLOCK_POINTER( xStart.pxNextFreeBlock );
+ 407              		.loc 1 243 17 is_stmt 1 view .LVU143
+ 408              	.LVL30:
+ 244:ThirdPackage/freertos/heap_4.c ****                 heapVALIDATE_BLOCK_POINTER( pxBlock );
+ 409              		.loc 1 244 17 view .LVU144
+ 244:ThirdPackage/freertos/heap_4.c ****                 heapVALIDATE_BLOCK_POINTER( pxBlock );
+ 410              		.loc 1 244 25 is_stmt 0 view .LVU145
+ 411 0044 4B4B     		ldr	r3, .L60+8
+ 412 0046 1B68     		ldr	r3, [r3]
+ 413              	.LVL31:
+ 245:ThirdPackage/freertos/heap_4.c **** 
+ 414              		.loc 1 245 17 is_stmt 1 view .LVU146
+ 415 0048 4B4A     		ldr	r2, .L60+12
+ 416 004a 9342     		cmp	r3, r2
+ 417 004c 03D3     		bcc	.L30
+ 245:ThirdPackage/freertos/heap_4.c **** 
+ 418              		.loc 1 245 17 is_stmt 0 discriminator 1 view .LVU147
+ 419 004e 02F6FF72 		addw	r2, r2, #4095
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 23
+
+
+ 420 0052 9342     		cmp	r3, r2
+ 421 0054 16D9     		bls	.L54
+ 422              	.L30:
+ 245:ThirdPackage/freertos/heap_4.c **** 
+ 423              		.loc 1 245 17 is_stmt 1 view .LVU148
+ 424              	.LBB24:
+ 425              	.LBI24:
+ 213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
+ 426              		.loc 2 213 30 view .LVU149
+ 427              	.LBB25:
+ 215:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 428              		.loc 2 215 5 view .LVU150
+ 429              		.loc 2 217 5 view .LVU151
+ 430              		.syntax unified
+ 431              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 432 0056 4FF0F003 		   mov r3, #240                                              
+ 433 005a 83F31188 	   msr basepri, r3                                         
+ 434 005e BFF36F8F 	   isb                                                     
+ 435 0062 BFF34F8F 	   dsb                                                     
+ 436              	
+ 437              	@ 0 "" 2
+ 438              	.LVL32:
+ 439              		.thumb
+ 440              		.syntax unified
+ 441              	.L32:
+ 442              		.loc 2 217 5 is_stmt 0 view .LVU152
+ 443              	.LBE25:
+ 444              	.LBE24:
+ 245:ThirdPackage/freertos/heap_4.c **** 
+ 445              		.loc 1 245 17 is_stmt 1 discriminator 3 view .LVU153
+ 245:ThirdPackage/freertos/heap_4.c **** 
+ 446              		.loc 1 245 17 discriminator 3 view .LVU154
+ 245:ThirdPackage/freertos/heap_4.c **** 
+ 447              		.loc 1 245 17 discriminator 3 view .LVU155
+ 448 0066 FEE7     		b	.L32
+ 449              	.LVL33:
+ 450              	.L50:
+ 202:ThirdPackage/freertos/heap_4.c ****                 }
+ 451              		.loc 1 202 33 is_stmt 0 view .LVU156
+ 452 0068 0024     		movs	r4, #0
+ 453              	.LVL34:
+ 202:ThirdPackage/freertos/heap_4.c ****                 }
+ 454              		.loc 1 202 33 view .LVU157
+ 455 006a DBE7     		b	.L27
+ 456              	.LVL35:
+ 457              	.L59:
+ 226:ThirdPackage/freertos/heap_4.c ****         }
+ 458              		.loc 1 226 13 is_stmt 1 view .LVU158
+ 459 006c FFF7FEFF 		bl	prvHeapInit
+ 460              	.LVL36:
+ 461 0070 DDE7     		b	.L28
+ 462              	.LVL37:
+ 463              	.L33:
+ 251:ThirdPackage/freertos/heap_4.c ****                 }
+ 464              		.loc 1 251 21 view .LVU159
+ 465              	.LBB26:
+ 466              	.LBI26:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 24
+
+
+ 213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
+ 467              		.loc 2 213 30 view .LVU160
+ 468              	.LBB27:
+ 215:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 469              		.loc 2 215 5 view .LVU161
+ 470              		.loc 2 217 5 view .LVU162
+ 471              		.syntax unified
+ 472              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 473 0072 4FF0F003 		   mov r3, #240                                              
+ 474 0076 83F31188 	   msr basepri, r3                                         
+ 475 007a BFF36F8F 	   isb                                                     
+ 476 007e BFF34F8F 	   dsb                                                     
+ 477              	
+ 478              	@ 0 "" 2
+ 479              	.LVL38:
+ 480              		.thumb
+ 481              		.syntax unified
+ 482              	.L34:
+ 483              		.loc 2 217 5 is_stmt 0 view .LVU163
+ 484              	.LBE27:
+ 485              	.LBE26:
+ 251:ThirdPackage/freertos/heap_4.c ****                 }
+ 486              		.loc 1 251 21 is_stmt 1 discriminator 4 view .LVU164
+ 251:ThirdPackage/freertos/heap_4.c ****                 }
+ 487              		.loc 1 251 21 discriminator 4 view .LVU165
+ 251:ThirdPackage/freertos/heap_4.c ****                 }
+ 488              		.loc 1 251 21 discriminator 4 view .LVU166
+ 489 0082 FEE7     		b	.L34
+ 490              	.LVL39:
+ 491              	.L54:
+ 251:ThirdPackage/freertos/heap_4.c ****                 }
+ 492              		.loc 1 251 21 is_stmt 0 discriminator 4 view .LVU167
+ 493 0084 3B49     		ldr	r1, .L60+8
+ 494              	.LVL40:
+ 495              	.L31:
+ 251:ThirdPackage/freertos/heap_4.c ****                 }
+ 496              		.loc 1 251 58 is_stmt 1 discriminator 8 view .LVU168
+ 247:ThirdPackage/freertos/heap_4.c ****                 {
+ 497              		.loc 1 247 22 discriminator 8 view .LVU169
+ 247:ThirdPackage/freertos/heap_4.c ****                 {
+ 498              		.loc 1 247 33 is_stmt 0 discriminator 8 view .LVU170
+ 499 0086 5A68     		ldr	r2, [r3, #4]
+ 247:ThirdPackage/freertos/heap_4.c ****                 {
+ 500              		.loc 1 247 22 discriminator 8 view .LVU171
+ 501 0088 A242     		cmp	r2, r4
+ 502 008a 0AD2     		bcs	.L35
+ 247:ThirdPackage/freertos/heap_4.c ****                 {
+ 503              		.loc 1 247 74 discriminator 1 view .LVU172
+ 504 008c 1A68     		ldr	r2, [r3]
+ 247:ThirdPackage/freertos/heap_4.c ****                 {
+ 505              		.loc 1 247 62 discriminator 1 view .LVU173
+ 506 008e 42B1     		cbz	r2, .L35
+ 249:ThirdPackage/freertos/heap_4.c ****                     pxBlock = heapPROTECT_BLOCK_POINTER( pxBlock->pxNextFreeBlock );
+ 507              		.loc 1 249 21 is_stmt 1 view .LVU174
+ 508              	.LVL41:
+ 250:ThirdPackage/freertos/heap_4.c ****                     heapVALIDATE_BLOCK_POINTER( pxBlock );
+ 509              		.loc 1 250 21 view .LVU175
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 25
+
+
+ 251:ThirdPackage/freertos/heap_4.c ****                 }
+ 510              		.loc 1 251 21 view .LVU176
+ 511 0090 3949     		ldr	r1, .L60+12
+ 512 0092 8A42     		cmp	r2, r1
+ 513 0094 EDD3     		bcc	.L33
+ 249:ThirdPackage/freertos/heap_4.c ****                     pxBlock = heapPROTECT_BLOCK_POINTER( pxBlock->pxNextFreeBlock );
+ 514              		.loc 1 249 37 is_stmt 0 discriminator 1 view .LVU177
+ 515 0096 1946     		mov	r1, r3
+ 251:ThirdPackage/freertos/heap_4.c ****                 }
+ 516              		.loc 1 251 21 discriminator 1 view .LVU178
+ 517 0098 384B     		ldr	r3, .L60+16
+ 518              	.LVL42:
+ 251:ThirdPackage/freertos/heap_4.c ****                 }
+ 519              		.loc 1 251 21 discriminator 1 view .LVU179
+ 520 009a 9A42     		cmp	r2, r3
+ 521 009c E9D8     		bhi	.L33
+ 250:ThirdPackage/freertos/heap_4.c ****                     heapVALIDATE_BLOCK_POINTER( pxBlock );
+ 522              		.loc 1 250 29 view .LVU180
+ 523 009e 1346     		mov	r3, r2
+ 524 00a0 F1E7     		b	.L31
+ 525              	.LVL43:
+ 526              	.L35:
+ 256:ThirdPackage/freertos/heap_4.c ****                 {
+ 527              		.loc 1 256 17 is_stmt 1 view .LVU181
+ 256:ThirdPackage/freertos/heap_4.c ****                 {
+ 528              		.loc 1 256 29 is_stmt 0 view .LVU182
+ 529 00a2 324A     		ldr	r2, .L60
+ 530 00a4 1268     		ldr	r2, [r2]
+ 256:ThirdPackage/freertos/heap_4.c ****                 {
+ 531              		.loc 1 256 19 view .LVU183
+ 532 00a6 9A42     		cmp	r2, r3
+ 533 00a8 5BD0     		beq	.L56
+ 260:ThirdPackage/freertos/heap_4.c ****                     heapVALIDATE_BLOCK_POINTER( pvReturn );
+ 534              		.loc 1 260 21 is_stmt 1 view .LVU184
+ 260:ThirdPackage/freertos/heap_4.c ****                     heapVALIDATE_BLOCK_POINTER( pvReturn );
+ 535              		.loc 1 260 61 is_stmt 0 view .LVU185
+ 536 00aa 0D68     		ldr	r5, [r1]
+ 260:ThirdPackage/freertos/heap_4.c ****                     heapVALIDATE_BLOCK_POINTER( pvReturn );
+ 537              		.loc 1 260 30 view .LVU186
+ 538 00ac 0835     		adds	r5, r5, #8
+ 539              	.LVL44:
+ 261:ThirdPackage/freertos/heap_4.c **** 
+ 540              		.loc 1 261 21 is_stmt 1 view .LVU187
+ 541 00ae 324A     		ldr	r2, .L60+12
+ 542 00b0 9542     		cmp	r5, r2
+ 543 00b2 03D3     		bcc	.L37
+ 261:ThirdPackage/freertos/heap_4.c **** 
+ 544              		.loc 1 261 21 is_stmt 0 discriminator 1 view .LVU188
+ 545 00b4 02F6FF72 		addw	r2, r2, #4095
+ 546 00b8 9542     		cmp	r5, r2
+ 547 00ba 08D9     		bls	.L38
+ 548              	.L37:
+ 261:ThirdPackage/freertos/heap_4.c **** 
+ 549              		.loc 1 261 21 is_stmt 1 view .LVU189
+ 550              	.LBB28:
+ 551              	.LBI28:
+ 213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 26
+
+
+ 552              		.loc 2 213 30 view .LVU190
+ 553              	.LBB29:
+ 215:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 554              		.loc 2 215 5 view .LVU191
+ 555              		.loc 2 217 5 view .LVU192
+ 556              		.syntax unified
+ 557              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 558 00bc 4FF0F003 		   mov r3, #240                                              
+ 559 00c0 83F31188 	   msr basepri, r3                                         
+ 560 00c4 BFF36F8F 	   isb                                                     
+ 561 00c8 BFF34F8F 	   dsb                                                     
+ 562              	
+ 563              	@ 0 "" 2
+ 564              	.LVL45:
+ 565              		.thumb
+ 566              		.syntax unified
+ 567              	.L39:
+ 568              		.loc 2 217 5 is_stmt 0 view .LVU193
+ 569              	.LBE29:
+ 570              	.LBE28:
+ 261:ThirdPackage/freertos/heap_4.c **** 
+ 571              		.loc 1 261 21 is_stmt 1 discriminator 5 view .LVU194
+ 261:ThirdPackage/freertos/heap_4.c **** 
+ 572              		.loc 1 261 21 discriminator 5 view .LVU195
+ 261:ThirdPackage/freertos/heap_4.c **** 
+ 573              		.loc 1 261 21 discriminator 5 view .LVU196
+ 574 00cc FEE7     		b	.L39
+ 575              	.LVL46:
+ 576              	.L38:
+ 261:ThirdPackage/freertos/heap_4.c **** 
+ 577              		.loc 1 261 59 view .LVU197
+ 265:ThirdPackage/freertos/heap_4.c **** 
+ 578              		.loc 1 265 21 view .LVU198
+ 265:ThirdPackage/freertos/heap_4.c **** 
+ 579              		.loc 1 265 63 is_stmt 0 view .LVU199
+ 580 00ce 1A68     		ldr	r2, [r3]
+ 265:ThirdPackage/freertos/heap_4.c **** 
+ 581              		.loc 1 265 54 view .LVU200
+ 582 00d0 0A60     		str	r2, [r1]
+ 269:ThirdPackage/freertos/heap_4.c **** 
+ 583              		.loc 1 269 21 is_stmt 1 view .LVU201
+ 584 00d2 5A68     		ldr	r2, [r3, #4]
+ 585 00d4 A242     		cmp	r2, r4
+ 586 00d6 0FD3     		bcc	.L40
+ 269:ThirdPackage/freertos/heap_4.c **** 
+ 587              		.loc 1 269 105 discriminator 2 view .LVU202
+ 271:ThirdPackage/freertos/heap_4.c ****                     {
+ 588              		.loc 1 271 21 discriminator 2 view .LVU203
+ 271:ThirdPackage/freertos/heap_4.c ****                     {
+ 589              		.loc 1 271 47 is_stmt 0 discriminator 2 view .LVU204
+ 590 00d8 121B     		subs	r2, r2, r4
+ 271:ThirdPackage/freertos/heap_4.c ****                     {
+ 591              		.loc 1 271 23 discriminator 2 view .LVU205
+ 592 00da 102A     		cmp	r2, #16
+ 593 00dc 1AD9     		bls	.L43
+ 277:ThirdPackage/freertos/heap_4.c ****                         configASSERT( ( ( ( size_t ) pxNewBlockLink ) & portBYTE_ALIGNMENT_MASK ) =
+ 594              		.loc 1 277 25 is_stmt 1 view .LVU206
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 27
+
+
+ 277:ThirdPackage/freertos/heap_4.c ****                         configASSERT( ( ( ( size_t ) pxNewBlockLink ) & portBYTE_ALIGNMENT_MASK ) =
+ 595              		.loc 1 277 40 is_stmt 0 view .LVU207
+ 596 00de 1E19     		adds	r6, r3, r4
+ 597              	.LVL47:
+ 278:ThirdPackage/freertos/heap_4.c **** 
+ 598              		.loc 1 278 25 is_stmt 1 view .LVU208
+ 599 00e0 16F0070F 		tst	r6, #7
+ 600 00e4 11D0     		beq	.L44
+ 278:ThirdPackage/freertos/heap_4.c **** 
+ 601              		.loc 1 278 25 view .LVU209
+ 602              	.LBB30:
+ 603              	.LBI30:
+ 213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
+ 604              		.loc 2 213 30 view .LVU210
+ 605              	.LBB31:
+ 215:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 606              		.loc 2 215 5 view .LVU211
+ 607              		.loc 2 217 5 view .LVU212
+ 608              		.syntax unified
+ 609              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 610 00e6 4FF0F003 		   mov r3, #240                                              
+ 611 00ea 83F31188 	   msr basepri, r3                                         
+ 612 00ee BFF36F8F 	   isb                                                     
+ 613 00f2 BFF34F8F 	   dsb                                                     
+ 614              	
+ 615              	@ 0 "" 2
+ 616              	.LVL48:
+ 617              		.thumb
+ 618              		.syntax unified
+ 619              	.L45:
+ 620              		.loc 2 217 5 is_stmt 0 view .LVU213
+ 621              	.LBE31:
+ 622              	.LBE30:
+ 278:ThirdPackage/freertos/heap_4.c **** 
+ 623              		.loc 1 278 25 is_stmt 1 discriminator 7 view .LVU214
+ 278:ThirdPackage/freertos/heap_4.c **** 
+ 624              		.loc 1 278 25 discriminator 7 view .LVU215
+ 278:ThirdPackage/freertos/heap_4.c **** 
+ 625              		.loc 1 278 25 discriminator 7 view .LVU216
+ 626 00f6 FEE7     		b	.L45
+ 627              	.LVL49:
+ 628              	.L40:
+ 269:ThirdPackage/freertos/heap_4.c **** 
+ 629              		.loc 1 269 21 view .LVU217
+ 630              	.LBB32:
+ 631              	.LBI32:
+ 213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
+ 632              		.loc 2 213 30 view .LVU218
+ 633              	.LBB33:
+ 215:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 634              		.loc 2 215 5 view .LVU219
+ 635              		.loc 2 217 5 view .LVU220
+ 636              		.syntax unified
+ 637              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 638 00f8 4FF0F003 		   mov r3, #240                                              
+ 639 00fc 83F31188 	   msr basepri, r3                                         
+ 640 0100 BFF36F8F 	   isb                                                     
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 28
+
+
+ 641 0104 BFF34F8F 	   dsb                                                     
+ 642              	
+ 643              	@ 0 "" 2
+ 644              	.LVL50:
+ 645              		.thumb
+ 646              		.syntax unified
+ 647              	.L42:
+ 648              		.loc 2 217 5 is_stmt 0 view .LVU221
+ 649              	.LBE33:
+ 650              	.LBE32:
+ 269:ThirdPackage/freertos/heap_4.c **** 
+ 651              		.loc 1 269 21 is_stmt 1 discriminator 6 view .LVU222
+ 269:ThirdPackage/freertos/heap_4.c **** 
+ 652              		.loc 1 269 21 discriminator 6 view .LVU223
+ 269:ThirdPackage/freertos/heap_4.c **** 
+ 653              		.loc 1 269 21 discriminator 6 view .LVU224
+ 654 0108 FEE7     		b	.L42
+ 655              	.LVL51:
+ 656              	.L44:
+ 278:ThirdPackage/freertos/heap_4.c **** 
+ 657              		.loc 1 278 105 discriminator 2 view .LVU225
+ 282:ThirdPackage/freertos/heap_4.c ****                         pxBlock->xBlockSize = xWantedSize;
+ 658              		.loc 1 282 25 discriminator 2 view .LVU226
+ 282:ThirdPackage/freertos/heap_4.c ****                         pxBlock->xBlockSize = xWantedSize;
+ 659              		.loc 1 282 52 is_stmt 0 discriminator 2 view .LVU227
+ 660 010a 7260     		str	r2, [r6, #4]
+ 283:ThirdPackage/freertos/heap_4.c **** 
+ 661              		.loc 1 283 25 is_stmt 1 discriminator 2 view .LVU228
+ 283:ThirdPackage/freertos/heap_4.c **** 
+ 662              		.loc 1 283 45 is_stmt 0 discriminator 2 view .LVU229
+ 663 010c 5C60     		str	r4, [r3, #4]
+ 286:ThirdPackage/freertos/heap_4.c ****                         pxPreviousBlock->pxNextFreeBlock = heapPROTECT_BLOCK_POINTER( pxNewBlockLin
+ 664              		.loc 1 286 25 is_stmt 1 discriminator 2 view .LVU230
+ 286:ThirdPackage/freertos/heap_4.c ****                         pxPreviousBlock->pxNextFreeBlock = heapPROTECT_BLOCK_POINTER( pxNewBlockLin
+ 665              		.loc 1 286 74 is_stmt 0 discriminator 2 view .LVU231
+ 666 010e 0A68     		ldr	r2, [r1]
+ 286:ThirdPackage/freertos/heap_4.c ****                         pxPreviousBlock->pxNextFreeBlock = heapPROTECT_BLOCK_POINTER( pxNewBlockLin
+ 667              		.loc 1 286 57 discriminator 2 view .LVU232
+ 668 0110 1A51     		str	r2, [r3, r4]
+ 287:ThirdPackage/freertos/heap_4.c ****                     }
+ 669              		.loc 1 287 25 is_stmt 1 discriminator 2 view .LVU233
+ 287:ThirdPackage/freertos/heap_4.c ****                     }
+ 670              		.loc 1 287 58 is_stmt 0 discriminator 2 view .LVU234
+ 671 0112 0E60     		str	r6, [r1]
+ 672              	.LVL52:
+ 673              	.L43:
+ 291:ThirdPackage/freertos/heap_4.c ****                     }
+ 674              		.loc 1 291 49 is_stmt 1 view .LVU235
+ 294:ThirdPackage/freertos/heap_4.c **** 
+ 675              		.loc 1 294 21 view .LVU236
+ 294:ThirdPackage/freertos/heap_4.c **** 
+ 676              		.loc 1 294 51 is_stmt 0 view .LVU237
+ 677 0114 5A68     		ldr	r2, [r3, #4]
+ 294:ThirdPackage/freertos/heap_4.c **** 
+ 678              		.loc 1 294 41 view .LVU238
+ 679 0116 801A     		subs	r0, r0, r2
+ 680 0118 1549     		ldr	r1, .L60+4
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 29
+
+
+ 681              	.LVL53:
+ 294:ThirdPackage/freertos/heap_4.c **** 
+ 682              		.loc 1 294 41 view .LVU239
+ 683 011a 0860     		str	r0, [r1]
+ 296:ThirdPackage/freertos/heap_4.c ****                     {
+ 684              		.loc 1 296 21 is_stmt 1 view .LVU240
+ 296:ThirdPackage/freertos/heap_4.c ****                     {
+ 685              		.loc 1 296 45 is_stmt 0 view .LVU241
+ 686 011c 1849     		ldr	r1, .L60+20
+ 687 011e 0968     		ldr	r1, [r1]
+ 296:ThirdPackage/freertos/heap_4.c ****                     {
+ 688              		.loc 1 296 23 view .LVU242
+ 689 0120 8842     		cmp	r0, r1
+ 690 0122 01D2     		bcs	.L46
+ 298:ThirdPackage/freertos/heap_4.c ****                     }
+ 691              		.loc 1 298 25 is_stmt 1 view .LVU243
+ 298:ThirdPackage/freertos/heap_4.c ****                     }
+ 692              		.loc 1 298 56 is_stmt 0 view .LVU244
+ 693 0124 1649     		ldr	r1, .L60+20
+ 694 0126 0860     		str	r0, [r1]
+ 695              	.L46:
+ 302:ThirdPackage/freertos/heap_4.c ****                     }
+ 696              		.loc 1 302 49 is_stmt 1 view .LVU245
+ 307:ThirdPackage/freertos/heap_4.c ****                     pxBlock->pxNextFreeBlock = NULL;
+ 697              		.loc 1 307 21 view .LVU246
+ 698 0128 42F00042 		orr	r2, r2, #-2147483648
+ 699 012c 5A60     		str	r2, [r3, #4]
+ 308:ThirdPackage/freertos/heap_4.c ****                     xNumberOfSuccessfulAllocations++;
+ 700              		.loc 1 308 21 view .LVU247
+ 308:ThirdPackage/freertos/heap_4.c ****                     xNumberOfSuccessfulAllocations++;
+ 701              		.loc 1 308 46 is_stmt 0 view .LVU248
+ 702 012e 0022     		movs	r2, #0
+ 703 0130 1A60     		str	r2, [r3]
+ 309:ThirdPackage/freertos/heap_4.c ****                 }
+ 704              		.loc 1 309 21 is_stmt 1 view .LVU249
+ 309:ThirdPackage/freertos/heap_4.c ****                 }
+ 705              		.loc 1 309 51 is_stmt 0 view .LVU250
+ 706 0132 144A     		ldr	r2, .L60+24
+ 707 0134 1368     		ldr	r3, [r2]
+ 708              	.LVL54:
+ 309:ThirdPackage/freertos/heap_4.c ****                 }
+ 709              		.loc 1 309 51 view .LVU251
+ 710 0136 0133     		adds	r3, r3, #1
+ 711 0138 1360     		str	r3, [r2]
+ 712 013a 02E0     		b	.L29
+ 713              	.LVL55:
+ 714              	.L51:
+ 178:ThirdPackage/freertos/heap_4.c ****     size_t xAdditionalRequiredSize;
+ 715              		.loc 1 178 12 view .LVU252
+ 716 013c 0025     		movs	r5, #0
+ 717 013e 00E0     		b	.L29
+ 718              	.L52:
+ 719 0140 0025     		movs	r5, #0
+ 720              	.LVL56:
+ 721              	.L29:
+ 323:ThirdPackage/freertos/heap_4.c ****         }
+ 722              		.loc 1 323 37 is_stmt 1 view .LVU253
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 30
+
+
+ 326:ThirdPackage/freertos/heap_4.c ****     }
+ 723              		.loc 1 326 45 view .LVU254
+ 328:ThirdPackage/freertos/heap_4.c **** 
+ 724              		.loc 1 328 5 view .LVU255
+ 328:ThirdPackage/freertos/heap_4.c **** 
+ 725              		.loc 1 328 14 is_stmt 0 view .LVU256
+ 726 0142 FFF7FEFF 		bl	xTaskResumeAll
+ 727              	.LVL57:
+ 343:ThirdPackage/freertos/heap_4.c ****     return pvReturn;
+ 728              		.loc 1 343 5 is_stmt 1 view .LVU257
+ 729 0146 15F0070F 		tst	r5, #7
+ 730 014a 0CD0     		beq	.L26
+ 343:ThirdPackage/freertos/heap_4.c ****     return pvReturn;
+ 731              		.loc 1 343 5 view .LVU258
+ 732              	.LBB34:
+ 733              	.LBI34:
+ 213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
+ 734              		.loc 2 213 30 view .LVU259
+ 735              	.LBB35:
+ 215:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 736              		.loc 2 215 5 view .LVU260
+ 737              		.loc 2 217 5 view .LVU261
+ 738              		.syntax unified
+ 739              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 740 014c 4FF0F003 		   mov r3, #240                                              
+ 741 0150 83F31188 	   msr basepri, r3                                         
+ 742 0154 BFF36F8F 	   isb                                                     
+ 743 0158 BFF34F8F 	   dsb                                                     
+ 744              	
+ 745              	@ 0 "" 2
+ 746              	.LVL58:
+ 747              		.thumb
+ 748              		.syntax unified
+ 749              	.L48:
+ 750              		.loc 2 217 5 is_stmt 0 view .LVU262
+ 751              	.LBE35:
+ 752              	.LBE34:
+ 343:ThirdPackage/freertos/heap_4.c ****     return pvReturn;
+ 753              		.loc 1 343 5 is_stmt 1 discriminator 9 view .LVU263
+ 343:ThirdPackage/freertos/heap_4.c ****     return pvReturn;
+ 754              		.loc 1 343 5 discriminator 9 view .LVU264
+ 343:ThirdPackage/freertos/heap_4.c ****     return pvReturn;
+ 755              		.loc 1 343 5 discriminator 9 view .LVU265
+ 756 015c FEE7     		b	.L48
+ 757              	.LVL59:
+ 758              	.L53:
+ 178:ThirdPackage/freertos/heap_4.c ****     size_t xAdditionalRequiredSize;
+ 759              		.loc 1 178 12 is_stmt 0 view .LVU266
+ 760 015e 0025     		movs	r5, #0
+ 761 0160 EFE7     		b	.L29
+ 762              	.LVL60:
+ 763              	.L56:
+ 178:ThirdPackage/freertos/heap_4.c ****     size_t xAdditionalRequiredSize;
+ 764              		.loc 1 178 12 view .LVU267
+ 765 0162 0025     		movs	r5, #0
+ 766 0164 EDE7     		b	.L29
+ 767              	.LVL61:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 31
+
+
+ 768              	.L26:
+ 345:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ 769              		.loc 1 345 1 view .LVU268
+ 770 0166 2846     		mov	r0, r5
+ 771 0168 70BD     		pop	{r4, r5, r6, pc}
+ 772              	.LVL62:
+ 773              	.L61:
+ 345:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ 774              		.loc 1 345 1 view .LVU269
+ 775 016a 00BF     		.align	2
+ 776              	.L60:
+ 777 016c 00000000 		.word	.LANCHOR1
+ 778 0170 00000000 		.word	.LANCHOR3
+ 779 0174 00000000 		.word	.LANCHOR0
+ 780 0178 00000000 		.word	ucHeap
+ 781 017c FF0F0000 		.word	ucHeap+4095
+ 782 0180 00000000 		.word	.LANCHOR2
+ 783 0184 00000000 		.word	.LANCHOR4
+ 784              		.cfi_endproc
+ 785              	.LFE4:
+ 787              		.section	.text.vPortFree,"ax",%progbits
+ 788              		.align	1
+ 789              		.global	vPortFree
+ 790              		.syntax unified
+ 791              		.thumb
+ 792              		.thumb_func
+ 794              	vPortFree:
+ 795              	.LVL63:
+ 796              	.LFB5:
+ 349:ThirdPackage/freertos/heap_4.c ****     uint8_t * puc = ( uint8_t * ) pv;
+ 797              		.loc 1 349 1 is_stmt 1 view -0
+ 798              		.cfi_startproc
+ 799              		@ args = 0, pretend = 0, frame = 0
+ 800              		@ frame_needed = 0, uses_anonymous_args = 0
+ 350:ThirdPackage/freertos/heap_4.c ****     BlockLink_t * pxLink;
+ 801              		.loc 1 350 5 view .LVU271
+ 351:ThirdPackage/freertos/heap_4.c **** 
+ 802              		.loc 1 351 5 view .LVU272
+ 353:ThirdPackage/freertos/heap_4.c ****     {
+ 803              		.loc 1 353 5 view .LVU273
+ 353:ThirdPackage/freertos/heap_4.c ****     {
+ 804              		.loc 1 353 7 is_stmt 0 view .LVU274
+ 805 0000 0028     		cmp	r0, #0
+ 806 0002 4CD0     		beq	.L74
+ 349:ThirdPackage/freertos/heap_4.c ****     uint8_t * puc = ( uint8_t * ) pv;
+ 807              		.loc 1 349 1 view .LVU275
+ 808 0004 38B5     		push	{r3, r4, r5, lr}
+ 809              	.LCFI5:
+ 810              		.cfi_def_cfa_offset 16
+ 811              		.cfi_offset 3, -16
+ 812              		.cfi_offset 4, -12
+ 813              		.cfi_offset 5, -8
+ 814              		.cfi_offset 14, -4
+ 815 0006 0446     		mov	r4, r0
+ 357:ThirdPackage/freertos/heap_4.c **** 
+ 816              		.loc 1 357 9 is_stmt 1 view .LVU276
+ 357:ThirdPackage/freertos/heap_4.c **** 
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 32
+
+
+ 817              		.loc 1 357 13 is_stmt 0 view .LVU277
+ 818 0008 A0F10805 		sub	r5, r0, #8
+ 819              	.LVL64:
+ 360:ThirdPackage/freertos/heap_4.c **** 
+ 820              		.loc 1 360 9 is_stmt 1 view .LVU278
+ 362:ThirdPackage/freertos/heap_4.c ****         configASSERT( heapBLOCK_IS_ALLOCATED( pxLink ) != 0 );
+ 821              		.loc 1 362 9 view .LVU279
+ 822 000c 244B     		ldr	r3, .L79
+ 823 000e 9D42     		cmp	r5, r3
+ 824 0010 10D3     		bcc	.L64
+ 362:ThirdPackage/freertos/heap_4.c ****         configASSERT( heapBLOCK_IS_ALLOCATED( pxLink ) != 0 );
+ 825              		.loc 1 362 9 is_stmt 0 discriminator 1 view .LVU280
+ 826 0012 03F6FF73 		addw	r3, r3, #4095
+ 827 0016 9D42     		cmp	r5, r3
+ 828 0018 0CD8     		bhi	.L64
+ 362:ThirdPackage/freertos/heap_4.c ****         configASSERT( heapBLOCK_IS_ALLOCATED( pxLink ) != 0 );
+ 829              		.loc 1 362 45 is_stmt 1 view .LVU281
+ 363:ThirdPackage/freertos/heap_4.c ****         configASSERT( pxLink->pxNextFreeBlock == NULL );
+ 830              		.loc 1 363 9 view .LVU282
+ 831 001a 50F8043C 		ldr	r3, [r0, #-4]
+ 832 001e 002B     		cmp	r3, #0
+ 833 0020 11DB     		blt	.L77
+ 363:ThirdPackage/freertos/heap_4.c ****         configASSERT( pxLink->pxNextFreeBlock == NULL );
+ 834              		.loc 1 363 9 view .LVU283
+ 835              	.LBB36:
+ 836              	.LBI36:
+ 213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
+ 837              		.loc 2 213 30 view .LVU284
+ 838              	.LBB37:
+ 215:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 839              		.loc 2 215 5 view .LVU285
+ 840              		.loc 2 217 5 view .LVU286
+ 841              		.syntax unified
+ 842              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 843 0022 4FF0F003 		   mov r3, #240                                              
+ 844 0026 83F31188 	   msr basepri, r3                                         
+ 845 002a BFF36F8F 	   isb                                                     
+ 846 002e BFF34F8F 	   dsb                                                     
+ 847              	
+ 848              	@ 0 "" 2
+ 849              	.LVL65:
+ 850              		.thumb
+ 851              		.syntax unified
+ 852              	.L68:
+ 853              		.loc 2 217 5 is_stmt 0 view .LVU287
+ 854              	.LBE37:
+ 855              	.LBE36:
+ 363:ThirdPackage/freertos/heap_4.c ****         configASSERT( pxLink->pxNextFreeBlock == NULL );
+ 856              		.loc 1 363 9 is_stmt 1 discriminator 2 view .LVU288
+ 363:ThirdPackage/freertos/heap_4.c ****         configASSERT( pxLink->pxNextFreeBlock == NULL );
+ 857              		.loc 1 363 9 discriminator 2 view .LVU289
+ 363:ThirdPackage/freertos/heap_4.c ****         configASSERT( pxLink->pxNextFreeBlock == NULL );
+ 858              		.loc 1 363 9 discriminator 2 view .LVU290
+ 859 0032 FEE7     		b	.L68
+ 860              	.L64:
+ 362:ThirdPackage/freertos/heap_4.c ****         configASSERT( heapBLOCK_IS_ALLOCATED( pxLink ) != 0 );
+ 861              		.loc 1 362 9 view .LVU291
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 33
+
+
+ 862              	.LBB38:
+ 863              	.LBI38:
+ 213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
+ 864              		.loc 2 213 30 view .LVU292
+ 865              	.LBB39:
+ 215:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 866              		.loc 2 215 5 view .LVU293
+ 867              		.loc 2 217 5 view .LVU294
+ 868              		.syntax unified
+ 869              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 870 0034 4FF0F003 		   mov r3, #240                                              
+ 871 0038 83F31188 	   msr basepri, r3                                         
+ 872 003c BFF36F8F 	   isb                                                     
+ 873 0040 BFF34F8F 	   dsb                                                     
+ 874              	
+ 875              	@ 0 "" 2
+ 876              	.LVL66:
+ 877              		.thumb
+ 878              		.syntax unified
+ 879              	.L67:
+ 880              		.loc 2 217 5 is_stmt 0 view .LVU295
+ 881              	.LBE39:
+ 882              	.LBE38:
+ 362:ThirdPackage/freertos/heap_4.c ****         configASSERT( heapBLOCK_IS_ALLOCATED( pxLink ) != 0 );
+ 883              		.loc 1 362 9 is_stmt 1 discriminator 1 view .LVU296
+ 362:ThirdPackage/freertos/heap_4.c ****         configASSERT( heapBLOCK_IS_ALLOCATED( pxLink ) != 0 );
+ 884              		.loc 1 362 9 discriminator 1 view .LVU297
+ 362:ThirdPackage/freertos/heap_4.c ****         configASSERT( heapBLOCK_IS_ALLOCATED( pxLink ) != 0 );
+ 885              		.loc 1 362 9 discriminator 1 view .LVU298
+ 886 0044 FEE7     		b	.L67
+ 887              	.L77:
+ 363:ThirdPackage/freertos/heap_4.c ****         configASSERT( pxLink->pxNextFreeBlock == NULL );
+ 888              		.loc 1 363 62 discriminator 2 view .LVU299
+ 364:ThirdPackage/freertos/heap_4.c **** 
+ 889              		.loc 1 364 9 discriminator 2 view .LVU300
+ 890 0046 50F8082C 		ldr	r2, [r0, #-8]
+ 891 004a 42B1     		cbz	r2, .L69
+ 364:ThirdPackage/freertos/heap_4.c **** 
+ 892              		.loc 1 364 9 view .LVU301
+ 893              	.LBB40:
+ 894              	.LBI40:
+ 213:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** {
+ 895              		.loc 2 213 30 view .LVU302
+ 896              	.LBB41:
+ 215:ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h **** 
+ 897              		.loc 2 215 5 view .LVU303
+ 898              		.loc 2 217 5 view .LVU304
+ 899              		.syntax unified
+ 900              	@ 217 "ThirdPackage/freertos/portable/GCC/ARM_CM4F/portmacro.h" 1
+ 901 004c 4FF0F003 		   mov r3, #240                                              
+ 902 0050 83F31188 	   msr basepri, r3                                         
+ 903 0054 BFF36F8F 	   isb                                                     
+ 904 0058 BFF34F8F 	   dsb                                                     
+ 905              	
+ 906              	@ 0 "" 2
+ 907              	.LVL67:
+ 908              		.thumb
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 34
+
+
+ 909              		.syntax unified
+ 910              	.L70:
+ 911              		.loc 2 217 5 is_stmt 0 view .LVU305
+ 912              	.LBE41:
+ 913              	.LBE40:
+ 364:ThirdPackage/freertos/heap_4.c **** 
+ 914              		.loc 1 364 9 is_stmt 1 discriminator 3 view .LVU306
+ 364:ThirdPackage/freertos/heap_4.c **** 
+ 915              		.loc 1 364 9 discriminator 3 view .LVU307
+ 364:ThirdPackage/freertos/heap_4.c **** 
+ 916              		.loc 1 364 9 discriminator 3 view .LVU308
+ 917 005c FEE7     		b	.L70
+ 918              	.L69:
+ 364:ThirdPackage/freertos/heap_4.c **** 
+ 919              		.loc 1 364 56 discriminator 2 view .LVU309
+ 366:ThirdPackage/freertos/heap_4.c ****         {
+ 920              		.loc 1 366 9 discriminator 2 view .LVU310
+ 366:ThirdPackage/freertos/heap_4.c ****         {
+ 921              		.loc 1 366 11 is_stmt 0 discriminator 2 view .LVU311
+ 922 005e 002B     		cmp	r3, #0
+ 923 0060 16DA     		bge	.L62
+ 368:ThirdPackage/freertos/heap_4.c ****             {
+ 924              		.loc 1 368 13 is_stmt 1 view .LVU312
+ 372:ThirdPackage/freertos/heap_4.c ****                 #if ( configHEAP_CLEAR_MEMORY_ON_FREE == 1 )
+ 925              		.loc 1 372 17 view .LVU313
+ 926 0062 23F00043 		bic	r3, r3, #-2147483648
+ 927 0066 40F8043C 		str	r3, [r0, #-4]
+ 377:ThirdPackage/freertos/heap_4.c ****                     {
+ 928              		.loc 1 377 21 view .LVU314
+ 377:ThirdPackage/freertos/heap_4.c ****                     {
+ 929              		.loc 1 377 23 is_stmt 0 view .LVU315
+ 930 006a 072B     		cmp	r3, #7
+ 931 006c 11D8     		bhi	.L78
+ 932              	.LVL68:
+ 933              	.L71:
+ 384:ThirdPackage/freertos/heap_4.c ****                 {
+ 934              		.loc 1 384 17 is_stmt 1 view .LVU316
+ 935 006e FFF7FEFF 		bl	vTaskSuspendAll
+ 936              	.LVL69:
+ 387:ThirdPackage/freertos/heap_4.c ****                     traceFREE( pv, pxLink->xBlockSize );
+ 937              		.loc 1 387 21 view .LVU317
+ 387:ThirdPackage/freertos/heap_4.c ****                     traceFREE( pv, pxLink->xBlockSize );
+ 938              		.loc 1 387 50 is_stmt 0 view .LVU318
+ 939 0072 54F8041C 		ldr	r1, [r4, #-4]
+ 387:ThirdPackage/freertos/heap_4.c ****                     traceFREE( pv, pxLink->xBlockSize );
+ 940              		.loc 1 387 41 view .LVU319
+ 941 0076 0B4A     		ldr	r2, .L79+4
+ 942 0078 1368     		ldr	r3, [r2]
+ 943 007a 0B44     		add	r3, r3, r1
+ 944 007c 1360     		str	r3, [r2]
+ 388:ThirdPackage/freertos/heap_4.c ****                     prvInsertBlockIntoFreeList( ( ( BlockLink_t * ) pxLink ) );
+ 945              		.loc 1 388 56 is_stmt 1 view .LVU320
+ 389:ThirdPackage/freertos/heap_4.c ****                     xNumberOfSuccessfulFrees++;
+ 946              		.loc 1 389 21 view .LVU321
+ 947 007e 2846     		mov	r0, r5
+ 948 0080 FFF7FEFF 		bl	prvInsertBlockIntoFreeList
+ 949              	.LVL70:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 35
+
+
+ 390:ThirdPackage/freertos/heap_4.c ****                 }
+ 950              		.loc 1 390 21 view .LVU322
+ 390:ThirdPackage/freertos/heap_4.c ****                 }
+ 951              		.loc 1 390 45 is_stmt 0 view .LVU323
+ 952 0084 084A     		ldr	r2, .L79+8
+ 953 0086 1368     		ldr	r3, [r2]
+ 954 0088 0133     		adds	r3, r3, #1
+ 955 008a 1360     		str	r3, [r2]
+ 392:ThirdPackage/freertos/heap_4.c ****             }
+ 956              		.loc 1 392 17 is_stmt 1 view .LVU324
+ 392:ThirdPackage/freertos/heap_4.c ****             }
+ 957              		.loc 1 392 26 is_stmt 0 view .LVU325
+ 958 008c FFF7FEFF 		bl	xTaskResumeAll
+ 959              	.LVL71:
+ 401:ThirdPackage/freertos/heap_4.c ****         }
+ 960              		.loc 1 401 37 is_stmt 1 view .LVU326
+ 961              	.L62:
+ 404:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ 962              		.loc 1 404 1 is_stmt 0 view .LVU327
+ 963 0090 38BD     		pop	{r3, r4, r5, pc}
+ 964              	.LVL72:
+ 965              	.L78:
+ 379:ThirdPackage/freertos/heap_4.c ****                     }
+ 966              		.loc 1 379 25 is_stmt 1 view .LVU328
+ 379:ThirdPackage/freertos/heap_4.c ****                     }
+ 967              		.loc 1 379 34 is_stmt 0 view .LVU329
+ 968 0092 A3F10802 		sub	r2, r3, #8
+ 969 0096 0021     		movs	r1, #0
+ 970 0098 FFF7FEFF 		bl	memset
+ 971              	.LVL73:
+ 379:ThirdPackage/freertos/heap_4.c ****                     }
+ 972              		.loc 1 379 34 view .LVU330
+ 973 009c E7E7     		b	.L71
+ 974              	.LVL74:
+ 975              	.L74:
+ 976              	.LCFI6:
+ 977              		.cfi_def_cfa_offset 0
+ 978              		.cfi_restore 3
+ 979              		.cfi_restore 4
+ 980              		.cfi_restore 5
+ 981              		.cfi_restore 14
+ 379:ThirdPackage/freertos/heap_4.c ****                     }
+ 982              		.loc 1 379 34 view .LVU331
+ 983 009e 7047     		bx	lr
+ 984              	.L80:
+ 985              		.align	2
+ 986              	.L79:
+ 987 00a0 00000000 		.word	ucHeap
+ 988 00a4 00000000 		.word	.LANCHOR3
+ 989 00a8 00000000 		.word	.LANCHOR5
+ 990              		.cfi_endproc
+ 991              	.LFE5:
+ 993              		.section	.text.xPortGetFreeHeapSize,"ax",%progbits
+ 994              		.align	1
+ 995              		.global	xPortGetFreeHeapSize
+ 996              		.syntax unified
+ 997              		.thumb
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 36
+
+
+ 998              		.thumb_func
+ 1000              	xPortGetFreeHeapSize:
+ 1001              	.LFB6:
+ 408:ThirdPackage/freertos/heap_4.c ****     return xFreeBytesRemaining;
+ 1002              		.loc 1 408 1 is_stmt 1 view -0
+ 1003              		.cfi_startproc
+ 1004              		@ args = 0, pretend = 0, frame = 0
+ 1005              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1006              		@ link register save eliminated.
+ 409:ThirdPackage/freertos/heap_4.c **** }
+ 1007              		.loc 1 409 5 view .LVU333
+ 410:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ 1008              		.loc 1 410 1 is_stmt 0 view .LVU334
+ 1009 0000 014B     		ldr	r3, .L82
+ 1010 0002 1868     		ldr	r0, [r3]
+ 1011 0004 7047     		bx	lr
+ 1012              	.L83:
+ 1013 0006 00BF     		.align	2
+ 1014              	.L82:
+ 1015 0008 00000000 		.word	.LANCHOR3
+ 1016              		.cfi_endproc
+ 1017              	.LFE6:
+ 1019              		.section	.text.xPortGetMinimumEverFreeHeapSize,"ax",%progbits
+ 1020              		.align	1
+ 1021              		.global	xPortGetMinimumEverFreeHeapSize
+ 1022              		.syntax unified
+ 1023              		.thumb
+ 1024              		.thumb_func
+ 1026              	xPortGetMinimumEverFreeHeapSize:
+ 1027              	.LFB7:
+ 414:ThirdPackage/freertos/heap_4.c ****     return xMinimumEverFreeBytesRemaining;
+ 1028              		.loc 1 414 1 is_stmt 1 view -0
+ 1029              		.cfi_startproc
+ 1030              		@ args = 0, pretend = 0, frame = 0
+ 1031              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1032              		@ link register save eliminated.
+ 415:ThirdPackage/freertos/heap_4.c **** }
+ 1033              		.loc 1 415 5 view .LVU336
+ 416:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ 1034              		.loc 1 416 1 is_stmt 0 view .LVU337
+ 1035 0000 014B     		ldr	r3, .L85
+ 1036 0002 1868     		ldr	r0, [r3]
+ 1037 0004 7047     		bx	lr
+ 1038              	.L86:
+ 1039 0006 00BF     		.align	2
+ 1040              	.L85:
+ 1041 0008 00000000 		.word	.LANCHOR2
+ 1042              		.cfi_endproc
+ 1043              	.LFE7:
+ 1045              		.section	.text.vPortInitialiseBlocks,"ax",%progbits
+ 1046              		.align	1
+ 1047              		.global	vPortInitialiseBlocks
+ 1048              		.syntax unified
+ 1049              		.thumb
+ 1050              		.thumb_func
+ 1052              	vPortInitialiseBlocks:
+ 1053              	.LFB8:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 37
+
+
+ 420:ThirdPackage/freertos/heap_4.c ****     /* This just exists to keep the linker quiet. */
+ 1054              		.loc 1 420 1 is_stmt 1 view -0
+ 1055              		.cfi_startproc
+ 1056              		@ args = 0, pretend = 0, frame = 0
+ 1057              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1058              		@ link register save eliminated.
+ 422:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ 1059              		.loc 1 422 1 view .LVU339
+ 1060 0000 7047     		bx	lr
+ 1061              		.cfi_endproc
+ 1062              	.LFE8:
+ 1064              		.section	.text.pvPortCalloc,"ax",%progbits
+ 1065              		.align	1
+ 1066              		.global	pvPortCalloc
+ 1067              		.syntax unified
+ 1068              		.thumb
+ 1069              		.thumb_func
+ 1071              	pvPortCalloc:
+ 1072              	.LVL75:
+ 1073              	.LFB9:
+ 427:ThirdPackage/freertos/heap_4.c ****     void * pv = NULL;
+ 1074              		.loc 1 427 1 view -0
+ 1075              		.cfi_startproc
+ 1076              		@ args = 0, pretend = 0, frame = 0
+ 1077              		@ frame_needed = 0, uses_anonymous_args = 0
+ 427:ThirdPackage/freertos/heap_4.c ****     void * pv = NULL;
+ 1078              		.loc 1 427 1 is_stmt 0 view .LVU341
+ 1079 0000 38B5     		push	{r3, r4, r5, lr}
+ 1080              	.LCFI7:
+ 1081              		.cfi_def_cfa_offset 16
+ 1082              		.cfi_offset 3, -16
+ 1083              		.cfi_offset 4, -12
+ 1084              		.cfi_offset 5, -8
+ 1085              		.cfi_offset 14, -4
+ 428:ThirdPackage/freertos/heap_4.c **** 
+ 1086              		.loc 1 428 5 is_stmt 1 view .LVU342
+ 1087              	.LVL76:
+ 430:ThirdPackage/freertos/heap_4.c ****     {
+ 1088              		.loc 1 430 5 view .LVU343
+ 430:ThirdPackage/freertos/heap_4.c ****     {
+ 1089              		.loc 1 430 9 is_stmt 0 view .LVU344
+ 1090 0002 0346     		mov	r3, r0
+ 1091 0004 20B1     		cbz	r0, .L89
+ 1092 0006 0022     		movs	r2, #0
+ 1093 0008 A0FB0140 		umull	r4, r0, r0, r1
+ 1094              	.LVL77:
+ 430:ThirdPackage/freertos/heap_4.c ****     {
+ 1095              		.loc 1 430 9 view .LVU345
+ 1096 000c 68B9     		cbnz	r0, .L95
+ 1097              	.L90:
+ 430:ThirdPackage/freertos/heap_4.c ****     {
+ 1098              		.loc 1 430 9 discriminator 1 view .LVU346
+ 1099 000e 72B9     		cbnz	r2, .L93
+ 1100              	.L89:
+ 432:ThirdPackage/freertos/heap_4.c **** 
+ 1101              		.loc 1 432 9 is_stmt 1 view .LVU347
+ 432:ThirdPackage/freertos/heap_4.c **** 
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 38
+
+
+ 1102              		.loc 1 432 14 is_stmt 0 view .LVU348
+ 1103 0010 01FB03F4 		mul	r4, r1, r3
+ 1104 0014 2046     		mov	r0, r4
+ 1105 0016 FFF7FEFF 		bl	pvPortMalloc
+ 1106              	.LVL78:
+ 434:ThirdPackage/freertos/heap_4.c ****         {
+ 1107              		.loc 1 434 9 is_stmt 1 view .LVU349
+ 434:ThirdPackage/freertos/heap_4.c ****         {
+ 1108              		.loc 1 434 11 is_stmt 0 view .LVU350
+ 1109 001a 0546     		mov	r5, r0
+ 1110 001c 18B1     		cbz	r0, .L88
+ 436:ThirdPackage/freertos/heap_4.c ****         }
+ 1111              		.loc 1 436 13 is_stmt 1 view .LVU351
+ 436:ThirdPackage/freertos/heap_4.c ****         }
+ 1112              		.loc 1 436 22 is_stmt 0 view .LVU352
+ 1113 001e 2246     		mov	r2, r4
+ 1114 0020 0021     		movs	r1, #0
+ 1115 0022 FFF7FEFF 		bl	memset
+ 1116              	.LVL79:
+ 1117              	.L88:
+ 441:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ 1118              		.loc 1 441 1 view .LVU353
+ 1119 0026 2846     		mov	r0, r5
+ 1120 0028 38BD     		pop	{r3, r4, r5, pc}
+ 1121              	.LVL80:
+ 1122              	.L95:
+ 441:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ 1123              		.loc 1 441 1 view .LVU354
+ 1124 002a 0122     		movs	r2, #1
+ 1125 002c EFE7     		b	.L90
+ 1126              	.L93:
+ 428:ThirdPackage/freertos/heap_4.c **** 
+ 1127              		.loc 1 428 12 view .LVU355
+ 1128 002e 0025     		movs	r5, #0
+ 440:ThirdPackage/freertos/heap_4.c **** }
+ 1129              		.loc 1 440 5 is_stmt 1 view .LVU356
+ 440:ThirdPackage/freertos/heap_4.c **** }
+ 1130              		.loc 1 440 12 is_stmt 0 view .LVU357
+ 1131 0030 F9E7     		b	.L88
+ 1132              		.cfi_endproc
+ 1133              	.LFE9:
+ 1135              		.section	.text.vPortGetHeapStats,"ax",%progbits
+ 1136              		.align	1
+ 1137              		.global	vPortGetHeapStats
+ 1138              		.syntax unified
+ 1139              		.thumb
+ 1140              		.thumb_func
+ 1142              	vPortGetHeapStats:
+ 1143              	.LVL81:
+ 1144              	.LFB12:
+ 558:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ 559:ThirdPackage/freertos/heap_4.c **** 
+ 560:ThirdPackage/freertos/heap_4.c **** void vPortGetHeapStats( HeapStats_t * pxHeapStats )
+ 561:ThirdPackage/freertos/heap_4.c **** {
+ 1145              		.loc 1 561 1 is_stmt 1 view -0
+ 1146              		.cfi_startproc
+ 1147              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 39
+
+
+ 1148              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1149              		.loc 1 561 1 is_stmt 0 view .LVU359
+ 1150 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 1151              	.LCFI8:
+ 1152              		.cfi_def_cfa_offset 24
+ 1153              		.cfi_offset 3, -24
+ 1154              		.cfi_offset 4, -20
+ 1155              		.cfi_offset 5, -16
+ 1156              		.cfi_offset 6, -12
+ 1157              		.cfi_offset 7, -8
+ 1158              		.cfi_offset 14, -4
+ 1159 0002 0746     		mov	r7, r0
+ 562:ThirdPackage/freertos/heap_4.c ****     BlockLink_t * pxBlock;
+ 1160              		.loc 1 562 5 is_stmt 1 view .LVU360
+ 563:ThirdPackage/freertos/heap_4.c ****     size_t xBlocks = 0, xMaxSize = 0, xMinSize = portMAX_DELAY; /* portMAX_DELAY used as a portable
+ 1161              		.loc 1 563 5 view .LVU361
+ 1162              	.LVL82:
+ 564:ThirdPackage/freertos/heap_4.c **** 
+ 565:ThirdPackage/freertos/heap_4.c ****     vTaskSuspendAll();
+ 1163              		.loc 1 565 5 view .LVU362
+ 1164 0004 FFF7FEFF 		bl	vTaskSuspendAll
+ 1165              	.LVL83:
+ 566:ThirdPackage/freertos/heap_4.c ****     {
+ 567:ThirdPackage/freertos/heap_4.c ****         pxBlock = heapPROTECT_BLOCK_POINTER( xStart.pxNextFreeBlock );
+ 1166              		.loc 1 567 9 view .LVU363
+ 1167              		.loc 1 567 17 is_stmt 0 view .LVU364
+ 1168 0008 174B     		ldr	r3, .L107
+ 1169 000a 1B68     		ldr	r3, [r3]
+ 1170              	.LVL84:
+ 568:ThirdPackage/freertos/heap_4.c **** 
+ 569:ThirdPackage/freertos/heap_4.c ****         /* pxBlock will be NULL if the heap has not been initialised.  The heap
+ 570:ThirdPackage/freertos/heap_4.c ****          * is initialised automatically when the first allocation is made. */
+ 571:ThirdPackage/freertos/heap_4.c ****         if( pxBlock != NULL )
+ 1171              		.loc 1 571 9 is_stmt 1 view .LVU365
+ 1172              		.loc 1 571 11 is_stmt 0 view .LVU366
+ 1173 000c 23B1     		cbz	r3, .L106
+ 563:ThirdPackage/freertos/heap_4.c **** 
+ 1174              		.loc 1 563 39 view .LVU367
+ 1175 000e 4FF0FF36 		mov	r6, #-1
+ 563:ThirdPackage/freertos/heap_4.c **** 
+ 1176              		.loc 1 563 25 view .LVU368
+ 1177 0012 0025     		movs	r5, #0
+ 563:ThirdPackage/freertos/heap_4.c **** 
+ 1178              		.loc 1 563 12 view .LVU369
+ 1179 0014 2C46     		mov	r4, r5
+ 1180 0016 1AE0     		b	.L97
+ 1181              	.L106:
+ 563:ThirdPackage/freertos/heap_4.c **** 
+ 1182              		.loc 1 563 39 view .LVU370
+ 1183 0018 4FF0FF36 		mov	r6, #-1
+ 563:ThirdPackage/freertos/heap_4.c **** 
+ 1184              		.loc 1 563 25 view .LVU371
+ 1185 001c 0025     		movs	r5, #0
+ 563:ThirdPackage/freertos/heap_4.c **** 
+ 1186              		.loc 1 563 12 view .LVU372
+ 1187 001e 2C46     		mov	r4, r5
+ 1188              	.LVL85:
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 40
+
+
+ 1189              	.L98:
+ 572:ThirdPackage/freertos/heap_4.c ****         {
+ 573:ThirdPackage/freertos/heap_4.c ****             while( pxBlock != pxEnd )
+ 574:ThirdPackage/freertos/heap_4.c ****             {
+ 575:ThirdPackage/freertos/heap_4.c ****                 /* Increment the number of blocks and record the largest block seen
+ 576:ThirdPackage/freertos/heap_4.c ****                  * so far. */
+ 577:ThirdPackage/freertos/heap_4.c ****                 xBlocks++;
+ 578:ThirdPackage/freertos/heap_4.c **** 
+ 579:ThirdPackage/freertos/heap_4.c ****                 if( pxBlock->xBlockSize > xMaxSize )
+ 580:ThirdPackage/freertos/heap_4.c ****                 {
+ 581:ThirdPackage/freertos/heap_4.c ****                     xMaxSize = pxBlock->xBlockSize;
+ 582:ThirdPackage/freertos/heap_4.c ****                 }
+ 583:ThirdPackage/freertos/heap_4.c **** 
+ 584:ThirdPackage/freertos/heap_4.c ****                 if( pxBlock->xBlockSize < xMinSize )
+ 585:ThirdPackage/freertos/heap_4.c ****                 {
+ 586:ThirdPackage/freertos/heap_4.c ****                     xMinSize = pxBlock->xBlockSize;
+ 587:ThirdPackage/freertos/heap_4.c ****                 }
+ 588:ThirdPackage/freertos/heap_4.c **** 
+ 589:ThirdPackage/freertos/heap_4.c ****                 /* Move to the next block in the chain until the last block is
+ 590:ThirdPackage/freertos/heap_4.c ****                  * reached. */
+ 591:ThirdPackage/freertos/heap_4.c ****                 pxBlock = heapPROTECT_BLOCK_POINTER( pxBlock->pxNextFreeBlock );
+ 592:ThirdPackage/freertos/heap_4.c ****             }
+ 593:ThirdPackage/freertos/heap_4.c ****         }
+ 594:ThirdPackage/freertos/heap_4.c ****     }
+ 595:ThirdPackage/freertos/heap_4.c ****     ( void ) xTaskResumeAll();
+ 1190              		.loc 1 595 5 is_stmt 1 view .LVU373
+ 1191              		.loc 1 595 14 is_stmt 0 view .LVU374
+ 1192 0020 FFF7FEFF 		bl	xTaskResumeAll
+ 1193              	.LVL86:
+ 596:ThirdPackage/freertos/heap_4.c **** 
+ 597:ThirdPackage/freertos/heap_4.c ****     pxHeapStats->xSizeOfLargestFreeBlockInBytes = xMaxSize;
+ 1194              		.loc 1 597 5 is_stmt 1 view .LVU375
+ 1195              		.loc 1 597 49 is_stmt 0 view .LVU376
+ 1196 0024 7D60     		str	r5, [r7, #4]
+ 598:ThirdPackage/freertos/heap_4.c ****     pxHeapStats->xSizeOfSmallestFreeBlockInBytes = xMinSize;
+ 1197              		.loc 1 598 5 is_stmt 1 view .LVU377
+ 1198              		.loc 1 598 50 is_stmt 0 view .LVU378
+ 1199 0026 BE60     		str	r6, [r7, #8]
+ 599:ThirdPackage/freertos/heap_4.c ****     pxHeapStats->xNumberOfFreeBlocks = xBlocks;
+ 1200              		.loc 1 599 5 is_stmt 1 view .LVU379
+ 1201              		.loc 1 599 38 is_stmt 0 view .LVU380
+ 1202 0028 FC60     		str	r4, [r7, #12]
+ 600:ThirdPackage/freertos/heap_4.c **** 
+ 601:ThirdPackage/freertos/heap_4.c ****     taskENTER_CRITICAL();
+ 1203              		.loc 1 601 5 is_stmt 1 view .LVU381
+ 1204 002a FFF7FEFF 		bl	vPortEnterCritical
+ 1205              	.LVL87:
+ 602:ThirdPackage/freertos/heap_4.c ****     {
+ 603:ThirdPackage/freertos/heap_4.c ****         pxHeapStats->xAvailableHeapSpaceInBytes = xFreeBytesRemaining;
+ 1206              		.loc 1 603 9 view .LVU382
+ 1207              		.loc 1 603 49 is_stmt 0 view .LVU383
+ 1208 002e 0F4B     		ldr	r3, .L107+4
+ 1209 0030 1B68     		ldr	r3, [r3]
+ 1210 0032 3B60     		str	r3, [r7]
+ 604:ThirdPackage/freertos/heap_4.c ****         pxHeapStats->xNumberOfSuccessfulAllocations = xNumberOfSuccessfulAllocations;
+ 1211              		.loc 1 604 9 is_stmt 1 view .LVU384
+ 1212              		.loc 1 604 53 is_stmt 0 view .LVU385
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 41
+
+
+ 1213 0034 0E4B     		ldr	r3, .L107+8
+ 1214 0036 1B68     		ldr	r3, [r3]
+ 1215 0038 7B61     		str	r3, [r7, #20]
+ 605:ThirdPackage/freertos/heap_4.c ****         pxHeapStats->xNumberOfSuccessfulFrees = xNumberOfSuccessfulFrees;
+ 1216              		.loc 1 605 9 is_stmt 1 view .LVU386
+ 1217              		.loc 1 605 47 is_stmt 0 view .LVU387
+ 1218 003a 0E4B     		ldr	r3, .L107+12
+ 1219 003c 1B68     		ldr	r3, [r3]
+ 1220 003e BB61     		str	r3, [r7, #24]
+ 606:ThirdPackage/freertos/heap_4.c ****         pxHeapStats->xMinimumEverFreeBytesRemaining = xMinimumEverFreeBytesRemaining;
+ 1221              		.loc 1 606 9 is_stmt 1 view .LVU388
+ 1222              		.loc 1 606 53 is_stmt 0 view .LVU389
+ 1223 0040 0D4B     		ldr	r3, .L107+16
+ 1224 0042 1B68     		ldr	r3, [r3]
+ 1225 0044 3B61     		str	r3, [r7, #16]
+ 607:ThirdPackage/freertos/heap_4.c ****     }
+ 608:ThirdPackage/freertos/heap_4.c ****     taskEXIT_CRITICAL();
+ 1226              		.loc 1 608 5 is_stmt 1 view .LVU390
+ 1227 0046 FFF7FEFF 		bl	vPortExitCritical
+ 1228              	.LVL88:
+ 609:ThirdPackage/freertos/heap_4.c **** }
+ 1229              		.loc 1 609 1 is_stmt 0 view .LVU391
+ 1230 004a F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1231              	.LVL89:
+ 1232              	.L100:
+ 591:ThirdPackage/freertos/heap_4.c ****             }
+ 1233              		.loc 1 591 17 is_stmt 1 view .LVU392
+ 591:ThirdPackage/freertos/heap_4.c ****             }
+ 1234              		.loc 1 591 25 is_stmt 0 view .LVU393
+ 1235 004c 1B68     		ldr	r3, [r3]
+ 1236              	.LVL90:
+ 1237              	.L97:
+ 573:ThirdPackage/freertos/heap_4.c ****             {
+ 1238              		.loc 1 573 18 is_stmt 1 view .LVU394
+ 573:ThirdPackage/freertos/heap_4.c ****             {
+ 1239              		.loc 1 573 28 is_stmt 0 view .LVU395
+ 1240 004e 0B4A     		ldr	r2, .L107+20
+ 1241 0050 1268     		ldr	r2, [r2]
+ 573:ThirdPackage/freertos/heap_4.c ****             {
+ 1242              		.loc 1 573 18 view .LVU396
+ 1243 0052 9A42     		cmp	r2, r3
+ 1244 0054 E4D0     		beq	.L98
+ 577:ThirdPackage/freertos/heap_4.c **** 
+ 1245              		.loc 1 577 17 is_stmt 1 view .LVU397
+ 577:ThirdPackage/freertos/heap_4.c **** 
+ 1246              		.loc 1 577 24 is_stmt 0 view .LVU398
+ 1247 0056 0134     		adds	r4, r4, #1
+ 1248              	.LVL91:
+ 579:ThirdPackage/freertos/heap_4.c ****                 {
+ 1249              		.loc 1 579 17 is_stmt 1 view .LVU399
+ 579:ThirdPackage/freertos/heap_4.c ****                 {
+ 1250              		.loc 1 579 28 is_stmt 0 view .LVU400
+ 1251 0058 5A68     		ldr	r2, [r3, #4]
+ 579:ThirdPackage/freertos/heap_4.c ****                 {
+ 1252              		.loc 1 579 19 view .LVU401
+ 1253 005a AA42     		cmp	r2, r5
+ 1254 005c 00D9     		bls	.L99
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 42
+
+
+ 581:ThirdPackage/freertos/heap_4.c ****                 }
+ 1255              		.loc 1 581 30 view .LVU402
+ 1256 005e 1546     		mov	r5, r2
+ 1257              	.LVL92:
+ 1258              	.L99:
+ 584:ThirdPackage/freertos/heap_4.c ****                 {
+ 1259              		.loc 1 584 17 is_stmt 1 view .LVU403
+ 584:ThirdPackage/freertos/heap_4.c ****                 {
+ 1260              		.loc 1 584 19 is_stmt 0 view .LVU404
+ 1261 0060 B242     		cmp	r2, r6
+ 1262 0062 F3D2     		bcs	.L100
+ 586:ThirdPackage/freertos/heap_4.c ****                 }
+ 1263              		.loc 1 586 30 view .LVU405
+ 1264 0064 1646     		mov	r6, r2
+ 1265              	.LVL93:
+ 586:ThirdPackage/freertos/heap_4.c ****                 }
+ 1266              		.loc 1 586 30 view .LVU406
+ 1267 0066 F1E7     		b	.L100
+ 1268              	.L108:
+ 1269              		.align	2
+ 1270              	.L107:
+ 1271 0068 00000000 		.word	.LANCHOR0
+ 1272 006c 00000000 		.word	.LANCHOR3
+ 1273 0070 00000000 		.word	.LANCHOR4
+ 1274 0074 00000000 		.word	.LANCHOR5
+ 1275 0078 00000000 		.word	.LANCHOR2
+ 1276 007c 00000000 		.word	.LANCHOR1
+ 1277              		.cfi_endproc
+ 1278              	.LFE12:
+ 1280              		.section	.text.vPortHeapResetState,"ax",%progbits
+ 1281              		.align	1
+ 1282              		.global	vPortHeapResetState
+ 1283              		.syntax unified
+ 1284              		.thumb
+ 1285              		.thumb_func
+ 1287              	vPortHeapResetState:
+ 1288              	.LFB13:
+ 610:ThirdPackage/freertos/heap_4.c **** /*-----------------------------------------------------------*/
+ 611:ThirdPackage/freertos/heap_4.c **** 
+ 612:ThirdPackage/freertos/heap_4.c **** /*
+ 613:ThirdPackage/freertos/heap_4.c ****  * Reset the state in this file. This state is normally initialized at start up.
+ 614:ThirdPackage/freertos/heap_4.c ****  * This function must be called by the application before restarting the
+ 615:ThirdPackage/freertos/heap_4.c ****  * scheduler.
+ 616:ThirdPackage/freertos/heap_4.c ****  */
+ 617:ThirdPackage/freertos/heap_4.c **** void vPortHeapResetState( void )
+ 618:ThirdPackage/freertos/heap_4.c **** {
+ 1289              		.loc 1 618 1 is_stmt 1 view -0
+ 1290              		.cfi_startproc
+ 1291              		@ args = 0, pretend = 0, frame = 0
+ 1292              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1293              		@ link register save eliminated.
+ 619:ThirdPackage/freertos/heap_4.c ****     pxEnd = NULL;
+ 1294              		.loc 1 619 5 view .LVU408
+ 1295              		.loc 1 619 11 is_stmt 0 view .LVU409
+ 1296 0000 0023     		movs	r3, #0
+ 1297 0002 054A     		ldr	r2, .L110
+ 1298 0004 1360     		str	r3, [r2]
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 43
+
+
+ 620:ThirdPackage/freertos/heap_4.c **** 
+ 621:ThirdPackage/freertos/heap_4.c ****     xFreeBytesRemaining = ( size_t ) 0U;
+ 1299              		.loc 1 621 5 is_stmt 1 view .LVU410
+ 1300              		.loc 1 621 25 is_stmt 0 view .LVU411
+ 1301 0006 054A     		ldr	r2, .L110+4
+ 1302 0008 1360     		str	r3, [r2]
+ 622:ThirdPackage/freertos/heap_4.c ****     xMinimumEverFreeBytesRemaining = ( size_t ) 0U;
+ 1303              		.loc 1 622 5 is_stmt 1 view .LVU412
+ 1304              		.loc 1 622 36 is_stmt 0 view .LVU413
+ 1305 000a 054A     		ldr	r2, .L110+8
+ 1306 000c 1360     		str	r3, [r2]
+ 623:ThirdPackage/freertos/heap_4.c ****     xNumberOfSuccessfulAllocations = ( size_t ) 0U;
+ 1307              		.loc 1 623 5 is_stmt 1 view .LVU414
+ 1308              		.loc 1 623 36 is_stmt 0 view .LVU415
+ 1309 000e 054A     		ldr	r2, .L110+12
+ 1310 0010 1360     		str	r3, [r2]
+ 624:ThirdPackage/freertos/heap_4.c ****     xNumberOfSuccessfulFrees = ( size_t ) 0U;
+ 1311              		.loc 1 624 5 is_stmt 1 view .LVU416
+ 1312              		.loc 1 624 30 is_stmt 0 view .LVU417
+ 1313 0012 054A     		ldr	r2, .L110+16
+ 1314 0014 1360     		str	r3, [r2]
+ 625:ThirdPackage/freertos/heap_4.c **** }
+ 1315              		.loc 1 625 1 view .LVU418
+ 1316 0016 7047     		bx	lr
+ 1317              	.L111:
+ 1318              		.align	2
+ 1319              	.L110:
+ 1320 0018 00000000 		.word	.LANCHOR1
+ 1321 001c 00000000 		.word	.LANCHOR3
+ 1322 0020 00000000 		.word	.LANCHOR2
+ 1323 0024 00000000 		.word	.LANCHOR4
+ 1324 0028 00000000 		.word	.LANCHOR5
+ 1325              		.cfi_endproc
+ 1326              	.LFE13:
+ 1328              		.section	.bss.pxEnd,"aw",%nobits
+ 1329              		.align	2
+ 1330              		.set	.LANCHOR1,. + 0
+ 1333              	pxEnd:
+ 1334 0000 00000000 		.space	4
+ 1335              		.section	.bss.ucHeap,"aw",%nobits
+ 1336              		.align	2
+ 1339              	ucHeap:
+ 1340 0000 00000000 		.space	4096
+ 1340      00000000 
+ 1340      00000000 
+ 1340      00000000 
+ 1340      00000000 
+ 1341              		.section	.bss.xFreeBytesRemaining,"aw",%nobits
+ 1342              		.align	2
+ 1343              		.set	.LANCHOR3,. + 0
+ 1346              	xFreeBytesRemaining:
+ 1347 0000 00000000 		.space	4
+ 1348              		.section	.bss.xMinimumEverFreeBytesRemaining,"aw",%nobits
+ 1349              		.align	2
+ 1350              		.set	.LANCHOR2,. + 0
+ 1353              	xMinimumEverFreeBytesRemaining:
+ 1354 0000 00000000 		.space	4
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 44
+
+
+ 1355              		.section	.bss.xNumberOfSuccessfulAllocations,"aw",%nobits
+ 1356              		.align	2
+ 1357              		.set	.LANCHOR4,. + 0
+ 1360              	xNumberOfSuccessfulAllocations:
+ 1361 0000 00000000 		.space	4
+ 1362              		.section	.bss.xNumberOfSuccessfulFrees,"aw",%nobits
+ 1363              		.align	2
+ 1364              		.set	.LANCHOR5,. + 0
+ 1367              	xNumberOfSuccessfulFrees:
+ 1368 0000 00000000 		.space	4
+ 1369              		.section	.bss.xStart,"aw",%nobits
+ 1370              		.align	2
+ 1371              		.set	.LANCHOR0,. + 0
+ 1374              	xStart:
+ 1375 0000 00000000 		.space	8
+ 1375      00000000 
+ 1376              		.text
+ 1377              	.Letext0:
+ 1378              		.file 3 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\lib\\gcc\\arm-none-eabi\
+ 1379              		.file 4 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 1380              		.file 5 "k:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 1381              		.file 6 "ThirdPackage/freertos/include/portable.h"
+ 1382              		.file 7 "ThirdPackage/freertos/include/task.h"
+ 1383              		.file 8 "<built-in>"
+ARM GAS  C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s 			page 45
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 heap_4.c
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:20     .text.prvHeapInit:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:25     .text.prvHeapInit:00000000 prvHeapInit
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:122    .text.prvHeapInit:00000044 $d
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1339   .bss.ucHeap:00000000 ucHeap
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:131    .text.prvInsertBlockIntoFreeList:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:136    .text.prvInsertBlockIntoFreeList:00000000 prvInsertBlockIntoFreeList
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:309    .text.prvInsertBlockIntoFreeList:00000080 $d
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:316    .text.pvPortMalloc:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:322    .text.pvPortMalloc:00000000 pvPortMalloc
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:777    .text.pvPortMalloc:0000016c $d
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:788    .text.vPortFree:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:794    .text.vPortFree:00000000 vPortFree
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:987    .text.vPortFree:000000a0 $d
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:994    .text.xPortGetFreeHeapSize:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1000   .text.xPortGetFreeHeapSize:00000000 xPortGetFreeHeapSize
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1015   .text.xPortGetFreeHeapSize:00000008 $d
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1020   .text.xPortGetMinimumEverFreeHeapSize:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1026   .text.xPortGetMinimumEverFreeHeapSize:00000000 xPortGetMinimumEverFreeHeapSize
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1041   .text.xPortGetMinimumEverFreeHeapSize:00000008 $d
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1046   .text.vPortInitialiseBlocks:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1052   .text.vPortInitialiseBlocks:00000000 vPortInitialiseBlocks
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1065   .text.pvPortCalloc:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1071   .text.pvPortCalloc:00000000 pvPortCalloc
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1136   .text.vPortGetHeapStats:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1142   .text.vPortGetHeapStats:00000000 vPortGetHeapStats
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1271   .text.vPortGetHeapStats:00000068 $d
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1281   .text.vPortHeapResetState:00000000 $t
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1287   .text.vPortHeapResetState:00000000 vPortHeapResetState
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1320   .text.vPortHeapResetState:00000018 $d
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1329   .bss.pxEnd:00000000 $d
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1333   .bss.pxEnd:00000000 pxEnd
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1336   .bss.ucHeap:00000000 $d
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1342   .bss.xFreeBytesRemaining:00000000 $d
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1346   .bss.xFreeBytesRemaining:00000000 xFreeBytesRemaining
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1349   .bss.xMinimumEverFreeBytesRemaining:00000000 $d
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1353   .bss.xMinimumEverFreeBytesRemaining:00000000 xMinimumEverFreeBytesRemaining
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1356   .bss.xNumberOfSuccessfulAllocations:00000000 $d
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1360   .bss.xNumberOfSuccessfulAllocations:00000000 xNumberOfSuccessfulAllocations
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1363   .bss.xNumberOfSuccessfulFrees:00000000 $d
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1367   .bss.xNumberOfSuccessfulFrees:00000000 xNumberOfSuccessfulFrees
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1370   .bss.xStart:00000000 $d
+C:\Users\86188\AppData\Local\Temp\ccosz7Yg.s:1374   .bss.xStart:00000000 xStart
+
+UNDEFINED SYMBOLS
+vTaskSuspendAll
+xTaskResumeAll
+memset
+vPortEnterCritical
+vPortExitCritical
